@@ -587,7 +587,7 @@ Sector1FirstStabilizerZone.connections = [
 
 Sector1SecondStabilizerZone.connections = [
     Connection(Sector1ChargeCoreZone, [HasMorph], one_way=True),
-    Connection(Sector1TourianHub, [Requirement(["Screw Attack", "Space Jump"], [])])
+    Connection(Sector1TourianExit, [Requirement(["Screw Attack", "Space Jump"], [])])
 ]
 
 Sector1ChargeCoreZone.connections = [

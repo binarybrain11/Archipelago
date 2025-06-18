@@ -188,7 +188,7 @@ class MetroidFusionClient(BizHawkClient):
             write_list.append((memory.items_received_high, [items_received_count // 256], self.bus))
             write_successful = await self.write_ram_values_guarded(ctx, write_list)
             if write_successful:
-                if current_item.player != ctx.slot or current_item.location == 0:
+                if current_item.player != ctx.slot or current_item.location < 1:
                     await bizhawk.display_message(ctx.bizhawk_ctx, f"Received {current_item_name}")
 
 
