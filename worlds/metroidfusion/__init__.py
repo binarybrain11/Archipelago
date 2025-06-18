@@ -64,6 +64,7 @@ class MetroidFusionWorld(World):
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
+        self.filler_items = None
 
     def create_item(self, name: str):
         return MetroidFusionItem(name, item_table[name].classification, self.item_name_to_id[name], self.player)
