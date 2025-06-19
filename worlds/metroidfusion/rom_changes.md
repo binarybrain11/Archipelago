@@ -18,4 +18,3 @@
 - You can now enable/disable power ups in the pause menu.
 - You can warp to your starting location by pressing L on the map screen. Ingame progress since your last save will be lost.
 - The client will sync received items and pickups with the server, allowing you to keep obtained items after game over/resetting/warping to start.
-- - You will have to manually reenable upgrades given this way, as there's no way for the client to know the difference between you turning off a pickup and having just respawned.
