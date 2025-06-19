@@ -1,3 +1,4 @@
+import os
 import pkgutil
 
 from .constants import game_data as gd
@@ -14,20 +15,26 @@ def _get_patch_path(rom: Rom, subfolder: str, filename: str) -> str:
 
 def _internal_apply_ips_patch(rom: Rom, patch_name: str, subfolder: str) -> None:
     path = _get_patch_path(rom, subfolder, patch_name)
-    patch = pkgutil.get_data(__name__, path)
+    patch = pkgutil.get_data("", path)
     IpsDecoder().apply_patch(patch, rom.data)
 
 
 def apply_patch_in_data_path(rom: Rom, patch_name: str) -> None:
-    _internal_apply_ips_patch(rom, patch_name, "")
+    path = os.path.join("data", "patches", "mf_u", patch_name)
+    patch = pkgutil.get_data(__name__, path)
+    IpsDecoder().apply_patch(patch, rom.data)
+    #_internal_apply_ips_patch(rom, patch_name, "")
 
 
 def apply_patch_in_asm_path(rom: Rom, patch_name: str) -> None:
-    _internal_apply_ips_patch(rom, patch_name, "asm")
+    path = os.path.join("data", "patches", "mf_u", "asm", patch_name)
+    patch = pkgutil.get_data(__name__, path)
+    IpsDecoder().apply_patch(patch, rom.data)
+    #_internal_apply_ips_patch(rom, patch_name, "asm")
 
 
 def apply_base_patch(rom: Rom) -> None:
-    path = _get_patch_path(rom, "asm", "m4rs.bps")
+    path = os.path.join("data", "patches", "mf_u", "asm", "m4rs.bps")
     patch = pkgutil.get_data(__name__, path)
     rom.data = BpsDecoder().apply_patch(patch, rom.data)
 

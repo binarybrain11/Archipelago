@@ -148,7 +148,8 @@ def encode_text(
                         # Check if normal markup tag
                         char_val = char_map.get(f"[{tag_str}]")
                         if char_val is None:
-                            raise ValueError(f"Invalid markup tag '{tag_str}'")
+                            char_val = char_map["?"]
+                            #raise ValueError(f"Invalid markup tag '{tag_str}'")
                     text.append(char_val)
                     markup_tag = None
                 else:
@@ -157,7 +158,10 @@ def encode_text(
         else:
             escaped = False
 
-        char_val = char_map[char]
+        try:
+            char_val = char_map[char]
+        except KeyError:
+            char_val = char_map["?"]
         char_width = get_char_width(rom, char_widths_addr, char_val)
         line_width += char_width
         width_since_break += char_width
@@ -175,7 +179,8 @@ def encode_text(
             if message_type == MessageType.ONE_LINE:
                 raise ValueError(f'String does not fit on one line:\n"{string}"')
             if width_since_break > max_width:
-                raise ValueError(f'Word does not fit on one line:\n"{string}"')
+                break
+                #raise ValueError(f'Word does not fit on one line:\n"{string}"')
             line_width = width_since_break
             line_number += 1
             extra_char = NEWLINE

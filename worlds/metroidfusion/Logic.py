@@ -2,7 +2,7 @@ from copy import copy
 from typing import Callable
 
 from BaseClasses import CollectionState
-from .data.locations import Requirement, HasKeycard1
+from .data.locations import Requirement
 
 
 class LogicObject():

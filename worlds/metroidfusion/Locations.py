@@ -23,7 +23,7 @@ class LocationData():
         self.major = major
         self.ap_id = ap_id
 
-    def to_json(self, item: str):
+    def to_json(self, item: str, item_sprite: str):
         if self.major:
             return {
                 "Source": self.source_name,
@@ -36,7 +36,7 @@ class LocationData():
                 "BlockX": self.room_location[0],
                 "BlockY": self.room_location[1],
                 "Item": item,
-                "ItemSprite": item if item != "None" else "Empty"
+                "ItemSprite": item_sprite
             }
 
     def __repr__(self):

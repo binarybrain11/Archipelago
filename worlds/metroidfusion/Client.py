@@ -41,9 +41,12 @@ class MetroidFusionClient(BizHawkClient):
         try:
             # Check ROM name/patch version
             rom_name = ((await bizhawk.read(ctx.bizhawk_ctx, [(memory.rom_name_location, 20, self.rom)]))[0])
-            rom_name = rom_name.decode("utf-8")
+            try:
+                rom_name = rom_name.decode("utf-8")
+            except UnicodeDecodeError:
+                return False
             if rom_name[:3] != "MFU":
-                return False  # Not a Final Fantasy 1 ROM
+                return False  # Not a Metroid Fusion ROM
         except bizhawk.RequestFailedError:
             return False  # Not able to get a response, say no for now
 
@@ -211,6 +214,7 @@ class MetroidFusionClient(BizHawkClient):
         infant_metroid_count = 0
         write_list: list[tuple[int, list[int], str]] = []
         upgrade_addresses = {}
+        toggle_addresses = {}
         keycard_value = 0x01
         items_received_count_low = await self.read_ram_value_guarded(ctx, memory.items_received_low, self.bus)
         items_received_count_high = await self.read_ram_value_guarded(ctx, memory.items_received_high, self.bus)
@@ -230,12 +234,36 @@ class MetroidFusionClient(BizHawkClient):
                     inv_bit = get_bit_value_from_position(upgrade.inventory_bit)
                     if upgrade.inventory_address in upgrade_addresses.keys():
                         current_upgrade_data = upgrade_addresses[upgrade.inventory_address]
+                        if current_upgrade_data & inv_bit == 0:
+                            toggle_bit = get_bit_value_from_position(upgrade.toggled_bit)
+                            if upgrade.toggled_address in toggle_addresses.keys():
+                                current_toggle_data = toggle_addresses[upgrade.toggled_address]
+                                new_toggle_value = current_toggle_data | toggle_bit
+                                toggle_addresses[upgrade.toggled_address] = new_toggle_value
+                            else:
+                                current_toggle_data = await self.read_ram_value_guarded(ctx, upgrade.toggled_address, self.iwram)
+                                if current_toggle_data is None:
+                                    return
+                                new_toggle_value = current_toggle_data | toggle_bit
+                                toggle_addresses[upgrade.toggled_address] = new_toggle_value
                         new_upgrade_value = current_upgrade_data | inv_bit
                         upgrade_addresses[upgrade.inventory_address] = new_upgrade_value
                     else:
                         current_upgrade_data = await self.read_ram_value_guarded(ctx, upgrade.inventory_address, self.iwram)
                         if current_upgrade_data is None:
                             return
+                        if current_upgrade_data & inv_bit == 0:
+                            toggle_bit = get_bit_value_from_position(upgrade.toggled_bit)
+                            if upgrade.toggled_address in toggle_addresses.keys():
+                                current_toggle_data = toggle_addresses[upgrade.toggled_address]
+                                new_toggle_value = current_toggle_data | toggle_bit
+                                toggle_addresses[upgrade.toggled_address] = new_toggle_value
+                            else:
+                                current_toggle_data = await self.read_ram_value_guarded(ctx, upgrade.toggled_address, self.iwram)
+                                if current_toggle_data is None:
+                                    return
+                                new_toggle_value = current_toggle_data | toggle_bit
+                                toggle_addresses[upgrade.toggled_address] = new_toggle_value
                         new_upgrade_value = current_upgrade_data | inv_bit
                         upgrade_addresses[upgrade.inventory_address] = new_upgrade_value
                 elif current_item_name in memory.tanks.keys():
@@ -254,6 +282,8 @@ class MetroidFusionClient(BizHawkClient):
                     write_list.append((keycard.address, [keycard_value], self.iwram))
                     write_list.append((memory.keycard_flash_address, [keycard_value], self.iwram))
             for address, value in upgrade_addresses.items():
+                write_list.append((address, [value], self.iwram))
+            for address, value in toggle_addresses.items():
                 write_list.append((address, [value], self.iwram))
             write_list.append((memory.FusionInfantMetroid.current_address, [infant_metroid_count], self.iwram))
             write_list.append((memory.tanks["Missile Tank"].max_address, [missile_max], self.iwram))

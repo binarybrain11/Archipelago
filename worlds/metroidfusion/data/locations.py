@@ -3,9 +3,10 @@ class Requirement():
     other_requirements: list["Requirement"] = []
     energy_tanks_needed: int = 0
 
-    def __init__(self, items_needed, other_requirements):
+    def __init__(self, items_needed, other_requirements, energy_tanks_needed = 0):
         self.items_needed = items_needed
         self.other_requirements = other_requirements
+        self.energy_tanks_needed = energy_tanks_needed
 
     def __repr__(self):
         return self.__class__.__name__
@@ -278,6 +279,19 @@ class CanAccessRipperTreasure(Requirement):
         Requirement(["Hi-Jump"], [CanFreezeEnemies])
     ]
 
+class CanAccessFieryStorage(Requirement):
+    items_needed = ["Varia Suit"]
+    other_requirements = [
+        CanBeatToughEnemy
+    ]
+
+class CanAccessFieryStorageUpper(Requirement):
+    items_needed = ["Varia Suit", "Speed Booster"]
+    other_requirements = [
+        Requirement(["Charge Beam"], [CanActivatePillar]),
+        Requirement(["Missile Data"], [CanActivatePillar]),
+    ]
+
 #region Region Definitions
 
 # Main Deck Regions
@@ -485,7 +499,7 @@ MainDeckHub.connections = [
     Connection(ArachnusZone, [CanDefeatSmallGeron, Requirement(["Morph Ball", "Screw Attack", "Space Jump"], [])]),
     Connection(HabitationDeck, [HasKeycard2]),
     Connection(SectorHub, [HasMorph]),
-    Connection(ReactorZone, [HasKeycard4, CanPowerBomb]),
+    Connection(ReactorZone, [Requirement(["Morph Ball"], [HasKeycard4, CanPowerBomb], 5)]),
     Connection(NexusStorage, [Requirement(["Level 2 Keycard"], [CanDefeatLargeGeron])])
 ]
 
@@ -542,8 +556,8 @@ HabitationDeck.locations = [
 ]
 
 ReactorZone.locations = [
-    FusionLocation("Main Deck -- Silo Catwalk", False, []),
-    FusionLocation("Main Deck -- Silo Scaffolding", False, [HasMorph])
+    FusionLocation("Main Deck -- Silo Catwalk", False, [CanBeatToughEnemy]),
+    FusionLocation("Main Deck -- Silo Scaffolding", False, [CanBeatToughEnemy])
 ]
 
 YakuzaZone.locations = [
@@ -704,7 +718,7 @@ Sector2NettoriZone.locations = [
 
 #region Sector 3 Topology
 Sector3Hub.connections = [
-    Connection(Sector3ToSector5, [Requirement(["Screw Attack", "Varia Suit"], [])], one_way=True),
+    Connection(Sector3ToSector5, [Requirement(["Screw Attack", "Varia Suit"], [CanAccessFieryStorage])], one_way=True),
     Connection(Sector3SecurityZone, [HasSpeedBooster]),
     Connection(Sector3MainShaft, [Requirement(["Morph Ball", "Speed Booster"], [])]),
     Connection(Sector3BOXZone, [CanDefeatMediumGeron]),
@@ -737,8 +751,8 @@ Sector3RightShaft.connections = [
 ]
 
 Sector3Hub.locations = [
-    FusionLocation("Sector 3 (PYR) -- Fiery Storage -- Lower Item", False, [HasVaria]),
-    FusionLocation("Sector 3 (PYR) -- Fiery Storage -- Upper Item", False, [Requirement(["Varia Suit", "Speed Booster"], [CanActivatePillar])])
+    FusionLocation("Sector 3 (PYR) -- Fiery Storage -- Lower Item", False, [CanAccessFieryStorage]),
+    FusionLocation("Sector 3 (PYR) -- Fiery Storage -- Upper Item", False, [CanAccessFieryStorageUpper])
 ]
 
 Sector3ToSector5.locations = [
@@ -864,7 +878,10 @@ Sector4SecurityZone.locations = [
 ]
 
 Sector4LowerSecurityZone.locations = [
-    FusionLocation("Sector 4 (AQA) -- Sanctuary Cache", False, [CanAccessSanctuaryCache])
+    FusionLocation("Sector 4 (AQA) -- Sanctuary Cache", False, [
+        Requirement(["Morph Ball", "Bomb Data"], [CanAccessSanctuaryCache]),
+        Requirement(["Morph Ball", "Hi-Jump"], [CanAccessSanctuaryCache])
+    ])
 ]
 
 Sector4SecurityRoom.locations = [
@@ -946,7 +963,7 @@ Sector5FrozenHub.locations = [
 ]
 
 Sector5BeforeNightmareHub.locations = [
-    FusionLocation("Sector 5 (ARC) -- Crow's Nest", False, [Requirement(["Morph Ball", "Power Bomb Data"], [CanJumpHigh])])
+    FusionLocation("Sector 5 (ARC) -- Crow's Nest", False, [Requirement(["Morph Ball", "Power Bomb Data"], [HasSpaceJump])])
 ]
 
 Sector5DataRoom.locations = [

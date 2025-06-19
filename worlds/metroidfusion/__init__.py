@@ -15,13 +15,14 @@ from .Logic import create_logic_rule, create_logic_rule_for_list, LogicObject
 from .Rom import MetroidFusionProcedurePatch
 from .data import memory
 from .data.locations import fusion_regions
+from .data.offworld_sprites import offworld_sprites
 from .data.room_names import room_names
 from .Client import MetroidFusionClient
 
 
 class MetroidFusionSettings(settings.Group):
     class RomFile(settings.UserFilePath):
-        """File name of the Zelda 1"""
+        """File name of the Metroid Fusion ROM"""
         description = "Metroid Fusion (USA) ROM File"
         copy_to = "Metroid Fusion (USA).gba"
         md5s = ["af5040fc0f579800151ee2a683e2e5b5"]
@@ -145,13 +146,21 @@ class MetroidFusionWorld(World):
             if location.name == "Victory":
                 continue
             location_data = get_location_data_by_name(location.name)
+            item_sprite = None
             if location.item.player == self.player:
                 item_name = ap_name_to_mars_name[location.item.name]
+                item_sprite = item_name
                 message = None
             else:
                 item_name = "None"
                 message = build_item_message(location.item.name, self.multiworld.player_name[location.item.player])
-            json_data = location_data.to_json(item_name)
+                game = self.multiworld.worlds[location.item.player].game
+                if game in offworld_sprites.keys():
+                    if location.item.name in offworld_sprites[game].keys():
+                        item_sprite = offworld_sprites[game][location.item.name]
+            if item_sprite is None:
+                item_sprite = "Empty"
+            json_data = location_data.to_json(item_name, item_sprite)
             if message is not None:
                 json_data["ItemMessages"] = message
             if location_data.major:
