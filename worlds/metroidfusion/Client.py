@@ -2,7 +2,8 @@ import logging
 from collections import deque
 from typing import TYPE_CHECKING
 
-from NetUtils import ClientStatus
+from BaseClasses import ItemClassification
+from NetUtils import ClientStatus, HintStatus
 
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
@@ -77,6 +78,7 @@ class MetroidFusionClient(BizHawkClient):
             await self.location_check(ctx)
             await self.received_items_check(ctx)
             await self.sync_upgrades(ctx)
+            await self.check_hints(ctx)
         except bizhawk.RequestFailedError:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
             pass
@@ -291,6 +293,41 @@ class MetroidFusionClient(BizHawkClient):
             write_list.append((memory.tanks["Energy Tank"].max_address + 1, [energy_max // 256], self.iwram))
             write_list.append((memory.tanks["Power Bomb Tank"].max_address, [power_bomb_max], self.iwram))
             await self.write_ram_values_guarded(ctx, write_list)
+
+    async def check_hints(self, ctx: "BizHawkClientContext"):
+        game_mode_data = await bizhawk.read(ctx.bizhawk_ctx, [(memory.game_mode, 1, self.iwram)])
+        if game_mode_data is None:
+            return
+        samus_pose_data = await bizhawk.read(ctx.bizhawk_ctx, [(memory.samus_pose, 1, self.iwram)])
+        if samus_pose_data is None:
+            return
+        game_mode = int.from_bytes(game_mode_data[0])
+        samus_pose = int.from_bytes(samus_pose_data[0])
+        if game_mode == memory.map_mode and samus_pose == memory.navigation_pose:
+            area_data = await bizhawk.read(ctx.bizhawk_ctx, [(memory.current_area, 1, self.iwram)])
+            if area_data is None:
+                return
+            room_data = await bizhawk.read(ctx.bizhawk_ctx, [(memory.current_room, 1, self.iwram)])
+            if room_data is None:
+                return
+            area = int.from_bytes(area_data[0])
+            room = int.from_bytes(room_data[0])
+            room_key = None
+            for key, value in memory.navigation_rooms.items():
+                if value.area == area and value.room == room:
+                    room_key = key
+            if "Hints" in ctx.slot_data.keys():
+                hints = ctx.slot_data["Hints"]
+                if room_key in hints:
+                    location_id = hints[room_key]["Location"]
+                    player_id = hints[room_key]["Player"]
+                    if player_id == ctx.slot:
+                        if location_id not in ctx.locations_scouted:
+                            ctx.locations_scouted.add(location_id)
+                            await ctx.send_msgs([{
+                                "cmd": "LocationScouts",
+                                "locations": [location_id],
+                                "create_as_hint": 2}])
 
 
     async def read_ram_values_guarded(self, ctx: "BizHawkClientContext", location: int, size: int, domain: str):

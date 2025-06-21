@@ -31,6 +31,14 @@ class FusionKeycard():
 class FusionInfantMetroid():
     current_address: int = 0x003E
 
+class FusionNavigationRoom():
+    area: int = 0
+    room: int = 0
+
+    def __init__(self, area: int, room: int):
+        self.area = area
+        self.room = room
+
 # These are all in IWRAM domain
 upgrades: dict[str, FusionUpgrade] = {
     "Morph Ball": FusionUpgrade(0x003D, 6, 0x131C, 6),
@@ -70,8 +78,27 @@ tanks: dict[str, FusionCapacity] = {
 
 game_mode = 0x0BDE
 ingame_mode = 0x01
+map_mode = 0x03
 credits_mode = 0x0B
 major_locations_start = 0x06B4
+current_area = 0x2C
+current_room = 0x2D
+samus_pose = 0x1245
+navigation_pose = 0x36
+
+navigation_rooms: dict[str, FusionNavigationRoom] = {
+    "MainDeckEast": FusionNavigationRoom(0, 9),
+    "MainDeckWest": FusionNavigationRoom(0, 16),
+    "OperationsDeck": FusionNavigationRoom(0, 32),
+    "AuxiliaryPower": FusionNavigationRoom(0, 56),
+    "RestrictedLabs": FusionNavigationRoom(0, 66),
+    "Sector1Entrance": FusionNavigationRoom(1, 2),
+    "Sector2Entrance": FusionNavigationRoom(2, 2),
+    "Sector3Entrance": FusionNavigationRoom(3, 0),
+    "Sector4Entrance": FusionNavigationRoom(4, 0),
+    "Sector5Entrance": FusionNavigationRoom(5, 0),
+    "Sector6Entrance": FusionNavigationRoom(6, 0)
+}
 
 # These are in EWRAM
 minor_locations_start = 0x037200

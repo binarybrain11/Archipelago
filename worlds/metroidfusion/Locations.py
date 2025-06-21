@@ -17,6 +17,7 @@ class LocationData():
     ap_id: int
     source_name: str
     room_location: tuple[int, int]
+    room_name: str
 
     def __init__(self, name: str, major: bool, ap_id: int):
         self.name = name
@@ -50,6 +51,14 @@ def build_item_message(item_name: str, player_name: str):
         "Kind": "CustomMessage"
     }
 
+def build_shiny_item_message(item_name: str):
+    return {
+        "Languages": {
+            "English": f"Found a Shiny {item_name}!\nIt's shiny, so you know it's special.",
+        },
+        "Kind": "CustomMessage"
+    }
+
 
 def populate_json_data(location_data: LocationData):
     file = pkgutil.get_data(__name__, "data/new_locations.json").decode()
@@ -70,6 +79,7 @@ locations = json_data["MinorLocations"]
 
 all_locations: list[LocationData] = []
 location_ids: dict[str, int] = dict()
+major_location_names: list[str] = []
 
 ap_id = 1
 for region in fusion_regions:
@@ -78,8 +88,25 @@ for region in fusion_regions:
         location_data.requirements = location.requirements
         populate_json_data(location_data)
         all_locations.append(location_data)
+        if location.major:
+            major_location_names.append(location.name)
         ap_id += 1
 
+difficult_speed_booster_list = [
+    "Sector 2 (TRO) -- Zazabi Speedway -- Lower Item",
+    "Sector 2 (TRO) -- Zazabi Speedway -- Upper Item",
+    "Sector 3 (PYR) -- Fiery Storage -- Upper Item",
+    "Sector 3 (PYR) -- Deserted Runway",
+    "Sector 3 (PYR) -- Garbage Chute -- Lower Item",
+    "Sector 3 (PYR) -- Garbage Chute -- Upper Item",
+    "Sector 6 (NOC) -- Spaceboost Alley -- Lower Item",
+    "Sector 6 (NOC) -- Spaceboost Alley -- Upper Item",
+    "Main Deck -- Restricted Airlock"
+]
+
+location_groups = {
+    "ShinesparkLocations": difficult_speed_booster_list
+}
 
 
 def get_location_data_by_name(name: str):

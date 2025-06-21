@@ -36,9 +36,9 @@ default_item_quantities = {
     "Level 0 Keycard": 0,
     "Missile Tank": 48,
     "Energy Tank": 20,
-    "Power Bomb Tank": 31,
+    "Power Bomb Tank": 36,
     "Ice Trap": 0,
-    "Infant Metroid": 5
+    "Infant Metroid": 0
 }
 
 ap_name_to_mars_name = {
