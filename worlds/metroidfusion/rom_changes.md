@@ -14,6 +14,7 @@
 - - Reaching the Operations Room requires Hi-Jump or Space Jump.
 - - Defeating the SA-X requires Charge Beam and Missiles.
 - - The level 4 keycard is not required for the Operations Room.
+- - The Main Deck music will change to its endgame version when these requirements are fulfilled.
 - Room layouts have been changed to facilitate better randomization.
 - You can now enable/disable power ups in the pause menu.
 - You can warp to your starting location by pressing L on the map screen. Ingame progress since your last save will be lost.
