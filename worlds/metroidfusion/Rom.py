@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import tempfile
 import typing
@@ -18,6 +19,8 @@ class FF4FEPatchExtension(APPatchExtension):
 
     @staticmethod
     def call_mars(caller, rom, placement_file):
+        from . import MetroidFusionWorld
+        logging.info(f"Metroid Fusion APWorld v{MetroidFusionWorld.version} used for patching.")
         patch_dict = json.loads(caller.get_file(placement_file))
         from .mars_patcher import patcher
         patcher.validate_patch_data(patch_dict)

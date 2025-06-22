@@ -157,6 +157,33 @@ class MetroidFusionClient(BizHawkClient):
                 up_bit = get_bit_value_from_position(upgrade.toggled_bit)
                 new_toggled_value = current_upgrade_toggled_data | up_bit
                 write_list.append((upgrade.toggled_address, [new_toggled_value], self.iwram))
+                if current_item_name == "Missile Data":
+                    missile_max_address = memory.tanks["Missile Tank"].max_address
+                    missile_current_address = memory.tanks["Missile Tank"].current_address
+                    missile_max_amount = await self.read_ram_value_guarded(ctx, missile_max_address, self.iwram)
+                    missile_current_amount = await self.read_ram_value_guarded(ctx, missile_current_address, self.iwram)
+                    if missile_max_amount is None or missile_current_amount is None:
+                        return
+                    missile_data_ammo = ctx.slot_data["MissileDataAmmo"]
+                    new_max_value = missile_max_amount + missile_data_ammo
+                    new_current_value = missile_current_amount + missile_data_ammo
+                    write_list.append((missile_current_address, [(new_current_value) % 256], self.iwram))
+                    write_list.append((missile_max_address, [(new_max_value) % 256], self.iwram))
+                    write_list.append((missile_current_address + 1, [(new_current_value) // 256], self.iwram))
+                    write_list.append((missile_max_address + 1, [(new_max_value) // 256], self.iwram))
+                if current_item_name == "Power Bomb Data":
+                    power_bomb_max_amount = await self.read_ram_value_guarded(
+                        ctx,
+                        memory.tanks["Power Bomb Tank"].max_address,
+                        self.iwram
+                    )
+                    power_bomb_current_amount = await self.read_ram_value_guarded(
+                        ctx,
+                        memory.tanks["Power Bomb Tank"].current_address,
+                        self.iwram
+                    )
+                    if power_bomb_max_amount is None or power_bomb_current_amount is None:
+                        return
             elif current_item_name in memory.tanks.keys():
                 tank = memory.tanks[current_item_name]
                 if current_item_name == "Power Bomb Tank":
@@ -166,8 +193,8 @@ class MetroidFusionClient(BizHawkClient):
                         return
                     current_amount = current_amount_data
                     max_amount = max_amount_data
-                    write_list.append((tank.current_address, [current_amount + tank.tank_size], self.iwram))
-                    write_list.append((tank.max_address, [max_amount + tank.tank_size], self.iwram))
+                    write_list.append((tank.current_address, [max(current_amount + tank.tank_size, 255)], self.iwram))
+                    write_list.append((tank.max_address, [max(max_amount + tank.tank_size, 255)], self.iwram))
                 elif current_item_name == "Energy Tank":
                     current_amount_data = await self.read_ram_values_guarded(ctx, tank.current_address, 2, self.iwram)
                     max_amount_data = await self.read_ram_values_guarded(ctx, tank.max_address, 2, self.iwram)
@@ -185,8 +212,10 @@ class MetroidFusionClient(BizHawkClient):
                         return
                     current_amount = int.from_bytes(current_amount_data, "little")
                     max_amount = int.from_bytes(max_amount_data, "little")
-                    write_list.append((tank.current_address, [current_amount + tank.tank_size], self.iwram))
-                    write_list.append((tank.max_address, [max_amount + tank.tank_size], self.iwram))
+                    write_list.append((tank.current_address, [(current_amount + tank.tank_size) % 256], self.iwram))
+                    write_list.append((tank.max_address, [(max_amount + tank.tank_size) % 256], self.iwram))
+                    write_list.append((tank.current_address + 1, [(current_amount + tank.tank_size) // 256], self.iwram))
+                    write_list.append((tank.max_address + 1, [(max_amount + tank.tank_size) // 256], self.iwram))
 
             items_received_count += 1
             write_list.append((memory.items_received_low, [items_received_count % 256], self.bus))
@@ -210,9 +239,9 @@ class MetroidFusionClient(BizHawkClient):
                 ctx.finished_game = True
 
     async def sync_upgrades(self, ctx: "BizHawkClientContext"):
-        missile_max = 10
+        missile_max = ctx.slot_data["MissileDataAmmo"]
         energy_max = 99
-        power_bomb_max = 10
+        power_bomb_max = ctx.slot_data["PowerBombDataAmmo"]
         infant_metroid_count = 0
         write_list: list[tuple[int, list[int], str]] = []
         upgrade_addresses = {}
@@ -270,11 +299,11 @@ class MetroidFusionClient(BizHawkClient):
                         upgrade_addresses[upgrade.inventory_address] = new_upgrade_value
                 elif current_item_name in memory.tanks.keys():
                     if current_item_name == "Missile Tank":
-                        missile_max += memory.tanks[current_item_name].tank_size
+                        missile_max += ctx.slot_data["MissileTankAmmo"]
                     elif current_item_name == "Energy Tank":
                         energy_max += memory.tanks[current_item_name].tank_size
                     elif current_item_name == "Power Bomb Tank":
-                        power_bomb_max += memory.tanks[current_item_name].tank_size
+                        power_bomb_max += ctx.slot_data["PowerBombTankAmmo"]
                 elif current_item_name in memory.keycards.keys():
                     keycard = memory.keycards[current_item_name]
                     current_keycard_data = await self.read_ram_value_guarded(ctx, keycard.address, self.iwram)
@@ -288,10 +317,11 @@ class MetroidFusionClient(BizHawkClient):
             for address, value in toggle_addresses.items():
                 write_list.append((address, [value], self.iwram))
             write_list.append((memory.FusionInfantMetroid.current_address, [infant_metroid_count], self.iwram))
-            write_list.append((memory.tanks["Missile Tank"].max_address, [missile_max], self.iwram))
+            write_list.append((memory.tanks["Missile Tank"].max_address, [missile_max % 256], self.iwram))
+            write_list.append((memory.tanks["Missile Tank"].max_address + 1, [missile_max // 256], self.iwram))
             write_list.append((memory.tanks["Energy Tank"].max_address, [energy_max % 256], self.iwram))
             write_list.append((memory.tanks["Energy Tank"].max_address + 1, [energy_max // 256], self.iwram))
-            write_list.append((memory.tanks["Power Bomb Tank"].max_address, [power_bomb_max], self.iwram))
+            write_list.append((memory.tanks["Power Bomb Tank"].max_address, [min(power_bomb_max, 255)], self.iwram))
             await self.write_ram_values_guarded(ctx, write_list)
 
     async def check_hints(self, ctx: "BizHawkClientContext"):

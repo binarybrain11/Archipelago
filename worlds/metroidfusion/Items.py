@@ -41,6 +41,28 @@ default_item_quantities = {
     "Infant Metroid": 0
 }
 
+major_abilities = [
+    "Missile Data",
+    "Morph Ball",
+    "Charge Beam",
+    "Bomb Data",
+    "Hi-Jump",
+    "Speed Booster",
+    "Level 2 Keycard",
+    "Super Missile",
+    "Varia Suit",
+    "Ice Missile",
+    "Wide Beam",
+    "Power Bomb Data",
+    "Space Jump",
+    "Plasma Beam",
+    "Gravity Suit",
+    "Diffusion Missile",
+    "Wave Beam",
+    "Screw Attack",
+    "Ice Beam"
+]
+
 ap_name_to_mars_name = {
     "Nothing": "None",
     "Level 0 Keycard": "Level0",

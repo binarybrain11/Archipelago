@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 from copy import deepcopy
 
@@ -12,7 +13,7 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule
 from .Hints import create_hints, HintedPair
 
-from .Items import item_table, default_item_quantities, ap_name_to_mars_name
+from .Items import item_table, default_item_quantities, ap_name_to_mars_name, major_abilities
 from .Locations import all_locations, MetroidFusionLocation, get_location_data_by_name, build_item_message, \
     location_groups, build_shiny_item_message
 from .Logic import create_logic_rule, create_logic_rule_for_list, LogicObject
@@ -71,6 +72,9 @@ class MetroidFusionWorld(World):
     item_name_to_id = {item: item_data.mars_id for item, item_data in item_table.items()}
     location_name_to_id = {location.name: location.ap_id for location in all_locations}
     location_name_groups = location_groups
+    version = 5
+
+    logging.info(f"Metroid Fusion APWorld v{version} used for generation.")
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -185,17 +189,26 @@ class MetroidFusionWorld(World):
 
 
     def create_navigation_text(self, hint_text: list[str], required_metroids: int):
-        beginning_text_addition = ""
+        briefing_text_addition_start = ""
+        if len(self.options.start_inventory) > 0:
+            starting_inventory = []
+            for item, quantity in self.options.start_inventory.items():
+                for i in range(quantity):
+                    starting_inventory.append(item)
+            starting_inventory_string = ", ".join(starting_inventory)
+            briefing_text_addition_start = f"Your starting gear is: {starting_inventory_string}. "
+        briefing_text_addition_end = ""
         if self.options.EnableHints:
-            beginning_text_addition = (f"Uplink at [COLOR=2]Navigation Rooms[/COLOR] along the way. "
+            briefing_text_addition_end = (f"Uplink at [COLOR=2]Navigation Rooms[/COLOR] along the way. "
                                        f"I can scan the station for useful equipment from there.")
         navigation_text = {
             "English": {
                 "ShipText": {
-                    "InitialText": f"Your objective is as follows: Find enough [COLOR=3]Infant Metroids[/COLOR] "
+                    "InitialText": f"{briefing_text_addition_start}"
+                                   f"Your objective is as follows: Find enough [COLOR=3]Infant Metroids[/COLOR] "
                                    f"({required_metroids}) to lure out the SA-X. "
                                    f"Then initiate the station's self-destruct sequence. "
-                                   f"{beginning_text_addition}"
+                                   f"{briefing_text_addition_end}"
                                    f"[OBJECTIVE]Good. Move out.",
                     "ConfirmText": "Any Objections, Lady?"
                 }
@@ -231,6 +244,65 @@ class MetroidFusionWorld(World):
                 }
         navigation_text["English"]["NavigationTerminals"] = nav_room_text
         return navigation_text
+
+    def build_starting_items_dict(self):
+        """
+            "StartingItems": {
+                "Energy": 199,
+                "Abilities": [],
+                "SecurityLevels": [
+                    0,
+                    3
+                ],
+                "DownloadedMaps": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6
+                ],
+                "Missiles": 10,
+                "PowerBombs": 10
+            },
+        """
+        start_inventory = self.options.start_inventory
+        energy = 99
+        missiles = 10
+        power_bombs = 10
+        security_levels = [0]
+        downloaded_maps = [0, 1, 2, 3, 4, 5, 6]
+        abilities = []
+        if "Energy Tank" in start_inventory.keys():
+            for i in range(start_inventory["Energy Tank"]):
+                energy += 100
+        if "Missile Tank" in start_inventory.keys():
+            for i in range(start_inventory["Missile Tank"]):
+                missiles += 5
+        if "Power Bomb Tank" in start_inventory.keys():
+            for i in range(start_inventory["Power Bomb Tank"]):
+                power_bombs += 2
+        for key in start_inventory.keys():
+            if key == "Level 1 Keycard":
+                security_levels.append(1)
+            if key == "Level 2 Keycard":
+                security_levels.append(2)
+            if key == "Level 3 Keycard":
+                security_levels.append(3)
+            if key == "Level 4 Keycard":
+                security_levels.append(4)
+            if key in major_abilities:
+                abilities.append(ap_name_to_mars_name[key])
+        return {
+                "Energy": energy,
+                "Abilities": abilities,
+                "SecurityLevels": security_levels,
+                "DownloadedMaps": downloaded_maps,
+                "Missiles": missiles,
+                "PowerBombs": power_bombs
+            }
+
 
     def generate_output(self, output_directory: str):
         patch_dict = dict()
@@ -286,9 +358,9 @@ class MetroidFusionWorld(World):
         patch_dict["RequiredMetroidCount"] = infant_metroids_required
         patch_dict["PowerBombsWithoutBombs"] = True
         patch_dict["AntiSoftlockRoomEdits"] = True
-        patch_dict["RevealHiddenTiles"] = True
+        patch_dict["RevealHiddenTiles"] = bool(self.options.RevealHiddenBlocks.value)
         patch_dict["DisableDemos"] = True
-        patch_dict["SkipDoorTransitions"] = True
+        patch_dict["SkipDoorTransitions"] = bool(self.options.FastDoorTransitions.value)
         patch_dict["UnexploredMap"] = True
         patch_dict["RoomNames"] = room_names
         if self.options.PaletteRandomization:
@@ -300,6 +372,16 @@ class MetroidFusionWorld(World):
                 infant_metroids_required)
         else:
             patch_dict["NavigationText"] = self.create_navigation_text([], infant_metroids_required)
+        if len(self.options.start_inventory) > 0:
+            pass
+            #patch_dict["StartingItems"] = self.build_starting_items_dict()
+        patch_dict["TankIncrements"] = {
+            "MissileTank": self.options.MissileTankAmmo.value,
+            "PowerBombTank": self.options.PowerBombTankAmmo.value,
+            "EnergyTank": 100,
+            "MissileData": self.options.MissileDataAmmo.value,
+            "PowerBombData": self.options.PowerBombDataAmmo.value
+        }
 
         rom_name_text = f'MFU{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}'
         rom_name_text = rom_name_text[:20]
@@ -348,7 +430,12 @@ class MetroidFusionWorld(World):
                 "Sector6Entrance": self.get_hint(self.hint_pairs[10])
             }
         return {
-            "Hints": hint_data
+            "Hints": hint_data,
+            "InfantMetroidsRequired": self.options.InfantMetroidsRequired.value,
+            "MissileDataAmmo": self.options.MissileDataAmmo.value,
+            "MissileTankAmmo": self.options.MissileTankAmmo.value,
+            "PowerBombDataAmmo": self.options.PowerBombDataAmmo.value,
+            "PowerBombTankAmmo": self.options.PowerBombTankAmmo.value
         }
 
     def get_hint(self, pair: HintedPair):

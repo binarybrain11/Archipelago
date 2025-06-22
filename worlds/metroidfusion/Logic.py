@@ -1,8 +1,8 @@
 from copy import copy
-from typing import Callable
 
 from BaseClasses import CollectionState
-from .data.locations import Requirement
+from .data.locations import Requirement, Level2KeycardRequirement
+from .Items import item_names
 
 
 class LogicObject():
@@ -28,84 +28,24 @@ class LogicObject():
 
 
 
-def create_logic_rule_for_list(requirements: list[Requirement]) -> tuple[list, int]:
-    expression = None
+def create_logic_rule_for_list(requirements: list[Requirement], debug: bool = False) -> tuple[list, int]:
     energy_tanks = 0
     requirements_list = []
     for requirement in requirements:
-        new_rule = create_logic_rule(requirement)
+        new_rule = create_logic_rule(requirement, debug)
         energy_tanks += new_rule[1]
         for requirement2 in new_rule[0]:
             requirements_list.append(requirement2)
         continue
     return requirements_list, energy_tanks
 
-def create_logic_rule(requirement: Requirement) -> tuple[list, int]:
+def create_logic_rule(requirement: Requirement, debug: bool = False) -> tuple[list, int]:
     requirements_list = []
     energy_tanks_needed = unpack_requirement(requirement, requirements_list, [])
+    if debug:
+        print(requirement)
+        print(requirements_list)
     return requirements_list, energy_tanks_needed
-
-def create_logic_rule_for_list2(requirements: list[Requirement], player: int) -> Callable:
-    expression = None
-    energy_tanks = 0
-    for requirement in requirements:
-        new_rule = create_logic_rule2(requirement, player)
-        energy_tanks += new_rule[1]
-        if expression is None:
-            expression = new_rule[0]
-        else:
-            expression = expression or new_rule[0]
-    if expression is None:
-        expression = lambda state: True
-    if energy_tanks > 0:
-        expression = lambda state: expression# and state.has("Energy Tank", player, energy_tanks)
-    return expression
-
-def create_logic_rule2(requirement: Requirement, player: int) -> tuple[Callable, int, list]:
-    requirements_list = []
-    energy_tanks_needed = unpack_requirement(requirement, requirements_list, [])
-    expression = None
-    for option in requirements_list:
-        new_rule = lambda state: state.has_all(option, player)
-        if expression is None:
-            expression = new_rule
-        else:
-            expression = expression or new_rule
-    if expression is None:
-        expression = lambda state: True
-    return expression, energy_tanks_needed, requirements_list
-
-item_names = [
-    "Level 0 Keycard",
-    "Missile Data",
-    "Morph Ball",
-    "Charge Beam",
-    "Level 1 Keycard",
-    "Bomb Data",
-    "Hi-Jump",
-    "Speed Booster",
-    "Level 2 Keycard",
-    "Super Missile",
-    "Varia Suit",
-    "Level 3 Keycard",
-    "Ice Missile",
-    "Wide Beam",
-    "Power Bomb Data",
-    "Space Jump",
-    "Plasma Beam",
-    "Gravity Suit",
-    "Level 4 Keycard",
-    "Diffusion Missile",
-    "Wave Beam",
-    "Screw Attack",
-    "Ice Beam",
-    "Missile Tank",
-    "Energy Tank",
-    "Power Bomb Tank",
-    "Ice Trap",
-    "Infant Metroid",
-    "Nothing"
-]
 
 def unpack_requirement(requirement: Requirement, possibilities: list[list[str]], parent_items: list[str]) -> int:
     energy_tanks = 0

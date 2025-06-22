@@ -9,7 +9,16 @@ class Requirement():
         self.energy_tanks_needed = energy_tanks_needed
 
     def __repr__(self):
-        return self.__class__.__name__
+        return_string = f"ItemsNeeded: [{", ".join(self.items_needed)}]"
+        return_string += "\n"
+        return_string += (f"OtherRequirements: "
+                          f"[{", ".join([str(requirement) for requirement in self.other_requirements])}]")
+        return_string += "\n"
+        return_string += f"EnergyTanks: {self.energy_tanks_needed}"
+        return return_string
+
+    def __str__(self):
+        return self.__repr__()
 
 class FusionLocation():
     name: str
@@ -132,14 +141,13 @@ class CanLavaDive(Requirement):
     items_needed = ["Varia Suit", "Gravity Suit"]
 
 class CanBomb(Requirement):
-    items_needed = ["Morph Ball"]
-    other_requirements = [
-        Requirement(["Bomb Data"], []),
-        Requirement(["Power Bomb Data"], [])
-    ]
+    items_needed = ["Morph Ball", "Bomb Data"]
 
 class CanPowerBomb(Requirement):
     items_needed = ["Morph Ball", "Power Bomb Data"]
+
+class CanBombOrPowerBomb(Requirement):
+    other_requirements = [CanBomb, CanPowerBomb]
 
 class CanPowerBombAndJumpHigh(Requirement):
     items_needed = ["Morph Ball", "Power Bomb Data"]
@@ -153,7 +161,10 @@ class CanBallJump(Requirement):
     ]
 
 class CanBallJumpAndBomb(Requirement):
-    other_requirements = [CanBomb, Requirement(["Hi-Jump"], [CanPowerBomb])]
+    other_requirements = [
+        Requirement(["Morph Ball", "Bomb Data"], []),
+        Requirement(["Hi-Jump"], [CanPowerBomb])
+    ]
 
 class CanScrewAttackAndSpaceJump(Requirement):
     items_needed = ["Screw Attack", "Space Jump"]
@@ -173,7 +184,7 @@ class CanFreezeEnemies(Requirement):
     ]
 
 class CanActivatePillar(Requirement):
-    other_requirements = [CanBomb, HasWaveBeam]
+    other_requirements = [CanBombOrPowerBomb, HasWaveBeam]
 
 class CanDiffusionMissile(Requirement):
     items_needed = ["Missile Data", "Diffusion Missile"]
@@ -241,7 +252,7 @@ class CanReachGenesisSpeedway(Requirement):
 
 class CanCrossFromReactorToSector2(Requirement):
     items_needed = ["Space Jump", "Missile Data"]
-    other_requirements = [CanBomb]
+    other_requirements = [CanBombOrPowerBomb]
 
 class CanReachAnimorphs(Requirement):
     items_needed = ["Space Jump", "Charge Beam", "Wave Beam", "Missile Data", "Super Missile"]
@@ -249,7 +260,7 @@ class CanReachAnimorphs(Requirement):
 class CanReachOasisStorage(Requirement):
     other_requirements = [
         CanPowerBomb,
-        Requirement(["Hi-Jump"], [CanBomb])
+        Requirement(["Hi-Jump"], [CanBombOrPowerBomb])
     ]
 
 class CanAscendBOXRoom(Requirement):
@@ -275,11 +286,11 @@ class CanAccessDrainPipe(Requirement):
 
 class CanAscendCheddarBay(Requirement):
     items_needed = ["Missile Data"]
-    other_requirements = [CanBomb]
+    other_requirements = [CanBombOrPowerBomb]
 
 class CanAccessReservoirVault(Requirement):
     other_requirements = [
-        Requirement(["Hi-Jump"], [CanBomb])
+        Requirement(["Hi-Jump"], [CanBombOrPowerBomb])
     ]
 
 class CanAccessSanctuaryCache(Requirement):
@@ -333,16 +344,23 @@ class CanAccessZazabiSpeedway(Requirement):
         "Charge Beam",
         "Missile Data",
         "Space Jump",
-        "Speed Booster"
+        "Speed Booster",
+        "Screw Attack"
     ]
 
 class CanAccessWateringHole(Requirement):
     items_needed = ["Gravity Suit", "Speed Booster"]
     other_requirements = [
-        Requirement(["Charge Beam"], [CanBomb]),
-        Requirement(["Plasma Beam"], [CanBomb]),
-        Requirement(["Missile Data"], [CanBomb])
+        Requirement(["Charge Beam"], [CanBallJump]),
+        Requirement(["Plasma Beam"], [CanBallJump]),
+        Requirement(["Missile Data"], [CanBallJump])
 
+    ]
+
+class CanBacktrackToCultivationStation(Requirement):
+    other_requirements = [
+        Requirement(["Hi-Jump"], [CanBombOrPowerBomb]),
+        Requirement(["Space Jump"], [CanBombOrPowerBomb])
     ]
 #endregion
 
@@ -353,8 +371,14 @@ class CanAccessWateringHole(Requirement):
 class MainDeckHub(FusionRegion):
     name = "Main Deck Hub"
 
-class ArachnusZone(FusionRegion):
-    name = "Arachnus Zone"
+class LowerArachnusArena(FusionRegion):
+    name = "Lower Arachnus Arena"
+
+class VentilationZone(FusionRegion):
+    name = "Ventilation Zone"
+
+class UpperArachnusArena(FusionRegion):
+    name = "Upper Arachnus Arena"
 
 class OperationsDeck(FusionRegion):
     name = "Operations Deck"
@@ -565,19 +589,25 @@ class Sector6AfterVariaCoreXZone(FusionRegion):
 #region Main Deck Topology
 MainDeckHub.connections = [
     Connection(OperationsDeck, []),
-    Connection(ArachnusZone, [CanDefeatSmallGeron, Requirement(["Morph Ball", "Screw Attack", "Space Jump"], [])]),
+    Connection(VentilationZone, [CanDefeatSmallGeron]),
+    Connection(LowerArachnusArena, [HasMorph]),
+    Connection(UpperArachnusArena, [Requirement(["Morph Ball", "Space Jump", "Screw Attack"], [])]),
     Connection(HabitationDeck, [HasKeycard2]),
     Connection(SectorHub, [HasMorph]),
     Connection(ReactorZone, [Requirement(["Morph Ball"], [HasKeycard4, CanPowerBomb], 5)]),
     Connection(NexusStorage, [Requirement(["Level 2 Keycard"], [CanDefeatLargeGeron])])
 ]
 
+VentilationZone.connections = [
+    Connection(UpperArachnusArena, [CanFightBeginnerBoss])
+]
+
 OperationsDeck.connections = [
-    Connection(ArachnusZone, [HasMissile], one_way=True)
+    Connection(LowerArachnusArena, [HasMissile], one_way=True)
 ]
 
 ReactorZone.connections = [
-    Connection(YakuzaZone, [CanFightBoss]),
+    Connection(YakuzaZone, [Requirement([], [HasMissile, HasChargeBeam])]),
     Connection(AuxiliaryReactor, [HasWaveBeam], one_way=True),
     Connection(Sector2NettoriZone, [CanCrossFromReactorToSector2], one_way=True)
 ]
@@ -611,12 +641,18 @@ OperationsDeck.locations = [
     FusionLocation("Main Deck -- Operations Deck Data Room", True, [])
 ]
 
-ArachnusZone.locations = [
-    FusionLocation("Main Deck -- Arachnus Arena -- Core X", True, [CanFightBeginnerBoss]),
-    FusionLocation("Main Deck -- Arachnus Arena -- Upper Item", False, [HasMissile, HasChargeBeam]),
-    FusionLocation("Main Deck -- Attic", False, [HasMissile]),
+VentilationZone.locations = [
     FusionLocation("Main Deck -- Operations Ventilation", False, []),
-    FusionLocation("Main Deck -- Operations Ventilation Storage", False, []),
+    FusionLocation("Main Deck -- Operations Ventilation Storage", False, [])
+]
+
+UpperArachnusArena.locations = [
+    FusionLocation("Main Deck -- Arachnus Arena -- Upper Item", False, []),
+    FusionLocation("Main Deck -- Attic", False, [HasMissile]),
+]
+
+LowerArachnusArena.locations = [
+    FusionLocation("Main Deck -- Arachnus Arena -- Core X", True, [CanFightBeginnerBoss])
 ]
 
 HabitationDeck.locations = [
@@ -630,7 +666,7 @@ ReactorZone.locations = [
 ]
 
 YakuzaZone.locations = [
-    FusionLocation("Main Deck -- Yakuza Arena", True, [CanFightBoss])
+    FusionLocation("Main Deck -- Yakuza Arena", True, [CanFightMidgameBoss])
 ]
 
 AuxiliaryReactor.locations = [
@@ -723,8 +759,8 @@ Sector1TourianHub.locations = [
 #region Sector 2 Topology
 Sector2Hub.connections = [
     Connection(Sector2ToSector4, [HasScrewAttack]),
-    Connection(Sector2LeftSide, [CanBomb]),
-    Connection(Sector2ZazabiZoneUpper, [CanBomb]),
+    Connection(Sector2LeftSide, [CanBombOrPowerBomb]),
+    Connection(Sector2ZazabiZoneUpper, [CanBombOrPowerBomb]),
     Connection(Sector2NettoriZone, [CanPowerBombAndJumpHigh])
 ]
 
@@ -733,11 +769,11 @@ Sector2ToSector4.connections = [
 ]
 
 Sector2LeftSide.connections = [
-    Connection(Sector2ZazabiZone, [CanBomb], one_way=True)
+    Connection(Sector2ZazabiZone, [CanBombOrPowerBomb], one_way=True)
 ]
 
 Sector2ZazabiZone.connections = [
-    Connection(Sector2LeftSide, [Requirement(["Space Jump"], [CanBomb])]),
+    Connection(Sector2LeftSide, [Requirement(["Space Jump"], [CanBombOrPowerBomb])]),
     Connection(Sector2NettoriZone, [HasSpaceJump]),
     Connection(Sector2ZazabiZoneUpper, [CanAccessZazabiSpeedway, HasSpaceJump])
 ]
@@ -749,11 +785,11 @@ Sector2ZazabiZoneUpper.connections = [
 Sector2Hub.locations = [
     FusionLocation("Sector 2 (TRO) -- Crumble City -- Lower Item", False, [CanScrewAttackAndSpaceJump]),
     FusionLocation("Sector 2 (TRO) -- Crumble City -- Upper Item", False, [CanScrewAttackAndSpaceJump]),
-    FusionLocation("Sector 2 (TRO) -- Data Courtyard", False, [CanBomb]),
+    FusionLocation("Sector 2 (TRO) -- Data Courtyard", False, [CanBombOrPowerBomb]),
     FusionLocation("Sector 2 (TRO) -- Data Room", True, [HasKeycard1]),
     FusionLocation("Sector 2 (TRO) -- Kago Room", False, [CanJumpHigh, HasScrewAttack]),
     FusionLocation("Sector 2 (TRO) -- Level 1 Security Room", True, []),
-    FusionLocation("Sector 2 (TRO) -- Lobby Cache", False, [Requirement(["Level 1 Keycard"], [CanBomb])]),
+    FusionLocation("Sector 2 (TRO) -- Lobby Cache", False, [Requirement(["Level 1 Keycard"], [CanBombOrPowerBomb])]),
 ]
 
 Sector2LeftSide.locations = [
@@ -761,7 +797,7 @@ Sector2LeftSide.locations = [
 ]
 
 Sector2ZazabiZone.locations = [
-    FusionLocation("Sector 2 (TRO) -- Cultivation Station", False, [CanBomb]),
+    FusionLocation("Sector 2 (TRO) -- Cultivation Station", False, [CanBacktrackToCultivationStation]),
     FusionLocation("Sector 2 (TRO) -- Oasis", False, [CanJumpHigh]),
     FusionLocation("Sector 2 (TRO) -- Oasis Storage", False, [CanReachOasisStorage]),
     FusionLocation("Sector 2 (TRO) -- Ripper Tower -- Lower Item", False, [Requirement(["Morph Ball"], [CanFreezeEnemies])]),
@@ -773,7 +809,7 @@ Sector2ZazabiZone.locations = [
 ]
 
 Sector2ZazabiZoneUpper.locations = [
-    FusionLocation("Sector 2 (TRO) -- Dessgeega Dorm", False, [CanBomb])
+    FusionLocation("Sector 2 (TRO) -- Dessgeega Dorm", False, [CanBombOrPowerBomb])
 ]
 
 Sector2NettoriZone.locations = [
@@ -790,7 +826,7 @@ Sector3Hub.connections = [
     Connection(Sector3ToSector5, [Requirement(["Screw Attack", "Varia Suit"], [CanAccessFieryStorage])], one_way=True),
     Connection(Sector3SecurityZone, [HasSpeedBooster]),
     Connection(Sector3MainShaft, [Requirement(["Morph Ball", "Speed Booster"], [])]),
-    Connection(Sector3BOXZone, [Requirement(["Level 2 Keycard"], [CanDefeatMediumGeron], 5)]),
+    Connection(Sector3BOXZone, [Level2KeycardRequirement([], [CanDefeatMediumGeron])]),
     Connection(Sector3Attic, [Requirement(["Screw Attack", "Space Jump"], [HasMorph, HasMissile])])
 ]
 
@@ -800,9 +836,9 @@ Sector3ToSector5.connections = [
 ]
 
 Sector3MainShaft.connections = [
-    Connection(Sector3Hub, [HasMorph], one_way=True),
+    Connection(Sector3Hub, [CanBomb], one_way=True),
     Connection(Sector3BoilerZone, [Level2KeycardRequirement([], [HasVaria])]),
-    Connection(Sector3BOXZone, [CanBallJumpAndBomb]),
+    Connection(Sector3BOXZone, [Level2KeycardRequirement([], [CanBallJumpAndBomb])]),
     Connection(Sector3SovaProcessing, [Level2KeycardRequirement(["Varia Suit"], [HasSpaceJump, HasWaveBeam])])
 ]
 
@@ -811,7 +847,7 @@ Sector3BOXZone.connections = [
 ]
 
 Sector3Attic.connections = [
-    Connection(Sector3Hub, [CanBomb], one_way=True),
+    Connection(Sector3Hub, [CanBombOrPowerBomb], one_way=True),
     Connection(Sector3BOXZone, [CanFightBoss], one_way=True)
 ]
 
@@ -846,12 +882,12 @@ Sector3BoilerZone.locations = [
 
 Sector3BOXZone.locations = [
     FusionLocation("Sector 3 (PYR) -- Bob's Abode", False, [HasMorph]),
-    FusionLocation("Sector 3 (PYR) -- Data Room", True, [CanFightBoss]),
+    FusionLocation("Sector 3 (PYR) -- Data Room", True, [Level2KeycardRequirement([], [CanFightBoss])]),
     FusionLocation("Sector 3 (PYR) -- Geron's Treasure", False, [CanDefeatMediumGeron])
 ]
 
 Sector3Attic.locations = [
-    FusionLocation("Sector 3 (PYR) -- Alcove -- Lower Item", False, [CanBomb]),
+    FusionLocation("Sector 3 (PYR) -- Alcove -- Lower Item", False, [CanBombOrPowerBomb]),
     FusionLocation("Sector 3 (PYR) -- Alcove -- Upper Item", False, [Requirement(["Speed Booster"], [CanPowerBomb])]),
     FusionLocation("Sector 3 (PYR) -- Deserted Runway", False, [HasSpeedBooster]),
 ]
@@ -867,7 +903,7 @@ Sector3SovaProcessing.locations = [
 
 #region Sector 4 Topology
 Sector4Hub.connections = [
-    Connection(Sector4UpperZone, [CanBomb], one_way=True),
+    Connection(Sector4UpperZone, [CanBombOrPowerBomb], one_way=True),
     Connection(Sector4DataZone, [Requirement(["Morph Ball", "Diffusion Missile"], [])]),
     Connection(Sector4RightWaterZone, [Requirement(["Diffusion Missile", "Gravity Suit"], [])])
 ]
@@ -982,7 +1018,7 @@ Sector5FrozenHub.connections = [
     Connection(Sector5DataRoom, [HasKeycard3], one_way=True),
     Connection(Sector5BeforeNightmareHub, [HasKeycard3]),
     Connection(Sector5SecurityZone, [
-        Requirement(["Speed Booster"], [CanBomb]),
+        Requirement(["Speed Booster"], [CanBombOrPowerBomb]),
         Requirement(["Level 3 Keycard"], [HasWaveBeam])
     ], one_way=True),
 
@@ -990,7 +1026,7 @@ Sector5FrozenHub.connections = [
 
 Sector5SecurityZone.connections = [
     Connection(Sector5DataRoom, [Requirement(["Space Jump"], [HasKeycard3])]),
-    Connection(Sector5FrozenHub, [HasKeycard3, Requirement(["Space Jump"], [CanBomb])], one_way=True)
+    Connection(Sector5FrozenHub, [HasKeycard3, Requirement(["Space Jump"], [CanBombOrPowerBomb])], one_way=True)
 ]
 
 Sector5DataRoom.connections = [
@@ -1067,7 +1103,7 @@ Sector6Hub.connections = [
 
 Sector6Crossroads.connections = [
     Connection(Sector6BeforeXBOXZone, [Requirement(["Varia Suit", "Level 4 Keycard"], [CanPowerBomb])]),
-    Connection(Sector6BeforeVariaCoreXZone, [Requirement(["Speed Booster"], [CanBomb])]),
+    Connection(Sector6BeforeVariaCoreXZone, [Requirement(["Speed Booster"], [CanBombOrPowerBomb])]),
     Connection(Sector6AfterVariaCoreXZone, [Requirement(["Varia Suit"], [HasScrewAttack])])
 ]
 
@@ -1106,9 +1142,9 @@ Sector6Hub.locations = [
 
 Sector6Crossroads.locations = [
     FusionLocation("Sector 6 (NOC) -- Catacombs", False, []),
-    FusionLocation("Sector 6 (NOC) -- Missile Mimic Lodge", False, [Requirement(["Varia Suit"], [CanBomb])]),
+    FusionLocation("Sector 6 (NOC) -- Missile Mimic Lodge", False, [Requirement(["Varia Suit"], [CanBombOrPowerBomb])]),
     FusionLocation("Sector 6 (NOC) -- Pillar Highway", False, [Requirement(["Screw Attack", "Speed Booster", "Varia Suit"], [CanBomb, HasWaveBeam])]),
-    FusionLocation("Sector 6 (NOC) -- Vault", False, [CanBomb])
+    FusionLocation("Sector 6 (NOC) -- Vault", False, [CanBombOrPowerBomb])
 ]
 
 Sector6BeforeXBOXZone.locations = [
@@ -1151,7 +1187,9 @@ Sector6AfterVariaCoreXZone.locations = [
 
 fusion_regions: list[FusionRegion] = [
     MainDeckHub,
-    ArachnusZone,
+    VentilationZone,
+    UpperArachnusArena,
+    LowerArachnusArena,
     OperationsDeck,
     HabitationDeck,
     SectorHub,

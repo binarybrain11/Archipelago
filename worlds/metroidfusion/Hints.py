@@ -37,7 +37,7 @@ def build_hint_text(world: "MetroidFusionWorld", hinted_pair: HintedPair):
     if world.player == hinted_pair.location.player:
         location_text = f"your [COLOR=2]{hinted_pair.location.name}[/COLOR]"
     else:
-        location_text = (f"[COLOR=4]{world.multiworld.get_player_name(hinted_pair.item.player)}'s[/COLOR] "
+        location_text = (f"[COLOR=4]{world.multiworld.get_player_name(hinted_pair.location.player)}'s[/COLOR] "
                          f"[COLOR=2]{hinted_pair.location.name}[/COLOR]")
     return f"{item_text} can be found at {location_text}."
 

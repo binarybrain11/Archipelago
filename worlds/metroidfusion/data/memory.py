@@ -94,10 +94,10 @@ navigation_rooms: dict[str, FusionNavigationRoom] = {
     "RestrictedLabs": FusionNavigationRoom(0, 66),
     "Sector1Entrance": FusionNavigationRoom(1, 2),
     "Sector2Entrance": FusionNavigationRoom(2, 2),
-    "Sector3Entrance": FusionNavigationRoom(3, 0),
-    "Sector4Entrance": FusionNavigationRoom(4, 0),
-    "Sector5Entrance": FusionNavigationRoom(5, 0),
-    "Sector6Entrance": FusionNavigationRoom(6, 0)
+    "Sector3Entrance": FusionNavigationRoom(3, 2),
+    "Sector4Entrance": FusionNavigationRoom(4, 2),
+    "Sector5Entrance": FusionNavigationRoom(5, 2),
+    "Sector6Entrance": FusionNavigationRoom(6, 2)
 }
 
 # These are in EWRAM
