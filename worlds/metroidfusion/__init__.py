@@ -72,14 +72,18 @@ class MetroidFusionWorld(World):
     item_name_to_id = {item: item_data.mars_id for item, item_data in item_table.items()}
     location_name_to_id = {location.name: location.ap_id for location in all_locations}
     location_name_groups = location_groups
-    version = 5
+    version = 6
 
-    logging.info(f"Metroid Fusion APWorld v{version} used for generation.")
+
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.filler_items = None
         self.hint_pairs = None
+
+    @classmethod
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
+        logging.info(f"Metroid Fusion APWorld v{cls.version} used for generation.")
 
     def create_item(self, name: str):
         return MetroidFusionItem(name, item_table[name].classification, self.item_name_to_id[name], self.player)
