@@ -1085,7 +1085,7 @@ Sector5SecurityZone.locations = [
 
 Sector5NightmareHub.locations = [
     FusionLocation("Sector 5 (ARC) -- Flooded Airlock to Sector 4 (AQA)", False, [CanSpeedBoosterUnderwater]),
-    FusionLocation("Sector 5 (ARC) -- Mini-Fridge", False, [Requirement(["Varia Suit", "Gravity Suit"], [CanBallJump])]),
+    FusionLocation("Sector 5 (ARC) -- Mini-Fridge", False, [Requirement(["Missile Data", "Varia Suit", "Gravity Suit"], [CanBallJump])]),
     FusionLocation("Sector 5 (ARC) -- Nightmare Hub", False, [Requirement(["Power Bomb Data"], [CanBallJump])]),
     FusionLocation("Sector 5 (ARC) -- Ruined Break Room", False, [CanPowerBomb])
 ]

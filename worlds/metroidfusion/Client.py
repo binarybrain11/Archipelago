@@ -184,6 +184,11 @@ class MetroidFusionClient(BizHawkClient):
                     )
                     if power_bomb_max_amount is None or power_bomb_current_amount is None:
                         return
+                    power_bomb_data_ammo = ctx.slot_data["PowerBombDataAmmo"]
+                    new_max_value = power_bomb_max_amount + power_bomb_data_ammo
+                    new_current_value = power_bomb_current_amount + power_bomb_data_ammo
+                    write_list.append((memory.tanks["Power Bomb Tank"].current_address, [min(new_current_value, 255)], self.iwram))
+                    write_list.append((memory.tanks["Power Bomb Tank"].max_address, [min(new_max_value, 255)], self.iwram))
             elif current_item_name in memory.tanks.keys():
                 tank = memory.tanks[current_item_name]
                 if current_item_name == "Power Bomb Tank":
@@ -193,8 +198,9 @@ class MetroidFusionClient(BizHawkClient):
                         return
                     current_amount = current_amount_data
                     max_amount = max_amount_data
-                    write_list.append((tank.current_address, [max(current_amount + tank.tank_size, 255)], self.iwram))
-                    write_list.append((tank.max_address, [max(max_amount + tank.tank_size, 255)], self.iwram))
+                    additional_amount = ctx.slot_data["PowerBombTankAmmo"]
+                    write_list.append((tank.current_address, [min(current_amount + additional_amount, 99)], self.iwram))
+                    write_list.append((tank.max_address, [min(max_amount + additional_amount, 99)], self.iwram))
                 elif current_item_name == "Energy Tank":
                     current_amount_data = await self.read_ram_values_guarded(ctx, tank.current_address, 2, self.iwram)
                     max_amount_data = await self.read_ram_values_guarded(ctx, tank.max_address, 2, self.iwram)
@@ -212,10 +218,11 @@ class MetroidFusionClient(BizHawkClient):
                         return
                     current_amount = int.from_bytes(current_amount_data, "little")
                     max_amount = int.from_bytes(max_amount_data, "little")
-                    write_list.append((tank.current_address, [(current_amount + tank.tank_size) % 256], self.iwram))
-                    write_list.append((tank.max_address, [(max_amount + tank.tank_size) % 256], self.iwram))
-                    write_list.append((tank.current_address + 1, [(current_amount + tank.tank_size) // 256], self.iwram))
-                    write_list.append((tank.max_address + 1, [(max_amount + tank.tank_size) // 256], self.iwram))
+                    additional_amount = ctx.slot_data["MissileTankAmmo"]
+                    write_list.append((tank.current_address, [(current_amount + additional_amount) % 256], self.iwram))
+                    write_list.append((tank.max_address, [(max_amount + additional_amount) % 256], self.iwram))
+                    write_list.append((tank.current_address + 1, [(current_amount + additional_amount) // 256], self.iwram))
+                    write_list.append((tank.max_address + 1, [(max_amount + additional_amount) // 256], self.iwram))
 
             items_received_count += 1
             write_list.append((memory.items_received_low, [items_received_count % 256], self.bus))
@@ -321,7 +328,7 @@ class MetroidFusionClient(BizHawkClient):
             write_list.append((memory.tanks["Missile Tank"].max_address + 1, [missile_max // 256], self.iwram))
             write_list.append((memory.tanks["Energy Tank"].max_address, [energy_max % 256], self.iwram))
             write_list.append((memory.tanks["Energy Tank"].max_address + 1, [energy_max // 256], self.iwram))
-            write_list.append((memory.tanks["Power Bomb Tank"].max_address, [min(power_bomb_max, 255)], self.iwram))
+            write_list.append((memory.tanks["Power Bomb Tank"].max_address, [min(power_bomb_max, 99)], self.iwram))
             await self.write_ram_values_guarded(ctx, write_list)
 
     async def check_hints(self, ctx: "BizHawkClientContext"):
