@@ -7,6 +7,7 @@ from NetUtils import ClientStatus, HintStatus
 
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
+
 from .data import memory
 from .data.minor_locations import location_order as minor_location_order
 from .data.major_locations import location_order as major_location_order
@@ -54,6 +55,8 @@ class MetroidFusionClient(BizHawkClient):
         ctx.game = self.game
         ctx.items_handling = 0b111
         ctx.want_slot_data = True
+        from . import MetroidFusionWorld
+        logger.info(f"Metroid Fusion APWorld v{MetroidFusionWorld.version} used for playing.")
 
         return True
 
