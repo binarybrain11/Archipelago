@@ -110,3 +110,5 @@ items_received_high = 0x0E01FFFF
 # This is in ROM
 rom_name_location = 0x7FFF00
 player_name_location = 0x7FFF50
+generation_version_location = 0x7FFF90
+patching_version_location = 0x7FFF91

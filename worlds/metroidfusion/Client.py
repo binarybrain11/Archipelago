@@ -38,6 +38,7 @@ class MetroidFusionClient(BizHawkClient):
         self.bus = "System Bus"
         self.rom = "ROM"
         self.location_name_to_id: dict[str, int] | None = None
+        self.logged_version = False
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -55,8 +56,18 @@ class MetroidFusionClient(BizHawkClient):
         ctx.game = self.game
         ctx.items_handling = 0b111
         ctx.want_slot_data = True
-        from . import MetroidFusionWorld
-        logger.info(f"Metroid Fusion APWorld v{MetroidFusionWorld.version} used for playing.")
+        if not self.logged_version:
+            from . import MetroidFusionWorld
+            generation_version = (await bizhawk.read(
+                ctx.bizhawk_ctx,
+        [(memory.generation_version_location, 1, self.rom)]))[0]
+            patch_version = (await bizhawk.read(
+                ctx.bizhawk_ctx,
+                [(memory.patching_version_location, 1, self.rom)]))[0]
+            logger.info(f"Metroid Fusion APWorld v{int.from_bytes(generation_version)} was used for generation.")
+            logger.info(f"Metroid Fusion APWorld v{int.from_bytes(patch_version)} was used for patching.")
+            logger.info(f"Metroid Fusion APWorld v{MetroidFusionWorld.version} used for playing.")
+            self.logged_version = True
 
         return True
 

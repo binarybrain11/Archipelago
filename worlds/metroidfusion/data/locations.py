@@ -276,12 +276,12 @@ class CanAccessL2SecurityRoom(Requirement):
     other_requirements = [CanBallJumpAndBomb]
 
 class CanAccessDrainPipe(Requirement):
-    items_needed = ["Morph Ball"]
+    items_needed = ["Morph Ball", "Speed Booster"]
     other_requirements = [
         HasWaveBeam,
         CanPowerBomb,
         Requirement(["Missile Data", "Super Missile"], []),
-        Requirement(["Screw Attack", "Gravity Suit"], [])
+        Requirement(["Screw Attack"], [])
     ]
 
 class CanAscendCheddarBay(Requirement):
@@ -307,7 +307,10 @@ class CanEscapeNightmareRoom(Requirement):
 
 class CanAccessRipperRoad(Requirement):
     items_needed = ["Morph Ball", "Hi-Jump"]
-    other_requirements = [CanFreezeEnemies]
+    other_requirements = [
+        Requirement(["Screw Attack"], [CanFreezeEnemies]),
+        Requirement(["Morph Ball", "Power Bomb Data"], [CanFreezeEnemies]),
+    ]
 
 class CanAccessRipperTreasure(Requirement):
     items_needed = ["Power Bomb Data"]
@@ -319,7 +322,8 @@ class CanAccessRipperTreasure(Requirement):
 class CanAccessFieryStorage(Requirement):
     items_needed = ["Varia Suit"]
     other_requirements = [
-        CanBeatToughEnemy
+        CanBeatToughEnemy,
+        CanLavaDive
     ]
 
 class CanAccessFieryStorageUpper(Requirement):
@@ -547,8 +551,11 @@ class Sector5BeforeNightmareHub(FusionRegion):
 class Sector5NightmareHub(FusionRegion):
     name = "Sector 5 Nightmare Hub"
 
-class Sector5NightmareZone(FusionRegion):
-    name = "Sector 5 Nightmare Zone"
+class Sector5NightmareZoneUpper(FusionRegion):
+    name = "Sector 5 Nightmare Zone Upper"
+
+class Sector5NightmareZoneArena(FusionRegion):
+    name = "Sector 5 Nightmare Zone Arena"
 
 #endregion
 
@@ -871,7 +878,7 @@ Sector3SecurityZone.locations = [
 
 Sector3MainShaft.locations = [
     FusionLocation("Sector 3 (PYR) -- Namihe's Lair", False, [CanPowerBombAndJumpHigh]),
-    FusionLocation("Sector 3 (PYR) -- Processing Access", False, []),
+    FusionLocation("Sector 3 (PYR) -- Processing Access", False, [Level2KeycardRequirement([], [])]),
 ]
 
 Sector3BoilerZone.locations = [
@@ -905,7 +912,7 @@ Sector3SovaProcessing.locations = [
 Sector4Hub.connections = [
     Connection(Sector4UpperZone, [CanBombOrPowerBomb], one_way=True),
     Connection(Sector4DataZone, [Requirement(["Morph Ball", "Diffusion Missile"], [])]),
-    Connection(Sector4RightWaterZone, [Requirement(["Diffusion Missile", "Gravity Suit"], [])])
+    Connection(Sector4RightWaterZone, [Requirement(["Missile Data", "Diffusion Missile", "Gravity Suit"], [])])
 ]
 
 Sector4ToSector6.connections = [
@@ -953,7 +960,7 @@ Sector4DataZone.connections = [
 
 Sector4Hub.locations = [
     FusionLocation("Sector 4 (AQA) -- Drain Pipe", False, [CanAccessDrainPipe]),
-    FusionLocation("Sector 4 (AQA) -- Reservoir East", False, [CanPowerBomb])
+    FusionLocation("Sector 4 (AQA) -- Reservoir East", False, [Requirement(["Speed Booster"], [CanPowerBomb])])
 ]
 
 Sector4PumpControl.locations = [
@@ -999,7 +1006,7 @@ Sector4RightWaterZone.locations = [
 ]
 
 Sector4DataZone.locations = [
-    FusionLocation("Sector 4 (AQA) -- Data Room", True, [Requirement([], [HasKeycard4])])
+    FusionLocation("Sector 4 (AQA) -- Data Room", True, [Requirement(["Speed Booster"], [HasKeycard4])])
 ]
 
 #endregion
@@ -1036,16 +1043,21 @@ Sector5DataRoom.connections = [
 
 Sector5BeforeNightmareHub.connections = [
     Connection(Sector3ToSector5, [CanJumpHigh]),
-    Connection(Sector5NightmareHub, [HasHiJump], one_way=True)
+    Connection(Sector5NightmareHub, [Requirement(["Hi-Jump"], [CanBeatToughEnemy])], one_way=True)
 ]
 
 Sector5NightmareHub.connections = [
     Connection(Sector5BeforeNightmareHub, [Requirement(["Gravity Suit"], [CanScrewAttackAndSpaceJump])]),
-    Connection(Sector5NightmareZone, [CanSpeedBoosterUnderwater, HasMorph], one_way=True),
-    Connection(Sector4UpperWaterZone, [CanSpeedBoosterUnderwater])
+    Connection(Sector5NightmareZoneArena, [CanSpeedBoosterUnderwater], one_way=True),
+    Connection(Sector4UpperWaterZone, [CanSpeedBoosterUnderwater]),
+    Connection(Sector5NightmareZoneUpper, [CanFightBoss])
 ]
 
-Sector5NightmareZone.connections = [
+Sector5NightmareZoneUpper.connections = [
+    Connection(Sector5NightmareZoneArena, [])
+]
+
+Sector5NightmareZoneArena.connections = [
     Connection(Sector5NightmareHub, [CanEscapeNightmareRoom])
 ]
 
@@ -1064,7 +1076,7 @@ Sector5BigRoom.locations = [
 ]
 
 Sector5FrozenHub.locations = [
-    FusionLocation("Sector 5 (ARC) -- Ripper Road", False, [])
+    FusionLocation("Sector 5 (ARC) -- Ripper Road", False, [CanAccessRipperRoad])
 ]
 
 Sector5BeforeNightmareHub.locations = [
@@ -1090,9 +1102,12 @@ Sector5NightmareHub.locations = [
     FusionLocation("Sector 5 (ARC) -- Ruined Break Room", False, [CanPowerBomb])
 ]
 
-Sector5NightmareZone.locations = [
-    FusionLocation("Sector 5 (ARC) -- Nightmare Arena", True, [CanFightLateGameBoss]),
+Sector5NightmareZoneUpper.locations = [
     FusionLocation("Sector 5 (ARC) -- Nightmare Nook", False, [CanBallJumpAndBomb])
+]
+
+Sector5NightmareZoneArena.locations = [
+    FusionLocation("Sector 5 (ARC) -- Nightmare Arena", True, [CanFightLateGameBoss])
 ]
 #endregion
 
@@ -1137,7 +1152,10 @@ Sector6AfterVariaCoreXZone.connections = [
 ]
 
 Sector6Hub.locations = [
-    FusionLocation("Sector 6 (NOC) -- Entrance Lobby", False, [HasMorph])
+    FusionLocation("Sector 6 (NOC) -- Entrance Lobby", False, [
+        Requirement(["Hi-Jump", "Screw Attack"], []),
+        Requirement([], [CanBallJumpAndBomb])
+    ])
 ]
 
 Sector6Crossroads.locations = [
@@ -1239,7 +1257,8 @@ fusion_regions: list[FusionRegion] = [
     Sector5DataRoom,
     Sector5BeforeNightmareHub,
     Sector5NightmareHub,
-    Sector5NightmareZone,
+    Sector5NightmareZoneUpper,
+    Sector5NightmareZoneArena,
     Sector6Hub,
     Sector6Crossroads,
     Sector6BeforeXBOXZone,

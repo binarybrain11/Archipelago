@@ -387,6 +387,8 @@ class MetroidFusionWorld(World):
             "PowerBombData": self.options.PowerBombDataAmmo.value
         }
 
+        patch_dict["GenerationVersion"] = MetroidFusionWorld.version
+
         rom_name_text = f'MFU{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}'
         rom_name_text = rom_name_text[:20]
         rom_name = bytearray(rom_name_text, 'utf-8')
