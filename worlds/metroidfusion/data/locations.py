@@ -1159,10 +1159,10 @@ Sector6Hub.locations = [
 ]
 
 Sector6Crossroads.locations = [
-    FusionLocation("Sector 6 (NOC) -- Catacombs", False, []),
+    FusionLocation("Sector 6 (NOC) -- Catacombs", False, [HasSpeedBooster]),
     FusionLocation("Sector 6 (NOC) -- Missile Mimic Lodge", False, [Requirement(["Varia Suit"], [CanBombOrPowerBomb])]),
     FusionLocation("Sector 6 (NOC) -- Pillar Highway", False, [Requirement(["Screw Attack", "Speed Booster", "Varia Suit"], [CanBomb, HasWaveBeam])]),
-    FusionLocation("Sector 6 (NOC) -- Vault", False, [CanBombOrPowerBomb])
+    FusionLocation("Sector 6 (NOC) -- Vault", False, [CanBallJumpAndBomb])
 ]
 
 Sector6BeforeXBOXZone.locations = [
