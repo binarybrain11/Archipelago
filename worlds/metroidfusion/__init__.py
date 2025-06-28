@@ -421,6 +421,9 @@ class MetroidFusionWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         hint_data = {}
+        infant_metroids_required = self.options.InfantMetroidsRequired.value
+        if infant_metroids_required > self.options.InfantMetroidsInPool.value:
+            infant_metroids_required = self.options.InfantMetroidsInPool.value
         if self.options.EnableHints:
             hint_data = {
                 "MainDeckEast": self.get_hint(self.hint_pairs[0]),
@@ -437,7 +440,7 @@ class MetroidFusionWorld(World):
             }
         return {
             "Hints": hint_data,
-            "InfantMetroidsRequired": self.options.InfantMetroidsRequired.value,
+            "InfantMetroidsRequired": infant_metroids_required,
             "MissileDataAmmo": self.options.MissileDataAmmo.value,
             "MissileTankAmmo": self.options.MissileTankAmmo.value,
             "PowerBombDataAmmo": self.options.PowerBombDataAmmo.value,
