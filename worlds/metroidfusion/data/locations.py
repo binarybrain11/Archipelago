@@ -290,7 +290,8 @@ class CanAscendCheddarBay(Requirement):
 
 class CanAccessReservoirVault(Requirement):
     other_requirements = [
-        Requirement(["Hi-Jump"], [CanBombOrPowerBomb])
+        Requirement(["Hi-Jump"], [CanBombOrPowerBomb]),
+        Requirement(["Space Jump"], [CanBombOrPowerBomb])
     ]
 
 class CanAccessSanctuaryCache(Requirement):
@@ -331,6 +332,7 @@ class CanAccessFieryStorageUpper(Requirement):
     other_requirements = [
         Requirement(["Charge Beam"], [CanActivatePillar]),
         Requirement(["Missile Data"], [CanActivatePillar]),
+        Requirement(["Gravity Suit"], [CanActivatePillar]),
     ]
 
 class CanAccessGarbageChute(Requirement):
@@ -365,6 +367,22 @@ class CanBacktrackToCultivationStation(Requirement):
     other_requirements = [
         Requirement(["Hi-Jump"], [CanBombOrPowerBomb]),
         Requirement(["Space Jump"], [CanBombOrPowerBomb])
+    ]
+
+class CanAccessYakuza(Requirement):
+    other_requirements = [
+        Requirement(["Morph Ball", "Bomb Data"], [CanBeatToughEnemy]),
+        Requirement(["Morph Ball", "Power Bomb Data"], [CanBeatToughEnemy]),
+        Requirement(["Morph Ball", "Wave Beam"], [CanBeatToughEnemy]),
+        Requirement(["Morph Ball", "Missile Data", "Diffusion Missile"], [CanBeatToughEnemy])
+    ]
+
+class CanCrossSector4RightWaterCorner(Requirement):
+    items_needed = "Missile Data"
+    other_requirements = [
+        Requirement(["Morph Ball", "Bomb Data"], [CanFreezeEnemies]),
+        Requirement(["Morph Ball", "Power Bomb Data"], [CanFreezeEnemies]),
+        Requirement(["Space Jump"], [CanBombOrPowerBomb]),
     ]
 #endregion
 
@@ -614,7 +632,7 @@ OperationsDeck.connections = [
 ]
 
 ReactorZone.connections = [
-    Connection(YakuzaZone, [Requirement([], [HasMissile, HasChargeBeam])]),
+    Connection(YakuzaZone, [CanAccessYakuza]),
     Connection(AuxiliaryReactor, [HasWaveBeam], one_way=True),
     Connection(Sector2NettoriZone, [CanCrossFromReactorToSector2], one_way=True)
 ]
@@ -830,7 +848,7 @@ Sector2NettoriZone.locations = [
 
 #region Sector 3 Topology
 Sector3Hub.connections = [
-    Connection(Sector3ToSector5, [Requirement(["Screw Attack", "Varia Suit"], [CanAccessFieryStorage])], one_way=True),
+    Connection(Sector3ToSector5, [Requirement(["Screw Attack"], [CanAccessFieryStorage])], one_way=True),
     Connection(Sector3SecurityZone, [HasSpeedBooster]),
     Connection(Sector3MainShaft, [Requirement(["Morph Ball", "Speed Booster"], [])]),
     Connection(Sector3BOXZone, [Level2KeycardRequirement([], [CanDefeatMediumGeron])]),
@@ -883,8 +901,8 @@ Sector3MainShaft.locations = [
 
 Sector3BoilerZone.locations = [
     FusionLocation("Sector 3 (PYR) -- Lava Maze", False, [Requirement([], [CanNavigateLavaMaze])]),
-    FusionLocation("Sector 3 (PYR) -- Main Boiler Control Room -- Boiler", True, [CanFightBoss]),
-    FusionLocation("Sector 3 (PYR) -- Main Boiler Control Room -- Core X", True, [CanFightBoss])
+    FusionLocation("Sector 3 (PYR) -- Main Boiler Control Room -- Boiler", True, [HasMissile]),
+    FusionLocation("Sector 3 (PYR) -- Main Boiler Control Room -- Core X", True, [HasMissile])
 ]
 
 Sector3BOXZone.locations = [
@@ -911,8 +929,8 @@ Sector3SovaProcessing.locations = [
 #region Sector 4 Topology
 Sector4Hub.connections = [
     Connection(Sector4UpperZone, [CanBombOrPowerBomb], one_way=True),
-    Connection(Sector4DataZone, [Requirement(["Morph Ball", "Diffusion Missile"], [])]),
-    Connection(Sector4RightWaterZone, [Requirement(["Missile Data", "Diffusion Missile", "Gravity Suit"], [])])
+    Connection(Sector4DataZone, [Requirement(["Missile Data", "Diffusion Missile", "Speed Booster"], [CanBombOrPowerBomb])]),
+    Connection(Sector4RightWaterZone, [Requirement(["Missile Data", "Diffusion Missile", "Gravity Suit", "Soeed Booster"], [CanBombOrPowerBomb])])
 ]
 
 Sector4ToSector6.connections = [
@@ -950,12 +968,12 @@ Sector4LowerSecurityZone.connections = [
 ]
 
 Sector4RightWaterZone.connections = [
-    Connection(Sector4DataZone, [CanFreezeEnemies, HasSpaceJump]),
+    Connection(Sector4DataZone, [CanCrossSector4RightWaterCorner]),
     Connection(Sector4ToSector6, [Requirement(["Missile Data"], [CanFreezeEnemies, HasSpaceJump])])
 ]
 
 Sector4DataZone.connections = [
-    Connection(Sector4ToSector6, [CanDiffusionMissile])
+    Connection(Sector4ToSector6, [Requirement(["Missile Data", "Diffusion Missile"], [CanBombOrPowerBomb])])
 ]
 
 Sector4Hub.locations = [
@@ -1015,6 +1033,10 @@ Sector4DataZone.locations = [
 Sector5Hub.connections = [
     Connection(Sector5ToSector6, [Requirement(["Level 3 Keycard"], [HasScrewAttack])]),
     Connection(Sector5BigRoom, [HasKeycard3, Requirement(["Morph Ball"], [HasMissile])])
+]
+
+Sector5ToSector6.connections = [
+    Connection(Sector6Crossroads, [HasScrewAttack])
 ]
 
 Sector5BigRoom.connections = [

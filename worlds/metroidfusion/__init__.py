@@ -72,7 +72,7 @@ class MetroidFusionWorld(World):
     item_name_to_id = {item: item_data.mars_id for item, item_data in item_table.items()}
     location_name_to_id = {location.name: location.ap_id for location in all_locations}
     location_name_groups = location_groups
-    version = 7
+    version = 8
 
 
 
@@ -128,10 +128,13 @@ class MetroidFusionWorld(World):
 
     def create_items(self):
         itempool = []
-        sphere_1_locations = ["Main Deck -- Quarantine Bay", "Main Deck -- Operations Deck Data Room"]
-        sphere_1_item_names = ["Morph Ball", "Missile Data"]
-        preplaced_location = self.random.choice(sphere_1_locations)
-        preplaced_item = self.random.choice(sphere_1_item_names)
+        preplaced_item = None
+        preplaced_location = None
+        if self.options.EarlyProgression == self.options.EarlyProgression.option_normal:
+            sphere_1_locations = ["Main Deck -- Quarantine Bay", "Main Deck -- Operations Deck Data Room"]
+            sphere_1_item_names = ["Morph Ball", "Missile Data"]
+            preplaced_location = self.random.choice(sphere_1_locations)
+            preplaced_item = self.random.choice(sphere_1_item_names)
         item_quantities = deepcopy(default_item_quantities)
         infant_metroids_in_pool = self.options.InfantMetroidsInPool.value
         item_quantities["Infant Metroid"] = infant_metroids_in_pool

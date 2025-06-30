@@ -3,6 +3,14 @@ from dataclasses import dataclass
 from Options import (Toggle, Range, Choice, PerGameCommonOptions, DefaultOnToggle, StartInventoryPool, OptionGroup,
                      OptionSet, Visibility)
 
+class EarlyProgression(Choice):
+    """Determines if an early progression item guaranteed in one of your first two locations.
+    Option is in testing and may increase generation failures."""
+    display_name = "Early Progression"
+    option_none = 0
+    option_normal = 1
+    default = 1
+
 class InfantMetroidsInPool(Range):
     """How many Infant Metroids will be in the item pool."""
     display_name = "Infant Metroids in Pool"
@@ -64,6 +72,7 @@ class PowerBombTankAmmo(Range):
 
 @dataclass
 class MetroidFusionOptions(PerGameCommonOptions):
+    EarlyProgression: EarlyProgression
     InfantMetroidsInPool: InfantMetroidsInPool
     InfantMetroidsRequired: InfantMetroidsRequired
     PaletteRandomization: PaletteRandomization

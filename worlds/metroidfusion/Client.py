@@ -231,12 +231,14 @@ class MetroidFusionClient(BizHawkClient):
                     if current_amount_data is None or max_amount_data is None:
                         return
                     current_amount = int.from_bytes(current_amount_data, "little")
+                    new_current = min(current_amount, 999)
                     max_amount = int.from_bytes(max_amount_data, "little")
+                    new_max = min(max_amount, 999)
                     additional_amount = ctx.slot_data["MissileTankAmmo"]
-                    write_list.append((tank.current_address, [(current_amount + additional_amount) % 256], self.iwram))
-                    write_list.append((tank.max_address, [(max_amount + additional_amount) % 256], self.iwram))
-                    write_list.append((tank.current_address + 1, [(current_amount + additional_amount) // 256], self.iwram))
-                    write_list.append((tank.max_address + 1, [(max_amount + additional_amount) // 256], self.iwram))
+                    write_list.append((tank.current_address, [new_current % 256], self.iwram))
+                    write_list.append((tank.max_address, [new_max % 256], self.iwram))
+                    write_list.append((tank.current_address + 1, [new_current // 256], self.iwram))
+                    write_list.append((tank.max_address + 1, [new_max // 256], self.iwram))
 
             items_received_count += 1
             write_list.append((memory.items_received_low, [items_received_count % 256], self.bus))
@@ -337,6 +339,7 @@ class MetroidFusionClient(BizHawkClient):
                 write_list.append((address, [value], self.iwram))
             for address, value in toggle_addresses.items():
                 write_list.append((address, [value], self.iwram))
+            missile_max = min(missile_max, 999)
             write_list.append((memory.FusionInfantMetroid.current_address, [infant_metroid_count], self.iwram))
             write_list.append((memory.tanks["Missile Tank"].max_address, [missile_max % 256], self.iwram))
             write_list.append((memory.tanks["Missile Tank"].max_address + 1, [missile_max // 256], self.iwram))
