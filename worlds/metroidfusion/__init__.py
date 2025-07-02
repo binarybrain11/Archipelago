@@ -72,7 +72,7 @@ class MetroidFusionWorld(World):
     item_name_to_id = {item: item_data.mars_id for item, item_data in item_table.items()}
     location_name_to_id = {location.name: location.ap_id for location in all_locations}
     location_name_groups = location_groups
-    version = 8
+    version = 9
 
 
 
@@ -98,8 +98,10 @@ class MetroidFusionWorld(World):
             region = Region(region_data.name, self.player, self.multiworld)
             self.multiworld.regions.append(region)
 
-        main_deck = self.get_region("Main Deck Hub")
-        menu.connect(main_deck)
+        starting_region = self.get_region("Main Deck Hub")
+        if self.options.GameMode == self.options.GameMode.option_open_sector_hub:
+            starting_region = self.get_region("Sector Hub")
+        menu.connect(starting_region)
 
         # Define connections
         for origin_region_data in fusion_regions:
@@ -107,12 +109,18 @@ class MetroidFusionWorld(World):
             for connection in origin_region_data.connections:
                 connecting_region = self.get_region(connection.destination.name)
                 logic_object = LogicObject(self.player)
-                logic_object.requirements, logic_object.energy_tanks = create_logic_rule_for_list(connection.requirements)
+                logic_object.requirements, logic_object.energy_tanks = create_logic_rule_for_list(connection.requirements, self.options)
                 origin_region.connect(
                     connecting_region,
                     f"{origin_region.name} to {connecting_region.name}",
                     logic_object.logic_rule
                 )
+                if not connection.one_way:
+                    connecting_region.connect(
+                        origin_region,
+                        f"{origin_region.name} to {connecting_region.name} Reverse",
+                        logic_object.logic_rule
+                    )
             for location in origin_region_data.locations:
                 new_location = MetroidFusionLocation(
                     self.player,
@@ -126,15 +134,46 @@ class MetroidFusionWorld(World):
         operations_deck.locations.append(victory_event)
         victory_event.place_locked_item(self.create_event("Victory"))
 
+    def build_early_progression_for_vanilla(self):
+        if self.options.EarlyProgression == self.options.EarlyProgression.option_normal:
+            sphere_1_item_names = ["Morph Ball", "Missile Data"]
+            sphere_1_locations = ["Main Deck -- Quarantine Bay", "Main Deck -- Operations Deck Data Room"]
+            preplaced_item = self.random.choice(sphere_1_item_names)
+            preplaced_location = self.random.choice(sphere_1_locations)
+            return preplaced_item, preplaced_location
+        elif self.options.EarlyProgression == self.options.EarlyProgression.option_advanced:
+            sphere_1_item_names = ["Morph Ball", "Missile Data", "Screw Attack"]
+            sphere_1_locations = ["Main Deck -- Quarantine Bay", "Main Deck -- Operations Deck Data Room"]
+            if self.options.TrickyShinesparksInRegionLogic:
+                sphere_1_item_names.append("Speed Booster")
+            preplaced_item = self.random.choice(sphere_1_item_names)
+            preplaced_location = self.random.choice(sphere_1_locations)
+            return preplaced_item, preplaced_location
+        else:
+            return None, None
+
+    def build_early_progression_for_osh(self):
+        sphere_1_item_names = ["Morph Ball", "Missile Data", "Screw Attack", "Speed Booster"]
+        sphere_1_locations = ["Sector 2 (TRO) -- Level 1 Security Room"]
+        preplaced_item = self.random.choice(sphere_1_item_names)
+        preplaced_location = self.random.choice(sphere_1_locations)
+        if len(self.options.start_inventory.value.keys()) == 0:
+            starting_item = self.random.choice(major_abilities)
+            self.options.start_inventory.value[starting_item] = 1
+            self.push_precollected(self.create_item(starting_item))
+        if "Energy Tank" not in self.options.start_inventory.value.keys():
+            self.options.start_inventory.value["Energy Tank"] = 1
+            self.push_precollected(self.create_item("Energy Tank"))
+        return preplaced_item, preplaced_location
+
     def create_items(self):
         itempool = []
         preplaced_item = None
         preplaced_location = None
-        if self.options.EarlyProgression == self.options.EarlyProgression.option_normal:
-            sphere_1_locations = ["Main Deck -- Quarantine Bay", "Main Deck -- Operations Deck Data Room"]
-            sphere_1_item_names = ["Morph Ball", "Missile Data"]
-            preplaced_location = self.random.choice(sphere_1_locations)
-            preplaced_item = self.random.choice(sphere_1_item_names)
+        if self.options.GameMode == self.options.GameMode.option_vanilla:
+            preplaced_item, preplaced_location = self.build_early_progression_for_vanilla()
+        elif self.options.GameMode == self.options.GameMode.option_open_sector_hub:
+            preplaced_item, preplaced_location = self.build_early_progression_for_osh()
         item_quantities = deepcopy(default_item_quantities)
         infant_metroids_in_pool = self.options.InfantMetroidsInPool.value
         item_quantities["Infant Metroid"] = infant_metroids_in_pool
@@ -155,7 +194,7 @@ class MetroidFusionWorld(World):
             ap_location = self.get_location(location.name)
             location_data = get_location_data_by_name(location.name)
             logic_object = LogicObject(self.player)
-            logic_object.requirements, logic_object.energy_tanks = create_logic_rule_for_list(location_data.requirements)
+            logic_object.requirements, logic_object.energy_tanks = create_logic_rule_for_list(location_data.requirements, self.options)
             add_rule(ap_location, logic_object.logic_rule)
         infant_metroids_required = self.options.InfantMetroidsRequired.value
         if infant_metroids_required > self.options.InfantMetroidsInPool.value:
@@ -252,64 +291,109 @@ class MetroidFusionWorld(World):
         navigation_text["English"]["NavigationTerminals"] = nav_room_text
         return navigation_text
 
-    def build_starting_items_dict(self):
-        """
-            "StartingItems": {
-                "Energy": 199,
-                "Abilities": [],
-                "SecurityLevels": [
-                    0,
-                    3
-                ],
-                "DownloadedMaps": [
-                    0,
-                    1,
-                    2,
-                    3,
-                    4,
-                    5,
-                    6
-                ],
-                "Missiles": 10,
-                "PowerBombs": 10
-            },
-        """
-        start_inventory = self.options.start_inventory
-        energy = 99
-        missiles = 10
-        power_bombs = 10
-        security_levels = [0]
-        downloaded_maps = [0, 1, 2, 3, 4, 5, 6]
-        abilities = []
-        if "Energy Tank" in start_inventory.keys():
-            for i in range(start_inventory["Energy Tank"]):
-                energy += 100
-        if "Missile Tank" in start_inventory.keys():
-            for i in range(start_inventory["Missile Tank"]):
-                missiles += 5
-        if "Power Bomb Tank" in start_inventory.keys():
-            for i in range(start_inventory["Power Bomb Tank"]):
-                power_bombs += 2
-        for key in start_inventory.keys():
-            if key == "Level 1 Keycard":
-                security_levels.append(1)
-            if key == "Level 2 Keycard":
-                security_levels.append(2)
-            if key == "Level 3 Keycard":
-                security_levels.append(3)
-            if key == "Level 4 Keycard":
-                security_levels.append(4)
-            if key in major_abilities:
-                abilities.append(ap_name_to_mars_name[key])
-        return {
-                "Energy": energy,
-                "Abilities": abilities,
-                "SecurityLevels": security_levels,
-                "DownloadedMaps": downloaded_maps,
-                "Missiles": missiles,
-                "PowerBombs": power_bombs
-            }
+    @staticmethod
+    def build_door_dict():
+        return [
+        {
+            "Area": 0,
+            "Door": 51,
+            "LockType": "Open"
+        },
+        {
+            "Area": 0,
+            "Door": 57,
+            "LockType": "Open"
+        },
+        {
+            "Area": 0,
+            "Door": 52,
+            "LockType": "Open"
+        },
+        {
+            "Area": 0,
+            "Door": 53,
+            "LockType": "Open"
+        },
+        {
+            "Area": 0,
+            "Door": 54,
+            "LockType": "Open"
+        },
+        {
+            "Area": 0,
+            "Door": 55,
+            "LockType": "Open"
+        },
+        {
+            "Area": 0,
+            "Door": 56,
+            "LockType": "Open"
+        },
+        {
+            "Area": 0,
+            "Door": 58,
+            "LockType": "Open"
+        },
+        {
+            "Area": 0,
+            "Door": 59,
+            "LockType": "Open"
+        },
+        {
+            "Area": 0,
+            "Door": 60,
+            "LockType": "Open"
+        },
+        {
+            "Area": 0,
+            "Door": 61,
+            "LockType": "Open"
+        },
+        {
+            "Area": 0,
+            "Door": 62,
+            "LockType": "Open"
+        }
+    ]
 
+    @staticmethod
+    def build_starting_location_dict():
+        return {
+            "Area": 0,
+            "Room": 24,
+            "BlockX": 24,
+            "BlockY": 18
+        }
+
+    def build_nav_locks_dict(self):
+        if self.options.GameMode == self.options.GameMode.option_vanilla:
+            return {
+                "MainDeckWest": "OPEN",
+                "MainDeckEast": "OPEN",
+                "OperationsDeck": "OPEN",
+                "Sector1Entrance": "OPEN",
+                "Sector2Entrance": "OPEN",
+                "Sector3Entrance": "OPEN",
+                "Sector4Entrance": "OPEN",
+                "Sector5Entrance": "OPEN",
+                "Sector6Entrance": "OPEN",
+                "AuxiliaryPower": "OPEN",
+                "RestrictedLabs": "OPEN"
+            }
+        elif self.options.GameMode == self.options.GameMode.option_open_sector_hub:
+            return {
+                "MainDeckWest": "OPEN",
+                "MainDeckEast": "OPEN",
+                "OperationsDeck": "OPEN",
+                "Sector1Entrance": "BLUE",
+                "Sector2Entrance": "BLUE",
+                "Sector3Entrance": "GREEN",
+                "Sector4Entrance": "GREEN",
+                "Sector5Entrance": "YELLOW",
+                "Sector6Entrance": "YELLOW",
+                "AuxiliaryPower": "OPEN",
+                "RestrictedLabs": "OPEN"
+            }
 
     def generate_output(self, output_directory: str):
         patch_dict = dict()
@@ -390,6 +474,12 @@ class MetroidFusionWorld(World):
             "PowerBombData": self.options.PowerBombDataAmmo.value
         }
 
+        if self.options.GameMode == self.options.GameMode.option_open_sector_hub:
+            patch_dict["DoorLocks"] = self.build_door_dict()
+            patch_dict["StartingLocation"] = self.build_starting_location_dict()
+
+        patch_dict["NavStationLocks"] = self.build_nav_locks_dict()
+
         patch_dict["GenerationVersion"] = MetroidFusionWorld.version
 
         rom_name_text = f'MFU{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}'
@@ -447,7 +537,9 @@ class MetroidFusionWorld(World):
             "MissileDataAmmo": self.options.MissileDataAmmo.value,
             "MissileTankAmmo": self.options.MissileTankAmmo.value,
             "PowerBombDataAmmo": self.options.PowerBombDataAmmo.value,
-            "PowerBombTankAmmo": self.options.PowerBombTankAmmo.value
+            "PowerBombTankAmmo": self.options.PowerBombTankAmmo.value,
+            "TrickyShinesparks": self.options.TrickyShinesparksInRegionLogic.value,
+            "GameMode": self.options.GameMode.value
         }
 
     def get_hint(self, pair: HintedPair):

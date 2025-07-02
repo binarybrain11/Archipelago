@@ -30,6 +30,7 @@ class MetroidFusionClient(BizHawkClient):
     game = "Metroid Fusion"
     system = "GBA"
     patch_suffix = ".apmetfus"
+    current_sector: int = 0
 
     def __init__(self) -> None:
         self.ewram = "EWRAM"
@@ -39,6 +40,7 @@ class MetroidFusionClient(BizHawkClient):
         self.rom = "ROM"
         self.location_name_to_id: dict[str, int] | None = None
         self.logged_version = False
+        self.current_sectpr = 0
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -93,6 +95,7 @@ class MetroidFusionClient(BizHawkClient):
             await self.received_items_check(ctx)
             await self.sync_upgrades(ctx)
             await self.check_hints(ctx)
+            await self.update_map(ctx)
         except bizhawk.RequestFailedError:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
             pass
@@ -383,6 +386,19 @@ class MetroidFusionClient(BizHawkClient):
                                 "locations": [location_id],
                                 "create_as_hint": 2}])
 
+    async def update_map(self, ctx: "BizHawkClientContext"):
+        current_sector = await self.read_ram_value_guarded(ctx, memory.current_area, self.iwram)
+        if current_sector is None:
+            return
+        if current_sector != self.current_sector:
+            self.current_sector = current_sector
+            await ctx.send_msgs([{
+                "cmd": "Set",
+                "key": f"current_sector",
+                "default": 0,
+                "want_reply": False,
+                "operations": [{"operation": "replace", "value": self.current_sector}],
+            }])
 
     async def read_ram_values_guarded(self, ctx: "BizHawkClientContext", location: int, size: int, domain: str):
         value = await bizhawk.guarded_read(ctx.bizhawk_ctx,

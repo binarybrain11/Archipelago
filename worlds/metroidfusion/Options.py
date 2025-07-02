@@ -4,12 +4,30 @@ from Options import (Toggle, Range, Choice, PerGameCommonOptions, DefaultOnToggl
                      OptionSet, Visibility)
 
 class EarlyProgression(Choice):
-    """Determines if an early progression item guaranteed in one of your first two locations.
+    """Determines if an early progression item guaranteed in one of your first locations.
+    Normal restricts the starting item pool to Morph Ball and Missiles.
+    Advanced expands the pool to Screw Attack.
+    If Tricky Shinessparks In Region Logic (below) is enabled, adds Speed Booster as well
     Option is in testing and may increase generation failures."""
     display_name = "Early Progression"
     option_none = 0
     option_normal = 1
+    option_advanced = 2
     default = 1
+
+class TrickyShinesparksInRegionLogic(Toggle):
+    """Are difficult or risky shinesparks required to navigate around?
+    Note that this does not exclude items that require shinesparking in vanilla to obtain.
+    Use the ShinesparkLocations location group for that."""
+    display_name = "Tricky Shinesparks in Region Logic"
+
+class GameMode(Choice):
+    """Determines starting location and accessibility.
+    Vanilla starts you in the Docking Bay with no items.
+    Open Sector Hub starts you in the Sector Hub with one E-Tank and one random item. All sector elevators will be open."""
+    display_name = "Game Mode"
+    option_vanilla = 0
+    option_open_sector_hub = 1
 
 class InfantMetroidsInPool(Range):
     """How many Infant Metroids will be in the item pool."""
@@ -73,6 +91,8 @@ class PowerBombTankAmmo(Range):
 @dataclass
 class MetroidFusionOptions(PerGameCommonOptions):
     EarlyProgression: EarlyProgression
+    TrickyShinesparksInRegionLogic: TrickyShinesparksInRegionLogic
+    GameMode: GameMode
     InfantMetroidsInPool: InfantMetroidsInPool
     InfantMetroidsRequired: InfantMetroidsRequired
     PaletteRandomization: PaletteRandomization
