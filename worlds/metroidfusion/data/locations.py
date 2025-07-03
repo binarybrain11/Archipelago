@@ -761,7 +761,7 @@ Sector1Hub.connections = [
 
 Sector1ToSector2.connections = [
     Connection(Sector1Hub, [HasScrewAttack], one_way=True),
-    Connection(Sector2Hub, [Requirement(["Screw Attack", "Morph Ball"], [], one_way=True)])
+    Connection(Sector2Hub, [Requirement(["Screw Attack", "Morph Ball"], [])], one_way=True)
 ]
 
 Sector1ToSector3.connections = [
@@ -1311,6 +1311,7 @@ fusion_regions: list[FusionRegion] = [
     Sector3SecurityZone,
     Sector3MainShaft,
     Sector3BoilerZone,
+    Sector3BobZone,
     Sector3BOXZone,
     Sector3Attic,
     Sector3SovaProcessing,
