@@ -906,14 +906,14 @@ Sector3ToSector5.connections = [
 ]
 
 Sector3MainShaft.connections = [
-    Connection(Sector3Hub, [CanBomb], one_way=True),
     Connection(Sector3BoilerZone, [Level2KeycardRequirement([], [HasVaria])]),
     Connection(Sector3BobZone, [Requirement([], [CanBallJumpAndBomb])]),
     Connection(Sector3SovaProcessing, [Level2KeycardRequirement(["Varia Suit"], [HasSpaceJump, HasWaveBeam])])
 ]
 
 Sector3BobZone.connections = [
-    Connection(Sector3BOXZone, [HasKeycard2])
+    Connection(Sector3BOXZone, [Requirement(["Morph Ball"], [HasKeycard2])]),
+    Connection(Sector3Hub, [], one_way=True)
 ]
 
 Sector3BOXZone.connections = [
