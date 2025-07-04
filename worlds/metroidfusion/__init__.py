@@ -178,6 +178,8 @@ class MetroidFusionWorld(World):
         infant_metroids_in_pool = self.options.InfantMetroidsInPool.value
         item_quantities["Infant Metroid"] = infant_metroids_in_pool
         item_quantities["Power Bomb Tank"] -= infant_metroids_in_pool
+        energy_tanks = 0
+        max_progressive_energy_tanks = 10
         for item in item_table:
             if item == preplaced_item:
                 self.get_location(preplaced_location).place_locked_item(self.create_item(preplaced_item))
@@ -187,6 +189,10 @@ class MetroidFusionWorld(World):
             else:
                 itempool.append(item)
         for item in map(self.create_item, itempool):
+            if item.name == "Energy Tank":
+                energy_tanks += 1
+                if energy_tanks > max_progressive_energy_tanks:
+                    item.classification = ItemClassification.useful
             self.multiworld.itempool.append(item)
 
     def set_rules(self):
@@ -202,7 +208,7 @@ class MetroidFusionWorld(World):
         add_rule(
             self.get_location("Victory"),
             lambda state: state.has("Infant Metroid", self.player, infant_metroids_required)
-                          and state.has("Energy Tank", self.player, 0))
+                          and state.has("Energy Tank", self.player, 10))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def generate_basic(self):

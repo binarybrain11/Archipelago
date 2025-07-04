@@ -36,7 +36,7 @@ def create_logic_rule_for_list(requirements: list[Requirement], options: "Metroi
     requirements_list = []
     for requirement in requirements:
         new_rule = create_logic_rule(requirement, options, debug)
-        energy_tanks += new_rule[1]
+        energy_tanks = max(energy_tanks, new_rule[1])
         for requirement2 in new_rule[0]:
             requirements_list.append(requirement2)
         continue
@@ -71,5 +71,5 @@ def unpack_requirement(requirement: Requirement, possibilities: list[list[str]],
             assert item_needed in item_names, (item_needed, requirement)
         items_needed.extend(parent_items)
         possibilities.append(items_needed)
-    energy_tanks += requirement.energy_tanks_needed
+    energy_tanks = max(energy_tanks, requirement.energy_tanks_needed)
     return energy_tanks

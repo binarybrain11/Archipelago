@@ -291,10 +291,10 @@ class CanAccessL2SecurityRoom(Requirement):
 class CanAccessDrainPipe(Requirement):
     items_needed = ["Morph Ball", "Speed Booster", "Level 1 Keycard"]
     other_requirements = [
-        HasWaveBeam,
+        Requirement(["Bomb Data"], [HasWaveBeam]),
         CanPowerBomb,
-        Requirement(["Missile Data", "Super Missile"], []),
-        Requirement(["Screw Attack"], [])
+        Requirement(["Missile Data", "Super Missile"], [CanBombOrPowerBomb]),
+        Requirement(["Screw Attack"], [CanBombOrPowerBomb])
     ]
 
 class CanAscendCheddarBay(Requirement):
@@ -964,7 +964,7 @@ Sector3BOXZone.locations = [
 ]
 
 Sector3Attic.locations = [
-    FusionLocation("Sector 3 (PYR) -- Alcove -- Lower Item", False, [CanBombOrPowerBomb]),
+    FusionLocation("Sector 3 (PYR) -- Alcove -- Lower Item", False, [CanBombOrPowerBomb, Requirement(["Screw Attack"], [CanJumpHigh])]),
     FusionLocation("Sector 3 (PYR) -- Alcove -- Upper Item", False, [Requirement(["Speed Booster"], [CanPowerBomb])]),
     FusionLocation("Sector 3 (PYR) -- Deserted Runway", False, [HasSpeedBooster]),
 ]
