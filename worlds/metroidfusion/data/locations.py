@@ -288,14 +288,9 @@ class CanAccessL2SecurityRoom(Requirement):
     items_needed = ["Speed Booster"]
     other_requirements = [CanBallJumpAndBomb]
 
-class CanAccessDrainPipe(Requirement):
-    items_needed = ["Morph Ball", "Speed Booster", "Level 1 Keycard"]
-    other_requirements = [
-        HasWaveBeam,
-        CanPowerBomb,
-        Requirement(["Missile Data", "Super Missile"], []),
-        Requirement(["Screw Attack"], [])
-    ]
+class CanDrainAQA(Requirement):
+    items_needed = ["Speed Booster", "Level 1 Keycard"]
+    other_requirements = [CanBombOrPowerBomb]
 
 class CanAscendCheddarBay(Requirement):
     items_needed = ["Missile Data"]
@@ -981,8 +976,8 @@ Sector3SovaProcessing.locations = [
 #region Sector 4 Topology
 Sector4Hub.connections = [
     Connection(Sector4UpperZone, [CanBombOrPowerBomb], one_way=True),
-    Connection(Sector4DataZone, [Requirement(["Missile Data", "Diffusion Missile", "Speed Booster", "Level 1 Keycard"], [CanBombOrPowerBomb])]),
-    Connection(Sector4RightWaterZone, [Requirement(["Missile Data", "Diffusion Missile", "Gravity Suit", "Speed Booster", "Level 1 Keycard"], [CanBombOrPowerBomb])])
+    Connection(Sector4DataZone, [Requirement(["Missile Data", "Diffusion Missile"], [CanDrainAQA])]),
+    Connection(Sector4RightWaterZone, [Requirement(["Missile Data", "Diffusion Missile", "Gravity Suit"], [CanDrainAQA])])
 ]
 
 Sector4ToSector6.connections = [
@@ -990,8 +985,8 @@ Sector4ToSector6.connections = [
 ]
 
 Sector4UpperZone.connections = [
-    Connection(Sector4Hub, [HasSpeedBooster], one_way=True),
-    Connection(Sector4PumpControl, [Level1KeycardRequirement([], [HasSpeedBooster])], one_way=True),
+    Connection(Sector4Hub, [CanDrainAQA]),
+    Connection(Sector4PumpControl, [Requirement(["Speed Booster", "Level 1 Keycard"])], one_way=True),
     Connection(Sector4UpperWaterZone, [Requirement(["Speed Booster", "Gravity Suit", "Level 1 Keycard"], [HasKeycard4])]),
     Connection(Sector4SerrisZone, [HasHiJump], one_way=True)
 ]
@@ -1029,8 +1024,8 @@ Sector4DataZone.connections = [
 ]
 
 Sector4Hub.locations = [
-    FusionLocation("Sector 4 (AQA) -- Drain Pipe", False, [CanAccessDrainPipe]),
-    FusionLocation("Sector 4 (AQA) -- Reservoir East", False, [Requirement(["Speed Booster", "Level 1 Keycard"], [CanPowerBomb])])
+    FusionLocation("Sector 4 (AQA) -- Drain Pipe", False, [Requirement([CanDrainAQA], [HasWaveBeam, CanDefeatMediumGeron]),
+    FusionLocation("Sector 4 (AQA) -- Reservoir East", False, [Requirement(["Power Bomb Data"], [CanDrainAQA])])
 ]
 
 Sector4PumpControl.locations = [
@@ -1040,6 +1035,7 @@ Sector4PumpControl.locations = [
 Sector4UpperZone.locations = [
     FusionLocation("Sector 4 (AQA) -- Broken Bridge", False, []),
     FusionLocation("Sector 4 (AQA) -- C-Cache", False, []),
+    FusionLocation("Sector 4 (AQA) -- Waterway", False, [CanDrainAQA]),
     FusionLocation("Sector 4 (AQA) -- Reservoir Vault -- Lower Item", False, [Requirement(["Missile Data"], [CanAccessReservoirVault])]),
     FusionLocation("Sector 4 (AQA) -- Reservoir Vault -- Upper Item", False, [CanAccessReservoirVault]),
 ]
@@ -1050,7 +1046,6 @@ Sector4SerrisZone.locations = [
 
 Sector4UpperWaterZone.locations = [
     FusionLocation("Sector 4 (AQA) -- Cargo Hold to Sector 5 (ARC)", False, [HasScrewAttack, HasSpeedBooster]),
-    FusionLocation("Sector 4 (AQA) -- Waterway", False, [HasSpeedBooster]),
     FusionLocation("Sector 4 (AQA) -- Aquarium Pirate Tank", False, [CanPowerBomb]),
 ]
 
@@ -1076,7 +1071,7 @@ Sector4RightWaterZone.locations = [
 ]
 
 Sector4DataZone.locations = [
-    FusionLocation("Sector 4 (AQA) -- Data Room", True, [Requirement(["Speed Booster", "Level 1 Keycard"], [HasKeycard4])])
+    FusionLocation("Sector 4 (AQA) -- Data Room", True, [Requirement([], [CanDrainAQA, HasKeycard4])])
 ]
 
 #endregion
