@@ -1,7 +1,9 @@
 import pkgutil
+from enum import IntEnum
 from typing import Callable
 
 from BaseClasses import Location
+from .Items import mars_name_to_ap_name, major_abilities
 from .data.locations import fusion_regions, Requirement
 import json
 
@@ -25,10 +27,16 @@ class LocationData():
         self.ap_id = ap_id
 
     def to_json(self, item: str, item_sprite: str):
+        ap_name = mars_name_to_ap_name[item]
+        if ap_name in major_abilities:
+            jingle = "Major"
+        else:
+            jingle = "Minor"
         if self.major:
             return {
                 "Source": self.source_name,
-                "Item": item
+                "Item": item,
+                "Jingle": jingle
             }
         else:
             return {
@@ -37,7 +45,8 @@ class LocationData():
                 "BlockX": self.room_location[0],
                 "BlockY": self.room_location[1],
                 "Item": item,
-                "ItemSprite": item_sprite
+                "ItemSprite": item_sprite,
+                "Jingle": jingle
             }
 
     def __repr__(self):
@@ -264,6 +273,12 @@ location_groups = {
     "Sector6Locations": sector_6_locations
 }
 
+class ERGroups(IntEnum):
+    TUBE_LEFT = 0
+    TUBE_RIGHT = 1
+    ELEVATOR_TOP = 2
+    ELEVATOR_BOTTOM = 3
+    STATIC = 5
 
 def get_location_data_by_name(name: str):
     return [location for location in all_locations if location.name == name].pop()

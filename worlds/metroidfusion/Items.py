@@ -97,3 +97,5 @@ ap_name_to_mars_name = {
     "Ice Trap": "IceTrap",
     "Infant Metroid": "InfantMetroid"
 }
+
+mars_name_to_ap_name = {v: k for k, v in ap_name_to_mars_name.items()}
