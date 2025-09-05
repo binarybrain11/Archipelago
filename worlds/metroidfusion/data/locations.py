@@ -1024,7 +1024,10 @@ Sector4DataZone.connections = [
 ]
 
 Sector4Hub.locations = [
-    FusionLocation("Sector 4 (AQA) -- Drain Pipe", False, [Requirement([CanDrainAQA], [HasWaveBeam, CanDefeatMediumGeron]),
+    FusionLocation("Sector 4 (AQA) -- Drain Pipe", False, [
+        Requirement([], [CanDrainAQA, HasWaveBeam]),
+        Requirement([], [CanDrainAQA, CanDefeatMediumGeron])
+    ]),
     FusionLocation("Sector 4 (AQA) -- Reservoir East", False, [Requirement(["Power Bomb Data"], [CanDrainAQA])])
 ]
 
