@@ -1,5 +1,5 @@
 from BaseClasses import ItemClassification
-from .data.items import all_item_data
+from .data.items import all_item_data, events
 
 
 class ItemData:
@@ -30,6 +30,7 @@ for item in all_item_data:
 
 item_names = [item for item in item_table.keys()]
 
+valid_item_names = [*item_names, *[event[3] for event in events]]
 # Everything not listed here has a quantity of one
 default_item_quantities = {
     "Nothing": 0,

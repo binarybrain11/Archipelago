@@ -2,8 +2,8 @@ from copy import copy
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from .data.locations import Requirement, Level2KeycardRequirement
-from .Items import item_names
+from .data.locations import Requirement
+from .Items import valid_item_names
 
 if TYPE_CHECKING:
     from worlds.metroidfusion import MetroidFusionOptions
@@ -61,14 +61,14 @@ def unpack_requirement(requirement: Requirement, possibilities: list[list[str]],
         for nested_requirement in requirement.other_requirements:
             current_parent_items = copy(parent_items)
             for item_needed in requirement.items_needed:
-                assert item_needed in item_names, (item_needed, requirement)
+                assert item_needed in valid_item_names, (item_needed, requirement)
             parent_items.extend(requirement.items_needed)
             energy_tanks += unpack_requirement(nested_requirement, possibilities, parent_items)
             parent_items = copy(current_parent_items)
     elif len(requirement.items_needed) > 0:
         items_needed = copy(requirement.items_needed)
         for item_needed in items_needed:
-            assert item_needed in item_names, (item_needed, requirement)
+            assert item_needed in valid_item_names, (item_needed, requirement)
         items_needed.extend(parent_items)
         possibilities.append(items_needed)
     energy_tanks = max(energy_tanks, requirement.energy_tanks_needed)

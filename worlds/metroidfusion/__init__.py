@@ -21,6 +21,7 @@ from .Logic import create_logic_rule, create_logic_rule_for_list, LogicObject
 from .Options import MetroidFusionOptions
 from .Rom import MetroidFusionProcedurePatch
 from .data import memory
+from .data.items import events
 from .data.locations import fusion_regions, left_tubes, right_tubes, sector_elevator_tops, sector_elevator_bottoms, \
     other_elevator_tops, other_elevator_bottoms, FusionRegion, sector_tube_id_lookups, Sector1TubeLeft, Sector2TubeLeft, \
     Sector3TubeLeft, Sector4TubeLeft, Sector5TubeLeft, Sector6TubeLeft, Sector1TubeRight, Sector2TubeRight, \
@@ -104,6 +105,10 @@ class MetroidFusionWorld(World):
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         logging.info(f"Metroid Fusion APWorld v{cls.version} used for generation.")
 
+    @classmethod
+    def stage_write_spoiler_header(cls, world, spoiler_handle: TextIO):
+        spoiler_handle.write(f"\nMetroid Fusion APWorld version: v{cls.version}\n")
+
     def create_item(self, name: str) -> "MetroidFusionItem":
         return MetroidFusionItem(name, item_table[name].classification, self.item_name_to_id[name], self.player)
 
@@ -158,7 +163,7 @@ class MetroidFusionWorld(World):
                                 group = ERGroups.ELEVATOR_TOP
                         else:
                             group = ERGroups.STATIC
-                    connection_name = origin_region.name
+                    connection_name = connecting_region.name + " Destination"
                 else:
                     group = ERGroups.STATIC
                 new_entrance = Entrance(self.player, connection_name, origin_region, group, entrance_type)
@@ -167,6 +172,12 @@ class MetroidFusionWorld(World):
                 new_entrance.connect(connecting_region)
                 if group != ERGroups.STATIC:
                     disconnect_entrance_for_randomization(new_entrance)
+                elif entrance_type == EntranceType.TWO_WAY:
+                    connection_name = f"{origin_region.name} from {connecting_region.name}"
+                    new_entrance = Entrance(self.player, connection_name, connecting_region, group, entrance_type)
+                    new_entrance.access_rule = logic_object.logic_rule
+                    connecting_region.exits.append(new_entrance)
+                    new_entrance.connect(origin_region)
             for location in origin_region_data.locations:
                 new_location = MetroidFusionLocation(
                     self.player,
@@ -175,17 +186,22 @@ class MetroidFusionWorld(World):
                     origin_region
                 )
                 origin_region.locations.append(new_location)
-        operations_deck = self.get_region("Operations Deck")
-        victory_event = MetroidFusionLocation(self.player, "Victory", None, operations_deck)
-        operations_deck.locations.append(victory_event)
-        victory_event.place_locked_item(self.create_event("Victory"))
+        for event in events:
+            region = self.get_region(event[2])
+            event_location = MetroidFusionLocation(self.player, event[0], None, region)
+            region.locations.append(event_location)
+            event_location.place_locked_item(self.create_event(event[3]))
 
     def connect_entrances(self) -> None:
         self.er_map = randomize_entrances(self, True, self.er_group_mappings).pairings
         for connection in self.er_map:
             self.region_map[connection[0]] = connection[1]
             self.region_map[connection[1]] = connection[0]
-            self.spoiler_region_map[connection[0]] = connection[1]
+            source = connection[0].replace(" Destination", "")
+            destination = connection[1].replace(" Destination", "")
+            self.spoiler_region_map[source] = destination
+        from Utils import visualize_regions
+        visualize_regions(self.get_region("Menu"), f"fusiondiagram{self.player}.puml")
 
     def build_early_progression_for_vanilla(self):
         if self.options.EarlyProgression == self.options.EarlyProgression.option_normal:
@@ -491,7 +507,7 @@ class MetroidFusionWorld(World):
             }
         }
 
-    def write_spoiler(self, spoiler_handle: TextIO) -> None:
+    def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         spoiler_handle.write("\nElevator and Tube Mapping:\n")
         origins = [
             "Operations Deck Elevator Top",
@@ -522,7 +538,7 @@ class MetroidFusionWorld(World):
 
         for location in self.get_locations():
             # Victory location isn't real and can't hurt you.
-            if location.name == "Victory":
+            if location.address is None:
                 continue
             location_data = get_location_data_by_name(location.name)
             item_sprite = None

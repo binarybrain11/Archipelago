@@ -5,11 +5,22 @@ if TYPE_CHECKING:
 
 
 class Requirement:
+    """
+    Defines a set of requirements for a Connection or Location.
+    """
     items_needed: list[str] = []
     other_requirements: list["Requirement"] = []
     energy_tanks_needed: int = 0
 
     def __init__(self, items_needed, other_requirements, energy_tanks_needed = 0):
+        """
+        Creates a new Requirement object. The parameters are unpacked into a series of OR requirements where everything
+        in ``items_required`` and one of the entries in ``other_requirements`` must be met for the Requirement to be passed.
+
+        :param items_needed: A list of items that are all required to be had.
+        :param other_requirements: A list of Requirement objects. If not empty, one of these must be fulfilled in addition to the ``items_needed``.
+        :param energy_tanks_needed: The number of energy tanks required.
+        """
         self.items_needed = items_needed
         self.other_requirements = other_requirements
         self.energy_tanks_needed = energy_tanks_needed
@@ -455,6 +466,13 @@ class CanAccessSector3LowerAlcove(Requirement):
         CanBombOrPowerBomb,
         Requirement(["Screw Attack"], [CanActivatePillar, HasSpeedBooster, CanJumpHigh])
     ]
+#endregion
+
+#region Event Requirements
+class CanDrainAQARequirement(Requirement):
+    def __init__(self, items_needed, other_requirements, energy_tanks_needed=3):
+        super().__init__(items_needed, other_requirements, energy_tanks_needed)
+        self.items_needed.append("Pump Control Activated")
 #endregion
 
 #region Optional Requirements
@@ -1185,12 +1203,12 @@ Sector4Hub.connections = [
     VariableConnection(SectorHubElevator4Top, []),
     Connection(Sector4UpperZone, [CanBombOrPowerBomb], one_way=True),
     Connection(Sector4DataZone, [
-        Requirement(["Missile Data", "Diffusion Missile", "Speed Booster", "Level 1 Keycard"], [CanBombOrPowerBomb]),
-        Requirement(["Ice Beam", "Wave Beam", "Speed Booster", "Level 1 Keycard"], [CanBombOrPowerBomb])
+        CanDrainAQARequirement(["Missile Data", "Diffusion Missile"], []),
+        CanDrainAQARequirement(["Ice Beam", "Wave Beam"], [])
     ]),
     Connection(Sector4RightWaterZone, [
-        Requirement(["Missile Data", "Diffusion Missile", "Gravity Suit", "Speed Booster", "Level 1 Keycard"], [CanBombOrPowerBomb]),
-        Requirement(["Ice Beam", "Wave Beam", "Gravity Suit", "Speed Booster", "Level 1 Keycard"], [CanBombOrPowerBomb])
+        CanDrainAQARequirement(["Missile Data", "Diffusion Missile", "Gravity Suit"], [CanBombOrPowerBomb]),
+        CanDrainAQARequirement(["Ice Beam", "Wave Beam", "Gravity Suit"], [CanBombOrPowerBomb])
     ])
 ]
 
@@ -1208,7 +1226,7 @@ Sector4TubeLeft.connections = [
 Sector4UpperZone.connections = [
     Connection(Sector4Hub, [HasSpeedBooster], one_way=True),
     Connection(Sector4PumpControl, [Level1KeycardRequirement([], [HasSpeedBooster])], one_way=True),
-    Connection(Sector4UpperWaterZone, [Requirement(["Speed Booster", "Gravity Suit", "Level 1 Keycard"], [HasKeycard4])]),
+    Connection(Sector4UpperWaterZone, [CanDrainAQARequirement(["Gravity Suit"], [HasKeycard4])]),
     Connection(Sector4SerrisZone, [Requirement(["Hi-Jump"] ,[CanBombOrPowerBomb])], one_way=True)
 ]
 
@@ -1250,7 +1268,7 @@ Sector4RightDataZone.connections = [
 
 Sector4Hub.locations = [
     FusionLocation("Sector 4 (AQA) -- Drain Pipe", False, [CanAccessDrainPipe]),
-    FusionLocation("Sector 4 (AQA) -- Reservoir East", False, [Requirement(["Speed Booster", "Level 1 Keycard"], [CanPowerBomb])])
+    FusionLocation("Sector 4 (AQA) -- Reservoir East", False, [CanDrainAQARequirement([], [CanPowerBomb])])
 ]
 
 Sector4PumpControl.locations = [
@@ -1262,7 +1280,7 @@ Sector4UpperZone.locations = [
     FusionLocation("Sector 4 (AQA) -- C-Cache", False, []),
     FusionLocation("Sector 4 (AQA) -- Reservoir Vault -- Lower Item", False, [Requirement(["Missile Data"], [CanAccessReservoirVault])]),
     FusionLocation("Sector 4 (AQA) -- Reservoir Vault -- Upper Item", False, [CanAccessReservoirVault]),
-    FusionLocation("Sector 4 (AQA) -- Waterway", False, [Requirement(["Speed Booster", "Morph Ball", "Level 1 Keycard"], [CanBallJumpAndBomb])]),
+    FusionLocation("Sector 4 (AQA) -- Waterway", False, [CanDrainAQARequirement([], [HasMorph])]),
 ]
 
 Sector4SerrisZone.locations = [
@@ -1271,7 +1289,6 @@ Sector4SerrisZone.locations = [
 
 Sector4UpperWaterZone.locations = [
     FusionLocation("Sector 4 (AQA) -- Cargo Hold to Sector 5 (ARC)", False, [HasScrewAttack, HasSpeedBooster]),
-
     FusionLocation("Sector 4 (AQA) -- Aquarium Pirate Tank", False, [CanPowerBomb]),
 ]
 
