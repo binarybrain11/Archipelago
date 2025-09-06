@@ -335,14 +335,9 @@ class CanAccessL2SecurityRoom(Requirement):
     items_needed = ["Speed Booster"]
     other_requirements = [CanBallJumpAndBomb]
 
-class CanAccessDrainPipe(Requirement):
-    items_needed = ["Morph Ball", "Speed Booster", "Level 1 Keycard"]
-    other_requirements = [
-        HasWaveBeam,
-        CanPowerBomb,
-        Requirement(["Missile Data", "Super Missile"], []),
-        Requirement(["Screw Attack"], [])
-    ]
+class CanDrainAQA(Requirement):
+    items_needed = ["Speed Booster", "Level 1 Keycard"]
+    other_requirements = [CanBombOrPowerBomb]
 
 class CanAscendCheddarBay(Requirement):
     items_needed = ["Missile Data"]
@@ -1230,7 +1225,7 @@ Sector4TubeLeft.connections = [
 ]
 
 Sector4UpperZone.connections = [
-    Connection(Sector4Hub, [HasSpeedBooster], one_way=True),
+    Connection(Sector4Hub, [CanDrainAQARequirement()]),
     Connection(Sector4PumpControl, [Level1KeycardRequirement([], [HasSpeedBooster])], one_way=True),
     Connection(Sector4UpperWaterZone, [CanDrainAQARequirement(["Gravity Suit"], [HasKeycard4])]),
     Connection(Sector4SerrisZone, [Requirement(["Hi-Jump"] ,[CanBombOrPowerBomb])], one_way=True)
@@ -1273,7 +1268,11 @@ Sector4RightDataZone.connections = [
 ]
 
 Sector4Hub.locations = [
-    FusionLocation("Sector 4 (AQA) -- Drain Pipe", False, [CanAccessDrainPipe]),
+    FusionLocation("Sector 4 (AQA) -- Drain Pipe", False, [
+        CanDrainAQARequirement(["Morph Ball"], [CanDefeatLargeGeron]),
+        CanDrainAQARequirement(["Morph Ball"], [HasWaveBeam]),
+
+    ]),
     FusionLocation("Sector 4 (AQA) -- Reservoir East", False, [CanDrainAQARequirement([], [CanPowerBomb])])
 ]
 
@@ -1284,6 +1283,7 @@ Sector4PumpControl.locations = [
 Sector4UpperZone.locations = [
     FusionLocation("Sector 4 (AQA) -- Broken Bridge", False, []),
     FusionLocation("Sector 4 (AQA) -- C-Cache", False, []),
+    FusionLocation("Sector 4 (AQA) -- Waterway", False, [CanDrainAQA]),
     FusionLocation("Sector 4 (AQA) -- Reservoir Vault -- Lower Item", False, [Requirement(["Missile Data"], [CanAccessReservoirVault])]),
     FusionLocation("Sector 4 (AQA) -- Reservoir Vault -- Upper Item", False, [CanAccessReservoirVault]),
     FusionLocation("Sector 4 (AQA) -- Waterway", False, [CanDrainAQARequirement([], [HasMorph])]),
@@ -1320,7 +1320,7 @@ Sector4RightWaterZone.locations = [
 ]
 
 Sector4DataZone.locations = [
-    FusionLocation("Sector 4 (AQA) -- Data Room", True, [Level1KeycardRequirement(["Speed Booster"], [HasKeycard4])])
+    FusionLocation("Sector 4 (AQA) -- Data Room", True, [CanDrainAQARequirement([], [HasKeycard4])])
 ]
 
 #endregion
