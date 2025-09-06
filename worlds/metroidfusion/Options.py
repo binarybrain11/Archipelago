@@ -29,6 +29,20 @@ class GameMode(Choice):
     option_vanilla = 0
     option_open_sector_hub = 1
 
+class SectorTubeShuffle(Toggle):
+    """If enabled, shuffles the tube connections between sectors.
+    Does not affect the non-glass tube connections."""
+    display_name = "Sector Tube Shuffle"
+
+class ElevatorShuffle(Choice):
+    """If enabled, shuffles the various elevator connections.
+     Sectors will shuffle the six sector elevators in the Sector Hub.
+     All will include all elevator connections in the game."""
+    display_name = "Elevator Shuffle"
+    option_none = 0
+    option_sectors = 1
+    option_all = 2
+
 class InfantMetroidsInPool(Range):
     """How many Infant Metroids will be in the item pool."""
     display_name = "Infant Metroids in Pool"
@@ -93,6 +107,8 @@ class MetroidFusionOptions(PerGameCommonOptions):
     EarlyProgression: EarlyProgression
     TrickyShinesparksInRegionLogic: TrickyShinesparksInRegionLogic
     GameMode: GameMode
+    SectorTubeShuffle: SectorTubeShuffle
+    ElevatorShuffle: ElevatorShuffle
     InfantMetroidsInPool: InfantMetroidsInPool
     InfantMetroidsRequired: InfantMetroidsRequired
     PaletteRandomization: PaletteRandomization

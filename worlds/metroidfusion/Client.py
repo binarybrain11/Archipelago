@@ -41,6 +41,7 @@ class MetroidFusionClient(BizHawkClient):
         self.location_name_to_id: dict[str, int] | None = None
         self.logged_version = False
         self.current_sectpr = 0
+        self.locations_hinted: list[str] = list()
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -375,16 +376,14 @@ class MetroidFusionClient(BizHawkClient):
                     room_key = key
             if "Hints" in ctx.slot_data.keys():
                 hints = ctx.slot_data["Hints"]
-                if room_key in hints:
+                if room_key in hints and room_key not in self.locations_hinted:
                     location_id = hints[room_key]["Location"]
                     player_id = hints[room_key]["Player"]
-                    if player_id == ctx.slot:
-                        if location_id not in ctx.locations_scouted:
-                            ctx.locations_scouted.add(location_id)
-                            await ctx.send_msgs([{
-                                "cmd": "LocationScouts",
-                                "locations": [location_id],
-                                "create_as_hint": 2}])
+                    self.locations_hinted.append(room_key)
+                    await ctx.send_msgs([{
+                        "cmd": "CreateHints",
+                        "locations": [location_id],
+                        "player": player_id}])
 
     async def update_map(self, ctx: "BizHawkClientContext"):
         current_sector = await self.read_ram_value_guarded(ctx, memory.current_area, self.iwram)
