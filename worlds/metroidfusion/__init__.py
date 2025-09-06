@@ -106,7 +106,7 @@ class MetroidFusionWorld(World):
         logging.info(f"Metroid Fusion APWorld v{cls.version} used for generation.")
 
     @classmethod
-    def stage_write_spoiler_header(cls, world, spoiler_handle: TextIO):
+    def stage_write_spoiler_header(cls, multiworld: MultiWorld, spoiler_handle: TextIO):
         spoiler_handle.write(f"\nMetroid Fusion APWorld version: v{cls.version}\n")
 
     def create_item(self, name: str) -> "MetroidFusionItem":
@@ -139,10 +139,11 @@ class MetroidFusionWorld(World):
             for connection in origin_region_data.connections:
                 connecting_region = self.get_region(connection.destination.name)
                 logic_object = LogicObject(self.player)
-                logic_object.requirements, logic_object.energy_tanks = create_logic_rule_for_list(connection.requirements, self.options)
+                print(f"{"One way connection" if connection.one_way else "Two way connection"}: "
+                      f"{origin_region.name} to {connecting_region.name}")
+                logic_object.requirements, logic_object.energy_tanks = create_logic_rule_for_list(connection.requirements, self.options, True)
                 connection_name = f"{origin_region.name} to {connecting_region.name}"
                 entrance_type = EntranceType.ONE_WAY if connection.one_way else EntranceType.TWO_WAY
-                #origin_region.connect(connecting_region, connection_name, logic_object.logic_rule)
                 if connection.__class__ == VariableConnection:
                     if "Tube" in connection.destination.name:
                         if "Left" in connection.destination.name:
@@ -163,7 +164,7 @@ class MetroidFusionWorld(World):
                                 group = ERGroups.ELEVATOR_TOP
                         else:
                             group = ERGroups.STATIC
-                    connection_name = connecting_region.name + " Destination"
+                    connection_name = origin_region.name + " Destination"
                 else:
                     group = ERGroups.STATIC
                 new_entrance = Entrance(self.player, connection_name, origin_region, group, entrance_type)
@@ -192,13 +193,21 @@ class MetroidFusionWorld(World):
             region.locations.append(event_location)
             event_location.place_locked_item(self.create_event(event[3]))
 
+    @staticmethod
+    def connect_entrance_callback(er_state, exits: list[Entrance], entrances: list[Entrance]):
+        for i, connected_exit in enumerate(exits):
+            connected_exit.name = (connected_exit.name.replace(" Destination", "") +
+                                   " to " +
+                                   entrances[i].connected_region.name)
+        return True
+
     def connect_entrances(self) -> None:
-        self.er_map = randomize_entrances(self, True, self.er_group_mappings).pairings
+        self.er_map = randomize_entrances(self, True, self.er_group_mappings, on_connect=self.connect_entrance_callback).pairings
         for connection in self.er_map:
-            self.region_map[connection[0]] = connection[1]
-            self.region_map[connection[1]] = connection[0]
             source = connection[0].replace(" Destination", "")
             destination = connection[1].replace(" Destination", "")
+            self.region_map[source] = destination
+            self.region_map[destination] = source
             self.spoiler_region_map[source] = destination
         from Utils import visualize_regions
         visualize_regions(self.get_region("Menu"), f"fusiondiagram{self.player}.puml")
@@ -297,6 +306,9 @@ class MetroidFusionWorld(World):
             "ColorSpace": "Oklab"
         }
 
+    def post_fill(self) -> None:
+        if self.options.EnableHints:
+            self.hint_text, self.hint_pairs = create_hints(self)
 
     def create_navigation_text(self, hint_text: list[str], required_metroids: int):
         briefing_text_addition_start = ""
@@ -571,7 +583,7 @@ class MetroidFusionWorld(World):
                     if chance == 1:
                         item_sprite = SpriteNames.ShinyPowerBombTank.value
                         message = build_shiny_item_message(item_name)
-            json_data = location_data.to_json(item_name, item_sprite)
+            json_data = location_data.to_json(item_name, item_sprite, location.item.classification)
             if message is not None:
                 json_data["ItemMessages"] = message
             if location_data.major:
@@ -591,13 +603,13 @@ class MetroidFusionWorld(World):
         patch_dict["SkipDoorTransitions"] = bool(self.options.FastDoorTransitions.value)
         patch_dict["UnexploredMap"] = True
         patch_dict["RoomNames"] = room_names
+        patch_dict["TitleText"] = [{"Text": "         Archipelago", "LineNum": 12}]
 
         if self.options.PaletteRandomization:
             patch_dict["Palettes"] = self.create_palette_rando(self.multiworld.seed)
         if self.options.EnableHints:
-            hint_text, self.hint_pairs = create_hints(self)
             patch_dict["NavigationText"] = self.create_navigation_text(
-                hint_text,
+                self.hint_text,
                 infant_metroids_required)
         else:
             patch_dict["NavigationText"] = self.create_navigation_text([], infant_metroids_required)

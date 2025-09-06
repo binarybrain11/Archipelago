@@ -3,6 +3,10 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from worlds.metroidfusion import MetroidFusionOptions
 
+level_1_e_tanks = 3
+level_2_e_tanks = 5
+level_3_e_tanks = 7
+level_4_e_tanks = 10
 
 class Requirement:
     """
@@ -26,11 +30,10 @@ class Requirement:
         self.energy_tanks_needed = energy_tanks_needed
 
     def __repr__(self):
-        return_string = f"ItemsNeeded: [{", ".join(self.items_needed)}]"
-        return_string += "\n"
+        return_string = f"{self.__class__}\n"
+        return_string += f"ItemsNeeded: [{", ".join(self.items_needed)}]\n"
         return_string += (f"OtherRequirements: "
-                          f"[{", ".join([str(requirement) for requirement in self.other_requirements])}]")
-        return_string += "\n"
+                          f"[{", ".join([str(requirement) for requirement in self.other_requirements])}]\n")
         return_string += f"EnergyTanks: {self.energy_tanks_needed}"
         return return_string
 
@@ -124,23 +127,23 @@ class HasWaveBeam(Requirement):
 
 #region Keycard Requirements
 class HasKeycard1(Requirement):
-    energy_tanks_needed = 3
+    energy_tanks_needed = level_1_e_tanks
     items_needed = ["Level 1 Keycard"]
 
 class HasKeycard2(Requirement):
-    energy_tanks_needed = 5
+    energy_tanks_needed = level_2_e_tanks
     items_needed = ["Level 2 Keycard"]
 
 class HasKeycard1And2(Requirement):
-    energy_tanks_needed = 5
+    energy_tanks_needed = level_2_e_tanks
     items_needed = ["Level 1 Keycard", "Level 2 Keycard"]
 
 class HasKeycard3(Requirement):
-    energy_tanks_needed = 7
+    energy_tanks_needed = level_3_e_tanks
     items_needed = ["Level 3 Keycard"]
 
 class HasKeycard4(Requirement):
-    energy_tanks_needed = 10
+    energy_tanks_needed = level_4_e_tanks
     items_needed = ["Level 4 Keycard"]
 
 class Level1KeycardRequirement(Requirement):
@@ -279,16 +282,16 @@ class CanFightBeginnerBoss(Requirement):
     items_needed = ["Missile Data"]
 
 class CanFightBoss(Requirement):
-    energy_tanks_needed = 2
+    energy_tanks_needed = level_1_e_tanks
     items_needed = ["Missile Data", "Charge Beam"]
 
 class CanFightMidgameBoss(Requirement):
-    energy_tanks_needed = 5
+    energy_tanks_needed = level_2_e_tanks
     items_needed = ["Super Missile"]
     other_requirements = [CanFightBoss]
 
 class CanFightLateGameBoss(Requirement):
-    energy_tanks_needed = 7
+    energy_tanks_needed = level_3_e_tanks
     items_needed = ["Plasma Beam", "Space Jump"]
     other_requirements = [CanFightMidgameBoss]
 
@@ -454,12 +457,13 @@ class CanCrossSector4RightWaterCorner(Requirement):
         Requirement(["Space Jump"], []),
     ]
 
-class CanCrossSector4LowerSecurityToRightWaterZone(Level4KeycardRequirement):
-    items_needed = ["Morph Ball"]
+class CanCrossSector4LowerSecurityToRightWaterZone(Requirement):
+    items_needed = ["Morph Ball", "Level 4 Keycard"]
     other_requirements = [
         Requirement(["Speed Booster"], [CanFreezeEnemies]),
         HasScrewAttack
     ]
+    energy_tanks_needed = level_4_e_tanks
 
 class CanAccessSector3LowerAlcove(Requirement):
     other_requirements = [
@@ -485,6 +489,7 @@ class CanDoTrickyShinespark(Requirement):
 
 class SectorHubLevel1KeycardRequirement(Requirement):
     items_needed = ["Level 1 Keycard"]
+    energy_tanks_needed = level_1_e_tanks
 
     @staticmethod
     def check_option_enabled(options: "MetroidFusionOptions"):
@@ -492,6 +497,7 @@ class SectorHubLevel1KeycardRequirement(Requirement):
 
 class SectorHubLevel1And2KeycardRequirement(Requirement):
     items_needed = ["Level 1 Keycard", "Level 2 Keycard"]
+    energy_tanks_needed = level_2_e_tanks
 
     @staticmethod
     def check_option_enabled(options: "MetroidFusionOptions"):
@@ -800,7 +806,7 @@ MainDeckHub.connections = [
     Connection(HabitationDeckElevatorBottom, [HasKeycard2]),
     Connection(SectorHubElevatorTop, [HasMorph, CanDoTrickyShinespark], one_way=True),
     Connection(ReactorZone, [Requirement(["Morph Ball"], [HasKeycard4, CanPowerBomb], 5)]),
-    Connection(NexusStorage, [Requirement(["Level 2 Keycard"], [CanDefeatLargeGeron])])
+    Connection(NexusStorage, [Level2KeycardRequirement([], [CanDefeatLargeGeron])])
 ]
 
 VentilationZone.connections = [
@@ -887,7 +893,7 @@ MainDeckHub.locations = [
     FusionLocation("Main Deck -- Genesis Speedway", False, [CanReachGenesisSpeedway]),
     FusionLocation("Main Deck -- Quarantine Bay", False, []),
     FusionLocation("Main Deck -- Station Entrance", False, [CanPowerBomb]),
-    FusionLocation("Main Deck -- Sub-Zero Containment", False, [Requirement(["Level 3 Keycard"], [HasVaria])])
+    FusionLocation("Main Deck -- Sub-Zero Containment", False, [Level3KeycardRequirement([], [HasVaria])])
 ]
 
 OperationsDeck.locations = [
@@ -943,7 +949,7 @@ Sector1Hub.connections = [
     Connection(Sector1TubeLeft, [Level1KeycardRequirement(["Morph Ball", "Screw Attack"], [])]),
     Connection(Sector1FirstStabilizerZone, [
         CanDefeatSmallGeron,
-        Requirement(["Level 1 Keycard", "Level 2 Keycard"], [CanLavaDive]),
+        Level1And2KeycardRequirement([], [CanLavaDive]),
         CanDoTrickyShinespark
     ]),
 ]
@@ -982,19 +988,19 @@ Sector1AfterChargeCoreZone.connections = [
 
 Sector1TourianExit.connections = [
     Connection(Sector1SecondStabilizerZone, [CanScrewAttackAndSpaceJump]),
-    Connection(Sector1TourianHub, [Requirement(["Screw Attack", "Morph Ball"], [HasMissile])], one_way=True)
+    Connection(Sector1TourianHub, [Requirement(["Missile Data", "Morph Ball"], [CanScrewAttackAndSpaceJump], level_4_e_tanks)], one_way=True)
 ]
 
 Sector1TourianHub.connections = [
-    Connection(Sector1TourianExit, [Requirement(["Screw Attack", "Morph Ball", "Wave Beam"], [HasMissile])])
+    Connection(Sector1TourianExit, [Requirement(["Screw Attack", "Morph Ball", "Wave Beam"], [HasMissile], level_4_e_tanks)])
 ]
 
 Sector1TourianHubElevatorTop.connections = [
     VariableConnection(Sector6RestrictedZoneElevatorToTourian, []),
-    Connection(Sector1TourianHub, [])
+    Connection(Sector1TourianHub, [Requirement([], [], level_4_e_tanks)])
 ]
 
-Sector1TubeRight.locations = [
+Sector1Antechamber.locations = [
     FusionLocation("Sector 1 (SRX) -- Antechamber", False, [])
 ]
 
@@ -1006,7 +1012,7 @@ Sector1FirstStabilizerZone.locations = [
 
 Sector1SecondStabilizerZone.locations = [
     FusionLocation("Sector 1 (SRX) -- Lava Lake -- Lower Item", False, [CanLavaDive]),
-    FusionLocation("Sector 1 (SRX) -- Lava Lake -- Upper Left Item", False, [HasSpaceJump, HasSpeedBooster]),
+    FusionLocation("Sector 1 (SRX) -- Lava Lake -- Upper Left Item", False, [HasSpaceJump, CanDoTrickyShinespark]),
     FusionLocation("Sector 1 (SRX) -- Lava Lake -- Upper Right Item", False, []),
     FusionLocation("Sector 1 (SRX) -- Stabilizer Storage", False, []),
 ]
@@ -1068,7 +1074,7 @@ Sector2Hub.locations = [
     FusionLocation("Sector 2 (TRO) -- Data Room", True, [HasKeycard1]),
     FusionLocation("Sector 2 (TRO) -- Kago Room", False, [CanJumpHigh, HasScrewAttack]),
     FusionLocation("Sector 2 (TRO) -- Level 1 Security Room", True, []),
-    FusionLocation("Sector 2 (TRO) -- Lobby Cache", False, [Requirement(["Level 1 Keycard"], [CanBombOrPowerBomb])]),
+    FusionLocation("Sector 2 (TRO) -- Lobby Cache", False, [Level1KeycardRequirement([], [CanBombOrPowerBomb])]),
 ]
 
 Sector2LeftSide.locations = [
@@ -1314,7 +1320,7 @@ Sector4RightWaterZone.locations = [
 ]
 
 Sector4DataZone.locations = [
-    FusionLocation("Sector 4 (AQA) -- Data Room", True, [Requirement(["Speed Booster", "Level 1 Keycard"], [HasKeycard4])])
+    FusionLocation("Sector 4 (AQA) -- Data Room", True, [Level1KeycardRequirement(["Speed Booster"], [HasKeycard4])])
 ]
 
 #endregion
@@ -1342,10 +1348,10 @@ Sector5BigRoom.connections = [
 
 Sector5FrozenHub.connections = [
     Connection(Sector5DataRoom, [HasKeycard3], one_way=True),
-    Connection(Sector5BeforeNightmareHub, [Requirement(["Level 3 Keycard"], [HasVaria])]),
+    Connection(Sector5BeforeNightmareHub, [Level3KeycardRequirement([], [HasVaria])]),
     Connection(Sector5SecurityZone, [
         Requirement(["Speed Booster"], [CanBombOrPowerBomb]),
-        Requirement(["Level 3 Keycard"], [HasWaveBeam])
+        Level3KeycardRequirement([], [HasWaveBeam])
     ], one_way=True),
 
 ]
@@ -1356,7 +1362,7 @@ Sector5SecurityZone.connections = [
 ]
 
 Sector5DataRoom.connections = [
-    Connection(Sector5FrozenHub, [Requirement(["Level 3 Keycard"], [HasWaveBeam])]),
+    Connection(Sector5FrozenHub, [Level3KeycardRequirement([], [HasWaveBeam])]),
     Connection(Sector5SecurityZone, [], one_way=True)
 ]
 
@@ -1382,8 +1388,8 @@ Sector5NightmareZoneArena.connections = [
 
 Sector5Hub.locations = [
     FusionLocation("Sector 5 (ARC) -- Gerubus Gully", False, [
-        Requirement(["Level 3 Keycard"], [CanPowerBomb]),
-        Requirement(["Level 3 Keycard", "Morph Ball", "Bomb Data"], [HasScrewAttack])
+        Level3KeycardRequirement([], [CanPowerBomb]),
+        Level3KeycardRequirement(["Morph Ball", "Bomb Data"], [HasScrewAttack])
     ]),
 ]
 
@@ -1413,14 +1419,14 @@ Sector5DataRoom.locations = [
 
 Sector5SecurityZone.locations = [
     FusionLocation("Sector 5 (ARC) -- E-Tank Mimic Den", False, [
-        Requirement(["Level 3 Keycard", "Morph Ball", "Bomb Data"], [CanFreezeEnemies, HasSpaceJump]),
-        Requirement(["Level 3 Keycard", "Morph Ball", "Power Bomb Data"], [CanFreezeEnemies, HasSpaceJump]),
-        Requirement(["Level 3 Keycard", "Morph Ball", "Screw Attack"], [CanFreezeEnemies, HasSpaceJump]),
+        Level3KeycardRequirement(["Morph Ball", "Bomb Data"], [CanFreezeEnemies, HasSpaceJump]),
+        Level3KeycardRequirement(["Morph Ball", "Power Bomb Data"], [CanFreezeEnemies, HasSpaceJump]),
+        Level3KeycardRequirement(["Morph Ball", "Screw Attack"], [CanFreezeEnemies, HasSpaceJump]),
     ]),
     FusionLocation("Sector 5 (ARC) -- Level 3 Security Room", True, []),
     FusionLocation("Sector 5 (ARC) -- Ripper's Treasure", False, [CanAccessRipperTreasure]),
     FusionLocation("Sector 5 (ARC) -- Security Shaft East", False, [CanPowerBomb]),
-    FusionLocation("Sector 5 (ARC) -- Transmutation Trial", False, [Requirement(["Hi-Jump", "Level 3 Keycard"], [HasSpaceJump, CanFreezeEnemies])])
+    FusionLocation("Sector 5 (ARC) -- Transmutation Trial", False, [Level3KeycardRequirement(["Hi-Jump"], [HasSpaceJump, CanFreezeEnemies])])
 ]
 
 Sector5NightmareHub.locations = [
@@ -1456,7 +1462,7 @@ Sector6TubeRight.connections = [
 ]
 
 Sector6Crossroads.connections = [
-    Connection(Sector6BeforeXBOXZone, [Requirement(["Varia Suit", "Level 4 Keycard"], [CanPowerBomb])]),
+    Connection(Sector6BeforeXBOXZone, [Level4KeycardRequirement(["Varia Suit"], [CanPowerBomb])]),
     Connection(Sector6BeforeVariaCoreXZone, [Requirement(["Speed Booster"], [CanBombOrPowerBomb])]),
     Connection(Sector6AfterVariaCoreXZone, [Requirement(["Morph Ball", "Varia Suit"], [HasScrewAttack])])
 ]
@@ -1483,7 +1489,7 @@ Sector6RestrictedZoneElevatorToTourian.connections = [
 ]
 
 Sector6BeforeVariaCoreXZone.connections = [
-    Connection(Sector6VariaCoreXZone, [Requirement(["Level 2 Keycard"], [CanFightBoss])])
+    Connection(Sector6VariaCoreXZone, [Level2KeycardRequirement([], [CanFightBoss])])
 ]
 
 Sector6VariaCoreXZone.connections = [

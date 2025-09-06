@@ -26,7 +26,7 @@ class LogicObject():
             else:
                 expression = expression or state.has_all(requirement_list, self.player)
         if self.energy_tanks > 0:
-            expression = bool(expression) and state.has("Energy Tank", self.player, self.energy_tanks)
+            expression = expression and state.has("Energy Tank", self.player, self.energy_tanks)
         return expression
 
 
@@ -49,6 +49,7 @@ def create_logic_rule(requirement: Requirement, options: "MetroidFusionOptions",
         if debug:
             print(requirement)
             print(requirements_list)
+            print("")
         return requirements_list, energy_tanks_needed
     else:
         if debug:

@@ -67,6 +67,11 @@ major_abilities = [
     "Ice Beam"
 ]
 
+major_jingles = [
+    *major_abilities,
+    "Infant Metroid"
+]
+
 ap_name_to_mars_name = {
     "Nothing": "None",
     "Level 0 Keycard": "Level0",

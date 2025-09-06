@@ -175,6 +175,8 @@ class MetroidFusionClient(BizHawkClient):
                 up_bit = get_bit_value_from_position(upgrade.toggled_bit)
                 new_toggled_value = current_upgrade_toggled_data | up_bit
                 write_list.append((upgrade.toggled_address, [new_toggled_value], self.iwram))
+                if "Beam" in current_item_name:
+                    write_list.append((memory.graphics_reload_flag, [1], self.iwram))
                 if current_item_name == "Missile Data":
                     missile_max_address = memory.tanks["Missile Tank"].max_address
                     missile_current_address = memory.tanks["Missile Tank"].current_address
@@ -285,6 +287,8 @@ class MetroidFusionClient(BizHawkClient):
             for item in ctx.items_received:
                 current_item_id = item.item
                 current_item_name = ctx.item_names.lookup_in_game(current_item_id, ctx.game)
+                if "Beam" in current_item_name:
+                    write_list.append((memory.graphics_reload_flag, [1], self.iwram))
                 if current_item_name == "Infant Metroid":
                     infant_metroid_count += 1
                 elif current_item_name in memory.upgrades.keys():

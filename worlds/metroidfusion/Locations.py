@@ -2,8 +2,8 @@ import pkgutil
 from enum import IntEnum
 from typing import Callable
 
-from BaseClasses import Location
-from .Items import mars_name_to_ap_name, major_abilities
+from BaseClasses import Location, ItemClassification
+from .Items import mars_name_to_ap_name, major_jingles
 from .data.locations import fusion_regions, Requirement
 import json
 
@@ -26,9 +26,9 @@ class LocationData():
         self.major = major
         self.ap_id = ap_id
 
-    def to_json(self, item: str, item_sprite: str):
+    def to_json(self, item: str, item_sprite: str, item_classification: ItemClassification):
         ap_name = mars_name_to_ap_name[item]
-        if ap_name in major_abilities:
+        if ap_name in major_jingles or item_classification | ItemClassification.progression:
             jingle = "Major"
         else:
             jingle = "Minor"
