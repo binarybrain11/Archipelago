@@ -1225,7 +1225,7 @@ Sector4TubeLeft.connections = [
 ]
 
 Sector4UpperZone.connections = [
-    Connection(Sector4Hub, [CanDrainAQARequirement()]),
+    Connection(Sector4Hub, [CanDrainAQARequirement([], [])], one_way=True),
     Connection(Sector4PumpControl, [Level1KeycardRequirement([], [HasSpeedBooster])], one_way=True),
     Connection(Sector4UpperWaterZone, [CanDrainAQARequirement(["Gravity Suit"], [HasKeycard4])]),
     Connection(Sector4SerrisZone, [Requirement(["Hi-Jump"] ,[CanBombOrPowerBomb])], one_way=True)
@@ -1283,7 +1283,6 @@ Sector4PumpControl.locations = [
 Sector4UpperZone.locations = [
     FusionLocation("Sector 4 (AQA) -- Broken Bridge", False, []),
     FusionLocation("Sector 4 (AQA) -- C-Cache", False, []),
-    FusionLocation("Sector 4 (AQA) -- Waterway", False, [CanDrainAQA]),
     FusionLocation("Sector 4 (AQA) -- Reservoir Vault -- Lower Item", False, [Requirement(["Missile Data"], [CanAccessReservoirVault])]),
     FusionLocation("Sector 4 (AQA) -- Reservoir Vault -- Upper Item", False, [CanAccessReservoirVault]),
     FusionLocation("Sector 4 (AQA) -- Waterway", False, [CanDrainAQARequirement([], [HasMorph])]),
