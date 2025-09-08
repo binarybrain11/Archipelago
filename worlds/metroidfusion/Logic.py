@@ -11,10 +11,13 @@ if TYPE_CHECKING:
 class LogicObject():
     requirements: list[list[str]] = []
     energy_tanks: int = 0
+    calculated_energy_tanks: int = 0
     player: int
+    options: "MetroidFusionOptions"
 
-    def __init__(self, player: int):
+    def __init__(self, player: int, options: "MetroidFusionOptions"):
         self.player = player
+        self.options = options
 
     def logic_rule(self, state: CollectionState) -> bool:
         if len(self.requirements) == 0:
@@ -26,7 +29,11 @@ class LogicObject():
             else:
                 expression = expression or state.has_all(requirement_list, self.player)
         if self.energy_tanks > 0:
-            expression = expression and state.has("Energy Tank", self.player, self.energy_tanks)
+            if self.options.ElevatorShuffle.value > self.options.ElevatorShuffle.option_none:
+                self.calculated_energy_tanks = self.energy_tanks // 2
+            else:
+                self.calculated_energy_tanks = self.energy_tanks
+            expression = expression and state.has("Energy Tank", self.player, self.calculated_energy_tanks)
         return expression
 
 

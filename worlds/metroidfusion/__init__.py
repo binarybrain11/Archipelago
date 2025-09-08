@@ -8,17 +8,18 @@ import settings
 import typing
 
 from typing import Dict, Any, TextIO
-from BaseClasses import MultiWorld, ItemClassification, Tutorial, Item, Region, EntranceType, Entrance
+from BaseClasses import MultiWorld, ItemClassification, Tutorial, Item, Region, EntranceType
 from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule
+from .Entrance import FusionEntrance
 from .Hints import create_hints, HintedPair
 
 from .Items import item_table, default_item_quantities, ap_name_to_mars_name, major_abilities
 from .Locations import all_locations, MetroidFusionLocation, get_location_data_by_name, build_item_message, \
     location_groups, build_shiny_item_message, ERGroups
 from .Logic import create_logic_rule, create_logic_rule_for_list, LogicObject
-from .Options import MetroidFusionOptions
+from .Options import MetroidFusionOptions, metroid_fusion_option_groups
 from .Rom import MetroidFusionProcedurePatch
 from .data import memory
 from .data.items import events
@@ -46,6 +47,7 @@ class MetroidFusionSettings(settings.Group):
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
     rom_start: bool = True
+    display_location_found_messages: bool = True
 
 
 class MetroidFusionWeb(WebWorld):
@@ -61,6 +63,8 @@ class MetroidFusionWeb(WebWorld):
 
     tutorials = [setup]
 
+    option_groups = metroid_fusion_option_groups
+
 
 class MetroidFusionWorld(World):
     """
@@ -70,14 +74,16 @@ class MetroidFusionWorld(World):
     game = "Metroid Fusion"
     options_dataclass = MetroidFusionOptions
     options: MetroidFusionOptions
+
     topology_present = True
     base_id = 0
     web = MetroidFusionWeb()
+    hint_text: list[str] | None
     hint_pairs: list[HintedPair] | None
     region_map: dict[str, str]
     spoiler_region_map: dict[str, str]
-    er_map = None
-    er_targets = None
+    er_map: list[tuple[str, str]] = None
+    preplaced_item: str = None
 
     er_group_mappings = {
         ERGroups.TUBE_LEFT: [ERGroups.TUBE_RIGHT],
@@ -89,24 +95,25 @@ class MetroidFusionWorld(World):
     item_name_to_id = {item: item_data.mars_id for item, item_data in item_table.items()}
     location_name_to_id = {location.name: location.ap_id for location in all_locations}
     location_name_groups = location_groups
-    version = 11
+    version = 12
+    debug = False
 
 
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.filler_items = None
+        self.hint_text = None
         self.hint_pairs = None
         self.region_map = dict()
         self.spoiler_region_map = dict()
-        self.er_targets = list()
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         logging.info(f"Metroid Fusion APWorld v{cls.version} used for generation.")
 
     @classmethod
-    def stage_write_spoiler_header(cls, multiworld: MultiWorld, spoiler_handle: TextIO):
+    def stage_write_spoiler_header(cls, _multiworld: MultiWorld, spoiler_handle: TextIO):
         spoiler_handle.write(f"\nMetroid Fusion APWorld version: v{cls.version}\n")
 
     def create_item(self, name: str) -> "MetroidFusionItem":
@@ -130,7 +137,7 @@ class MetroidFusionWorld(World):
 
         starting_region = self.get_region("Main Deck Hub")
         if self.options.GameMode == self.options.GameMode.option_open_sector_hub:
-            starting_region = self.get_region("Sector Hub")
+            starting_region = self.get_region("Sector Hub Elevator Bottom")
         menu.connect(starting_region)
 
         # Define connections
@@ -138,10 +145,14 @@ class MetroidFusionWorld(World):
             origin_region = self.get_region(origin_region_data.name)
             for connection in origin_region_data.connections:
                 connecting_region = self.get_region(connection.destination.name)
-                logic_object = LogicObject(self.player)
-                print(f"{"One way connection" if connection.one_way else "Two way connection"}: "
-                      f"{origin_region.name} to {connecting_region.name}")
-                logic_object.requirements, logic_object.energy_tanks = create_logic_rule_for_list(connection.requirements, self.options, True)
+                logic_object = LogicObject(self.player, self.options)
+                if self.debug:
+                    print(f"{"One way connection" if connection.one_way else "Two way connection"}: "
+                          f"{origin_region.name} to {connecting_region.name}")
+                logic_object.requirements, logic_object.energy_tanks = create_logic_rule_for_list(
+                    connection.requirements,
+                    self.options,
+                    self.debug)
                 connection_name = f"{origin_region.name} to {connecting_region.name}"
                 entrance_type = EntranceType.ONE_WAY if connection.one_way else EntranceType.TWO_WAY
                 if connection.__class__ == VariableConnection:
@@ -167,7 +178,7 @@ class MetroidFusionWorld(World):
                     connection_name = origin_region.name + " Destination"
                 else:
                     group = ERGroups.STATIC
-                new_entrance = Entrance(self.player, connection_name, origin_region, group, entrance_type)
+                new_entrance = FusionEntrance(self.player, connection_name, origin_region, group, entrance_type)
                 new_entrance.access_rule = logic_object.logic_rule
                 origin_region.exits.append(new_entrance)
                 new_entrance.connect(connecting_region)
@@ -175,7 +186,7 @@ class MetroidFusionWorld(World):
                     disconnect_entrance_for_randomization(new_entrance)
                 elif entrance_type == EntranceType.TWO_WAY:
                     connection_name = f"{origin_region.name} from {connecting_region.name}"
-                    new_entrance = Entrance(self.player, connection_name, connecting_region, group, entrance_type)
+                    new_entrance = FusionEntrance(self.player, connection_name, connecting_region, group, entrance_type)
                     new_entrance.access_rule = logic_object.logic_rule
                     connecting_region.exits.append(new_entrance)
                     new_entrance.connect(origin_region)
@@ -194,7 +205,7 @@ class MetroidFusionWorld(World):
             event_location.place_locked_item(self.create_event(event[3]))
 
     @staticmethod
-    def connect_entrance_callback(er_state, exits: list[Entrance], entrances: list[Entrance]):
+    def connect_entrance_callback(_er_state, exits: list[Entrance], entrances: list[Entrance]):
         for i, connected_exit in enumerate(exits):
             connected_exit.name = (connected_exit.name.replace(" Destination", "") +
                                    " to " +
@@ -202,39 +213,43 @@ class MetroidFusionWorld(World):
         return True
 
     def connect_entrances(self) -> None:
-        self.er_map = randomize_entrances(self, True, self.er_group_mappings, on_connect=self.connect_entrance_callback).pairings
+        self.er_map = randomize_entrances(self, True, self.er_group_mappings).pairings
         for connection in self.er_map:
             source = connection[0].replace(" Destination", "")
             destination = connection[1].replace(" Destination", "")
             self.region_map[source] = destination
             self.region_map[destination] = source
             self.spoiler_region_map[source] = destination
-        from Utils import visualize_regions
-        visualize_regions(self.get_region("Menu"), f"fusiondiagram{self.player}.puml")
+        if self.debug:
+            for source, destination in self.spoiler_region_map.items():
+                print(f"{source} <-> {destination}")
+            from Utils import visualize_regions
+            visualize_regions(self.get_region("Menu"), f"fusiondiagram{self.player}.puml")
 
     def build_early_progression_for_vanilla(self):
         if self.options.EarlyProgression == self.options.EarlyProgression.option_normal:
             sphere_1_item_names = ["Morph Ball", "Missile Data"]
-            preplaced_item = self.random.choice(sphere_1_item_names)
-            self.multiworld.local_early_items[self.player][preplaced_item] = 1
+            self.preplaced_item = self.random.choice(sphere_1_item_names)
         elif self.options.EarlyProgression == self.options.EarlyProgression.option_advanced:
             sphere_1_item_names = ["Morph Ball", "Missile Data", "Screw Attack"]
             if self.options.TrickyShinesparksInRegionLogic:
                 sphere_1_item_names.append("Speed Booster")
-            preplaced_item = self.random.choice(sphere_1_item_names)
-            self.multiworld.local_early_items[self.player][preplaced_item] = 1
+            self.preplaced_item = self.random.choice(sphere_1_item_names)
 
     def build_early_progression_for_osh(self):
-        sphere_1_item_names = ["Morph Ball", "Missile Data", "Screw Attack", "Speed Booster"]
-        preplaced_item = self.random.choice(sphere_1_item_names)
-        self.multiworld.local_early_items[self.player][preplaced_item] = 1
-        if len(self.options.start_inventory.value.keys()) == 0:
+        starting_item = ""
+        if ((len(self.options.start_inventory.value.keys()) == 0)
+                and (len(self.options.start_inventory_from_pool.value.keys()) == 0)):
             starting_item = self.random.choice(major_abilities)
-            self.options.start_inventory.value[starting_item] = 1
+            self.options.start_inventory_from_pool.value[starting_item] = 1
             self.push_precollected(self.create_item(starting_item))
         if "Energy Tank" not in self.options.start_inventory.value.keys():
-            self.options.start_inventory.value["Energy Tank"] = 1
+            self.options.start_inventory_from_pool.value["Energy Tank"] = 1
             self.push_precollected(self.create_item("Energy Tank"))
+        sphere_1_item_names = ["Morph Ball", "Missile Data", "Screw Attack", "Speed Booster"]
+        if starting_item in sphere_1_item_names:
+            sphere_1_item_names.remove(starting_item)
+        self.preplaced_item = self.random.choice(sphere_1_item_names)
 
     def create_items(self):
         itempool = []
@@ -265,7 +280,7 @@ class MetroidFusionWorld(World):
         for location in all_locations:
             ap_location = self.get_location(location.name)
             location_data = get_location_data_by_name(location.name)
-            logic_object = LogicObject(self.player)
+            logic_object = LogicObject(self.player, self.options)
             logic_object.requirements, logic_object.energy_tanks = create_logic_rule_for_list(location_data.requirements, self.options)
             add_rule(ap_location, logic_object.logic_rule)
         infant_metroids_required = self.options.InfantMetroidsRequired.value
@@ -277,6 +292,9 @@ class MetroidFusionWorld(World):
                           and state.has("Energy Tank", self.player, 10)
                           and (state.has("Space Jump", self.player) or state.has("Hi-Jump", self.player)))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+
+    def pre_fill(self) -> None:
+        self.multiworld.local_early_items[self.player][self.preplaced_item] = 1
 
     def generate_basic(self):
         pass
@@ -317,6 +335,11 @@ class MetroidFusionWorld(World):
             for item, quantity in self.options.start_inventory.items():
                 for i in range(quantity):
                     starting_inventory.append(item)
+        if len(self.options.start_inventory_from_pool) > 0:
+            starting_inventory = []
+            for item, quantity in self.options.start_inventory_from_pool.items():
+                for i in range(quantity):
+                    starting_inventory.append(item)
             starting_inventory_string = ", ".join(starting_inventory)
             briefing_text_addition_start = f"Your starting gear is: {starting_inventory_string}. "
         briefing_text_addition_end = ""
@@ -332,7 +355,7 @@ class MetroidFusionWorld(World):
                                    f"Then initiate the station's self-destruct sequence. "
                                    f"{briefing_text_addition_end}"
                                    f"[OBJECTIVE]Good. Move out.",
-                    "ConfirmText": "Any Objections, Lady?"
+                    "ConfirmText": "Any objections, Lady?"
                 }
             }
         }
@@ -517,6 +540,12 @@ class MetroidFusionWorld(World):
                 "Sector5ToMainHub": elevator_id_lookups[self.region_map[Sector5Hub.name]],
                 "Sector6ToMainHub": elevator_id_lookups[self.region_map[Sector6Hub.name]]
             }
+        }
+
+    def build_minimap_edits(self):
+        pass
+        return {
+
         }
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:

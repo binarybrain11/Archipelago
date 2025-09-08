@@ -1,11 +1,10 @@
 import logging
-from collections import deque
 from typing import TYPE_CHECKING
 
-from BaseClasses import ItemClassification
-from NetUtils import ClientStatus, HintStatus
+from NetUtils import ClientStatus
 
 import worlds._bizhawk as bizhawk
+from settings import get_settings
 from worlds._bizhawk.client import BizHawkClient
 
 from .data import memory
@@ -13,8 +12,7 @@ from .data.minor_locations import location_order as minor_location_order
 from .data.major_locations import location_order as major_location_order
 
 if TYPE_CHECKING:
-    from worlds._bizhawk.context import BizHawkClientContext
-
+    from worlds._bizhawk.context import BizHawkClientContext, BizHawkClientCommandProcessor
 
 logger = logging.getLogger("Client")
 
@@ -24,7 +22,6 @@ def get_byte_bit_from_index(index):
 
 def get_bit_value_from_position(position):
     return 2 ** position
-
 
 class MetroidFusionClient(BizHawkClient):
     game = "Metroid Fusion"
@@ -40,6 +37,7 @@ class MetroidFusionClient(BizHawkClient):
         self.rom = "ROM"
         self.location_name_to_id: dict[str, int] | None = None
         self.logged_version = False
+        self.display_location_found_messages = True
         self.current_sectpr = 0
         self.locations_hinted: list[str] = list()
 
@@ -71,6 +69,8 @@ class MetroidFusionClient(BizHawkClient):
             logger.info(f"Metroid Fusion APWorld v{int.from_bytes(patch_version)} was used for patching.")
             logger.info(f"Metroid Fusion APWorld v{MetroidFusionWorld.version} used for playing.")
             self.logged_version = True
+            self.display_location_found_messages = (get_settings()["metroidfusion_options"]
+                                                    .get("display_location_found_messages", True))
 
         return True
 
@@ -128,9 +128,10 @@ class MetroidFusionClient(BizHawkClient):
         for location in found_locations:
             ctx.locations_checked.add(location)
             location_name = ctx.location_names.lookup_in_game(location)
-            logger.info(
-                f'New Check: {location_name} ({len(ctx.locations_checked)}/'
-                f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+            if self.display_location_found_messages:
+                logger.info(
+                    f'New Check: {location_name} ({len(ctx.locations_checked)}/'
+                    f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
 
     async def received_items_check(self, ctx: "BizHawkClientContext"):
         write_list: list[tuple[int, list[int], str]] = []

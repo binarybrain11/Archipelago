@@ -1,25 +1,9 @@
 from dataclasses import dataclass
 
-from Options import (Toggle, Range, Choice, PerGameCommonOptions, DefaultOnToggle, StartInventoryPool, OptionGroup,
-                     OptionSet, Visibility)
+from Options import Toggle, Range, Choice, PerGameCommonOptions, DefaultOnToggle, StartInventoryPool, OptionGroup
 
-class EarlyProgression(Choice):
-    """Determines if an early progression item guaranteed in one of your first locations.
-    Normal restricts the starting item pool to Morph Ball and Missiles.
-    Advanced expands the pool to Screw Attack.
-    If Tricky Shinessparks In Region Logic (below) is enabled, adds Speed Booster as well
-    Option is in testing and may increase generation failures."""
-    display_name = "Early Progression"
-    option_none = 0
-    option_normal = 1
-    option_advanced = 2
-    default = 1
 
-class TrickyShinesparksInRegionLogic(Toggle):
-    """Are difficult or risky shinesparks required to navigate around?
-    Note that this does not exclude items that require shinesparking in vanilla to obtain.
-    Use the ShinesparkLocations location group for that."""
-    display_name = "Tricky Shinesparks in Region Logic"
+# Main Options
 
 class GameMode(Choice):
     """Determines starting location and accessibility.
@@ -28,20 +12,6 @@ class GameMode(Choice):
     display_name = "Game Mode"
     option_vanilla = 0
     option_open_sector_hub = 1
-
-class SectorTubeShuffle(Toggle):
-    """If enabled, shuffles the tube connections between sectors.
-    Does not affect the non-glass tube connections."""
-    display_name = "Sector Tube Shuffle"
-
-class ElevatorShuffle(Choice):
-    """If enabled, shuffles the various elevator connections.
-     Sectors will shuffle the six sector elevators in the Sector Hub.
-     All will include all elevator connections in the game."""
-    display_name = "Elevator Shuffle"
-    option_none = 0
-    option_sectors = 1
-    option_all = 2
 
 class InfantMetroidsInPool(Range):
     """How many Infant Metroids will be in the item pool."""
@@ -57,6 +27,48 @@ class InfantMetroidsRequired(Range):
     range_start = 1
     range_end = 20
     default = 5
+
+# Logic Options
+
+class EarlyProgression(Choice):
+    """Determines if an early progression item guaranteed in one of your first locations.
+    Normal restricts the starting item pool to Morph Ball and Missiles.
+    Advanced expands the pool to Screw Attack.
+    If Tricky Shinessparks In Region Logic (below) is enabled, adds Speed Booster as well
+    Option is in testing and may increase generation failures."""
+    display_name = "Early Progression"
+    option_none = 0
+    option_normal = 1
+    option_advanced = 2
+    default = 1
+
+
+class TrickyShinesparksInRegionLogic(Toggle):
+    """Are difficult or risky shinesparks required to navigate around?
+    Note that this does not exclude items that require shinesparking in vanilla to obtain.
+    Use the ShinesparkLocations location group for that."""
+    display_name = "Tricky Shinesparks in Region Logic"
+
+class SimpleWallJumpsInRegionLogic(Toggle):
+    """Can simple wall jumps be required to navigate around?"""
+    display_name = "Simple Wall Jumps in Region Logic"
+
+class SectorTubeShuffle(Toggle):
+    """If enabled, shuffles the tube connections between sectors.
+    Does not affect the non-glass tube connections."""
+    display_name = "Sector Tube Shuffle"
+
+class ElevatorShuffle(Choice):
+    """If enabled, shuffles the various elevator connections.
+     Sectors will shuffle the six sector elevators in the Sector Hub.
+     All will include all elevator connections in the game.
+     Note that if enabled, logical energy tank requirements will be relaxed."""
+    display_name = "Elevator Shuffle"
+    option_none = 0
+    option_sectors = 1
+    option_all = 2
+
+# Minor Options
 
 class PaletteRandomization(Toggle):
     """Randomize the ingame palettes."""
@@ -104,13 +116,16 @@ class PowerBombTankAmmo(Range):
 
 @dataclass
 class MetroidFusionOptions(PerGameCommonOptions):
-    EarlyProgression: EarlyProgression
-    TrickyShinesparksInRegionLogic: TrickyShinesparksInRegionLogic
     GameMode: GameMode
-    SectorTubeShuffle: SectorTubeShuffle
-    ElevatorShuffle: ElevatorShuffle
     InfantMetroidsInPool: InfantMetroidsInPool
     InfantMetroidsRequired: InfantMetroidsRequired
+
+    EarlyProgression: EarlyProgression
+    TrickyShinesparksInRegionLogic: TrickyShinesparksInRegionLogic
+    SimpleWallJumpsInRegionLogic: SimpleWallJumpsInRegionLogic
+    SectorTubeShuffle: SectorTubeShuffle
+    ElevatorShuffle: ElevatorShuffle
+
     PaletteRandomization: PaletteRandomization
     EnableHints: EnableHints
     RevealHiddenBlocks: RevealHiddenBlocks
@@ -119,3 +134,30 @@ class MetroidFusionOptions(PerGameCommonOptions):
     MissileTankAmmo: MissileTankAmmo
     PowerBombDataAmmo: PowerBombDataAmmo
     PowerBombTankAmmo: PowerBombTankAmmo
+
+    start_inventory_from_pool: StartInventoryPool
+
+metroid_fusion_option_groups = [
+    OptionGroup("Main Options", [
+        GameMode,
+        InfantMetroidsInPool,
+        InfantMetroidsRequired
+    ]),
+    OptionGroup("Logic Options", [
+        EarlyProgression,
+        TrickyShinesparksInRegionLogic,
+        SimpleWallJumpsInRegionLogic,
+        SectorTubeShuffle,
+        ElevatorShuffle
+    ]),
+    OptionGroup("Minor Options", [
+        PaletteRandomization,
+        EnableHints,
+        RevealHiddenBlocks,
+        FastDoorTransitions,
+        MissileDataAmmo,
+        MissileTankAmmo,
+        PowerBombDataAmmo,
+        PowerBombTankAmmo,
+    ])
+]

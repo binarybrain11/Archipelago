@@ -52,9 +52,11 @@ def create_hints(world: "MetroidFusionWorld") -> tuple[list[str], list[HintedPai
 
     hinted_items = world.random.sample(items_to_hint, 5)
     for item in hinted_items:
-        location_object = world.multiworld.find_item_locations(item, world.player)[0]
-        item_object = location_object.item
-        hinted_pairs.add(HintedPair(location_object, item_object))
+        locations = world.multiworld.find_item_locations(item, world.player)
+        if len(locations) > 0:
+            location_object = locations[0]
+            item_object = location_object.item
+            hinted_pairs.add(HintedPair(location_object, item_object))
 
     while len(hinted_pairs) < 11:
         new_location = world.random.choice(sorted(list(world.get_locations())))
