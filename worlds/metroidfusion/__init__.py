@@ -326,10 +326,6 @@ class MetroidFusionWorld(World):
             "ColorSpace": "Oklab"
         }
 
-    def post_fill(self) -> None:
-        if self.options.EnableHints:
-            self.hint_text, self.hint_pairs = create_hints(self)
-
     def create_navigation_text(self, hint_text: list[str], required_metroids: int):
         briefing_text_addition_start = ""
         if len(self.options.start_inventory) > 0:
@@ -698,6 +694,8 @@ class MetroidFusionWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         hint_data = {}
+        if self.options.EnableHints:
+            self.hint_text, self.hint_pairs = create_hints(self)
         infant_metroids_required = self.options.InfantMetroidsRequired.value
         if infant_metroids_required > self.options.InfantMetroidsInPool.value:
             infant_metroids_required = self.options.InfantMetroidsInPool.value
