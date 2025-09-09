@@ -27,7 +27,7 @@ all_item_data = [
     ("Screw Attack", ItemClassification.progression, ["Weapons", "Suit"], 22),
     ("Ice Beam", ItemClassification.progression, ["Weapons", "Beams"], 23),
     ("Missile Tank", ItemClassification.filler, ["Weapons", "Missiles"], 24),
-    ("Energy Tank", ItemClassification.progression, ["Suit", "Defense"], 25),
+    ("Energy Tank", ItemClassification.progression_deprioritized_skip_balancing, ["Suit", "Defense"], 25),
     ("Power Bomb Tank", ItemClassification.filler, ["Weapons", "Bombs"], 26),
     ("Ice Trap", ItemClassification.trap, [], 27),
     ("Infant Metroid", ItemClassification.progression, ["Metroid"], 28),

@@ -1,6 +1,5 @@
 import pkgutil
 from enum import IntEnum
-from typing import Callable
 
 from BaseClasses import Location, ItemClassification
 from .Items import mars_name_to_ap_name, major_jingles
@@ -11,7 +10,7 @@ class MetroidFusionLocation(Location):
     game = "Metroid Fusion"
     logic_rule: list[list[str]]
 
-class LocationData():
+class LocationData:
     name: str
     mars_id: tuple[int, int]
     major: bool
@@ -28,7 +27,7 @@ class LocationData():
 
     def to_json(self, item: str, item_sprite: str, item_classification: ItemClassification):
         ap_name = mars_name_to_ap_name[item]
-        if ap_name in major_jingles or item_classification | ItemClassification.progression:
+        if ap_name in major_jingles or (item_classification & ItemClassification.progression and ap_name != "Energy Tank"):
             jingle = "Major"
         else:
             jingle = "Minor"
