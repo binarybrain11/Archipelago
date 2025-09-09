@@ -635,6 +635,8 @@ class MetroidFusionWorld(World):
         if self.options.PaletteRandomization:
             patch_dict["Palettes"] = self.create_palette_rando(self.multiworld.seed)
         if self.options.EnableHints:
+            if self.hint_text is None:
+                self.hint_text, self.hint_pairs = create_hints(self)
             patch_dict["NavigationText"] = self.create_navigation_text(
                 self.hint_text,
                 infant_metroids_required)
@@ -695,7 +697,8 @@ class MetroidFusionWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         hint_data = {}
         if self.options.EnableHints:
-            self.hint_text, self.hint_pairs = create_hints(self)
+            if self.hint_text is None:
+                self.hint_text, self.hint_pairs = create_hints(self)
         infant_metroids_required = self.options.InfantMetroidsRequired.value
         if infant_metroids_required > self.options.InfantMetroidsInPool.value:
             infant_metroids_required = self.options.InfantMetroidsInPool.value
