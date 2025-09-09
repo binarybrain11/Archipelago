@@ -63,12 +63,14 @@ class MetroidFusionWeb(WebWorld):
 
     tutorials = [setup]
 
+    rich_text_options_doc = True
     option_groups = metroid_fusion_option_groups
 
 
 class MetroidFusionWorld(World):
     """
-    Metroid Fusion, powered by MARS.
+    Metroid Fusion, powered by MARS. The fourth Metroid game, known for its linearity, in randomized form!
+    Locate the Infant Metroids to lure out the SA-X, set the self destruct, and escape the station.
     """
     settings: typing.ClassVar[MetroidFusionSettings]
     game = "Metroid Fusion"
