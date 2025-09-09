@@ -495,8 +495,7 @@ class CanAccessGarbageChute(Requirement):
 
 class CanAccessWallJumpTutorialWithSpaceJump(Requirement):
     items_needed = ["Space Jump"]
-    other_requirements = [
-        Requirement(["Space Jump"], [CanBallJump]),
+    other_requirements = [CanBallJump]),
     ]
 
 class CanAccessWallJumpTutorialWithWallJump(Requirement):
@@ -1256,8 +1255,8 @@ Sector3Hub.connections = [
 Sector3TubeLeft.connections = [
     VariableConnection(Sector5TubeRight, []),
     Connection(Sector3Hub, [
-        Requirement(["Screw Attack"], [CanJumpHigh, CanDoSimpleWallJump])
-    ], one_way=True)
+        Requirement(["Screw Attack", "Varia Suit"], [CanJumpHigh, CanDoSimpleWallJump])
+    ])
 ]
 
 Sector3TubeRight.connections = [
@@ -1617,7 +1616,7 @@ Sector5DataRoom.connections = [
 ]
 
 Sector5BeforeNightmareHub.connections = [
-    Connection(Sector3TubeLeft, [CanJumpHigh, CanDoSimpleWallJump]),
+    Connection(Sector5TubeRight, [CanJumpHigh, CanDoSimpleWallJump]),
     Connection(Sector5NightmareHub, [
         Requirement(["Hi-Jump"], [CanBeatToughEnemy]),
         Requirement(["Space Jump"], [CanBeatToughEnemy])
