@@ -33,9 +33,9 @@ class Requirement:
 
     def __repr__(self):
         return_string = f"{self.__class__}\n"
-        return_string += f"ItemsNeeded: [{", ".join(self.items_needed)}]\n"
+        return_string += f"ItemsNeeded: [{', '.join(self.items_needed)}]\n"
         return_string += (f"OtherRequirements: "
-                          f"[{", ".join([str(requirement) for requirement in self.other_requirements])}]\n")
+                          f"[{', '.join([str(requirement) for requirement in self.other_requirements])}]\n")
         return_string += f"EnergyTanks: {self.energy_tanks_needed}"
         return return_string
 

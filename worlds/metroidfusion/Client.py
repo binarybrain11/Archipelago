@@ -71,7 +71,6 @@ class MetroidFusionClient(BizHawkClient):
             self.logged_version = True
             self.display_location_found_messages = (get_settings()["metroidfusion_options"]
                                                     .get("display_location_found_messages", True))
-
         return True
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:

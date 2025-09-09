@@ -147,7 +147,7 @@ class MetroidFusionWorld(World):
                 connecting_region = self.get_region(connection.destination.name)
                 logic_object = LogicObject(self.player, self.options)
                 if self.debug:
-                    print(f"{"One way connection" if connection.one_way else "Two way connection"}: "
+                    print(f"{'One way connection' if connection.one_way else 'Two way connection'}: "
                           f"{origin_region.name} to {connecting_region.name}")
                 logic_object.requirements, logic_object.energy_tanks = create_logic_rule_for_list(
                     connection.requirements,
