@@ -135,7 +135,6 @@ class CanDoTrickyShinespark(Requirement):
     def check_option_enabled(options: "MetroidFusionOptions") -> bool:
         return bool(options.TrickyShinesparksInRegionLogic.value)
 
-
 class CanDoSimpleWallJump(Requirement):
     items_needed = []
 
@@ -157,6 +156,12 @@ class CanDoSimpleWallJumpWithScrewAttack(Requirement):
     def check_option_enabled(options: "MetroidFusionOptions") -> bool:
         return bool(options.SimpleWallJumpsInRegionLogic.value)
 
+class CanDoTrickyWallJump(Requirement):
+    items_needed = []
+
+    @staticmethod
+    def check_option_enabled(options: "MetroidFusionOptions") -> bool:
+        return bool(options.TrickyWallJumpsInRegionLogic.value)
 
 class SectorHubLevel1KeycardRequirement(Requirement):
     items_needed = ["Level 1 Keycard"]
@@ -793,8 +798,8 @@ class Sector5TubeRight(FusionRegion):
 class Sector5MagicBox(FusionRegion):
     name = "Sector 5 Magic Box"
 
-class Sector5TopleftBigRoom(FusionRegion):
-    name = "Sector 5 Big Room"
+class Sector5TopLeftBigRoom(FusionRegion):
+    name = "Sector 5 Top Left of Big Room"
 
 class Sector5FrozenHub(FusionRegion):
     name = "Sector 5 Frozen Hub"
@@ -1564,7 +1569,7 @@ Sector5Hub.connections = [
     Connection(Sector5MagicBox, [
         Level3KeycardRequirement([], [])
     ]),
-    Connection(Sector5TopleftBigRoom, [
+    Connection(Sector5TopLeftBigRoom, [
         Level3KeycardRequirement([], [CanJumpHigh, CanDoTrickyWallJump]),
         Requirement(["Morph Ball"], [HasMissile])
     ]),
@@ -1583,7 +1588,7 @@ Sector5TubeRight.connections = [
     Connection(Sector5BeforeNightmareHub, [], one_way=True)
 ]
 
-Sector5TopleftBigRoom.connections = [
+Sector5TopLeftBigRoom.connections = [
     Connection(Sector5FrozenHub, [HasVaria], one_way=True)
 ]
 
@@ -1596,7 +1601,7 @@ Sector5FrozenHub.connections = [
         Requirement(["Speed Booster"], [CanBombOrPowerBomb]),
         Level3KeycardRequirement([], [HasWaveBeam])
     ], one_way=True),
-    Connection(Sector5TopleftBigRoom, [CanJumpHigh, CanDoTrickyWallJump]
+    Connection(Sector5TopLeftBigRoom, [CanJumpHigh, CanDoTrickyWallJump]
 ]
 
 Sector5SecurityZone.connections = [
@@ -1654,7 +1659,7 @@ Sector5MagicBox.locations = [
     FusionLocation("Sector 5 (ARC) -- Magic Box", False, [])
 ]
 
-Sector5BigRoom.locations = [
+Sector5TopLeftBigRoom.locations = [
     FusionLocation("Sector 5 (ARC) -- Training Aerie -- Left Item", False, [
         Requirement(["Speed Booster"], [HasSpaceJump, CanFreezeEnemies])
     ]),
@@ -1931,7 +1936,7 @@ fusion_regions: list[FusionRegion] = [
     Sector5TubeLeft,
     Sector5TubeRight,
     Sector5MagicBox,
-    Sector5TopleftBigRoom,
+    Sector5TopLeftBigRoom,
     Sector5FrozenHub,
     Sector5SecurityZone,
     Sector5DataRoom,
