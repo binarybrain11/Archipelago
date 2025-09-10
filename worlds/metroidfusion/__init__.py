@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import warnings
 from copy import deepcopy
 
 import Utils
@@ -23,16 +24,24 @@ from .Options import MetroidFusionOptions, metroid_fusion_option_groups
 from .Rom import MetroidFusionProcedurePatch
 from .data import memory
 from .data.items import events
-from .data.locations import fusion_regions, left_tubes, right_tubes, sector_elevator_tops, sector_elevator_bottoms, \
-    other_elevator_tops, other_elevator_bottoms, FusionRegion, sector_tube_id_lookups, Sector1TubeLeft, Sector2TubeLeft, \
-    Sector3TubeLeft, Sector4TubeLeft, Sector5TubeLeft, Sector6TubeLeft, Sector1TubeRight, Sector2TubeRight, \
-    Sector3TubeRight, Sector4TubeRight, Sector5TubeRight, Sector6TubeRight, elevator_id_lookups, OperationsDeck, \
-    SectorHubElevator1Top, SectorHubElevator2Top, SectorHubElevator3Top, SectorHubElevator4Top, SectorHubElevator5Top, \
-    SectorHubElevator6Top, SectorHubElevatorTop, HabitationDeckElevatorTop, Sector1TourianHub, \
-    OperationsDeckElevatorBottom, SectorHubElevatorBottom, Sector6RestrictedZoneElevatorToTourian, \
-    HabitationDeckElevatorBottom, Sector1Hub, Sector2Hub, Sector3Hub, Sector4Hub, Sector5Hub, Sector6Hub, \
-    VariableConnection, sector_elevators, other_elevators, OperationsDeckElevatorTop, Sector1TourianHubElevatorTop, \
-    default_region_map, reverse_region_map
+from .data.locations import (fusion_regions, left_tubes, right_tubes, sector_elevator_tops, sector_elevator_bottoms,
+                             other_elevator_tops, other_elevator_bottoms, sector_tube_id_lookups, elevator_id_lookups,
+                             sector_elevators, other_elevators)
+from .data.logic.VariableConnection import VariableConnection
+from .data.logic.RegionMap import default_region_map, reverse_region_map
+from .data.logic.regions.MainDeck import (OperationsDeck, SectorHubElevator1Top, SectorHubElevator2Top,
+                                          SectorHubElevator3Top, SectorHubElevator4Top, SectorHubElevator5Top,
+                                          SectorHubElevator6Top, SectorHubElevatorTop, HabitationDeckElevatorTop,
+                                          OperationsDeckElevatorBottom, SectorHubElevatorBottom,
+                                          OperationsDeckElevatorTop, HabitationDeckElevatorBottom)
+from .data.logic.regions.Sector1 import Sector1Hub, Sector1TubeLeft, Sector1TubeRight, Sector1TourianHub, \
+    Sector1TourianHubElevatorTop
+from .data.logic.regions.Sector2 import Sector2Hub, Sector2TubeLeft, Sector2TubeRight
+from .data.logic.regions.Sector3 import Sector3Hub, Sector3TubeLeft, Sector3TubeRight
+from .data.logic.regions.Sector4 import Sector4Hub, Sector4TubeLeft, Sector4TubeRight
+from .data.logic.regions.Sector5 import Sector5Hub, Sector5TubeLeft, Sector5TubeRight
+from .data.logic.regions.Sector6 import (Sector6Hub, Sector6TubeLeft, Sector6TubeRight,
+                                         Sector6RestrictedZoneElevatorToTourian)
 from .data.offworld_sprites import offworld_sprites, SpriteNames
 from .data.room_names import room_names
 from .Client import MetroidFusionClient
@@ -86,6 +95,8 @@ class MetroidFusionWorld(World):
     spoiler_region_map: dict[str, str]
     er_map: list[tuple[str, str]] = None
     preplaced_item: str = None
+    starting_location: str = None
+    starting_region: Region
 
     er_group_mappings = {
         ERGroups.TUBE_LEFT: [ERGroups.TUBE_RIGHT],
@@ -97,7 +108,7 @@ class MetroidFusionWorld(World):
     item_name_to_id = {item: item_data.mars_id for item, item_data in item_table.items()}
     location_name_to_id = {location.name: location.ap_id for location in all_locations}
     location_name_groups = location_groups
-    version = 12
+    version = 13
     debug = False
 
 
@@ -125,6 +136,12 @@ class MetroidFusionWorld(World):
         return MetroidFusionItem(name, ItemClassification.progression, None, self.player)
 
     def generate_early(self) -> None:
+        if self.options.SimpleWallJumpsInRegionLogic:
+            warnings.warn(f"SimpleWallJumpsInRegionLogic for player {self.player_name} is depreecated and will be removed in a future version. "
+                            "Please remove it from your options and switch to WallJumpTrickDifficulty.")
+        if self.options.TrickyShinesparksInRegionLogic:
+            warnings.warn(f"TrickyShinesparksInRegionLogic for player {self.player_name} is depreecated and will be removed in a future version. "
+                            "Please remove it from your options and switch to ShinesparkTrickDifficulty.")
         for origin, destination in default_region_map.items():
             self.region_map[origin.name] = destination.name
         for origin, destination in reverse_region_map.items():
@@ -137,10 +154,12 @@ class MetroidFusionWorld(World):
             region = Region(region_data.name, self.player, self.multiworld)
             self.multiworld.regions.append(region)
 
-        starting_region = self.get_region("Main Deck Hub")
-        if self.options.GameMode == self.options.GameMode.option_open_sector_hub:
-            starting_region = self.get_region("Sector Hub Elevator Bottom")
-        menu.connect(starting_region)
+        if self.starting_location is None:
+            self.starting_location = "Main Deck Hub"
+            if self.options.GameMode == self.options.GameMode.option_open_sector_hub:
+                self.starting_location = "Sector Hub Elevator Bottom"
+        self.starting_region = self.get_region(self.starting_location)
+        menu.connect(self.starting_region)
 
         # Define connections
         for origin_region_data in fusion_regions:
@@ -283,7 +302,9 @@ class MetroidFusionWorld(World):
             ap_location = self.get_location(location.name)
             location_data = get_location_data_by_name(location.name)
             logic_object = LogicObject(self.player, self.options)
-            logic_object.requirements, logic_object.energy_tanks = create_logic_rule_for_list(location_data.requirements, self.options)
+            if self.debug:
+                    print(f"\n{location.name} requirements:")
+            logic_object.requirements, logic_object.energy_tanks = create_logic_rule_for_list(location_data.requirements, self.options, self.debug)
             add_rule(ap_location, logic_object.logic_rule)
         infant_metroids_required = self.options.InfantMetroidsRequired.value
         if infant_metroids_required > self.options.InfantMetroidsInPool.value:
@@ -291,6 +312,11 @@ class MetroidFusionWorld(World):
         add_rule(
             self.get_location("Victory"),
             lambda state: state.has("Infant Metroid", self.player, infant_metroids_required)
+                          and state.has("Charge Beam", self.player)
+                          and state.has("Wide Beam", self.player)
+                          and state.has("Plasma Beam", self.player)
+                          and state.has("Missile Data", self.player)
+                          and state.has("Super Missile", self.player)
                           and state.has("Energy Tank", self.player, 10)
                           and (state.has("Space Jump", self.player) or state.has("Hi-Jump", self.player)))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
@@ -724,8 +750,34 @@ class MetroidFusionWorld(World):
             "PowerBombDataAmmo": self.options.PowerBombDataAmmo.value,
             "PowerBombTankAmmo": self.options.PowerBombTankAmmo.value,
             "TrickyShinesparks": self.options.TrickyShinesparksInRegionLogic.value,
-            "GameMode": self.options.GameMode.value
+            "GameMode": self.options.GameMode.value,
+            "UTOptions": self.options.as_dict(
+                "GameMode",
+                "InfantMetroidsInPool",
+                "InfantMetroidsRequired",
+                "EarlyProgression",
+                "TrickyShinesparksInRegionLogic",
+                "SimpleWallJumpsInRegionLogic",
+                "SectorTubeShuffle",
+                "ElevatorShuffle"
+            ),
+            "UTStartingLocation": self.starting_location,
+            "UTEntrances": self.er_map
         }
+
+    def interpret_slot_data(self, slot_data: dict[str, Any]) -> None:
+        if "UTStartingLocation" in slot_data:
+            self.origin_region_name = slot_data["UTStartingLocation"]
+
+        if "UTEntrances" in slot_data:
+            # Update entrance connections for ER
+            entrances = {
+                entrance.name: entrance
+                for region in self.get_regions()
+                for entrance in region.entrances
+            }
+            for source_exit, target_entrance in slot_data["UTEntrances"]:
+                entrances[source_exit].connected_region = entrances[target_entrance].parent_region
 
     @staticmethod
     def get_hint(pair: HintedPair):

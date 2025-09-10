@@ -1,10 +1,12 @@
 import pkgutil
+import json
 from enum import IntEnum
 
 from BaseClasses import Location, ItemClassification
 from .Items import mars_name_to_ap_name, major_jingles
-from .data.locations import fusion_regions, Requirement
-import json
+from .data.locations import fusion_regions
+from .data.logic.Requirement import Requirement
+from .data.logic import topologies
 
 class MetroidFusionLocation(Location):
     game = "Metroid Fusion"

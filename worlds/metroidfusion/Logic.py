@@ -2,7 +2,7 @@ from copy import copy
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from .data.locations import Requirement
+from .data.logic.Requirement import Requirement
 from .Items import valid_item_names
 
 if TYPE_CHECKING:

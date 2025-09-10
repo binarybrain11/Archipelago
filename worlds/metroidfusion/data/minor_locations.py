@@ -1,4 +1,4 @@
-# Only change this is the order of minor location in MARS changes otherwise the client will break.
+# Only change this if the order of minor location in MARS changes otherwise the client will break.
 
 location_order = [
 	'Main Deck -- Station Entrance',

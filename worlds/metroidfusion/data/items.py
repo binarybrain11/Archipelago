@@ -1,5 +1,6 @@
 from BaseClasses import ItemClassification
-from worlds.metroidfusion.data.locations import Sector4PumpControl, OperationsDeck
+from .logic.regions.Sector4 import Sector4PumpControl
+from .logic.regions.MainDeck import OperationsDeck
 
 all_item_data = [
     # Name, Major, Groups, ID
@@ -16,7 +17,7 @@ all_item_data = [
     ("Varia Suit", ItemClassification.progression, ["Suit", "Defense"], 11),
     ("Level 3 Keycard", ItemClassification.progression, ["Keycards"], 12),
     ("Ice Missile", ItemClassification.progression, ["Weapons", "Missiles"], 13),
-    ("Wide Beam", ItemClassification.useful, ["Weapons", "Beams"], 14),
+    ("Wide Beam", ItemClassification.progression, ["Weapons", "Beams"], 14),
     ("Power Bomb Data", ItemClassification.progression, ["Weapons", "Morph Ball"], 15),
     ("Space Jump", ItemClassification.progression, ["Movement"], 16),
     ("Plasma Beam", ItemClassification.progression, ["Weapons", "Beams"], 17),

@@ -12,6 +12,7 @@ class GameMode(Choice):
     display_name = "Game Mode"
     option_vanilla = 0
     option_open_sector_hub = 1
+    default = 0
 
 class InfantMetroidsInPool(Range):
     """How many Infant Metroids will be in the item pool."""
@@ -42,17 +43,6 @@ class EarlyProgression(Choice):
     option_advanced = 2
     default = 1
 
-
-class TrickyShinesparksInRegionLogic(Toggle):
-    """Are difficult or risky shinesparks required to navigate around?
-    Note that this does not exclude items that require shinesparking in vanilla to obtain.
-    Use the ShinesparkLocations location group for that."""
-    display_name = "Tricky Shinesparks in Region Logic"
-
-class SimpleWallJumpsInRegionLogic(Toggle):
-    """Can simple wall jumps be required to navigate around?"""
-    display_name = "Simple Wall Jumps in Region Logic"
-
 class SectorTubeShuffle(Toggle):
     """If enabled, shuffles the tube connections between sectors.
     Does not affect the non-glass tube connections."""
@@ -67,6 +57,35 @@ class ElevatorShuffle(Choice):
     option_none = 0
     option_sectors = 1
     option_all = 2
+    default = 0
+
+# Trick Options
+
+class WallJumpTrickDifficulty(Choice):
+    """What level of wall jump trick difficulty may be required to navigate around."""
+    display_name = "Wall Jump Trick Difficulty"
+    option_none = 0
+    option_beginner = 1
+    option_advanced = 2
+    default = 0
+
+class ShinesparkTrickDifficulty(Choice):
+    """What level of shinespark trick difficulty may be required to navigate around.
+    Note that this does not exclude items that require shinesparking in vanilla to obtain.
+    Use the ShinesparkLocations location group for that."""
+    display_name = "Shinespark Trick Difficulty"
+    option_none = 0
+    option_beginner = 1
+    option_advanced = 2
+    default = 0
+
+class CombatDifficulty(Choice):
+    """What level of combat tools are logically expected for later game bosses."""
+    display_name = "Combat Difficulty"
+    option_beginner = 0
+    option_advanced = 1
+    option_expert = 2
+    default = 0
 
 # Minor Options
 
@@ -114,6 +133,18 @@ class PowerBombTankAmmo(Range):
     range_end = 100
     default = 2
 
+# Deprecated options
+
+class TrickyShinesparksInRegionLogic(Toggle):
+    """DEPRECATED OPTION. WILL BE REMOVED IN A FUTURE VERSION.
+    Use ShinesparkTrickDifficulty instead."""
+    display_name = "Tricky Shinesparks in Region Logic"
+
+class SimpleWallJumpsInRegionLogic(Toggle):
+    """DEPRECATED OPTION. WILL BE REMOVED IN A FUTURE VERSION.
+    Use WallJumpTrickDifficulty instead."""
+    display_name = "Simple Wall Jumps in Region Logic"
+
 @dataclass
 class MetroidFusionOptions(PerGameCommonOptions):
     GameMode: GameMode
@@ -121,10 +152,12 @@ class MetroidFusionOptions(PerGameCommonOptions):
     InfantMetroidsRequired: InfantMetroidsRequired
 
     EarlyProgression: EarlyProgression
-    TrickyShinesparksInRegionLogic: TrickyShinesparksInRegionLogic
-    SimpleWallJumpsInRegionLogic: SimpleWallJumpsInRegionLogic
     SectorTubeShuffle: SectorTubeShuffle
     ElevatorShuffle: ElevatorShuffle
+
+    ShinesparkTrickDifficulty: ShinesparkTrickDifficulty
+    WallJumpTrickDifficulty: WallJumpTrickDifficulty
+    CombatDifficulty: CombatDifficulty
 
     PaletteRandomization: PaletteRandomization
     EnableHints: EnableHints
@@ -134,6 +167,9 @@ class MetroidFusionOptions(PerGameCommonOptions):
     MissileTankAmmo: MissileTankAmmo
     PowerBombDataAmmo: PowerBombDataAmmo
     PowerBombTankAmmo: PowerBombTankAmmo
+
+    TrickyShinesparksInRegionLogic: TrickyShinesparksInRegionLogic
+    SimpleWallJumpsInRegionLogic: SimpleWallJumpsInRegionLogic
 
     start_inventory_from_pool: StartInventoryPool
 
@@ -145,10 +181,13 @@ metroid_fusion_option_groups = [
     ]),
     OptionGroup("Logic Options", [
         EarlyProgression,
-        TrickyShinesparksInRegionLogic,
-        SimpleWallJumpsInRegionLogic,
         SectorTubeShuffle,
         ElevatorShuffle
+    ]),
+    OptionGroup("Trick Options", [
+        ShinesparkTrickDifficulty,
+        WallJumpTrickDifficulty,
+        CombatDifficulty
     ]),
     OptionGroup("Minor Options", [
         PaletteRandomization,
@@ -159,5 +198,9 @@ metroid_fusion_option_groups = [
         MissileTankAmmo,
         PowerBombDataAmmo,
         PowerBombTankAmmo,
+    ]),
+    OptionGroup("Deprecated Options - DON'T USE", [
+        TrickyShinesparksInRegionLogic,
+        SimpleWallJumpsInRegionLogic
     ])
 ]
