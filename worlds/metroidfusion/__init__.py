@@ -309,16 +309,21 @@ class MetroidFusionWorld(World):
         infant_metroids_required = self.options.InfantMetroidsRequired.value
         if infant_metroids_required > self.options.InfantMetroidsInPool.value:
             infant_metroids_required = self.options.InfantMetroidsInPool.value
+
+
         add_rule(
             self.get_location("Victory"),
             lambda state: state.has("Infant Metroid", self.player, infant_metroids_required)
                           and state.has("Charge Beam", self.player)
-                          and state.has("Wide Beam", self.player)
-                          and state.has("Plasma Beam", self.player)
                           and state.has("Missile Data", self.player)
-                          and state.has("Super Missile", self.player)
                           and state.has("Energy Tank", self.player, 10)
                           and (state.has("Space Jump", self.player) or state.has("Hi-Jump", self.player)))
+        if self.options.CombatDifficulty < self.options.CombatDifficulty.option_expert:
+            add_rule(self.get_location("Victory"), lambda state: state.has("Plasma Beam", self.player))
+        if self.options.CombatDifficulty < self.options.CombatDifficulty.option_advanced:
+            (add_rule(
+                self.get_location("Victory")),
+                lambda state: state.has("Wide Beam", self.player) and state.has("Super Missile", self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def pre_fill(self) -> None:

@@ -99,7 +99,7 @@ Sector1FirstStabilizerZone.locations = [
 
 Sector1SecondStabilizerZone.locations = [
     FusionLocation("Sector 1 (SRX) -- Lava Lake -- Lower Item", False, [
-        Requirement("Morph Ball", [CanLavaDive])
+        Requirement(["Morph Ball"], [CanLavaDive])
     ]),
     FusionLocation("Sector 1 (SRX) -- Lava Lake -- Upper Left Item", False, [
         HasSpaceJump,
