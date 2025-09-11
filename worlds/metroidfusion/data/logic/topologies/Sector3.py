@@ -74,7 +74,9 @@ Sector3BOXZone.connections = [
 Sector3Attic.connections = [
     Connection(Sector3Hub, [CanBombOrPowerBomb], one_way=True),
     Connection(Sector3BOXZone, [CanFightBoss], one_way=True),
-    Connection(Sector3TubeRight, [CanScrewAttackAndSpaceJump])
+    Connection(Sector3TubeRight, [
+        Requirement(["Screw Attack"], [CanJumpHigh])
+    ])
 ]
 
 Sector3SovaProcessing.connections = [
@@ -147,7 +149,12 @@ Sector3Attic.locations = [
 
 Sector3SovaProcessing.locations = [
     FusionLocation("Sector 3 (PYR) -- Sova Processing -- Left Item", False, [
-        Requirement(["Morph Ball"], [HasSpaceJump, CanFreezeEnemies])
+        Requirement(["Morph Ball"], [
+            Requirement(["Bomb Data"], [HasSpaceJump]),
+            Requirement(["Hi-Jump"], [HasSpaceJump]),
+            Requirement(["Bomb Data"], [CanFreezeEnemies])
+            Requirement(["Hi-Jump"], [CanFreezeEnemies])
+        ])
     ]),
     FusionLocation("Sector 3 (PYR) -- Sova Processing -- Right Item", False, [
         Requirement(["Morph Ball"], [HasSpaceJump, CanFreezeEnemies])
