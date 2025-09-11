@@ -108,7 +108,7 @@ class MetroidFusionWorld(World):
     item_name_to_id = {item: item_data.mars_id for item, item_data in item_table.items()}
     location_name_to_id = {location.name: location.ap_id for location in all_locations}
     location_name_groups = location_groups
-    version = 13
+    version = 14
     debug = False
 
 
@@ -316,14 +316,19 @@ class MetroidFusionWorld(World):
             lambda state: state.has("Infant Metroid", self.player, infant_metroids_required)
                           and state.has("Charge Beam", self.player)
                           and state.has("Missile Data", self.player)
-                          and state.has("Energy Tank", self.player, 10)
+                          and state.has("Energy Tank", self.player, 3)
                           and (state.has("Space Jump", self.player) or state.has("Hi-Jump", self.player)))
         if self.options.CombatDifficulty < self.options.CombatDifficulty.option_expert:
-            add_rule(self.get_location("Victory"), lambda state: state.has("Plasma Beam", self.player))
+            add_rule(
+                self.get_location("Victory"),
+                lambda state: state.has("Plasma Beam", self.player)
+                              and state.has("Energy Tank", self.player, 6))
         if self.options.CombatDifficulty < self.options.CombatDifficulty.option_advanced:
-            (add_rule(
-                self.get_location("Victory")),
-                lambda state: state.has("Wide Beam", self.player) and state.has("Super Missile", self.player))
+            add_rule(
+                self.get_location("Victory"),
+                lambda state: state.has("Wide Beam", self.player)
+                              and state.has("Super Missile", self.player)
+                              and state.has("Energy Tank", self.player, 10))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def pre_fill(self) -> None:
