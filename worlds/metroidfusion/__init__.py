@@ -225,14 +225,6 @@ class MetroidFusionWorld(World):
             region.locations.append(event_location)
             event_location.place_locked_item(self.create_event(event[3]))
 
-    @staticmethod
-    def connect_entrance_callback(_er_state, exits: list[Entrance], entrances: list[Entrance]):
-        for i, connected_exit in enumerate(exits):
-            connected_exit.name = (connected_exit.name.replace(" Destination", "") +
-                                   " to " +
-                                   entrances[i].connected_region.name)
-        return True
-
     def connect_entrances(self) -> None:
         self.er_map = randomize_entrances(self, True, self.er_group_mappings).pairings
         for connection in self.er_map:
