@@ -152,7 +152,7 @@ Sector3SovaProcessing.locations = [
         Requirement(["Morph Ball"], [
             Requirement(["Bomb Data"], [HasSpaceJump]),
             Requirement(["Hi-Jump"], [HasSpaceJump]),
-            Requirement(["Bomb Data"], [CanFreezeEnemies])
+            Requirement(["Bomb Data"], [CanFreezeEnemies]),
             Requirement(["Hi-Jump"], [CanFreezeEnemies])
         ])
     ]),
