@@ -29,6 +29,18 @@ class InfantMetroidsRequired(Range):
     range_end = 20
     default = 5
 
+class InfantMetroidLocations(Choice):
+    """Where Infant Metroids can be located.
+    Anywhere allows them to be anywhere in the multiworld.
+    Bosses Encouraged increases the chances of them being located on local boss locations.
+    Only Bosses means Infant Metroids can only be on your boss locations. Will limit the number of Infant Metroids
+    in the pool. if greater than the number of bosses."""
+    display_name = "Infant Metroid Locations"
+    option_anywhere = 0
+    option_bosses_encouraged = 1
+    option_only_bosses = 2
+    default = 0
+
 # Logic Options
 
 class EarlyProgression(Choice):
@@ -150,6 +162,7 @@ class MetroidFusionOptions(PerGameCommonOptions):
     GameMode: GameMode
     InfantMetroidsInPool: InfantMetroidsInPool
     InfantMetroidsRequired: InfantMetroidsRequired
+    InfantMetroidLocations: InfantMetroidLocations
 
     EarlyProgression: EarlyProgression
     SectorTubeShuffle: SectorTubeShuffle
@@ -177,7 +190,8 @@ metroid_fusion_option_groups = [
     OptionGroup("Main Options", [
         GameMode,
         InfantMetroidsInPool,
-        InfantMetroidsRequired
+        InfantMetroidsRequired,
+        InfantMetroidLocations
     ]),
     OptionGroup("Logic Options", [
         EarlyProgression,

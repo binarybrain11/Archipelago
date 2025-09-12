@@ -2,7 +2,7 @@ import json
 import logging
 import os
 import warnings
-from copy import deepcopy
+from copy import deepcopy, copy
 
 import Utils
 import settings
@@ -42,6 +42,7 @@ from .data.logic.regions.Sector4 import Sector4Hub, Sector4TubeLeft, Sector4Tube
 from .data.logic.regions.Sector5 import Sector5Hub, Sector5TubeLeft, Sector5TubeRight
 from .data.logic.regions.Sector6 import (Sector6Hub, Sector6TubeLeft, Sector6TubeRight,
                                          Sector6RestrictedZoneElevatorToTourian)
+from .data.major_locations import boss_locations
 from .data.offworld_sprites import offworld_sprites, SpriteNames
 from .data.room_names import room_names
 from .Client import MetroidFusionClient
@@ -108,8 +109,8 @@ class MetroidFusionWorld(World):
     item_name_to_id = {item: item_data.mars_id for item, item_data in item_table.items()}
     location_name_to_id = {location.name: location.ap_id for location in all_locations}
     location_name_groups = location_groups
-    version = 14
-    debug = False
+    version = 15
+    debug = True
 
 
 
@@ -264,6 +265,23 @@ class MetroidFusionWorld(World):
             sphere_1_item_names.remove(starting_item)
         self.preplaced_item = self.random.choice(sphere_1_item_names)
 
+    def build_metroid_boss_list(self):
+        if self.options.InfantMetroidLocations == self.options.InfantMetroidLocations.option_bosses_encouraged:
+            boss_count = self.random.randint(3, 5)
+            bosses = self.random.sample(boss_locations, k=boss_count)
+            chosen_bosses = []
+            for boss in bosses:
+                chance = self.random.randint(0, 1)
+                if chance == 1:
+                    chosen_bosses.append(boss)
+            return chosen_bosses
+        elif self.options.InfantMetroidLocations == self.options.InfantMetroidLocations.option_only_bosses:
+            bosses = copy(boss_locations)
+            self.random.shuffle(bosses)
+            return bosses
+        else:
+            return []
+
     def create_items(self):
         itempool = []
         if self.options.GameMode == self.options.GameMode.option_vanilla:
@@ -272,8 +290,11 @@ class MetroidFusionWorld(World):
             self.build_early_progression_for_osh()
         item_quantities = deepcopy(default_item_quantities)
         infant_metroids_in_pool = self.options.InfantMetroidsInPool.value
+        if self.options.InfantMetroidLocations == self.options.InfantMetroidLocations.option_only_bosses:
+            infant_metroids_in_pool = min(infant_metroids_in_pool, len(boss_locations))
         item_quantities["Infant Metroid"] = infant_metroids_in_pool
         item_quantities["Power Bomb Tank"] -= infant_metroids_in_pool
+        metroid_bosses = self.build_metroid_boss_list()
         energy_tanks = 0
         max_progressive_energy_tanks = 10
         for item in item_table:
@@ -287,7 +308,13 @@ class MetroidFusionWorld(World):
                 energy_tanks += 1
                 if energy_tanks > max_progressive_energy_tanks:
                     item.classification = ItemClassification.useful
-            self.multiworld.itempool.append(item)
+            if item.name == "Infant Metroid" and len(metroid_bosses) > 0:
+                boss_location = metroid_bosses.pop()
+                self.get_location(boss_location).place_locked_item(item)
+                if self.debug:
+                    print(f"Placed Infant Metroid at {boss_location}")
+            else:
+                self.multiworld.itempool.append(item)
 
     def set_rules(self):
         for location in all_locations:
@@ -299,8 +326,11 @@ class MetroidFusionWorld(World):
             logic_object.requirements, logic_object.energy_tanks = create_logic_rule_for_list(location_data.requirements, self.options, self.debug)
             add_rule(ap_location, logic_object.logic_rule)
         infant_metroids_required = self.options.InfantMetroidsRequired.value
-        if infant_metroids_required > self.options.InfantMetroidsInPool.value:
-            infant_metroids_required = self.options.InfantMetroidsInPool.value
+        infant_metroids_in_pool = self.options.InfantMetroidsInPool.value
+        if self.options.InfantMetroidLocations == self.options.InfantMetroidLocations.option_only_bosses:
+            infant_metroids_in_pool = min(infant_metroids_in_pool, len(boss_locations))
+        if infant_metroids_required > infant_metroids_in_pool:
+            infant_metroids_required = infant_metroids_in_pool
 
 
         add_rule(
@@ -752,6 +782,9 @@ class MetroidFusionWorld(World):
             "PowerBombDataAmmo": self.options.PowerBombDataAmmo.value,
             "PowerBombTankAmmo": self.options.PowerBombTankAmmo.value,
             "TrickyShinesparks": self.options.TrickyShinesparksInRegionLogic.value,
+            "ShinesparkDifficulty": self.options.ShinesparkTrickDifficulty.value,
+            "WallJumpDifficulty": self.options.WallJumpTrickDifficulty.value,
+            "CombatDifficulty": self.options.CombatDifficulty.value,
             "GameMode": self.options.GameMode.value,
             "UTOptions": self.options.as_dict(
                 "GameMode",

@@ -1,4 +1,5 @@
 from ..Connection import Connection
+from ..Requirements import CanDoBeginnerShinespark
 from ..VariableConnection import VariableConnection
 from ..Requirements import *
 from ..FusionLocation import FusionLocation
@@ -13,8 +14,8 @@ Sector4Hub.connections = [
     VariableConnection(SectorHubElevator4Top, []),
     Connection(Sector4UpperZone, [CanBombOrPowerBomb], one_way=True),
     Connection(Sector4DataZone, [
-        CanDrainAQARequirement(["Missile Data", "Diffusion Missile"], []),
-        CanDrainAQARequirement(["Ice Beam", "Wave Beam"], [])
+        CanDrainAQARequirement(["Missile Data", "Diffusion Missile"], [HasMorph]),
+        CanDrainAQARequirement(["Ice Beam", "Wave Beam"], [HasMorph])
     ]),
     Connection(Sector4RightWaterZone, [
         CanDrainAQARequirement(
@@ -53,10 +54,13 @@ Sector4BeforePumpControlZone.connections = [
     ], one_way=True),
     Connection(Sector4UpperWaterZone, [
         CanDrainAQARequirement(["Gravity Suit"], [HasKeycard4])
-    ]),
+    ], one_way=True),
     Connection(Sector4SerrisZone, [
         Requirement(["Hi-Jump"], [CanBombOrPowerBomb]),
         Requirement(["Morph Ball", "Bomb Data", "Gravity Suit"], [])
+    ], one_way=True),
+    Connection(Sector4UpperZone, [
+        CanDrainAQARequirement([], [HasMorph])
     ], one_way=True)
 ]
 
@@ -75,14 +79,19 @@ Sector4SerrisZone.connections = [
 ]
 
 Sector4PumpControl.connections = [
-    Connection(Sector4UpperZone, [CanBallJump], one_way=True)
+    Connection(Sector4BeforePumpControlZone, [CanBallJump], one_way=True)
 ]
 
 Sector4UpperWaterZone.connections = [
-    Connection(Sector5NightmareHub, [
-        Requirement(["Speed Booster", "Gravity Suit"], [CanJumpHigh])
+    Connection(Sector4BeforePumpControlZone, [
+        CanJumpHighUnderwater,
+        Requirement(["Gravity Suit"], [CanDoBeginnerShinespark])
     ]),
-    Connection(Sector4SecurityZone, [HasSpeedBooster, HasScrewAttack]),
+    Connection(Sector5NightmareHub, [CanSpeedBoosterUnderwater]),
+    Connection(Sector4SecurityZone, [
+        CanSpeedBoosterUnderwater,
+        Requirement(["Screw Attack", "Gravity Suit"], [CanBallJump])
+    ]),
 ]
 
 Sector4SecurityZone.connections = [
@@ -155,7 +164,7 @@ Sector4SerrisZone.locations = [
 Sector4UpperWaterZone.locations = [
     FusionLocation("Sector 4 (AQA) -- Cargo Hold to Sector 5 (ARC)", False, [
         HasScrewAttack,
-        HasSpeedBooster
+        Requirement(["Morph Ball"], [CanSpeedBoosterUnderwater])
     ]),
     FusionLocation("Sector 4 (AQA) -- Aquarium Pirate Tank", False, [CanPowerBomb]),
 ]

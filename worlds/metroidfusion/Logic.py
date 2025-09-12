@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 class LogicObject():
     requirements: list[list[str]] = []
-    energy_tanks: int = 0
+    energy_tanks: list[int] = []
     calculated_energy_tanks: int = 0
     player: int
     options: "MetroidFusionOptions"
@@ -23,28 +23,35 @@ class LogicObject():
         if len(self.requirements) == 0:
             return True
         expression = None
-        for requirement_list in self.requirements:
+        for requirement_list, energy_tanks in zip(self.requirements, self.energy_tanks):
+            if energy_tanks > 0:
+                if self.options.ElevatorShuffle.value > self.options.ElevatorShuffle.option_none:
+                    energy_tanks = energy_tanks // 2
+                else:
+                    energy_tanks = energy_tanks
+                if self.options.CombatDifficulty >= self.options.CombatDifficulty.option_expert:
+                    energy_tanks = energy_tanks // 2
             if expression is None:
-                expression = state.has_all(requirement_list, self.player)
+                expression = (state.has_all(requirement_list, self.player)
+                              and state.has("Energy Tank", self.player, energy_tanks))
             else:
-                expression = expression or state.has_all(requirement_list, self.player)
-        if self.energy_tanks > 0:
-            if self.options.ElevatorShuffle.value > self.options.ElevatorShuffle.option_none:
-                self.calculated_energy_tanks = self.energy_tanks // 2
-            else:
-                self.calculated_energy_tanks = self.energy_tanks
-            expression = expression and state.has("Energy Tank", self.player, self.calculated_energy_tanks)
+                expression = (expression
+                              or state.has_all(requirement_list, self.player)
+                              and state.has("Energy Tank", self.player, energy_tanks))
         return expression
 
 
 
-def create_logic_rule_for_list(requirements: list[Requirement], options: "MetroidFusionOptions", debug: bool = False) -> tuple[list, int]:
-    energy_tanks = 0
+def create_logic_rule_for_list(
+        requirements: list[Requirement],
+        options: "MetroidFusionOptions",
+        debug: bool = False) -> tuple[list, list]:
+    energy_tanks = []
     requirements_list = []
     for requirement in requirements:
-        new_rule = create_logic_rule(requirement, options, debug)
-        energy_tanks = max(energy_tanks, new_rule[1])
-        for requirement2 in new_rule[0]:
+        new_rule, energy_tanks_in_rule = create_logic_rule(requirement, options, debug)
+        energy_tanks.append(energy_tanks_in_rule)
+        for requirement2 in new_rule:
             requirements_list.append(requirement2)
         continue
     return requirements_list, energy_tanks

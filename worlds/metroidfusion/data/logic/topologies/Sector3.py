@@ -18,23 +18,20 @@ Sector3Hub.connections = [
     Connection(Sector3BobZone, [
         Level2KeycardRequirement([], [CanDefeatMediumGeron])
     ]),
-    Connection(Sector3Attic, [
+    Connection(Sector3LowerAttic, [
         Requirement(["Screw Attack", "Space Jump", "Morph Ball"], [])
     ])
 ]
 
 Sector3TubeLeft.connections = [
     VariableConnection(Sector5TubeRight, []),
-    Connection(Sector3Hub, [
-        Requirement(["Screw Attack", "Varia Suit"], [CanJumpHigh, CanDoSimpleWallJump])
+    Connection(Sector3FieryStorageLeft, [
+        Requirement(["Screw Attack"], [CanJumpHigh, CanDoSimpleWallJump])
     ])
 ]
 
 Sector3TubeRight.connections = [
     VariableConnection(Sector1TubeLeft, []),
-    Connection(Sector3FieryStorageLeft, [
-        Requirement(["Screw Attack"], [CanJumpHigh, CanDoSimpleWallJump])
-    ])
 ]
 
 Sector3FieryStorageRight.connections = [
@@ -68,19 +65,30 @@ Sector3BobZone.connections = [
 ]
 
 Sector3BOXZone.connections = [
-    Connection(Sector3Attic, [CanAscendBOXRoom])
+    Connection(Sector3UpperAttic, [CanAscendBOXRoom])
 ]
 
-Sector3Attic.connections = [
-    Connection(Sector3Hub, [CanBombOrPowerBomb], one_way=True),
-    Connection(Sector3BOXZone, [CanFightBoss], one_way=True),
-    Connection(Sector3TubeRight, [
-        Requirement(["Screw Attack"], [CanJumpHigh])
+Sector3LowerAttic.connections = [
+    Connection(Sector3Hub, [CanDestroyBombBlocks], one_way=True),
+    Connection(Sector3UpperAttic, [
+        Requirement(["Space Jump"], [CanBombOrPowerBomb]),
+        Requirement(["Morph Ball", "Bomb Data", "Hi-Jump"], [CanDoTrickyWallJump]),
+        Requirement(["Morph Ball", "Power Bomb Data", "Hi-Jump"], [CanDoTrickyWallJump]),
+        Requirement(["Morph Ball", "Bomb Data", "Hi-Jump"], [CanFreezeEnemies]),
+        Requirement(["Morph Ball", "Power Bomb Data", "Hi-Jump"], [CanFreezeEnemies]),
     ])
 ]
 
+Sector3UpperAttic.connections = [
+    Connection(Sector3BOXZone, [CanFightBoss], one_way=True),
+    Connection(Sector3TubeRight, [
+        Requirement(["Screw Attack"], [CanJumpHigh])
+    ]),
+    Connection(Sector3LowerAttic, [CanDestroyBombBlocks], one_way=True)
+]
+
 Sector3SovaProcessing.connections = [
-    Connection(Sector3Attic, [CanAccessGarbageChute], one_way=True)
+    Connection(Sector3UpperAttic, [CanAccessGarbageChute], one_way=True)
 ]
 
 Sector3FieryStorageRight.locations = [
@@ -137,13 +145,16 @@ Sector3BOXZone.locations = [
     FusionLocation("Sector 3 (PYR) -- Geron's Treasure", False, [CanDefeatMediumGeron])
 ]
 
-Sector3Attic.locations = [
+Sector3LowerAttic.locations = [
     FusionLocation("Sector 3 (PYR) -- Alcove -- Lower Item", False, [
         CanAccessSector3LowerAlcove
     ]),
     FusionLocation("Sector 3 (PYR) -- Alcove -- Upper Item", False, [
         Requirement(["Speed Booster"], [CanPowerBomb])
     ]),
+]
+
+Sector3UpperAttic.locations = [
     FusionLocation("Sector 3 (PYR) -- Deserted Runway", False, [HasSpeedBooster]),
 ]
 

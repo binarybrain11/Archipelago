@@ -103,7 +103,7 @@ Sector1SecondStabilizerZone.locations = [
     ]),
     FusionLocation("Sector 1 (SRX) -- Lava Lake -- Upper Left Item", False, [
         HasSpaceJump,
-        CanDoAdvancedShinespark
+        CanDoBeginnerShinespark
     ]),
     FusionLocation("Sector 1 (SRX) -- Lava Lake -- Upper Right Item", False, []),
     FusionLocation("Sector 1 (SRX) -- Stabilizer Storage", False, []),
