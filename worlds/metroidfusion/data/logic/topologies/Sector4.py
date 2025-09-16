@@ -1,5 +1,5 @@
 from ..Connection import Connection
-from ..Requirements import CanDoBeginnerShinespark
+from ..Requirement import PONRRequirement
 from ..VariableConnection import VariableConnection
 from ..Requirements import *
 from ..FusionLocation import FusionLocation
@@ -56,8 +56,10 @@ Sector4BeforePumpControlZone.connections = [
         CanDrainAQARequirement(["Gravity Suit"], [HasKeycard4])
     ], one_way=True),
     Connection(Sector4SerrisZone, [
-        Requirement(["Hi-Jump"], [CanBombOrPowerBomb]),
-        Requirement(["Morph Ball", "Bomb Data", "Gravity Suit"], [])
+        PONRRequirement(["Hi-Jump"], [CanBombOrPowerBomb]),
+        PONRRequirement(["Morph Ball", "Bomb Data", "Gravity Suit"], []),
+        Requirement(["Hi-Jump", "Speed Booster"], [CanBombOrPowerBomb]),
+        Requirement(["Morph Ball", "Bomb Data", "Gravity Suit", "Speed Booster"], [])
     ], one_way=True),
     Connection(Sector4UpperZone, [
         CanDrainAQARequirement([], [HasMorph])
@@ -87,7 +89,9 @@ Sector4UpperWaterZone.connections = [
         CanJumpHighUnderwater,
         Requirement(["Gravity Suit"], [CanDoBeginnerShinespark])
     ]),
-    Connection(Sector5NightmareHub, [CanSpeedBoosterUnderwater]),
+    Connection(Sector5NightmareHub, [
+        Requirement(["Gravity Suit", "Speed Booster"], [CanJumpHigh])
+    ], one_way=True),
     Connection(Sector4SecurityZone, [
         CanSpeedBoosterUnderwater,
         Requirement(["Screw Attack", "Gravity Suit"], [CanBallJump])
@@ -96,8 +100,16 @@ Sector4UpperWaterZone.connections = [
 
 Sector4SecurityZone.connections = [
     Connection(Sector4RightWaterZone, [CanCrossSector4LowerSecurityToRightWaterZone]),
-    Connection(Sector4LowerSecurityZone, [HasKeycard4, CanAscendCheddarBay]),
-    Connection(Sector4SecurityRoom, [CanAscendCheddarBay], one_way=True),
+    Connection(Sector4LowerSecurityZone, [
+        PONRRequirement([], [HasKeycard4]),
+        PONRRequirement([], [CanAscendCheddarBay]),
+        Requirement(["Space Jump"], [HasKeycard4]),
+        Requirement(["Space Jump"], [CanAscendCheddarBay])
+    ]),
+    Connection(Sector4SecurityRoom, [
+        PONRRequirement([], [CanAscendCheddarBay]),
+        Requirement(["Level 4 Keycard", "Space Jump"], [CanAscendCheddarBay]),
+    ], one_way=True),
 ]
 
 Sector4LowerSecurityZone.connections = [

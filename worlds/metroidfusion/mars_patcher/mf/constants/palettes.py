@@ -1,4 +1,4 @@
-from ..rom import Game
+from ...rom import Game
 
 MF_TILESET_ALT_PAL_ROWS = {
     0x46F134: 0xD,  # 08

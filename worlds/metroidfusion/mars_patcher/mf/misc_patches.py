@@ -1,11 +1,10 @@
+from ..constants import game_data as gd
+from .constants.reserved_space import ReservedConstantsMF
+from .data import get_data_path
+from ..patching import BpsDecoder, IpsDecoder
+from ..rom import Rom
 import os
 import pkgutil
-
-from .constants import game_data as gd
-from .constants.reserved_space import ReservedConstants
-from .data import get_data_path
-from .patching import BpsDecoder, IpsDecoder
-from .rom import Rom
 
 
 def _get_patch_path(rom: Rom, subfolder: str, filename: str) -> str:
@@ -50,7 +49,7 @@ def skip_door_transitions(rom: Rom) -> None:
 
 
 def stereo_default(rom: Rom) -> None:
-    apply_patch_in_data_path(rom, "stereo_default.ips")
+    rom.write_8(rom.read_ptr(ReservedConstantsMF.DEFAULT_STEREO_FLAG_POINTER_ADDR), 1)
 
 
 def disable_sounds(rom: Rom, start: int, end: int, exclude: set[int] = set()) -> None:
@@ -77,7 +76,7 @@ def disable_sound_effects(rom: Rom) -> None:
 
 
 def change_missile_limit(rom: Rom, limit: int) -> None:
-    rom.write_8(rom.read_ptr(ReservedConstants.MISSILE_LIMIT_ADDR), limit)
+    rom.write_8(rom.read_ptr(ReservedConstantsMF.MISSILE_LIMIT_ADDR), limit)
 
 
 def apply_unexplored_map(rom: Rom) -> None:
@@ -89,7 +88,7 @@ def apply_pbs_without_bombs(rom: Rom) -> None:
 
 
 def apply_reveal_hidden_tiles(rom: Rom) -> None:
-    rom.write_8(rom.read_ptr(ReservedConstants.REVEAL_HIDDEN_TILES_ADDR), 1)
+    rom.write_8(rom.read_ptr(ReservedConstantsMF.REVEAL_HIDDEN_TILES_ADDR), 1)
 
 
 def apply_reveal_unexplored_doors(rom: Rom) -> None:

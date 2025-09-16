@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Range, Choice, PerGameCommonOptions, DefaultOnToggle, StartInventoryPool, OptionGroup
+from Options import Toggle, Range, Choice, PerGameCommonOptions, DefaultOnToggle, StartInventoryPool, OptionGroup, \
+    DeathLink, Removed
 
 
 # Main Options
@@ -47,13 +48,18 @@ class EarlyProgression(Choice):
     """Determines if an early progression item guaranteed in one of your first locations.
     Normal restricts the starting item pool to Morph Ball and Missiles.
     Advanced expands the pool to Screw Attack.
-    If Tricky Shinessparks In Region Logic (below) is enabled, adds Speed Booster as well
+    If Shinespark Tricks are set to Advanced, adds Speed Booster as well
     Option is in testing and may increase generation failures."""
     display_name = "Early Progression"
     option_none = 0
     option_normal = 1
     option_advanced = 2
     default = 1
+
+class PointOfNoReturnsInLogic(DefaultOnToggle):
+    """Should Point of No Return locations be in logic.
+    If disabled, you will never be required to enter an area without the items to exit out."""
+    display_name = "Point of No Returns in Logic"
 
 class SectorTubeShuffle(Toggle):
     """If enabled, shuffles the tube connections between sectors.
@@ -147,15 +153,26 @@ class PowerBombTankAmmo(Range):
 
 # Deprecated options
 
-class TrickyShinesparksInRegionLogic(Toggle):
+class TrickyShinesparksInRegionLogic(Removed):
     """DEPRECATED OPTION. WILL BE REMOVED IN A FUTURE VERSION.
     Use ShinesparkTrickDifficulty instead."""
     display_name = "Tricky Shinesparks in Region Logic"
 
-class SimpleWallJumpsInRegionLogic(Toggle):
+    def __init__(self, value: str):
+        if value:
+            raise Exception("TrickyShinesparksInRegionLogic option removed. "
+                            "Please use ShinesparkTrickDifficulty instead.")
+        super().__init__(value)
+
+class SimpleWallJumpsInRegionLogic(Removed):
     """DEPRECATED OPTION. WILL BE REMOVED IN A FUTURE VERSION.
     Use WallJumpTrickDifficulty instead."""
     display_name = "Simple Wall Jumps in Region Logic"
+
+    def __init__(self, value: str):
+        if value:
+            raise Exception("SimpleWallJumpsInRegionLogic option removed. Please use WallJumpTrickDifficulty instead.")
+        super().__init__(value)
 
 @dataclass
 class MetroidFusionOptions(PerGameCommonOptions):
@@ -167,6 +184,7 @@ class MetroidFusionOptions(PerGameCommonOptions):
     EarlyProgression: EarlyProgression
     SectorTubeShuffle: SectorTubeShuffle
     ElevatorShuffle: ElevatorShuffle
+    PointOfNoReturnsInLogic: PointOfNoReturnsInLogic
 
     ShinesparkTrickDifficulty: ShinesparkTrickDifficulty
     WallJumpTrickDifficulty: WallJumpTrickDifficulty
@@ -185,6 +203,7 @@ class MetroidFusionOptions(PerGameCommonOptions):
     SimpleWallJumpsInRegionLogic: SimpleWallJumpsInRegionLogic
 
     start_inventory_from_pool: StartInventoryPool
+    death_link: DeathLink
 
 metroid_fusion_option_groups = [
     OptionGroup("Main Options", [
@@ -196,7 +215,8 @@ metroid_fusion_option_groups = [
     OptionGroup("Logic Options", [
         EarlyProgression,
         SectorTubeShuffle,
-        ElevatorShuffle
+        ElevatorShuffle,
+        PointOfNoReturnsInLogic
     ]),
     OptionGroup("Trick Options", [
         ShinesparkTrickDifficulty,
@@ -212,9 +232,5 @@ metroid_fusion_option_groups = [
         MissileTankAmmo,
         PowerBombDataAmmo,
         PowerBombTankAmmo,
-    ]),
-    OptionGroup("Deprecated Options - DON'T USE", [
-        TrickyShinesparksInRegionLogic,
-        SimpleWallJumpsInRegionLogic
     ])
 ]

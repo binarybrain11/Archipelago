@@ -1,4 +1,5 @@
 from ..Connection import Connection
+from ..Requirement import PONRRequirement
 from ..VariableConnection import VariableConnection
 from ..Requirements import *
 from ..FusionLocation import FusionLocation
@@ -39,7 +40,10 @@ Sector3FieryStorageRight.connections = [
 ]
 
 Sector3FieryStorageLeft.connections = [
-    Connection(Sector3TubeRight, [HasScrewAttack], one_way=True)
+    Connection(Sector3TubeRight, [
+        PONRRequirement([], [HasScrewAttack]),
+        Requirement(["Screw Attack"], [CanJumpHigh, CanDoSimpleWallJump]),
+    ], one_way=True)
 ]
 
 Sector3MainShaft.connections = [
@@ -72,10 +76,15 @@ Sector3LowerAttic.connections = [
     Connection(Sector3Hub, [CanDestroyBombBlocks], one_way=True),
     Connection(Sector3UpperAttic, [
         Requirement(["Space Jump"], [CanBombOrPowerBomb]),
-        Requirement(["Morph Ball", "Bomb Data", "Hi-Jump"], [CanDoTrickyWallJump]),
-        Requirement(["Morph Ball", "Power Bomb Data", "Hi-Jump"], [CanDoTrickyWallJump]),
+        Requirement(["Morph Ball", "Bomb Data"], [CanDoAdvancedWallJumpWithHiJump]),
+        Requirement(["Morph Ball", "Power Bomb Data"], [CanDoAdvancedWallJumpWithHiJump]),
         Requirement(["Morph Ball", "Bomb Data", "Hi-Jump"], [CanFreezeEnemies]),
         Requirement(["Morph Ball", "Power Bomb Data", "Hi-Jump"], [CanFreezeEnemies]),
+        Requirement(["Morph Ball", "Bomb Data"], [CanDoSimpleWallJumpAndFreezeEnemies]),
+        Requirement(
+            ["Morph Ball", "Power Bomb Data"],
+        [CanDoSimpleWallJumpAndFreezeEnemies]
+        )
     ])
 ]
 

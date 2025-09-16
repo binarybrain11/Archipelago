@@ -6,7 +6,7 @@ import pkgutil
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, ClassVar
 
-from .frozendict import frozendict
+from ..frozendict import frozendict
 
 from .constants.items import (
     ITEM_ENUMS,
@@ -36,11 +36,11 @@ from .constants.items import (
     ItemType,
     MajorSource,
 )
-from .data import get_data_path
-from .text import Language
+
+from ..text import Language
 
 if TYPE_CHECKING:
-    from .auto_generated_types import Itemmessages, MarsschemaLocations
+    from .auto_generated_types import Itemmessages, MarsschemamfLocations
 
 
 class Location:
@@ -174,7 +174,7 @@ class LocationSettings:
 
         return LocationSettings(major_locs, minor_locs)
 
-    def set_assignments(self, data: MarsschemaLocations) -> None:
+    def set_assignments(self, data: MarsschemamfLocations) -> None:
         for maj_loc_entry in data[KEY_MAJOR_LOCS]:
             # Get source and item
             source = SOURCE_ENUMS[maj_loc_entry[KEY_SOURCE]]
