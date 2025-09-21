@@ -88,6 +88,9 @@ class CanJumpHighUnderwater(Requirement):
 class CanSpeedBoosterUnderwater(Requirement):
     items_needed = ["Gravity Suit", "Speed Booster"]
 
+class CanScrewAttackUnderwater(Requirement):
+    items_needed = ["Gravity Suit", "Screw Attack"]
+
 class CanFreezeEnemies(Requirement):
     other_requirements = [
         Requirement(["Ice Missile"], [HasMissile]),
