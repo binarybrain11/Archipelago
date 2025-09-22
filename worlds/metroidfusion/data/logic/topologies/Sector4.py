@@ -175,7 +175,7 @@ Sector4SerrisZone.locations = [
 
 Sector4UpperWaterZone.locations = [
     FusionLocation("Sector 4 (AQA) -- Cargo Hold to Sector 5 (ARC)", False, [
-        HasScrewAttack,
+        CanScrewAttackUnderwater,
         Requirement(["Morph Ball"], [CanSpeedBoosterUnderwater])
     ]),
     FusionLocation("Sector 4 (AQA) -- Aquarium Pirate Tank", False, [CanPowerBomb]),
