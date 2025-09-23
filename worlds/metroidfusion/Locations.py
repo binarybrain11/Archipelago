@@ -107,12 +107,18 @@ for region in fusion_regions:
 
 
 difficult_speed_booster_list = [
+    "Sector 1 (SRX) -- Charge Core Arena -- Upper Item",
+    "Sector 1 (SRX) -- Watering Hole",
     "Sector 2 (TRO) -- Zazabi Speedway -- Lower Item",
     "Sector 2 (TRO) -- Zazabi Speedway -- Upper Item",
     "Sector 3 (PYR) -- Fiery Storage -- Upper Item",
     "Sector 3 (PYR) -- Deserted Runway",
     "Sector 3 (PYR) -- Garbage Chute -- Lower Item",
     "Sector 3 (PYR) -- Garbage Chute -- Upper Item",
+    "Sector 4 (AQA) -- Aquarium Kago Storage -- Right Item",
+    "Sector 5 (ARC) -- Training Aerie -- Left Item",
+    "Sector 5 (ARC) -- Flooded Airlock to Sector 4 (AQA)",
+    "Sector 6 (NOC) -- Pillar Highway",
     "Sector 6 (NOC) -- Spaceboost Alley -- Lower Item",
     "Sector 6 (NOC) -- Spaceboost Alley -- Upper Item",
     "Main Deck -- Restricted Airlock"
