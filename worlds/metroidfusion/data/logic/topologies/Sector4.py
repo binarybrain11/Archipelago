@@ -133,7 +133,7 @@ Sector4DataZone.connections = [
 
 Sector4RightDataZone.connections = [
     Connection(Sector4RightWaterZone, [
-        Requirement(["Morph Ball"], [CanDiffusionMissile])
+        Requirement(["Morph Ball", "Gravity Suit"], [CanDiffusionMissile])
     ], one_way=True)
 ]
 

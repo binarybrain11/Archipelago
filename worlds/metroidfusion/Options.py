@@ -123,6 +123,15 @@ class FastDoorTransitions(DefaultOnToggle):
     """Enables fast door transitions between rooms."""
     display_name = "Fast Door Transitions"
 
+class StartingLocation(Choice):
+    """Your starting location. Default puts you in the default location for your GameMode setting."""
+    display_name = "Starting Location"
+    option_default_start = 0
+    option_docking_bay = 1
+    option_sector_hub = 2
+    option_concourse_save_station = 3
+    default = 0
+
 class MissileDataAmmo(Range):
     """The amount of missiles provided by a Missile Data item."""
     display_name = "Missile Data Ammo"
@@ -194,6 +203,7 @@ class MetroidFusionOptions(PerGameCommonOptions):
     EnableHints: EnableHints
     RevealHiddenBlocks: RevealHiddenBlocks
     FastDoorTransitions: FastDoorTransitions
+    StartingLocation: StartingLocation
     MissileDataAmmo: MissileDataAmmo
     MissileTankAmmo: MissileTankAmmo
     PowerBombDataAmmo: PowerBombDataAmmo
@@ -228,6 +238,7 @@ metroid_fusion_option_groups = [
         EnableHints,
         RevealHiddenBlocks,
         FastDoorTransitions,
+        StartingLocation,
         MissileDataAmmo,
         MissileTankAmmo,
         PowerBombDataAmmo,

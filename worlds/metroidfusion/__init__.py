@@ -22,6 +22,7 @@ from .Locations import all_locations, MetroidFusionLocation, get_location_data_b
 from .Logic import create_logic_rule, create_logic_rule_for_list, LogicObject
 from .Options import MetroidFusionOptions, metroid_fusion_option_groups
 from .Rom import MetroidFusionProcedurePatch
+from .StartingLocations import main_deck_hub, StartingLocation, sector_hub, starting_location_data
 from .data import memory
 from .data.items import events
 from .data.locations import (fusion_regions, left_tubes, right_tubes, sector_elevator_tops, sector_elevator_bottoms,
@@ -109,8 +110,8 @@ class MetroidFusionWorld(World):
     item_name_to_id = {item: item_data.mars_id for item, item_data in item_table.items()}
     location_name_to_id = {location.name: location.ap_id for location in all_locations}
     location_name_groups = location_groups
-    version = 15
-    debug = False
+    version = 16
+    debug = True
 
 
 
@@ -150,9 +151,16 @@ class MetroidFusionWorld(World):
             self.multiworld.regions.append(region)
 
         if self.starting_location is None:
-            self.starting_location = "Main Deck Hub"
-            if self.options.GameMode == self.options.GameMode.option_open_sector_hub:
+            if self.options.StartingLocation == self.options.StartingLocation.option_default_start:
+                self.starting_location = "Main Deck Hub"
+                if self.options.GameMode == self.options.GameMode.option_open_sector_hub:
+                    self.starting_location = "Sector Hub Elevator Bottom"
+            elif self.options.StartingLocation == self.options.StartingLocation.option_docking_bay:
+                self.starting_location = "Main Deck Hub"
+            elif self.options.StartingLocation == self.options.StartingLocation.option_sector_hub:
                 self.starting_location = "Sector Hub Elevator Bottom"
+            elif self.options.StartingLocation == self.options.StartingLocation.option_concourse_save_station:
+                self.starting_location = "Main Deck Hub"
         self.starting_region = self.get_region(self.starting_location)
         menu.connect(self.starting_region)
 
@@ -234,30 +242,43 @@ class MetroidFusionWorld(World):
             from Utils import visualize_regions
             visualize_regions(self.get_region("Menu"), f"fusiondiagram{self.player}.puml")
 
-    def build_early_progression_for_vanilla(self):
-        if self.options.EarlyProgression == self.options.EarlyProgression.option_normal:
-            sphere_1_item_names = ["Morph Ball", "Missile Data"]
-            self.preplaced_item = self.random.choice(sphere_1_item_names)
-        elif self.options.EarlyProgression == self.options.EarlyProgression.option_advanced:
-            sphere_1_item_names = ["Morph Ball", "Missile Data", "Screw Attack"]
-            if self.options.ShinesparkTrickDifficulty >= self.options.ShinesparkTrickDifficulty.option_advanced:
-                sphere_1_item_names.append("Speed Booster")
-            self.preplaced_item = self.random.choice(sphere_1_item_names)
+    def build_early_progression(self, starting_location: StartingLocation):
+        ponr = self.options.PointOfNoReturnsInLogic
+        sphere_0_items = starting_location.get_sphere_0(ponr).copy()
+        if len(sphere_0_items) > 0:
+            sphere_0_item = self.random.choice(sphere_0_items)
+            self.options.start_inventory_from_pool.value[sphere_0_item] = 1
+            self.push_precollected(self.create_item(sphere_0_item))
+        sphere_1_items = starting_location.get_sphere_1(ponr).copy()
+        sphere_1_items.extend(starting_location.get_additional_items(self.options))
+        self.preplaced_item = self.random.choice(sphere_1_items)
+        self.multiworld.local_early_items[self.player][self.preplaced_item] = 1
 
-    def build_early_progression_for_osh(self):
-        starting_item = ""
-        if ((len(self.options.start_inventory.value.keys()) == 0)
-                and (len(self.options.start_inventory_from_pool.value.keys()) == 0)):
+    def build_early_progression_for_vanilla(self, starting_region: str):
+        if starting_region == "Main Deck Hub":
+            starting_location = main_deck_hub
+        elif starting_region == "Sector Hub Elevator Bottom":
+            starting_location = sector_hub
+        else:
+            raise
+        self.build_early_progression(starting_location)
+
+    def build_early_progression_for_osh(self, starting_region: str):
+        if starting_region == "Main Deck Hub":
+            starting_location = main_deck_hub
+        elif starting_region == "Sector Hub Elevator Bottom":
+            starting_location = sector_hub
+        else:
+            raise
+        self.build_early_progression(starting_location)
+        if len(self.options.start_inventory.value) == 0 and len(self.options.start_inventory_from_pool.value) == 0:
             starting_item = self.random.choice(major_abilities)
             self.options.start_inventory_from_pool.value[starting_item] = 1
             self.push_precollected(self.create_item(starting_item))
-        if "Energy Tank" not in self.options.start_inventory.value.keys():
+        if ("Energy Tank" not in self.options.start_inventory.value.keys()
+                or "Energy Tank" not in self.options.start_inventory_from_pool.value.keys()):
             self.options.start_inventory_from_pool.value["Energy Tank"] = 1
             self.push_precollected(self.create_item("Energy Tank"))
-        sphere_1_item_names = ["Morph Ball", "Missile Data", "Screw Attack", "Speed Booster"]
-        if starting_item in sphere_1_item_names:
-            sphere_1_item_names.remove(starting_item)
-        self.preplaced_item = self.random.choice(sphere_1_item_names)
 
     def build_metroid_boss_list(self):
         if self.options.InfantMetroidLocations == self.options.InfantMetroidLocations.option_bosses_encouraged:
@@ -279,10 +300,9 @@ class MetroidFusionWorld(World):
     def create_items(self):
         itempool = []
         if self.options.GameMode == self.options.GameMode.option_vanilla:
-            self.build_early_progression_for_vanilla()
+            self.build_early_progression_for_vanilla(self.starting_location)
         elif self.options.GameMode == self.options.GameMode.option_open_sector_hub:
-            self.build_early_progression_for_osh()
-        self.multiworld.local_early_items[self.player][self.preplaced_item] = 1
+            self.build_early_progression_for_osh(self.starting_location)
         item_quantities = deepcopy(default_item_quantities)
         infant_metroids_in_pool = self.options.InfantMetroidsInPool.value
         if self.options.InfantMetroidLocations == self.options.InfantMetroidLocations.option_only_bosses:
@@ -382,16 +402,16 @@ class MetroidFusionWorld(World):
 
     def create_navigation_text(self, hint_text: list[str], required_metroids: int):
         briefing_text_addition_start = ""
-        if len(self.options.start_inventory) > 0:
-            starting_inventory = []
-            for item, quantity in self.options.start_inventory.items():
+        starting_inventory = []
+        if len(self.options.start_inventory.value) > 0:
+            for item, quantity in self.options.start_inventory.value.items():
                 for i in range(quantity):
                     starting_inventory.append(item)
-        if len(self.options.start_inventory_from_pool) > 0:
-            starting_inventory = []
-            for item, quantity in self.options.start_inventory_from_pool.items():
+        if len(self.options.start_inventory_from_pool.value) > 0:
+            for item, quantity in self.options.start_inventory_from_pool.value.items():
                 for i in range(quantity):
                     starting_inventory.append(item)
+        if len(starting_inventory) > 0:
             starting_inventory_string = ", ".join(starting_inventory)
             briefing_text_addition_start = f"Your starting gear is: {starting_inventory_string}. "
         briefing_text_addition_end = ""
@@ -507,14 +527,19 @@ class MetroidFusionWorld(World):
         }
     ]
 
-    @staticmethod
-    def build_starting_location_dict():
-        return {
-            "Area": 0,
-            "Room": 24,
-            "BlockX": 24,
-            "BlockY": 18
-        }
+    def build_starting_location_dict(self) -> dict[str, int]:
+        if self.options.StartingLocation == self.options.StartingLocation.option_default_start:
+            if self.options.GameMode == self.options.GameMode.option_vanilla:
+                return starting_location_data["Docking Bay"]
+            else:
+                return starting_location_data["Sector Hub"]
+        elif self.options.StartingLocation == self.options.StartingLocation.option_docking_bay:
+            return starting_location_data["Docking Bay"]
+        elif self.options.StartingLocation == self.options.StartingLocation.option_sector_hub:
+            return starting_location_data["Sector Hub"]
+        elif self.options.StartingLocation == self.options.StartingLocation.option_concourse_save_station:
+            return starting_location_data["Concourse Save Station"]
+
 
     def build_nav_locks_dict(self):
         if self.options.GameMode == self.options.GameMode.option_vanilla:
@@ -709,7 +734,8 @@ class MetroidFusionWorld(World):
 
         if self.options.GameMode == self.options.GameMode.option_open_sector_hub:
             patch_dict["DoorLocks"] = self.build_door_dict()
-            patch_dict["StartingLocation"] = self.build_starting_location_dict()
+
+        patch_dict["StartingLocation"] = self.build_starting_location_dict()
 
         patch_dict["NavStationLocks"] = self.build_nav_locks_dict()
 

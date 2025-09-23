@@ -433,7 +433,7 @@ class MetroidFusionClient(BizHawkClient):
 
     async def check_deathlink(self, ctx: "BizHawkClientContext"):
         current_game_mode_data = await bizhawk.read(ctx.bizhawk_ctx, [(memory.game_mode, 1, self.iwram)])
-        if current_game_mode_data is None or ctx.finished_game:
+        if current_game_mode_data is None:
             return
         else:
             current_game_mode = int.from_bytes(current_game_mode_data[0])
@@ -444,7 +444,7 @@ class MetroidFusionClient(BizHawkClient):
             current_energy = int.from_bytes(current_energy_data, "little")
             if current_game_mode == memory.ingame_mode:
                 if not self.sent_deathlink and current_energy == 0:
-                    if ctx.last_death_link + 5 < time.time():
+                    if ctx.last_death_link + 10 < time.time():
                         self.sent_deathlink = True
                         sector_message = "Main Deck" if self.current_sector == 0 else f"Sector {self.current_sector}"
                         death_message = (f"{ctx.player_names[ctx.slot]} was defeated in {sector_message}'s "

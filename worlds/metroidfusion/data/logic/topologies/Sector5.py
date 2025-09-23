@@ -91,7 +91,7 @@ Sector5NightmareHub.connections = [
 
 Sector5NightmareZoneUpper.connections = [
     Connection(Sector5NightmareZoneArena, [
-        PONRRequirement([], []),
+        PONRRequirement(["Nothing"], []),
         CanEscapeNightmareRoom
     ])
 ]

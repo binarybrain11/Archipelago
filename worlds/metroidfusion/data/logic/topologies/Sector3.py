@@ -52,14 +52,26 @@ Sector3MainShaft.connections = [
     Connection(Sector3SovaProcessing, [
         Level2KeycardRequirement(
             ["Varia Suit", "Morph Ball", "Bomb Data"],
-            [HasSpaceJump, HasWaveBeam]
+            [
+                HasSpaceJump,
+                HasWaveBeam,
+                Requirement(["Missile Data"], [CanDoBeginnerShinespark])
+            ]
         ),
         Level2KeycardRequirement(
             ["Varia Suit", "Morph Ball", "Power Bomb Data"],
-            [HasSpaceJump, HasWaveBeam]),
+            [
+                HasSpaceJump,
+                HasWaveBeam,
+                Requirement(["Missile Data"], [CanDoBeginnerShinespark])
+            ]),
         Level2KeycardRequirement(
             ["Varia Suit", "Screw Attack"],
-            [HasSpaceJump, HasWaveBeam]),
+            [
+                HasSpaceJump,
+                HasWaveBeam,
+                Requirement(["Missile Data"], [CanDoBeginnerShinespark])
+            ]),
     ])
 ]
 
@@ -119,7 +131,7 @@ Sector3TubeLeft.locations = [
 Sector3SecurityZone.locations = [
     FusionLocation("Sector 3 (PYR) -- Level 2 Security Room", True, [
         HasKeycard2,
-        CanAccessL2SecurityRoom
+        CanAccessLevel2SecurityRoom
     ]),
     FusionLocation("Sector 3 (PYR) -- Security Access", False, [CanBeatToughEnemyAndJumpHigh])
 ]

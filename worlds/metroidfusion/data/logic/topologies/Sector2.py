@@ -50,7 +50,7 @@ Sector2ZazabiZone.connections = [
 
 Sector2ZazabiZoneUpper.connections = [
     Connection(Sector2ZazabiZone, [
-        PONRRequirement([], []),
+        PONRRequirement(["Nothing"], []),
         Requirement(["Hi-Jump"], [CanFightBoss]),
         Requirement(["Space Jump"], []),
     ], one_way=True)
@@ -71,7 +71,7 @@ Sector2Hub.locations = [
         CanJumpHigh, HasScrewAttack, CanFreezeEnemies, CanDoBeginnerShinespark
     ]),
     FusionLocation("Sector 2 (TRO) -- Level 1 Security Room", True, [
-        PONRRequirement([], []),
+        PONRRequirement(["Nothing"], []),
         Requirement([], [CanJumpHigh]),
         Requirement(["Level 1 Keycard"], []),
     ]),

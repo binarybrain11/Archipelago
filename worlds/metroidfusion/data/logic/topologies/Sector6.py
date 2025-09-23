@@ -32,8 +32,8 @@ Sector6Crossroads.connections = [
     ]),
     Connection(Sector6BeforeVariaCoreXZone, [
         PONRRequirement(["Speed Booster"], [CanBombOrPowerBomb]),
-        CanDoAdvancedShinesparkRequirement(["Morph Ball", "Power Bomb Data"], [
-            HasSpaceJump, CanDoAdvancedWalljump
+        CanDoAdvancedShinespark(["Morph Ball", "Power Bomb Data"], [
+            HasSpaceJump, CanDoAdvancedWallJump
         ]),
         Level2KeycardRequirement(["Speed Booster", "Charge Beam", "Missile Data", "Varia Suit"], [
             CanBombOrPowerBomb
@@ -46,7 +46,7 @@ Sector6Crossroads.connections = [
 
 Sector6BeforeXBOXZone.connections = [
     Connection(Sector6XBOXZone, [
-        PONRRequirement([], []),
+        PONRRequirement(["Nothing"], []),
         Requirement([], [CanScrewAttackAndSpaceJump])
     ], one_way=True)
 ]
@@ -100,8 +100,8 @@ Sector6Hub.locations = [
 
 Sector6Crossroads.locations = [
     FusionLocation("Sector 6 (NOC) -- Catacombs", False, [
-        PONRRequirement([HasSpeedBooster]),
-        CanDoAdvancedShinesparkRequirement([]),
+        PONRRequirement([], [HasSpeedBooster]),
+        CanDoAdvancedShinespark,
         Level2KeycardRequirement(["Speed Booster", "Charge Beam", "Missile Data", "Varia Suit"], [
             CanBombOrPowerBomb
         ])

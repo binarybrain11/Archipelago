@@ -76,7 +76,10 @@ YakuzaZone.connections = [
 ]
 
 SectorHubElevatorTop.connections = [
-    Connection(MainDeckHub, [HasMorph, HasSpeedBooster], one_way=True),
+    Connection(MainDeckHub, [
+        HasMorph,
+        PONRRequirement([], [HasSpeedBooster])
+    ], one_way=True),
     VariableConnection(SectorHubElevatorBottom, [])
 ]
 

@@ -106,13 +106,15 @@ for region in fusion_regions:
         ap_id += 1
 
 
-difficult_speed_booster_list = [
+shinespark_locations = [
+    "Sector 1 (SRX) -- Watering Hole",
     "Sector 2 (TRO) -- Zazabi Speedway -- Lower Item",
     "Sector 2 (TRO) -- Zazabi Speedway -- Upper Item",
     "Sector 3 (PYR) -- Fiery Storage -- Upper Item",
     "Sector 3 (PYR) -- Deserted Runway",
     "Sector 3 (PYR) -- Garbage Chute -- Lower Item",
     "Sector 3 (PYR) -- Garbage Chute -- Upper Item",
+    "Sector 5 (ARC) -- Training Aerie -- Left Item",
     "Sector 6 (NOC) -- Spaceboost Alley -- Lower Item",
     "Sector 6 (NOC) -- Spaceboost Alley -- Upper Item",
     "Main Deck -- Restricted Airlock"
@@ -266,7 +268,7 @@ sector_6_locations = [
 ]
 
 location_groups = {
-    "ShinesparkLocations": difficult_speed_booster_list,
+    "ShinesparkLocations": shinespark_locations,
     "MajorLocations": major_location_names,
     "BossLocations": boss_locations,
     "BossLocationsExtended": [*boss_locations, *extended_boss_locations],
@@ -278,6 +280,7 @@ location_groups = {
     "Sector5Locations": sector_5_locations,
     "Sector6Locations": sector_6_locations
 }
+
 
 class ERGroups(IntEnum):
     TUBE_LEFT = 0
