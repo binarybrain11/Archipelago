@@ -109,6 +109,9 @@ class CanSpeedBoosterUnderwater(Requirement):
     name = "Can Speed Booster Underwater"
     items_needed = ["Gravity Suit", "Speed Booster"]
 
+class CanScrewAttackUnderwater(Requirement):
+    items_needed = ["Gravity Suit", "Screw Attack"]
+
 class CanFreezeEnemies(Requirement):
     name = "Can Freeze Enemies"
     other_requirements = [

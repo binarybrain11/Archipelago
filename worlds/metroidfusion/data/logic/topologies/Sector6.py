@@ -13,7 +13,7 @@ from ..regions.Sector6 import *
 
 Sector6Hub.connections = [
     VariableConnection(SectorHubElevator6Top, []),
-    Connection(Sector6Crossroads, [CanDefeatMediumGeron]),
+    Connection(Sector6Crossroads, [CanDefeatMediumGeron, CanDoBeginnerShinespark]),
     Connection(Sector6TubeLeft, [HasScrewAttack])
 ]
 
@@ -94,7 +94,8 @@ Sector6AfterVariaCoreXZone.connections = [
 Sector6Hub.locations = [
     FusionLocation("Sector 6 (NOC) -- Entrance Lobby", False, [
         Requirement(["Screw Attack"], [CanBallJump]),
-        Requirement([], [CanBallJumpAndBomb])
+        Requirement([], [CanBallJumpAndBomb]),
+        CanDoBeginnerShinesparkRequirement([], [CanBallJump])
     ])
 ]
 
