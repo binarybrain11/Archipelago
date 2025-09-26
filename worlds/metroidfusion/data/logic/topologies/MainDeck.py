@@ -20,7 +20,7 @@ MainDeckHub.connections = [
         Requirement(["Morph Ball", "Screw Attack"], [CanJumpHigh, CanDoSimpleWallJump])
     ]),
     Connection(HabitationDeckElevatorBottom, [HasKeycard2]),
-    Connection(SectorHubElevatorTop, [HasMorph, CanDoAdvancedShinespark], one_way=True),
+    Connection(SectorHubElevatorTop, [HasMorph, CanDoAdvancedShinespark]),
     Connection(ReactorZone, [
         Requirement(["Morph Ball"], [HasKeycard4, CanPowerBomb], 5)
     ]),
@@ -31,8 +31,9 @@ MainDeckHub.connections = [
 
 VentilationZone.connections = [
     Connection(UpperArachnusArena, [
-        Requirement(["Morph Ball"], [CanFightBeginnerBoss]),
-        PONRRequirement([], [CanFightBeginnerBoss])
+        Requirement(["Morph Ball"], [HasMissile]),
+        Requirement(["Morph Ball", "Charge Beam"], [CanDefeatSmallGeron]),
+        PONRRequirement([], [CanBeatToughEnemy])
     ])
 ]
 
@@ -62,8 +63,8 @@ ReactorZone.connections = [
     Connection(YakuzaZone, [
         PONRRequirement([], [CanAccessYakuza]),
         Requirement(["Space Jump"], [CanAccessYakuza]),
-    ]),
-    Connection(AuxiliaryReactor, [HasWaveBeam], one_way=True),
+    ], one_way=True),
+    Connection(AuxiliaryReactor, [HasWaveBeam]),
     Connection(Sector2NettoriZone, [CanCrossFromReactorToSector2], one_way=True)
 ]
 
@@ -76,7 +77,9 @@ YakuzaZone.connections = [
 ]
 
 SectorHubElevatorTop.connections = [
-    Connection(MainDeckHub, [HasMorph, HasSpeedBooster], one_way=True),
+    Connection(MainDeckHub, [
+        PONRRequirement([HasSpeedBooster]),
+    ]),
     VariableConnection(SectorHubElevatorBottom, [])
 ]
 
@@ -139,21 +142,27 @@ UpperArachnusArena.locations = [
 ]
 
 LowerArachnusArena.locations = [
-    FusionLocation("Main Deck -- Arachnus Arena -- Core X", True, [CanFightBeginnerBoss])
+    FusionLocation("Main Deck -- Arachnus Arena -- Core X", True, [HasMissile])
 ]
 
 HabitationDeck.locations = [
     FusionLocation("Main Deck -- Habitation Deck -- Animals", True, [
-        Level2KeycardRequirement([], [CanReachAnimals])
+        Level2KeycardRequirement([], [CanReachAnimals]),
+        CanFreezeEnemiesRequirement(["Level 2 Keycard", "Speed Booster"], [CanDoSimpleWallJump]),
+        CanFreezeEnemiesRequirement(["Level 2 Keycard", "Wave Beam"], [CanDoSimpleWallJump, HasHiJump])
     ]),
     FusionLocation("Main Deck -- Habitation Deck -- Lower Item", False, [
-        Level2KeycardRequirement([], [CanReachAnimals, HasWaveBeam])
+        Level2KeycardRequirement([], [HasSpaceJump, HasWaveBeam]),
+        CanFreezeEnemiesRequirement(["Level 2 Keycard"], [HasHiJump, CanDoAdvancedWallJump])
     ])
 ]
 
 ReactorZone.locations = [
-    FusionLocation("Main Deck -- Silo Catwalk", False, [CanBeatToughEnemy]),
-    FusionLocation("Main Deck -- Silo Scaffolding", False, [CanBeatToughEnemy])
+    FusionLocation("Main Deck -- Silo Catwalk", False, [CanDefeatStabilizer]),
+    FusionLocation("Main Deck -- Silo Scaffolding", False, [
+        PONRRequirement(["Morph Ball"], [CanDefeatStabilizer]),
+        CanDefeatStabilizerRequirement(["Morph Ball"], [CanJumpHigh, CanDoAdvancedWallJump])
+    ])
 ]
 
 YakuzaZone.locations = [
