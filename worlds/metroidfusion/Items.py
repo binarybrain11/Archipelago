@@ -42,7 +42,7 @@ default_item_quantities = {
     "Infant Metroid": 0
 }
 
-major_abilities = [
+major_upgrades = [
     "Missile Data",
     "Morph Ball",
     "Charge Beam",
@@ -68,7 +68,7 @@ major_abilities = [
 ]
 
 major_jingles = [
-    *major_abilities,
+    *major_upgrades,
     "Infant Metroid"
 ]
 

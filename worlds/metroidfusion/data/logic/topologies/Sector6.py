@@ -47,7 +47,8 @@ Sector6Crossroads.connections = [
 Sector6BeforeXBOXZone.connections = [
     Connection(Sector6XBOXZone, [
         PONRRequirement(["Nothing"], []),
-        Requirement([], [CanScrewAttackAndSpaceJump])
+        Requirement([], [CanScrewAttackAndSpaceJump]),
+        Requirement(["Speed Booster", "Wave Beam"], [])
     ], one_way=True)
 ]
 
@@ -95,7 +96,7 @@ Sector6Hub.locations = [
     FusionLocation("Sector 6 (NOC) -- Entrance Lobby", False, [
         Requirement(["Screw Attack"], [CanBallJump]),
         Requirement([], [CanBallJumpAndBomb]),
-        CanDoBeginnerShinesparkRequirement([], [CanBallJump])
+        CanDoBeginnerShinespark([], [CanBallJump])
     ])
 ]
 

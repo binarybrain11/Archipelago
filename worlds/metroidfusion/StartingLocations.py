@@ -3,29 +3,10 @@ from collections.abc import Callable
 
 from worlds.metroidfusion import MetroidFusionOptions
 
-starting_location_starting_items_map = {
-    "Main Deck Hub": {
-        "Main Deck -- Quarantine Bay": {
-            "Sphere 0": [],
-            "Sphere 1": [],
-            "PONR Sphere 0": [],
-            "PONR Sphere 1": []
-        }
-
-    },
-    "Sector Hub Elevator Bottom": {
-        "Sector 2 -- Security Room": {
-            "Sphere 0": [],
-            "Sphere 1": ["Morph Ball", "Speed Booster"],
-            "PONR Sphere 0": ["Hi-Jump", "Space Jump", "Level 1 Keycard"],
-            "PONR Sphere 1": ["Morph Ball", "Speed Booster"]
-        }
-    }
-}
-
 class StartingLocation:
     vanilla_opening_locations: list[str] = []
     elevator_shuffle_opening_locations: list[str] = []
+    sphere_0_item_count: int = 1
     sphere_0: list[str] = []
     sphere_1: list[str] = []
     ponr_sphere_0: list[str] = []
@@ -50,7 +31,7 @@ main_deck_hub.vanilla_opening_locations = ["Main Deck -- Quarantine Bay", "Main 
 main_deck_hub.elevator_shuffle_opening_locations = ["Main Deck -- Quarantine Bay"]
 main_deck_hub.sphere_1 = ["Morph Ball", "Missile Data"]
 
-def get_main_deck_additional_items(_self: StartingLocation, options: MetroidFusionOptions):
+def get_main_deck_additional_items(options: MetroidFusionOptions):
     additional_items = []
     if options.EarlyProgression >= options.EarlyProgression.option_advanced:
         additional_items.append("Screw Attack")
@@ -60,12 +41,30 @@ def get_main_deck_additional_items(_self: StartingLocation, options: MetroidFusi
 
 main_deck_hub.get_additional_items = get_main_deck_additional_items
 
+
+operations_deck = StartingLocation()
+operations_deck.vanilla_opening_locations = ["Main Deck -- Quarantine Bay", "Main Deck -- Operations Deck Data Room"]
+operations_deck.elevator_shuffle_opening_locations = ["Main Deck -- Operations Deck Data Room"]
+operations_deck.sphere_1 = ["Missile Data"]
+
+def get_operations_deck_additional_items(options: MetroidFusionOptions):
+    additional_items = []
+    if options.ElevatorShuffle != options.ElevatorShuffle.option_all:
+        additional_items.append("Morph Ball")
+        if options.EarlyProgression >= options.EarlyProgression.option_advanced:
+            if options.ShinesparkTrickDifficulty >= options.ShinesparkTrickDifficulty.option_advanced:
+                additional_items.append("Speed Booster")
+    return additional_items
+
+operations_deck.get_additional_items = get_operations_deck_additional_items
+
+
 sector_hub = StartingLocation()
 sector_hub.vanilla_opening_locations = ["Sector 2 (TRO) -- Level 1 Security Room"]
 sector_hub.elevator_shuffle_opening_locations = ["Sector 2 (TRO) -- Level 1 Security Room"]
 sector_hub.sphere_0 = []
 sector_hub.sphere_1 = ["Morph Ball", "Missile Data", "Screw Attack", "Speed Booster"]
-sector_hub.ponr_sphere_0 = ["Hi-Jump", "Space Jump", "Level 1 Keycard"]
+sector_hub.ponr_sphere_0 = ["Space Jump", "Level 1 Keycard"]
 sector_hub.ponr_sphere_1 = ["Morph Ball", "Missile Data", "Screw Attack"]
 
 
@@ -74,6 +73,12 @@ starting_location_data = {
         "Area": 0,
         "Room": 0,
         "BlockX": 25,
+        "BlockY": 10
+    },
+    "Operations Deck": {
+        "Area": 0,
+        "Room": 44,
+        "BlockX": 8,
         "BlockY": 10
     },
     "Sector Hub": {

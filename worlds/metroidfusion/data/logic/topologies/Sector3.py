@@ -40,9 +40,8 @@ Sector3FieryStorageRight.connections = [
 ]
 
 Sector3FieryStorageLeft.connections = [
-    Connection(Sector3TubeRight, [
-        PONRRequirement([], [HasScrewAttack]),
-        Requirement(["Screw Attack"], [CanJumpHigh, CanDoSimpleWallJump]),
+    Connection(Sector3TubeLeft, [
+        PONRRequirement([], [HasScrewAttack])
     ], one_way=True)
 ]
 
@@ -77,6 +76,7 @@ Sector3MainShaft.connections = [
 
 Sector3BobZone.connections = [
     Connection(Sector3BOXZone, [Requirement(["Morph Ball"], [HasKeycard2])]),
+    Connection(Sector3MainShaft, [HasMorph], one_way=True),
     Connection(Sector3Hub, [], one_way=True)
 ]
 
@@ -105,7 +105,7 @@ Sector3UpperAttic.connections = [
     Connection(Sector3TubeRight, [
         Requirement(["Screw Attack"], [CanJumpHigh])
     ]),
-    Connection(Sector3LowerAttic, [CanDestroyBombBlocks], one_way=True)
+    Connection(Sector3LowerAttic, [HasScrewAttack, CanBallJumpAndBomb], one_way=True)
 ]
 
 Sector3SovaProcessing.connections = [

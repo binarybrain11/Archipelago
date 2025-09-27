@@ -253,7 +253,10 @@ class SectorHubLevel1KeycardRequirement(Requirement):
 
     @staticmethod
     def check_option_enabled(options: "MetroidFusionOptions"):
-        return options.GameMode == options.GameMode.option_vanilla
+        if options.GameMode == options.GameMode.option_custom:
+            return not options.OpenSectorElevators
+        else:
+            return options.GameMode == options.GameMode.option_vanilla
 
 
 class SectorHubLevel1And2KeycardRequirement(Requirement):
@@ -263,7 +266,10 @@ class SectorHubLevel1And2KeycardRequirement(Requirement):
 
     @staticmethod
     def check_option_enabled(options: "MetroidFusionOptions"):
-        return options.GameMode == options.GameMode.option_vanilla
+        if options.GameMode == options.GameMode.option_custom:
+            return not options.OpenSectorElevators
+        else:
+            return options.GameMode == options.GameMode.option_vanilla
 
 
 # endregion
@@ -374,6 +380,7 @@ class CanDefeatThirdStabilizer(Requirement):
     name = "Can Defeat Third Stabilizer"
     other_requirements = [
         Requirement(["Screw Attack"], [
+            HasSpaceJump,
             CanDoAdvancedWallJump,
             CanDoSimpleWallJumpWithHiJump
         ]),
