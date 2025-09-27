@@ -20,7 +20,9 @@ MainDeckHub.connections = [
         Requirement(["Morph Ball", "Screw Attack"], [CanJumpHigh, CanDoSimpleWallJump])
     ]),
     Connection(HabitationDeckElevatorBottom, [HasKeycard2]),
-    Connection(SectorHubElevatorTop, [HasMorph, CanDoAdvancedShinespark]),
+    Connection(SectorHubElevatorTop, [
+        Requirement([], [HasMorph, CanDoAdvancedShinespark]),
+    ]),
     Connection(ReactorZone, [
         Requirement(["Morph Ball"], [HasKeycard4, CanPowerBomb], 5)
     ]),
@@ -34,7 +36,7 @@ VentilationZone.connections = [
         Requirement(["Morph Ball"], [HasMissile]),
         Requirement(["Morph Ball", "Charge Beam"], [CanDefeatSmallGeron]),
         PONRRequirement([], [CanBeatToughEnemy])
-    ])
+    ], one_way=True)
 ]
 
 OperationsDeckElevatorBottom.connections = [
@@ -64,12 +66,13 @@ ReactorZone.connections = [
         PONRRequirement([], [CanAccessYakuza]),
         Requirement(["Space Jump"], [CanAccessYakuza]),
     ], one_way=True),
-    Connection(AuxiliaryReactor, [HasWaveBeam]),
+    Connection(AuxiliaryReactor, [HasWaveBeam], one_way=True),
     Connection(Sector2NettoriZone, [CanCrossFromReactorToSector2], one_way=True)
 ]
 
 AuxiliaryReactor.connections = [
-    Connection(ReactorZone, [], one_way=True)
+    Connection(ReactorZone, [], one_way=True),
+    Connection(YakuzaZone, [PONRRequirement([], one_way=True)])
 ]
 
 YakuzaZone.connections = [
@@ -79,7 +82,7 @@ YakuzaZone.connections = [
 SectorHubElevatorTop.connections = [
     Connection(MainDeckHub, [
         PONRRequirement([HasSpeedBooster]),
-    ]),
+    ], one_way=True),
     VariableConnection(SectorHubElevatorBottom, [])
 ]
 
