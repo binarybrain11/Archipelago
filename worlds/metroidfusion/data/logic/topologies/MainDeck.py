@@ -72,7 +72,7 @@ ReactorZone.connections = [
 
 AuxiliaryReactor.connections = [
     Connection(ReactorZone, [], one_way=True),
-    Connection(YakuzaZone, [PONRRequirement([], one_way=True)])
+    Connection(YakuzaZone, [PONRRequirement(["Nothing"], [])], one_way=True)
 ]
 
 YakuzaZone.connections = [
