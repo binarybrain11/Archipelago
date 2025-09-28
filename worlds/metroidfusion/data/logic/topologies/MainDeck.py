@@ -20,9 +20,7 @@ MainDeckHub.connections = [
         Requirement(["Morph Ball", "Screw Attack"], [CanJumpHigh, CanDoSimpleWallJump])
     ]),
     Connection(HabitationDeckElevatorBottom, [HasKeycard2]),
-    Connection(SectorHubElevatorTop, [
-        Requirement([], [HasMorph, CanDoAdvancedShinespark]),
-    ]),
+    Connection(SectorHubElevatorTop, [HasMorph, CanDoAdvancedShinespark]),
     Connection(ReactorZone, [
         Requirement(["Morph Ball"], [HasKeycard4, CanPowerBomb], 5)
     ]),
@@ -66,7 +64,7 @@ ReactorZone.connections = [
         PONRRequirement([], [CanAccessYakuza]),
         Requirement(["Space Jump"], [CanAccessYakuza]),
     ], one_way=True),
-    Connection(AuxiliaryReactor, [HasWaveBeam], one_way=True),
+    Connection(AuxiliaryReactor, [HasWaveBeam]),
     Connection(Sector2NettoriZone, [CanCrossFromReactorToSector2], one_way=True)
 ]
 
