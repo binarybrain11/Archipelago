@@ -13,7 +13,7 @@ from ..regions.Sector5 import Sector5Hub
 from ..regions.Sector6 import Sector6Hub
 
 MainDeckHub.connections = [
-    Connection(OperationsDeckElevatorBottom, ["Nothing"]),
+    Connection(OperationsDeckElevatorBottom, []),
     Connection(VentilationZone, [CanDefeatSmallGeron]),
     Connection(LowerArachnusArena, [HasMorph]),
     Connection(UpperArachnusArena, [
@@ -38,12 +38,12 @@ VentilationZone.connections = [
 ]
 
 OperationsDeckElevatorBottom.connections = [
-    VariableConnection(OperationsDeckElevatorTop, ["Nothing"])
+    VariableConnection(OperationsDeckElevatorTop, [])
 ]
 
 OperationsDeckElevatorTop.connections = [
-    VariableConnection(OperationsDeckElevatorBottom, ["Nothing"]),
-    Connection(OperationsDeck, ["Nothing"])
+    VariableConnection(OperationsDeckElevatorBottom, []),
+    Connection(OperationsDeck, [])
 ]
 
 OperationsDeck.connections = [
@@ -51,11 +51,11 @@ OperationsDeck.connections = [
 ]
 
 HabitationDeckElevatorBottom.connections = [
-    VariableConnection(HabitationDeckElevatorTop, ["Nothing"])
+    VariableConnection(HabitationDeckElevatorTop, [])
 ]
 
 HabitationDeckElevatorTop.connections = [
-    VariableConnection(HabitationDeckElevatorBottom, ["Nothing"]),
+    VariableConnection(HabitationDeckElevatorBottom, []),
     Connection(HabitationDeck, [HasKeycard2])
 ]
 
@@ -69,7 +69,7 @@ ReactorZone.connections = [
 ]
 
 AuxiliaryReactor.connections = [
-    Connection(ReactorZone, ["Nothing"], one_way=True),
+    Connection(ReactorZone, [], one_way=True),
     Connection(YakuzaZone, [PONRRequirement(["Nothing"], [])], one_way=True)
 ]
 
@@ -81,13 +81,13 @@ SectorHubElevatorTop.connections = [
     Connection(MainDeckHub, [
         PONRRequirement([HasSpeedBooster]),
     ], one_way=True),
-    VariableConnection(SectorHubElevatorBottom, ["Nothing"])
+    VariableConnection(SectorHubElevatorBottom, [])
 ]
 
 SectorHubElevatorBottom.connections = [
-    VariableConnection(SectorHubElevatorTop, ["Nothing"]),
-    Connection(SectorHubElevator1Top, ["Nothing"]),
-    Connection(SectorHubElevator2Top, ["Nothing"]),
+    VariableConnection(SectorHubElevatorTop, []),
+    Connection(SectorHubElevator1Top, []),
+    Connection(SectorHubElevator2Top, []),
     Connection(SectorHubElevator3Top, [SectorHubLevel1KeycardRequirement]),
     Connection(SectorHubElevator4Top, [SectorHubLevel1KeycardRequirement]),
     Connection(SectorHubElevator5Top, [SectorHubLevel1And2KeycardRequirement]),
@@ -95,33 +95,33 @@ SectorHubElevatorBottom.connections = [
 ]
 
 SectorHubElevator1Top.connections = [
-    VariableConnection(Sector1Hub, ["Nothing"])
+    VariableConnection(Sector1Hub, [])
 ]
 
 SectorHubElevator2Top.connections = [
-    VariableConnection(Sector2Hub, ["Nothing"])
+    VariableConnection(Sector2Hub, [])
 ]
 
 SectorHubElevator3Top.connections = [
-    VariableConnection(Sector3Hub, ["Nothing"])
+    VariableConnection(Sector3Hub, [])
 ]
 
 SectorHubElevator4Top.connections = [
-    VariableConnection(Sector4Hub, ["Nothing"])
+    VariableConnection(Sector4Hub, [])
 ]
 
 SectorHubElevator5Top.connections = [
-    VariableConnection(Sector5Hub, ["Nothing"])
+    VariableConnection(Sector5Hub, [])
 ]
 
 SectorHubElevator6Top.connections = [
-    VariableConnection(Sector6Hub, ["Nothing"])
+    VariableConnection(Sector6Hub, [])
 ]
 
 MainDeckHub.locations = [
     FusionLocation("Main Deck -- Cubby Hole", False, [HasMorph]),
     FusionLocation("Main Deck -- Genesis Speedway", False, [CanReachGenesisSpeedway]),
-    FusionLocation("Main Deck -- Quarantine Bay", False, ["Nothing"]),
+    FusionLocation("Main Deck -- Quarantine Bay", False, []),
     FusionLocation("Main Deck -- Station Entrance", False, [CanPowerBomb]),
     FusionLocation("Main Deck -- Sub-Zero Containment", False, [
         Level3KeycardRequirement([], [HasVaria])
@@ -129,16 +129,16 @@ MainDeckHub.locations = [
 ]
 
 OperationsDeck.locations = [
-    FusionLocation("Main Deck -- Operations Deck Data Room", True, ["Nothing"])
+    FusionLocation("Main Deck -- Operations Deck Data Room", True, [])
 ]
 
 VentilationZone.locations = [
-    FusionLocation("Main Deck -- Operations Ventilation", False, ["Nothing"]),
-    FusionLocation("Main Deck -- Operations Ventilation Storage", False, ["Nothing"])
+    FusionLocation("Main Deck -- Operations Ventilation", False, []),
+    FusionLocation("Main Deck -- Operations Ventilation Storage", False, [])
 ]
 
 UpperArachnusArena.locations = [
-    FusionLocation("Main Deck -- Arachnus Arena -- Upper Item", False, ["Nothing"]),
+    FusionLocation("Main Deck -- Arachnus Arena -- Upper Item", False, []),
     FusionLocation("Main Deck -- Attic", False, [HasMissile]),
 ]
 
@@ -174,7 +174,7 @@ YakuzaZone.locations = [
 ]
 
 AuxiliaryReactor.locations = [
-    FusionLocation("Main Deck -- Auxiliary Power Station", True, ["Nothing"])
+    FusionLocation("Main Deck -- Auxiliary Power Station", True, [])
 ]
 
 SectorHubElevatorTop.locations = [
