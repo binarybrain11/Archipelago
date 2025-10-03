@@ -220,6 +220,22 @@ class CanDoAdvancedWallJumpWithScrewAttack(Requirement):
     def check_option_enabled(options: "MetroidFusionOptions") -> bool:
         return options.WallJumpTrickDifficulty >= options.WallJumpTrickDifficulty.option_advanced
 
+class CanDoAdvancedCombat(Requirement):
+    name = "Can Do Advanced Combat"
+    items_needed = ["Nothing"]
+
+    @staticmethod
+    def check_option_enabled(options: "MetroidFusionOptions") -> bool:
+        return options.CombatDifficulty >= options.CombatDifficulty.option_advanced
+
+class CanDoExpertCombat(Requirement):
+    name = "Can Do Expert Combat"
+    items_needed = ["Nothing"]
+
+    @staticmethod
+    def check_option_enabled(options: "MetroidFusionOptions") -> bool:
+        return options.CombatDifficulty >= options.CombatDifficulty.option_expert
+
 class CanFightBossOnAdvanced(Requirement):
     name = "Can Fight Boss on Advanced"
     items_needed = ["Missile Data", "Charge Beam"]
@@ -492,11 +508,24 @@ class CanAccessZazabiSpeedway(Requirement):
 
 class CanAccessWateringHole(Requirement):
     name = "Can Access Watering Hole"
-    items_needed = ["Gravity Suit", "Speed Booster"]
+    items_needed = ["Gravity Suit", "Speed Booster", "Morph Ball"]
     other_requirements = [
+        # The first three are straightforward, but other crab killing methods are made much easier with a recharge.
         Requirement(["Charge Beam"], [CanBallJump]),
         Requirement(["Plasma Beam"], [CanBallJump]),
-        Requirement(["Missile Data"], [CanBallJump])
+        Requirement(["Screw Attack"], [CanBallJump]),
+        Requirement(["Missile Data", "Bomb Data"], [CanDoBeginnerShinespark]),
+        Requirement(["Missile Data", "Hi-Jump"], [CanDoBeginnerShinespark]),
+        Requirement(["Wide Beam", "Bomb Data"], [CanDoBeginnerShinespark]),
+        Requirement(["Wide Beam", "Hi-Jump"], [CanDoBeginnerShinespark]),
+        Requirement(["Wave Beam", "Bomb Data"], [CanDoBeginnerShinespark]),
+        Requirement(["Wave Beam", "Hi-Jump"], [CanDoBeginnerShinespark]),
+        Requirement(["Ice Beam", "Bomb Data"], [CanDoBeginnerShinespark]),
+        Requirement(["Ice Beam", "Hi-Jump"], [CanDoBeginnerShinespark]),
+        Requirement(["Power Bomb Data", "Bomb Data"], [CanDoBeginnerShinespark]),
+        Requirement(["Power Bomb Data", "Hi-Jump"], [CanDoBeginnerShinespark]),
+        Requirement([], [CanDoAdvancedShinespark]),
+        Requirement([], [CanDoAdvancedCombat]),
 
     ]
 

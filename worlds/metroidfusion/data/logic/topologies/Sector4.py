@@ -86,8 +86,8 @@ Sector4PumpControl.connections = [
 
 Sector4UpperWaterZone.connections = [
     Connection(Sector4BeforePumpControlZone, [
-        CanJumpHighUnderwater,
-        Requirement(["Gravity Suit"], [CanDoBeginnerShinespark])
+        Level4KeycardRequirement([], [CanJumpHighUnderwater]),
+        Level4KeycardRequirement(["Gravity Suit"], [CanDoBeginnerShinespark])
     ]),
     Connection(Sector5NightmareHub, [
         Requirement(["Gravity Suit", "Speed Booster"], [CanJumpHigh])

@@ -416,7 +416,7 @@ class MetroidFusionClient(BizHawkClient):
             self.current_sector = current_sector
             await ctx.send_msgs([{
                 "cmd": "Set",
-                "key": f"current_sector",
+                "key": f"fusion_current_sector_{ctx.slot}_{ctx.team}",
                 "default": 0,
                 "want_reply": False,
                 "operations": [{"operation": "replace", "value": self.current_sector}],

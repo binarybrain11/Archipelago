@@ -284,7 +284,6 @@ class MetroidFusionWorld(World):
             visualize_regions(self.get_region("Menu"), f"fusiondiagram{self.player}.puml")
 
     def build_early_progression(self):
-
         starting_inventory = self.options.start_inventory.value | self.options.start_inventory_from_pool.value
 
         # Starting major upgrades plus start inventory
@@ -350,7 +349,7 @@ class MetroidFusionWorld(World):
         item_quantities["Power Bomb Tank"] -= infant_metroids_in_pool
         metroid_bosses = self.build_metroid_boss_list()
         energy_tanks = 0
-        max_progressive_energy_tanks = 20
+        max_progressive_energy_tanks = 10
         for item in item_table:
             if item in item_quantities.keys():
                 for i in range(item_quantities[item]):
@@ -744,20 +743,23 @@ class MetroidFusionWorld(World):
                 if game in offworld_sprites.keys():
                     if location.item.name in offworld_sprites[game].keys():
                         item_sprite = offworld_sprites[game][location.item.name].value
-            if item_sprite is None: # If we don't have a sprite yet, we use the question mark icon.
-                item_sprite = SpriteNames.Anonymous.value
+            if item_sprite is None: # If no offworld sprite, we use one based on classification
+                if location.item.classification & ItemClassification.progression:
+                    item_sprite = SpriteNames.Anonymous.value
+                else:
+                    item_sprite = SpriteNames.Empty.value
             # For fun, local visible missile and power bomb tanks have a 1/1024 chance to be shiny.
             if location.item.player == self.player and not location_data.major:
                 if item_sprite == SpriteNames.MissileTank.value:
                     chance = self.random.randint(1, 1024)
                     if chance == 1:
                         item_sprite = SpriteNames.ShinyMissileTank.value
-                        message = build_shiny_item_message(item_name)
+                        message = build_shiny_item_message(location.item.name)
                 if item_sprite == SpriteNames.PowerBombTank.value:
                     chance = self.random.randint(1, 1024)
                     if chance == 1:
                         item_sprite = SpriteNames.ShinyPowerBombTank.value
-                        message = build_shiny_item_message(item_name)
+                        message = build_shiny_item_message(location.item.name)
             json_data = location_data.to_json(item_name, item_sprite, location.item.classification)
             if message is not None:
                 json_data["ItemMessages"] = message
@@ -873,10 +875,15 @@ class MetroidFusionWorld(World):
             "MissileTankAmmo": self.options.MissileTankAmmo.value,
             "PowerBombDataAmmo": self.options.PowerBombDataAmmo.value,
             "PowerBombTankAmmo": self.options.PowerBombTankAmmo.value,
+            "PONRsInLogic": self.options.PointOfNoReturnsInLogic.value,
             "ShinesparkDifficulty": self.options.ShinesparkTrickDifficulty.value,
             "WallJumpDifficulty": self.options.WallJumpTrickDifficulty.value,
             "CombatDifficulty": self.options.CombatDifficulty.value,
             "GameMode": self.options.GameMode.value,
+            "StartingLocation": self.options.StartingLocation.value,
+            "OpenSectorElevators": self.options.OpenSectorElevators.value,
+            "SectorTubeShuffle": self.options.SectorTubeShuffle.value,
+            "ElevatorShuffle": self.options.ElevatorShuffle.value,
             "DeathLink": self.options.death_link.value,
             "UTStartingLocation": self.starting_region,
             "UTEntrances": self.er_map

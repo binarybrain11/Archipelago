@@ -67,7 +67,7 @@ def build_item_message(item_name: str, player_name: str):
 def build_shiny_item_message(item_name: str):
     return {
         "Languages": {
-            "English": f"Found a Shiny {item_name}!\nIt's shiny, so you know it's special.",
+            "English": f"Found a Shiny {item_name}!\nIt's shiny, so it's special.",
         },
         "Kind": "CustomMessage"
     }
