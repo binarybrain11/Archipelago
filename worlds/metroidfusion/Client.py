@@ -300,7 +300,7 @@ class MetroidFusionClient(BizHawkClient):
         if items_received_count == 0xFFFF:
             items_received_count = 0
         if items_received_count >= len(ctx.items_received):
-            items_received = ctx.slot_data["StartInventory"]
+            items_received = ctx.slot_data["StartInventory"].copy()
             for item in ctx.items_received:
                 item_id = item.item
                 item_name = ctx.item_names.lookup_in_game(item_id, ctx.game)
@@ -368,6 +368,7 @@ class MetroidFusionClient(BizHawkClient):
             for address, value in toggle_addresses.items():
                 write_list.append((address, [value], self.iwram))
             missile_max = min(missile_max, 999)
+            energy_max = min(energy_max, 2099)
             write_list.append((memory.FusionInfantMetroid.current_address, [infant_metroid_count], self.iwram))
             write_list.append((memory.tanks["Missile Tank"].max_address, [missile_max % 256], self.iwram))
             write_list.append((memory.tanks["Missile Tank"].max_address + 1, [missile_max // 256], self.iwram))
