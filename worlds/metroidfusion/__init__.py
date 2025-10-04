@@ -443,13 +443,15 @@ class MetroidFusionWorld(World):
     def create_navigation_text(self, hint_text: list[str], required_metroids: int):
         briefing_text_addition_start = ""
         starting_inventory_strings = []
-        starting_inventory = self.options.start_inventory.value | self.options.start_inventory_from_pool.value
-        if len(starting_inventory) > 0:
-            for item, quantity in starting_inventory.items():
+        starting_inventory_items = [item.name for item in self.multiworld.precollected_items[self.player]]
+        starting_inventory_counter = {item: starting_inventory_items.count(item) for item in starting_inventory_items}
+        if len(starting_inventory_counter) > 0:
+            for item, quantity in starting_inventory_counter.items():
                 item_string = item
                 if quantity > 1:
                     item_string += f" x {quantity}"
                 starting_inventory_strings.append(item_string)
+        starting_inventory_strings.sort()
         if len(starting_inventory_strings) > 0:
             starting_inventory_string = ", ".join(starting_inventory_strings)
             briefing_text_addition_start = f"Your starting gear is: {starting_inventory_string}. "
@@ -717,6 +719,47 @@ class MetroidFusionWorld(World):
             if origin in self.spoiler_region_map.keys():
                 spoiler_handle.write(f"--{origin} <-> {self.spoiler_region_map[origin]}\n")
 
+    def build_starting_items_dict(self):
+        starting_inventory = [item.name for item in self.multiworld.precollected_items[self.player]]
+        energy = 99
+        missiles = 0
+        power_bombs = 0
+        security_levels = [0]
+        abilities = []
+        for item in starting_inventory:
+            if item == "Energy Tank":
+                energy += 100
+            elif item == "Missile Tank":
+                missiles += self.options.MissileTankAmmo.value
+            elif item == "Power Bomb Tank":
+                power_bombs += self.options.PowerBombTankAmmo.value
+            elif item == "Level 1 Keycard":
+                security_levels.append(1)
+            elif item == "Level 2 Keycard":
+                security_levels.append(2)
+            elif item == "Level 3 Keycard":
+                security_levels.append(3)
+            elif item == "Level 4 Keycard":
+                security_levels.append(4)
+            elif item in major_upgrades:
+                if item == "Missile Data":
+                    missiles += self.options.MissileDataAmmo.value
+                elif item == "Power Bomb Data":
+                    power_bombs += self.options.PowerBombDataAmmo.value
+                abilities.append(ap_name_to_mars_name[item])
+            else:
+                logging.warning(f"{item} not supported as a starting item.")
+
+
+        return {
+            "Energy": energy,
+            "Abilities": abilities,
+            "SecurityLevels": security_levels,
+            "DownloadedMaps": [0, 1, 2, 3, 4, 5, 6],
+            "Missiles": missiles,
+            "PowerBombs": power_bombs
+        }
+
     def generate_output(self, output_directory: str):
         patch_dict = dict()
         patch_dict["SeedHash"] = str(self.multiworld.seed)[:8]
@@ -793,9 +836,8 @@ class MetroidFusionWorld(World):
                 infant_metroids_required)
         else:
             patch_dict["NavigationText"] = self.create_navigation_text([], infant_metroids_required)
-        if len(self.options.start_inventory) > 0:
-            pass
-            #patch_dict["StartingItems"] = self.build_starting_items_dict()
+        if len(self.options.start_inventory.value) > 0 or len(self.options.start_inventory_from_pool.value) > 0:
+            patch_dict["StartingItems"] = self.build_starting_items_dict()
         patch_dict["TankIncrements"] = {
             "MissileTank": self.options.MissileTankAmmo.value,
             "PowerBombTank": self.options.PowerBombTankAmmo.value,
@@ -885,6 +927,7 @@ class MetroidFusionWorld(World):
             "SectorTubeShuffle": self.options.SectorTubeShuffle.value,
             "ElevatorShuffle": self.options.ElevatorShuffle.value,
             "DeathLink": self.options.death_link.value,
+            "StartInventory": [item.name for item in self.multiworld.precollected_items[self.player]],
             "UTStartingLocation": self.starting_region,
             "UTEntrances": self.er_map
         }

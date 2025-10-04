@@ -383,14 +383,9 @@ class CanBeatToughEnemyAndJumpHigh(Requirement):
         Requirement(["Space Jump"], [CanBeatToughEnemy])
     ]
 
-class CanDefeatStabilizer(Requirement):
+class CanDefeatStabilizerOrToughEnemy(Requirement):
     name = "Can Defeat Stabilizer"
-    other_requirements = [
-        Requirement(["Screw Attack"], []),
-        Requirement(["Charge Beam"], []),
-        Requirement(["Missile Data"], []),
-        CanPowerBomb
-    ]
+    other_requirements = [HasScrewAttack, HasMissile, HasChargeBeam, CanPowerBomb]
 
 class CanDefeatThirdStabilizer(Requirement):
     name = "Can Defeat Third Stabilizer"

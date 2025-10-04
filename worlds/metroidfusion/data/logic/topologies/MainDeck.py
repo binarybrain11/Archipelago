@@ -160,10 +160,10 @@ HabitationDeck.locations = [
 ]
 
 ReactorZone.locations = [
-    FusionLocation("Main Deck -- Silo Catwalk", False, [CanDefeatStabilizer]),
+    FusionLocation("Main Deck -- Silo Catwalk", False, [CanDefeatStabilizerOrToughEnemy]),
     FusionLocation("Main Deck -- Silo Scaffolding", False, [
-        PONRRequirement(["Morph Ball"], [CanDefeatStabilizer]),
-        CanDefeatStabilizer(["Morph Ball"], [CanJumpHigh, CanDoAdvancedWallJump])
+        PONRRequirement(["Morph Ball"], [CanDefeatStabilizerOrToughEnemy]),
+        CanDefeatStabilizerOrToughEnemy(["Morph Ball"], [CanJumpHigh, CanDoAdvancedWallJump])
     ])
 ]
 

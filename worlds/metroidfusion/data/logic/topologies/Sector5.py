@@ -72,11 +72,9 @@ Sector5DataRoom.connections = [
 Sector5BeforeNightmareHub.connections = [
     Connection(Sector5TubeRight, [CanJumpHigh, CanDoSimpleWallJump]),
     Connection(Sector5NightmareHub, [
-        Requirement(["Hi-Jump"], [CanBeatToughEnemy]),
-        Requirement(["Space Jump"], [CanBeatToughEnemy]),
-        PONRRequirement(
-            ["Gravity Suit", "Space Jump", "Screw Attack"],
-            [CanBeatToughEnemy])
+        PONRRequirement(["Hi-Jump"], [CanBeatToughEnemy]),
+        PONRRequirement(["Space Jump"], [CanBeatToughEnemy]),
+        Requirement(["Gravity Suit", "Space Jump", "Screw Attack"],[CanBeatToughEnemy])
     ], one_way=True)
 ]
 

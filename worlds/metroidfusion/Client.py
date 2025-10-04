@@ -63,7 +63,7 @@ class MetroidFusionClient(BizHawkClient):
             return False  # Not able to get a response, say no for now
 
         ctx.game = self.game
-        ctx.items_handling = 0b111
+        ctx.items_handling = 0b011
         ctx.want_slot_data = True
         if not self.logged_version:
             from . import MetroidFusionWorld
@@ -117,6 +117,7 @@ class MetroidFusionClient(BizHawkClient):
 
     async def location_check(self, ctx: "BizHawkClientContext"):
         locations_checked = []
+
 
         # Minor locations
         locations_data = await self.read_ram_values_guarded(ctx, memory.minor_locations_start, 16, self.ewram)
@@ -299,9 +300,13 @@ class MetroidFusionClient(BizHawkClient):
         if items_received_count == 0xFFFF:
             items_received_count = 0
         if items_received_count >= len(ctx.items_received):
+            items_received = ctx.slot_data["StartInventory"]
             for item in ctx.items_received:
-                current_item_id = item.item
-                current_item_name = ctx.item_names.lookup_in_game(current_item_id, ctx.game)
+                item_id = item.item
+                item_name = ctx.item_names.lookup_in_game(item_id, ctx.game)
+                items_received.append(item_name)
+            for item in items_received:
+                current_item_name = item
                 if "Beam" in current_item_name:
                     write_list.append((memory.graphics_reload_flag, [1], self.iwram))
                 if current_item_name == "Infant Metroid":
