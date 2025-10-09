@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from Options import Toggle, Range, Choice, PerGameCommonOptions, DefaultOnToggle, StartInventoryPool, OptionGroup, \
-    DeathLink, Removed
+    ItemSet, DeathLink, Removed
 
 
 # Main Options
@@ -123,7 +123,7 @@ class StartingMajorUpgrades(Range):
     """How many major upgrades you begin with.
     Note that depending on your StartingLocation and EarlyProgression settings, you may receive more than specified here
     in order to successfully generate the game. Upgrades are taken from the general item pool and will be replaced
-    by a random minor tank.
+    by a random filler item.
     These will be applied in addition to your start_inventory and start_inventory_from_pool items.
     These will be sent by the client once you're connected.
     This is a Custom Game Mode option and will only be applied if GameMode is set to Custom."""
@@ -135,13 +135,21 @@ class StartingMajorUpgrades(Range):
 class StartingEnergyTanks(Range):
     """How many Energy Tanks you begin with.
     This will be overridden by the number specified in start_inventory and start_inventory_from_pool, if applicable.
-    Energy tanks are taken from the general item pool and will be replaced by a random minor tank.
+    Energy tanks are taken from the general item pool and will be replaced by a random filler item.
     These will be sent by the client once you're connected.
     This is a Custom Game Mode option and will only be applied if GameMode is set to Custom."""
     display_name = "Starting Energy Tanks"
     range_start = 0
     range_end = 20
     default = 0
+
+class FillerItems(ItemSet):
+    """Which Items are used as filler when Items are removed from the pool
+    Whenever an item is removed from the pool by start_inventory_from_pool, StartingMajorUpgrades, StartingEnergyTanks,
+    or for other reasons, it will be replaced with a random item from this list.
+    This is a Custom Game Mode option and will only be applied if GameMode is set to Custom."""
+    display_name = "Filler Items"
+    default = ["Missile Tank", "Power Bomb Tank"]
 
 class OpenSectorElevators(Toggle):
     """Determines if the sector elevators in the Sector Hub are locked by their vanilla keycard requirements.
@@ -243,6 +251,7 @@ class MetroidFusionOptions(PerGameCommonOptions):
     StartingLocation: StartingLocation
     StartingMajorUpgrades: StartingMajorUpgrades
     StartingEnergyTanks: StartingEnergyTanks
+    FillerItems: FillerItems
     OpenSectorElevators: OpenSectorElevators
     SectorNavigationRoomHintLocks: SectorNavigationRoomHintLocks
 
@@ -283,6 +292,7 @@ metroid_fusion_option_groups = [
         StartingLocation,
         StartingMajorUpgrades,
         StartingEnergyTanks,
+        FillerItems,
         OpenSectorElevators,
         SectorNavigationRoomHintLocks
     ]),
