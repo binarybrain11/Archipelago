@@ -103,6 +103,7 @@ class MetroidFusionWorld(World):
     starting_region: Region
     starting_major_upgrades: int = 0
     starting_energy_tanks: int = 0
+    filler_items: list[str] = None
     open_sector_elevators: bool = False
     navigation_room_hint_locks: bool = False
 
@@ -126,7 +127,6 @@ class MetroidFusionWorld(World):
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
-        self.filler_items = None
         self.hint_text = None
         self.hint_pairs = None
         self.region_map = dict()
@@ -154,6 +154,7 @@ class MetroidFusionWorld(World):
                 self.starting_location_object = main_deck_hub
             self.starting_major_upgrades = 0
             self.starting_energy_tanks = 0
+            self.filler_items = None
             self.open_sector_elevators = False
             self.navigation_room_hint_locks = False
         elif self.options.GameMode == self.options.GameMode.option_open_sector_hub:
@@ -163,6 +164,7 @@ class MetroidFusionWorld(World):
                 self.starting_location_object = sector_hub
             self.starting_major_upgrades = 1
             self.starting_energy_tanks = 1
+            self.filler_items = None
             self.open_sector_elevators = True
             self.navigation_room_hint_locks = True
         elif self.options.GameMode == self.options.GameMode.option_custom:
@@ -185,6 +187,7 @@ class MetroidFusionWorld(World):
                     self.starting_location_object = main_deck_hub
             self.starting_major_upgrades = self.options.StartingMajorUpgrades.value
             self.starting_energy_tanks = self.options.StartingEnergyTanks.value
+            self.filler_items = self.options.FillerItems.value
             self.open_sector_elevators = bool(self.options.OpenSectorElevators.value)
             self.navigation_room_hint_locks = bool(self.options.SectorNavigationRoomHintLocks.value)
 
@@ -886,6 +889,8 @@ class MetroidFusionWorld(World):
         if self.filler_items is None:
             self.filler_items = [item for item in item_table if
                                  item_table[item].classification == ItemClassification.filler]
+        if len(self.filler_items) == 0:
+            self.filler_items = ["Nothing"]
         return self.random.choice(self.filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:
