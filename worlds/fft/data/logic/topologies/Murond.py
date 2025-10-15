@@ -23,7 +23,8 @@ Goug.connections = [
 ]
 
 Goug.locations = [
-    FFTLocation("Slums of Goug Story Battle")
+    FFTLocation("Slums of Goug Story Battle"),
+    FFTLocation("Recruit Mustadio")
 ]
 
 Orbonne.connections = [
@@ -53,7 +54,8 @@ DeepDungeon.locations = [
     FFTLocation("BRIDGE Sidequest Battle"),
     FFTLocation("VOYAGE Sidequest Battle"),
     FFTLocation("HORROR Sidequest Battle"),
-    FFTLocation("END Sidequest Battle")
+    FFTLocation("END Sidequest Battle"),
+    FFTLocation("Recruit Byblos")
 ]
 
 MurondDeathCity.connections = [

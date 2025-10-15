@@ -19,7 +19,8 @@ from .Logic import create_logic_rule, create_logic_rule_for_list, LogicObject
 from .Options import FinalFantasyTacticsOptions, fft_option_groups
 from .Rom import FinalFantasyTacticsProcedurePatch
 
-from .data.items import zodiac_stone_names, world_map_pass_names, job_names, filler_item_names
+from .data.items import zodiac_stone_names, world_map_pass_names, job_names, filler_item_names, shop_levels, \
+    special_character_names
 from .data.locations import all_regions, world_map_regions
 from .data.logic.regions.Jobs import jobs_regions
 
@@ -139,6 +140,8 @@ class FinalFantasyTacticsWorld(World):
         victory_location = FinalFantasyTacticsLocation(self.player, "Victory", None, murond_death_city)
         victory_location.place_locked_item(self.create_event("Victory"))
         murond_death_city.locations.append(victory_location)
+        from Utils import visualize_regions
+        visualize_regions(self.get_region("Menu"), f"fftdiagram{self.player}.puml")
 
     def create_items(self):
         world_locations = self.get_locations()
@@ -147,10 +150,14 @@ class FinalFantasyTacticsWorld(World):
             if location.item is None:
                 location_count += 1
 
+        zodiac_stones_required = self.options.ZodiacStonesRequired.value
         zodiac_stones_in_pool = self.options.ZodiacStonesInPool.value
+        if zodiac_stones_in_pool < zodiac_stones_required:
+            zodiac_stones_in_pool = zodiac_stones_required
+
         zodiac_stones_in_game = self.random.sample(zodiac_stone_names, k=zodiac_stones_in_pool)
         major_items = [
-            *zodiac_stones_in_game, *world_map_pass_names, *job_names
+            *zodiac_stones_in_game, *world_map_pass_names, *job_names, *shop_levels, *special_character_names
         ]
 
         filler_item_count = location_count - len(major_items)
@@ -160,7 +167,10 @@ class FinalFantasyTacticsWorld(World):
 
         itempool = [*major_items, *filler_items]
         for item in map(self.create_item, itempool):
-            self.multiworld.itempool.append(item)
+            if item.name == "Squire":
+                self.get_location("Squire Unlock").place_locked_item(item)
+            else:
+                self.multiworld.itempool.append(item)
 
     def set_rules(self):
         for location in all_locations:
@@ -174,8 +184,8 @@ class FinalFantasyTacticsWorld(World):
 
         zodiac_stones_required = self.options.ZodiacStonesRequired.value
         zodiac_stones_in_pool = self.options.ZodiacStonesInPool.value
-        if zodiac_stones_required > zodiac_stones_in_pool:
-            zodiac_stones_required = zodiac_stones_in_pool
+        if zodiac_stones_in_pool < zodiac_stones_required:
+            zodiac_stones_in_pool = zodiac_stones_required
 
 
         add_rule(

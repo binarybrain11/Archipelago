@@ -33,6 +33,10 @@ Igros.connections = [
     Connection(Zeakden)
 ]
 
+Igros.locations = [
+    FFTLocation("Igros Castle Story Battle")
+]
+
 Sweegy.connections = [
     Connection(Gariland),
     Connection(Dorter)
@@ -74,4 +78,8 @@ Lenalia.locations = [
 Zeakden.connections = [
     Connection(Igros),
     Connection(Fovoham, [HasFovohamPass])
+]
+
+Zeakden.locations = [
+    FFTLocation("Fort Zeakden Story Battle")
 ]

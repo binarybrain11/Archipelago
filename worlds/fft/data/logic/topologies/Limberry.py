@@ -24,7 +24,8 @@ Bethla.connections = [
 Bethla.locations = [
     FFTLocation("Bethla Garrison North Wall Story Battle"),
     FFTLocation("Bethla Garrison South Wall Story Battle"),
-    FFTLocation("Bethla Garrison Sluice Story Battle")
+    FFTLocation("Bethla Garrison Sluice Story Battle"),
+    FFTLocation("Recruit Orlandu")
 ]
 
 Dolbodar.connections = [
@@ -40,7 +41,8 @@ Limberry.connections = [
 Limberry.locations = [
     FFTLocation("Limberry Castle Gates Story Battle"),
     FFTLocation("Inside Limberry Castle Story Battle"),
-    FFTLocation("Limberry Castle Cemetary Story Battle")
+    FFTLocation("Limberry Castle Cemetary Story Battle"),
+    FFTLocation("Recruit Meliadoul")
 ]
 
 Poeskas.connections = [

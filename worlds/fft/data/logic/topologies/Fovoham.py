@@ -43,7 +43,9 @@ Riovanes.connections = [
 Riovanes.locations = [
     FFTLocation("Gate of Riovanes Story Battle"),
     FFTLocation("Inside Riovanes Castle Story Battle"),
-    FFTLocation("Roof of Riovanes Castle Story Battle")
+    FFTLocation("Roof of Riovanes Castle Story Battle"),
+    FFTLocation("Recruit Rafa"),
+    FFTLocation("Recruit Malak")
 ]
 
 Fovoham.connections = [

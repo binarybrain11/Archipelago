@@ -64,7 +64,7 @@ TimeMage.locations = [
     FFTLocation("Time Mage Unlock", [Requirement(["Wizard"])])
 ]
 
-Mediator.lZcations = [
+Mediator.locations = [
     FFTLocation("Mediator Unlock", [Requirement(["Oracle"])])
 ]
 

@@ -12,9 +12,16 @@ job_names = [
     "Priest", "Wizard", "Oracle", "Time Mage", "Mediator", "Summoner", "Calculator", "Bard", "Mime"
 ]
 
+shop_levels = []
+
+for i in range(14):
+    shop_levels.append("Progressive Shop Level")
+
 major_item_names = [
-    *zodiac_stone_names, *world_map_pass_names, *job_names
+    *zodiac_stone_names, *world_map_pass_names, *job_names, "Progressive Shop Level"
 ]
+
+
 
 special_character_names = [
     "Boco", "Agrias", "Mustadio", "Rafa",

@@ -41,7 +41,8 @@ Zarghidas.connections = [
 ]
 
 Zarghidas.locations = [
-    FFTLocation("Zarghidas Trade City Sidequest Battle")
+    FFTLocation("Zarghidas Trade City Sidequest Battle"),
+    FFTLocation("Recruit Cloud")
 ]
 
 Germinas.connections = [
@@ -58,5 +59,6 @@ Nelveska.connections = [
 ]
 
 Nelveska.locations = [
-    FFTLocation("Nelveska Temple Sidequest Battle")
+    FFTLocation("Nelveska Temple Sidequest Battle"),
+    FFTLocation("Recruit Reis")
 ]

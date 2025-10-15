@@ -42,7 +42,8 @@ BariausValley.connections = [
 ]
 
 BariausValley.locations = [
-    FFTLocation("Bariaus Valley Story Battle")
+    FFTLocation("Bariaus Valley Story Battle"),
+    FFTLocation("Recruit Agrias")
 ]
 
 Golgorand.connections = [

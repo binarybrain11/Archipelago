@@ -14,7 +14,8 @@ Araguay.connections = [
 ]
 
 Araguay.locations = [
-    FFTLocation("Araguay Woods Story Battle")
+    FFTLocation("Araguay Woods Story Battle"),
+    FFTLocation("Recruit Boco")
 ]
 
 Zeklaus.connections = [
@@ -53,11 +54,17 @@ Goland.locations = [
     FFTLocation("Goland Colliery Second Floor Sidequest Battle"),
     FFTLocation("Goland Colliery First Floor Sidequest Battle"),
     FFTLocation("Goland Underground Passage Sidequest Battle"),
+    FFTLocation("Recruit Beowulf"),
+    FFTLocation("Recruit Worker 8")
 ]
 
 Lesalia.connections = [
     Connection(Goland),
     Connection(Grog, [HasFovohamPass])
+]
+
+Lesalia.locations = [
+    FFTLocation("Back Gate of Lesalia Castle")
 ]
 
 Doguola.connections = [
