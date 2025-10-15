@@ -1,0 +1,32 @@
+from BaseClasses import Location
+from .data.logic.Requirement import Requirement
+from .data.logic import topologies
+from .data.locations import all_regions
+
+
+class FinalFantasyTacticsLocation(Location):
+    game = "Final Fantasy Tactics"
+    logic_rule: list[list[str]]
+
+class LocationData:
+    name: str
+    id: int
+    requirements: list[Requirement]
+
+    def __init__(self, name: str, id: int):
+        self.name = name
+        self.id = id
+
+    def __repr__(self):
+        return self.name
+
+id = 1
+
+all_locations: list[LocationData] = list()
+
+for region in all_regions:
+    for location in region.locations:
+        location_data = LocationData(location.name, id)
+        location_data.requirements = location.requirements
+        all_locations.append(location_data)
+        id += 1
