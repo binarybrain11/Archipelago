@@ -6,16 +6,16 @@ from .data.logic.Requirement import Requirement
 from .Items import valid_item_names
 
 if TYPE_CHECKING:
-    from worlds.fft import FinalFantasyTacticsOptions
+    from worlds.fftii import FinalFantasyTacticsIIOptions
 
 class LogicObject:
     requirements: list[list[str]] = []
     energy_tanks: list[int] = []
     calculated_energy_tanks: int = 0
     player: int
-    options: "FinalFantasyTacticsOptions"
+    options: "FinalFantasyTacticsIIOptions"
 
-    def __init__(self, player: int, options: "FinalFantasyTacticsOptions"):
+    def __init__(self, player: int, options: "FinalFantasyTacticsIIOptions"):
         self.player = player
         self.options = options
 
@@ -25,7 +25,7 @@ class LogicObject:
         expression = None
         for requirement_list in self.requirements:
             if "Zodiac Stones" in requirement_list:
-                expression = state.has_group("Zodiac Stones", self.player, self.options.ZodiacStonesRequired.value)
+                expression = state.has_group("Zodiac Stones", self.player, self.options.zodiac_stones_required.value)
             elif expression is None:
                 expression = state.has_all(requirement_list, self.player)
             else:
@@ -34,7 +34,7 @@ class LogicObject:
 
 def create_logic_rule_for_list(
         requirements: list[Requirement],
-        options: "FinalFantasyTacticsOptions",
+        options: "FinalFantasyTacticsIIOptions",
         debug: bool = False) -> list:
     requirements_list = []
     for requirement in requirements:
@@ -52,7 +52,7 @@ def create_logic_rule_for_list(
 
 def create_logic_rule(
         requirement: Requirement,
-        options: "FinalFantasyTacticsOptions",
+        options: "FinalFantasyTacticsIIOptions",
         debug: bool = False) -> list[str]:
     if requirement.check_option_enabled(options):
         requirements_list = []
@@ -79,7 +79,7 @@ def unpack_requirement(
         requirement: Requirement,
         possibilities: list[list[str]],
         parent_items: list[str],
-        options: "FinalFantasyTacticsOptions",
+        options: "FinalFantasyTacticsIIOptions",
         debug = False) -> None:
     if requirement.check_option_enabled(options):
         if len(requirement.other_requirements) > 0:

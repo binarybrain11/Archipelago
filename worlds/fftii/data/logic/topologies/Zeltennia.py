@@ -22,7 +22,8 @@ Finath.connections = [
 ]
 
 Finath.locations = [
-    FFTLocation("Finath River Story Battle")
+    FFTLocation("Finath River Story Battle"),
+    FFTLocation("Finath River Rare Battle")
 ]
 
 Zeltennia.connections = [
@@ -51,7 +52,8 @@ Germinas.connections = [
 ]
 
 Germinas.locations = [
-    FFTLocation("Germinas Peak Story Battle")
+    FFTLocation("Germinas Peak Story Battle"),
+    FFTLocation("Germinas Peak Rare Battle")
 ]
 
 Nelveska.connections = [

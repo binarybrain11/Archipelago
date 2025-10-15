@@ -4,8 +4,8 @@ from .data.logic import topologies
 from .data.locations import all_regions
 
 
-class FinalFantasyTacticsLocation(Location):
-    game = "Final Fantasy Tactics"
+class FinalFantasyTacticsIILocation(Location):
+    game = "Final Fantasy Tactics Ivalice Island"
     logic_rule: list[list[str]]
 
 class LocationData:

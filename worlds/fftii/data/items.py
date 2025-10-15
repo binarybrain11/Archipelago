@@ -29,6 +29,10 @@ special_character_names = [
     "Worker 8", "Cloud", "Meliadoul", "Byblos"
 ]
 
+rare_item_names = [
+    "Rare Item"
+]
+
 useful_item_names = [
     "Useful Item"
 ]
@@ -38,5 +42,5 @@ filler_item_names = [
 ]
 
 all_item_names = [
-    *major_item_names, *special_character_names, *job_names, *useful_item_names, *filler_item_names
+    *major_item_names, *special_character_names, *job_names, *rare_item_names, *useful_item_names, *filler_item_names
 ]

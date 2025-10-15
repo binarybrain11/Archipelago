@@ -15,7 +15,8 @@ Araguay.connections = [
 
 Araguay.locations = [
     FFTLocation("Araguay Woods Story Battle"),
-    FFTLocation("Recruit Boco")
+    FFTLocation("Recruit Boco"),
+    FFTLocation("Araguay Woods Rare Battle")
 ]
 
 Zeklaus.connections = [
@@ -25,12 +26,17 @@ Zeklaus.connections = [
 ]
 
 Zeklaus.locations = [
-    FFTLocation("Zeklaus Desert Story Battle")
+    FFTLocation("Zeklaus Desert Story Battle"),
+    FFTLocation("Zeklaus Desert Rare Battle")
 ]
 
 BerveniaVolcano.connections = [
     Connection(Zeklaus),
     Connection(Riovanes, [HasFovohamPass])
+]
+
+BerveniaVolcano.locations = [
+    FFTLocation("Bervenia Volvano Rare Battle")
 ]
 
 Zirekile.connections = [
@@ -40,7 +46,8 @@ Zirekile.connections = [
 ]
 
 Zirekile.locations = [
-    FFTLocation("Zirekile Falls Story Battle")
+    FFTLocation("Zirekile Falls Story Battle"),
+    FFTLocation("Zirekile Falls Rare Battle")
 ]
 
 Goland.connections = [
@@ -64,7 +71,7 @@ Lesalia.connections = [
 ]
 
 Lesalia.locations = [
-    FFTLocation("Back Gate of Lesalia Castle")
+    FFTLocation("Back Gate of Lesalia Castle Story Battle")
 ]
 
 Doguola.connections = [
@@ -72,5 +79,6 @@ Doguola.connections = [
 ]
 
 Doguola.locations = [
-    FFTLocation("Doguola Pass Story Battle")
+    FFTLocation("Doguola Pass Story Battle"),
+    FFTLocation("Doguola Pass Rare Battle")
 ]

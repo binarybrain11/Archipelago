@@ -12,7 +12,8 @@ Bed.connections = [
 ]
 
 Bed.locations = [
-    FFTLocation("Bed Desert Story Battle")
+    FFTLocation("Bed Desert Story Battle"),
+    FFTLocation("Bed Desert Rare Battle")
 ]
 
 Bethla.connections = [
@@ -33,6 +34,10 @@ Dolbodar.connections = [
     Connection(Limberry)
 ]
 
+Dolbodar.locations = [
+    FFTLocation("Dolbodar Swamp Rare Battle")
+]
+
 Limberry.connections = [
     Connection(Dolbodar),
     Connection(Poeskas)
@@ -51,5 +56,6 @@ Poeskas.connections = [
 ]
 
 Poeskas.locations = [
-    FFTLocation("Poeskas Lake Story Battle")
+    FFTLocation("Poeskas Lake Story Battle"),
+    FFTLocation("Poeskas Lake Rare Battle")
 ]

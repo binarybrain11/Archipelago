@@ -13,7 +13,8 @@ Grog.connections = [
 ]
 
 Grog.locations = [
-    FFTLocation("Grog Hill Story Battle")
+    FFTLocation("Grog Hill Story Battle"),
+    FFTLocation("Grog Hill Rare Battle")
 ]
 
 Yardow.connections = [
@@ -31,7 +32,8 @@ Yuguo.connections = [
 ]
 
 Yuguo.locations = [
-    FFTLocation("Yuguo Woods")
+    FFTLocation("Yuguo Woods Story Battle"),
+    FFTLocation("Yuguo Woods Rare Battle")
 ]
 
 Riovanes.connections = [
@@ -55,5 +57,6 @@ Fovoham.connections = [
 ]
 
 Fovoham.locations = [
-    FFTLocation("Fovoham Plains Story Battle")
+    FFTLocation("Fovoham Plains Story Battle"),
+    FFTLocation("Fovoham Plains Rare Battle")
 ]

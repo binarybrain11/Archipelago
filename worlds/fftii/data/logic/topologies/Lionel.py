@@ -22,7 +22,8 @@ BariausHill.connections = [
 ]
 
 BariausHill.locations = [
-    FFTLocation("Bariaus Hill Story Battle")
+    FFTLocation("Bariaus Hill Story Battle"),
+    FFTLocation("Bariaus Hill Rare Battle")
 ]
 
 Lionel.connections = [
@@ -43,7 +44,8 @@ BariausValley.connections = [
 
 BariausValley.locations = [
     FFTLocation("Bariaus Valley Story Battle"),
-    FFTLocation("Recruit Agrias")
+    FFTLocation("Recruit Agrias"),
+    FFTLocation("Bariaus Valley Rare Battle")
 ]
 
 Golgorand.connections = [
@@ -65,5 +67,6 @@ Zigolis.connections = [
 ]
 
 Zigolis.locations = [
-    FFTLocation("Zigolis Swamp Story Battle")
+    FFTLocation("Zigolis Swamp Story Battle"),
+    FFTLocation("Zigolis Swamp Rare Battle")
 ]

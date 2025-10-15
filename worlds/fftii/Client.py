@@ -26,7 +26,7 @@ def get_bit_value_from_position(position):
     return 2 ** position
 
 class FinalFantasyTacticsClient(BizHawkClient):
-    game = "Final Fantasy Tactics"
+    game = "Final Fantasy Tactics Ivalice Island"
     system = "PS1"
     patch_suffix = ".apfft"
 

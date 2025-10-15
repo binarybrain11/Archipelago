@@ -13,18 +13,18 @@ def get_base_rom_as_bytes() -> bytes:
     return base_rom_bytes
 
 
-class FinalFantasyTacticsPatchExtension(APPatchExtension):
-    game = "Final Fantasy Tactics"
+class FinalFantasyTacticsIIPatchExtension(APPatchExtension):
+    game = "Final Fantasy Tactics Ivalice Island"
 
     @staticmethod
     def patch_iso(caller, iso, placement_file):
         pass
 
 
-class FinalFantasyTacticsProcedurePatch(APProcedurePatch, APTokenMixin):
-    game = "Metroid Fusion"
+class FinalFantasyTacticsIIProcedurePatch(APProcedurePatch, APTokenMixin):
+    game = "Final Fantasy Tactics Ivalice Island"
     hash = "27D02A4F03E172E029C9B82AC3DB79F7"
-    patch_file_ending = ".apfft"
+    patch_file_ending = ".apfftii"
     result_file_ending = ".iso"
 
     procedure = [

@@ -25,7 +25,8 @@ Mandalia.connections = [
 ]
 
 Mandalia.locations = [
-    FFTLocation("Mandalia Plains Story Battle")
+    FFTLocation("Mandalia Plains Story Battle"),
+    FFTLocation("Manalia Plains Rare Battle")
 ]
 
 Igros.connections = [
@@ -43,7 +44,8 @@ Sweegy.connections = [
 ]
 
 Sweegy.locations = [
-    FFTLocation("Sweegy Woods Story Battle")
+    FFTLocation("Sweegy Woods Story Battle"),
+    FFTLocation("Sweegy Woods Rare Battle")
 ]
 
 Dorter.connections = [
@@ -72,7 +74,8 @@ Lenalia.connections = [
 ]
 
 Lenalia.locations = [
-    FFTLocation("Lenalia Plateau Story Battle")
+    FFTLocation("Lenalia Plateau Story Battle"),
+    FFTLocation("Lenalia Plateau Rare Battle")
 ]
 
 Zeakden.connections = [

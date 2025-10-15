@@ -55,7 +55,8 @@ DeepDungeon.locations = [
     FFTLocation("VOYAGE Sidequest Battle"),
     FFTLocation("HORROR Sidequest Battle"),
     FFTLocation("END Sidequest Battle"),
-    FFTLocation("Recruit Byblos")
+    FFTLocation("Recruit Byblos"),
+    FFTLocation("Deep Dungeon Rare Battle")
 ]
 
 MurondDeathCity.connections = [

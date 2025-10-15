@@ -16,9 +16,11 @@ class ItemData:
         return self.name
 
 item_table: dict[str, ItemData] = dict()
+item_table["Farlem"] = ItemData("Farlem", ItemClassification.progression, 1)
 
-for index, item in enumerate(all_item_names):
+for index, item in enumerate(all_item_names, start=2):
     classification = ItemClassification.progression if item in major_item_names else ItemClassification.filler
     item_table[item] = ItemData(item, classification, index + 1)
+
 
 valid_item_names = [*all_item_names, "Zodiac Stones"]

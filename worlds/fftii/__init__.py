@@ -14,18 +14,19 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule
 
 from .Items import item_table
-from .Locations import all_locations, FinalFantasyTacticsLocation
+from .Locations import all_locations, FinalFantasyTacticsIILocation
 from .Logic import create_logic_rule, create_logic_rule_for_list, LogicObject
-from .Options import FinalFantasyTacticsOptions, fft_option_groups
-from .Rom import FinalFantasyTacticsProcedurePatch
+from .Options import FinalFantasyTacticsIIOptions, fftii_option_groups
+from .Rom import FinalFantasyTacticsIIProcedurePatch
 
 from .data.items import zodiac_stone_names, world_map_pass_names, job_names, filler_item_names, shop_levels, \
     special_character_names
-from .data.locations import all_regions, world_map_regions
+from .data.locations import all_regions, world_map_regions, story_battle_locations, character_recruit_locations, \
+    sidequest_battle_locations, job_unlock_locations, rare_battle_locations, default_murond_fights
 from .data.logic.regions.Jobs import jobs_regions
 
 
-class FinalFantasyTacticsSettings(settings.Group):
+class FinalFantasyTacticsIISettings(settings.Group):
     class RomFile(settings.UserFilePath):
         """File name of the Metroid Fusion ROM"""
         description = "Metroid Fusion (USA) ROM File"
@@ -37,7 +38,7 @@ class FinalFantasyTacticsSettings(settings.Group):
     display_location_found_messages: bool = True
 
 
-class FinalFantasyTacticsWeb(WebWorld):
+class FinalFantasyTacticsIIWeb(WebWorld):
     theme = "ocean"
     setup = Tutorial(
         "Multiworld Setup Guide",
@@ -51,21 +52,21 @@ class FinalFantasyTacticsWeb(WebWorld):
     tutorials = [setup]
 
     rich_text_options_doc = True
-    option_groups = fft_option_groups
+    option_groups = fftii_option_groups
 
 
-class FinalFantasyTacticsWorld(World):
+class FinalFantasyTacticsIvaliceIslandWorld(World):
     """
-    FFT description here.
+    An open world mod for Final Fantasy Tactics for Archipelago.
+    Find all the Zodiac Stones and make your way to Murond Death City to confront Ultima!
     """
-    settings: typing.ClassVar[FinalFantasyTacticsSettings]
-    game = "Final Fantasy Tactics"
-    options_dataclass = FinalFantasyTacticsOptions
-    options: FinalFantasyTacticsOptions
+    settings: typing.ClassVar[FinalFantasyTacticsIISettings]
+    game = "Final Fantasy Tactics Ivalice Island"
+    options_dataclass = FinalFantasyTacticsIIOptions
+    options: FinalFantasyTacticsIIOptions
 
-    topology_present = True
     base_id = 0
-    web = FinalFantasyTacticsWeb()
+    web = FinalFantasyTacticsIIWeb()
 
     item_name_to_id = {item: item_data.id for item, item_data in item_table.items()}
     location_name_to_id = {location.name: location.id for location in all_locations}
@@ -73,31 +74,46 @@ class FinalFantasyTacticsWorld(World):
         "Zodiac Stones": zodiac_stone_names
     }
 
+    filler_items: list[str] | None
+    included_locations: list[str]
+    murond_fights: list[str]
+
     version = 1
     debug = False
+    topology_present = debug
 
 
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.filler_items = None
+        self.included_locations = list()
+        self.murond_fights = list()
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
-        logging.info(f"Final Fantasy Tactics APWorld v{cls.version} used for generation.")
+        logging.info(f"Final Fantasy Tactics Ivalice Island APWorld v{cls.version} used for generation.")
 
     @classmethod
     def stage_write_spoiler_header(cls, _multiworld: MultiWorld, spoiler_handle: TextIO):
-        spoiler_handle.write(f"\nFinal Fantasy Tactics APWorld version: v{cls.version}\n")
+        spoiler_handle.write(f"\nFinal Fantasy Tactics Ivalice Island APWorld version: v{cls.version}\n")
 
-    def create_item(self, name: str) -> "FinalFantasyTacticsItem":
-        return FinalFantasyTacticsItem(name, item_table[name].classification, self.item_name_to_id[name], self.player)
+    def create_item(self, name: str) -> "FinalFantasyTacticsIIItem":
+        return FinalFantasyTacticsIIItem(name, item_table[name].classification, self.item_name_to_id[name], self.player)
 
-    def create_event(self, name: str) -> "FinalFantasyTacticsItem":
-        return FinalFantasyTacticsItem(name, ItemClassification.progression, None, self.player)
+    def create_event(self, name: str) -> "FinalFantasyTacticsIIItem":
+        return FinalFantasyTacticsIIItem(name, ItemClassification.progression, None, self.player)
 
     def generate_early(self) -> None:
-        pass
+        self.included_locations.extend(story_battle_locations)
+        self.included_locations.extend(character_recruit_locations)
+        if self.options.sidequest_battles_in_location_pool:
+            self.included_locations.extend(sidequest_battle_locations)
+        if self.options.job_unlocks_in_location_pool:
+            self.included_locations.extend(job_unlock_locations)
+        if self.options.rare_battles_in_location_pool:
+            self.included_locations.extend(rare_battle_locations)
+        self.murond_fights.extend(default_murond_fights)
 
     def create_regions(self):
         menu = Region("Menu", self.player, self.multiworld)
@@ -127,7 +143,11 @@ class FinalFantasyTacticsWorld(World):
                 origin_region.exits.append(new_entrance)
                 new_entrance.connect(connecting_region)
             for location in origin_region_data.locations:
-                new_location = FinalFantasyTacticsLocation(
+                if location.name not in self.included_locations:
+                    if self.debug:
+                        print(f"Excluding {location.name}")
+                    continue
+                new_location = FinalFantasyTacticsIILocation(
                     self.player,
                     location.name,
                     self.location_name_to_id[location.name],
@@ -136,10 +156,12 @@ class FinalFantasyTacticsWorld(World):
                 origin_region.locations.append(new_location)
         for region in jobs_regions:
             menu.connect(self.get_region(region.name))
-        murond_death_city = self.get_region("Murond Death City")
-        victory_location = FinalFantasyTacticsLocation(self.player, "Victory", None, murond_death_city)
-        victory_location.place_locked_item(self.create_event("Victory"))
-        murond_death_city.locations.append(victory_location)
+        victory_location = self.get_location("Graveyard of Airships 2 Story Battle")
+        victory_location.place_locked_item(self.create_item("Farlem"))
+
+        for fight in self.murond_fights:
+            self.get_location(fight).place_locked_item(self.create_item("Rare Item"))
+
         from Utils import visualize_regions
         visualize_regions(self.get_region("Menu"), f"fftdiagram{self.player}.puml")
 
@@ -150,15 +172,17 @@ class FinalFantasyTacticsWorld(World):
             if location.item is None:
                 location_count += 1
 
-        zodiac_stones_required = self.options.ZodiacStonesRequired.value
-        zodiac_stones_in_pool = self.options.ZodiacStonesInPool.value
+        zodiac_stones_required = self.options.zodiac_stones_required.value
+        zodiac_stones_in_pool = self.options.zodiac_stones_in_pool.value
         if zodiac_stones_in_pool < zodiac_stones_required:
             zodiac_stones_in_pool = zodiac_stones_required
 
         zodiac_stones_in_game = self.random.sample(zodiac_stone_names, k=zodiac_stones_in_pool)
         major_items = [
-            *zodiac_stones_in_game, *world_map_pass_names, *job_names, *shop_levels, *special_character_names
+            *zodiac_stones_in_game, *world_map_pass_names, *shop_levels, *special_character_names
         ]
+        if self.options.job_unlocks_in_item_pool:
+            major_items.extend(job_names)
 
         filler_item_count = location_count - len(major_items)
         filler_items = []
@@ -167,13 +191,15 @@ class FinalFantasyTacticsWorld(World):
 
         itempool = [*major_items, *filler_items]
         for item in map(self.create_item, itempool):
-            if item.name == "Squire":
+            if item.name == "Squire" and "Squire Unlock" in self.included_locations:
                 self.get_location("Squire Unlock").place_locked_item(item)
             else:
                 self.multiworld.itempool.append(item)
 
     def set_rules(self):
         for location in all_locations:
+            if location.name not in self.included_locations:
+                continue
             ap_location = self.get_location(location.name)
             logic_object = LogicObject(self.player, self.options)
             if self.debug:
@@ -182,16 +208,13 @@ class FinalFantasyTacticsWorld(World):
                 location.requirements, self.options, self.debug)
             add_rule(ap_location, logic_object.logic_rule)
 
-        zodiac_stones_required = self.options.ZodiacStonesRequired.value
-        zodiac_stones_in_pool = self.options.ZodiacStonesInPool.value
-        if zodiac_stones_in_pool < zodiac_stones_required:
-            zodiac_stones_in_pool = zodiac_stones_required
+        zodiac_stones_required = self.options.zodiac_stones_required.value
 
 
         add_rule(
-            self.get_location("Victory"),
+            self.get_location("Graveyard of Airships 2 Story Battle"),
             lambda state: state.has_group("Zodiac Stones", self.player, zodiac_stones_required))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Farlem", self.player)
 
     def pre_fill(self) -> None:
         pass
@@ -254,6 +277,5 @@ class FinalFantasyTacticsWorld(World):
         pass
 
 
-class FinalFantasyTacticsItem(Item):
-    game = "Final Fantasy Tactics"
-
+class FinalFantasyTacticsIIItem(Item):
+    game = "Final Fantasy Tactics Ivalice Island"
