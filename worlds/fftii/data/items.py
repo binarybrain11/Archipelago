@@ -18,9 +18,12 @@ for i in range(14):
     shop_levels.append("Progressive Shop Level")
 
 major_item_names = [
-    *zodiac_stone_names, *world_map_pass_names, *job_names, "Progressive Shop Level"
+    *zodiac_stone_names, *world_map_pass_names, *job_names, "Progressive Shop Level", "Progressive Ramza Job Form"
 ]
 
+ramza_job_levels = [
+    "Progressive Ramza Job Form", "Progressive Ramza Job Form"
+]
 
 
 special_character_names = [

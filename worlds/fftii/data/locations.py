@@ -163,6 +163,23 @@ job_unlock_locations = [
     "Mime Unlock"
 ]
 
+shop_unlock_locations = [
+    "Mandalia Plains Shop Unlock",
+    "Thieves' Fort Shop Unlock",
+    "Fort Zeakden Shop Unlock",
+    "Yardow Fort City Shop Unlock",
+    "Riovanes Castle Shop Unlock",
+    "Zirekile Falls Shop Unlock",
+    "Zeklaus Desert Shop Unlock",
+    "Lesalia Imperial Capital Shop Unlock",
+    "Bariaus Hill Shop Unlock",
+    "Lionel Castle Shop Unlock",
+    "Bariaus Valley Shop Unlock",
+    "Bethla Garrison Shop Unlock",
+    "Limberry Castle Shop Unlock",
+    "Orbonne Monastery Shop Unlock",
+]
+
 default_murond_fights = [
     "Murond Death City Story Battle",
     "Lost Sacred Precincts Story Battle",

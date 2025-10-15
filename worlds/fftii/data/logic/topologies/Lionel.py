@@ -23,7 +23,8 @@ BariausHill.connections = [
 
 BariausHill.locations = [
     FFTLocation("Bariaus Hill Story Battle"),
-    FFTLocation("Bariaus Hill Rare Battle")
+    FFTLocation("Bariaus Hill Rare Battle"),
+    FFTLocation("Bariaus Hill Shop Unlock")
 ]
 
 Lionel.connections = [
@@ -33,7 +34,8 @@ Lionel.connections = [
 
 Lionel.locations = [
     FFTLocation("Gate of Lionel Castle Story Battle"),
-    FFTLocation("Inside of Lionel Castle Story Battle")
+    FFTLocation("Inside of Lionel Castle Story Battle"),
+    FFTLocation("Lionel Castle Shop Unlock")
 ]
 
 BariausValley.connections = [
@@ -45,7 +47,8 @@ BariausValley.connections = [
 BariausValley.locations = [
     FFTLocation("Bariaus Valley Story Battle"),
     FFTLocation("Recruit Agrias"),
-    FFTLocation("Bariaus Valley Rare Battle")
+    FFTLocation("Bariaus Valley Rare Battle"),
+    FFTLocation("Bariaus Valley Shop Unlock")
 ]
 
 Golgorand.connections = [

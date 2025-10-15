@@ -20,10 +20,18 @@ from .Options import FinalFantasyTacticsIIOptions, fftii_option_groups
 from .Rom import FinalFantasyTacticsIIProcedurePatch
 
 from .data.items import zodiac_stone_names, world_map_pass_names, job_names, filler_item_names, shop_levels, \
-    special_character_names
+    special_character_names, ramza_job_levels
 from .data.locations import all_regions, world_map_regions, story_battle_locations, character_recruit_locations, \
-    sidequest_battle_locations, job_unlock_locations, rare_battle_locations, default_murond_fights
+    sidequest_battle_locations, job_unlock_locations, rare_battle_locations, default_murond_fights, \
+    shop_unlock_locations
+from .data.logic.regions.Fovoham import fovoham_regions
+from .data.logic.regions.Gallione import gallione_regions
 from .data.logic.regions.Jobs import jobs_regions
+from .data.logic.regions.Lesalia import lesalia_regions
+from .data.logic.regions.Limberry import limberry_regions
+from .data.logic.regions.Lionel import lionel_regions
+from .data.logic.regions.Murond import murond_regions
+from .data.logic.regions.Zeltennia import zeltennia_regions
 
 
 class FinalFantasyTacticsIISettings(settings.Group):
@@ -107,6 +115,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
     def generate_early(self) -> None:
         self.included_locations.extend(story_battle_locations)
         self.included_locations.extend(character_recruit_locations)
+        self.included_locations.extend(shop_unlock_locations)
         if self.options.sidequest_battles_in_location_pool:
             self.included_locations.extend(sidequest_battle_locations)
         if self.options.job_unlocks_in_location_pool:
@@ -124,6 +133,14 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
 
         starting_region = self.get_region("Gariland")
         menu.connect(starting_region)
+
+        gallione_locations = []
+        fovoham_locations = []
+        lesalia_locations = []
+        lionel_locations = []
+        zeltennia_locations = []
+        limberry_locations = []
+        murond_locations = []
 
         # Define connections
         for origin_region_data in all_regions:
@@ -143,6 +160,20 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
                 origin_region.exits.append(new_entrance)
                 new_entrance.connect(connecting_region)
             for location in origin_region_data.locations:
+                if origin_region_data in gallione_regions:
+                    gallione_locations.append(location)
+                if origin_region_data in fovoham_regions:
+                    fovoham_locations.append(location)
+                if origin_region_data in lesalia_regions:
+                    lesalia_locations.append(location)
+                if origin_region_data in lionel_regions:
+                    lionel_locations.append(location)
+                if origin_region_data in zeltennia_regions:
+                    zeltennia_locations.append(location)
+                if origin_region_data in limberry_regions:
+                    limberry_locations.append(location)
+                if origin_region_data in murond_regions:
+                    murond_locations.append(location)
                 if location.name not in self.included_locations:
                     if self.debug:
                         print(f"Excluding {location.name}")
@@ -159,6 +190,36 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         victory_location = self.get_location("Graveyard of Airships 2 Story Battle")
         victory_location.place_locked_item(self.create_item("Farlem"))
 
+        if self.debug:
+            print(f"Gallione Locations ({len(gallione_locations)})")
+            for location in gallione_locations:
+                print(f"{location.name}")
+            print("")
+            print(f"Fovoham Locations ({len(fovoham_locations)})")
+            for location in fovoham_locations:
+                print(f"{location.name}")
+            print("")
+            print(f"Lesalia Locations ({len(lesalia_locations)})")
+            for location in lesalia_locations:
+                print(f"{location.name}")
+            print("")
+            print(f"Lionel Locations ({len(lionel_locations)})")
+            for location in lionel_locations:
+                print(f"{location.name}")
+            print("")
+            print(f"Zeltennia Locations ({len(zeltennia_locations)})")
+            for location in zeltennia_locations:
+                print(f"{location.name}")
+            print("")
+            print(f"Limberry Locations ({len(limberry_locations)})")
+            for location in limberry_locations:
+                print(f"{location.name}")
+            print("")
+            print(f"Murond Locations ({len(murond_locations)})")
+            for location in murond_locations:
+                print(f"{location.name}")
+
+
         for fight in self.murond_fights:
             self.get_location(fight).place_locked_item(self.create_item("Rare Item"))
 
@@ -166,11 +227,14 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         visualize_regions(self.get_region("Menu"), f"fftdiagram{self.player}.puml")
 
     def create_items(self):
-        world_locations = self.get_locations()
-        location_count = 0
+        world_locations = self.multiworld.get_unfilled_locations(self.player)
+        location_count = len(world_locations)
         for location in world_locations:
             if location.item is None:
-                location_count += 1
+                pass
+                #location_count += 1
+            else:
+                pass
 
         zodiac_stones_required = self.options.zodiac_stones_required.value
         zodiac_stones_in_pool = self.options.zodiac_stones_in_pool.value
@@ -179,7 +243,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
 
         zodiac_stones_in_game = self.random.sample(zodiac_stone_names, k=zodiac_stones_in_pool)
         major_items = [
-            *zodiac_stones_in_game, *world_map_pass_names, *shop_levels, *special_character_names
+            *zodiac_stones_in_game, *world_map_pass_names, *shop_levels, *special_character_names, *ramza_job_levels
         ]
         if self.options.job_unlocks_in_item_pool:
             major_items.extend(job_names)

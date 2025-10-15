@@ -44,7 +44,7 @@ def create_logic_rule_for_list(
         continue
     if debug:
         print("Create logic rule for list...")
-        for requirement, energy_tanks_amount in zip(requirements_list):
+        for requirement in requirements_list:
             print("Logic rule:")
             print(f"Requirements: {requirement}")
         print("===\n")

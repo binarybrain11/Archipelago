@@ -26,7 +26,8 @@ Mandalia.connections = [
 
 Mandalia.locations = [
     FFTLocation("Mandalia Plains Story Battle"),
-    FFTLocation("Manalia Plains Rare Battle")
+    FFTLocation("Manalia Plains Rare Battle"),
+    FFTLocation("Mandalia Plains Shop Unlock")
 ]
 
 Igros.connections = [
@@ -65,7 +66,8 @@ ThievesFort.connections = [
 ]
 
 ThievesFort.locations = [
-    FFTLocation("Thieves' Fort Story Battle")
+    FFTLocation("Thieves' Fort Story Battle"),
+    FFTLocation("Thieves' Fort Shop Unlock")
 ]
 
 Lenalia.connections = [
@@ -84,5 +86,6 @@ Zeakden.connections = [
 ]
 
 Zeakden.locations = [
-    FFTLocation("Fort Zeakden Story Battle")
+    FFTLocation("Fort Zeakden Story Battle"),
+    FFTLocation("Fort Zeakden Shop Unlock")
 ]

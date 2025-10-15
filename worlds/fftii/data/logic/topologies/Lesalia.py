@@ -27,7 +27,8 @@ Zeklaus.connections = [
 
 Zeklaus.locations = [
     FFTLocation("Zeklaus Desert Story Battle"),
-    FFTLocation("Zeklaus Desert Rare Battle")
+    FFTLocation("Zeklaus Desert Rare Battle"),
+    FFTLocation("Zeklaus Desert Shop Unlock")
 ]
 
 BerveniaVolcano.connections = [
@@ -47,7 +48,8 @@ Zirekile.connections = [
 
 Zirekile.locations = [
     FFTLocation("Zirekile Falls Story Battle"),
-    FFTLocation("Zirekile Falls Rare Battle")
+    FFTLocation("Zirekile Falls Rare Battle"),
+    FFTLocation("Zirekile Falls Shop Unlock")
 ]
 
 Goland.connections = [
@@ -71,7 +73,8 @@ Lesalia.connections = [
 ]
 
 Lesalia.locations = [
-    FFTLocation("Back Gate of Lesalia Castle Story Battle")
+    FFTLocation("Back Gate of Lesalia Castle Story Battle"),
+    FFTLocation("Lesalia Imperial Capital Shop Unlock")
 ]
 
 Doguola.connections = [

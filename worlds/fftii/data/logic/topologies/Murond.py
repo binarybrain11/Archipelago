@@ -37,7 +37,8 @@ Orbonne.locations = [
     FFTLocation("Underground Book Storage 2 Story Battle"),
     FFTLocation("Underground Book Storage 3 Story Battle"),
     FFTLocation("Underground Book Storage 4 Story Battle"),
-    FFTLocation("Underground Book Storage 5 Story Battle")
+    FFTLocation("Underground Book Storage 5 Story Battle"),
+    FFTLocation("Orbonne Monastery Shop Unlock")
 ]
 
 DeepDungeon.connections = [

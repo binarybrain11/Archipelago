@@ -23,7 +23,8 @@ Yardow.connections = [
 ]
 
 Yardow.locations = [
-    FFTLocation("Yardow Fort City Story Battle")
+    FFTLocation("Yardow Fort City Story Battle"),
+    FFTLocation("Yardow Fort City Shop Unlock")
 ]
 
 Yuguo.connections = [
@@ -47,7 +48,8 @@ Riovanes.locations = [
     FFTLocation("Inside Riovanes Castle Story Battle"),
     FFTLocation("Roof of Riovanes Castle Story Battle"),
     FFTLocation("Recruit Rafa"),
-    FFTLocation("Recruit Malak")
+    FFTLocation("Recruit Malak"),
+    FFTLocation("Riovanes Castle Shop Unlock")
 ]
 
 Fovoham.connections = [
