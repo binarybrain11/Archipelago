@@ -49,7 +49,8 @@ Riovanes.locations = [
     FFTLocation("Roof of Riovanes Castle Story Battle"),
     FFTLocation("Recruit Rafa"),
     FFTLocation("Recruit Malak"),
-    FFTLocation("Riovanes Castle Shop Unlock")
+    FFTLocation("Riovanes Castle Shop Unlock"),
+    FFTLocation("Chapter 4 Ramzza Squire Job Unlock")
 ]
 
 Fovoham.connections = [

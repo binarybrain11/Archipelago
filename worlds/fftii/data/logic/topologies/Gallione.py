@@ -88,6 +88,7 @@ Zeakden.connections = [
 Zeakden.locations = [
     FFTLocation("Fort Zeakden Story Battle"),
     FFTLocation("Fort Zeakden Shop Unlock"),
+    FFTLocation("Chapter 2 Ramzza Squire Job Unlock"),
     FFTLocation("Recruit Rad"),
     FFTLocation("Recruit Alicia"),
     FFTLocation("Recruit Lavian")
