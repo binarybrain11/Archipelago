@@ -64,6 +64,7 @@ Goland.locations = [
     FFTLocation("Goland Colliery First Floor Sidequest Battle"),
     FFTLocation("Goland Underground Passage Sidequest Battle"),
     FFTLocation("Recruit Beowulf"),
+    FFTLocation("Recruit Reis (Dragon)"),
     FFTLocation("Recruit Worker 8")
 ]
 

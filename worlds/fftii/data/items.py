@@ -1,5 +1,104 @@
+class ItemData:
+    name: str
+    game_id: int
+
+    def __init__(self, name: str, game_id: int):
+        self.name = name
+        self.game_id = game_id
+
+    def __repr__(self):
+        return f"{self.name} ({hex(self.game_id)})"
+
+all_item_data = []
+
+gear_item_names = [
+    "Dagger", "Mythril Knife", "Blind Knife", "Mage Masher", "Platina Dagger", "Main Gauche", "orichalcum",
+    "Assassin Dagger", "Air Knife", "Zorlin Shape",
+
+    "Hidden Knife", "Ninja Knife", "Short Edge", "Ninja Edge", "Spell Edge", "Sasuke Knife", "Iga Knife", "Koga Knife",
+
+    "Broad Sword", "Long Sword", "Iron Sword", "Mythril Sword", "Blood Sword", "Coral Sword", "Ancient Sword",
+    "Sleep Sword", "Platinum Sword", "Diamond Sword", "Ice Brand", "Rune Blade", "Nagrarock", "Materia Blade",
+
+    "Defender", "Save the Queen", "Excalibur", "Ragnarok", "Chaos Blade",
+
+    "Asura Knife", "Koutetsu Knife", "Bizzen Boat", "Murasame", "Heaven's Cloud", "Kiyomori", "Muramasa",
+    "Kikuichimoji", "Masamune", "Chirijiraden",
+
+    "Battle Axe", "Giant Axe", "Slasher",
+
+    "Rod", "Thunder Rod", "Flame Rod", "Ice Rod", "Poison Rod", "Wizard Rod", "Dragon Rod", "Faith Rod",
+
+    "Oak Staff", "White Staff", "Healing Staff", "Rainbow Staff", "Wizard Staff", "Gold Staff", "Mace of Zeus",
+    "Sage Staff",
+
+    "Flail", "Flame Whip", "Morning Star", "Scorpion Tail",
+
+    "Romanda Gun", "Mythril Gun", "Stone Gun", "Blaze Gun", "Glacier Gun", "Blast Gun",
+
+    "Bow Gun", "Night Killer", "Cross Bow", "Poison Bow", "Hunting Bow", "Gastrafitis",
+
+    "Long Bow", "Silver Bow", "Ice Bow", "Lightning Bow", "Windslash Bow", "Mythril Bow", "Ultimus Bow", "Yoichi Bow",
+    "Perseus Bow",
+
+    "Ramia Harp", "Bloody Strings", "Fairy Harp",
+
+    "Battle Dict", "Monster Dict", "Papyrus Plate", "Madlemgen",
+
+    "Javelin", "Spear", "Mythril Spear", "Partisan", "Oberisk", "Hole Lance", "Dragon Whisker", "Javelin 2",
+
+    "Cypress Rod", "Battle Bamboo", "Musk Rod", "Iron Gan", "Gokuu Rod", "Icory Rod", "Octagon Rod", "Whale Whisker",
+
+    "C Bag", "FS Bag", "P Bag", "H Bag",
+
+    "Persia", "Cashmere", "Ryozan Silk",
+
+    "Shuriken", "Magic Shuriken", "Yagyu Darkness", "Fire Ball", "Water Ball", "Lightning Ball",
+    
+    "Escutcheon", "Buckler", "Bronze Shield", "Round Shield", "Mythril Shield", "Gold Shield", "Ice Shield",
+    "Flame Shield", "Aegis Shield", "Diamond Shield", "Platina Shield", "Crustal Shield", "Genji Shield",
+    "Kaiser Plate", "Venetian Shield", "Escutcheon",
+
+    "Leather Helmet", "Bronze Helmet", "Iron Helmet", "Barbuta", "Mythril Helmet", "Gold Helmet", "Cross Helmet",
+    "Diamond Helmet", "Platina Helmet", "Circlet", "Crystal Helmet", "Genji Helmet", "Grand Helmet",
+
+    "Leather Hat", "Feather Hat", "Red Hood", "Headgear", "Triangle Hat", "Green Beret", "Twist Headband",
+    "Holy Miter", "Black Hood", "Golden Hairpin", "Flash Hat", "Thief Hat",
+
+    "Cachusha", "Barette", "Ribbon",
+
+    "Leather Armor", "Linen Cuirass", "Bronze Armor", "Chain Mail", "Mythril Armor", "Plate Mail", "Gold Armor",
+    "Diamond Armor", "Platina Armor", "Carabini Mail", "Crystal Mail", "Genji Armor", "Reflect Mail", "Maximillian",
+
+    "Clothes", "Leather Outfit", "Leather Vest", "Chain Vest", "Mythril Vest", "Adaman Vest", "Wizard Outfit",
+    "Brigadine", "Judo Outfit", "Power Sleeve", "Earth Clothes", "Secret Clothes", "Black Costume", "Rubber Costume",
+
+    "Linen Robe", "Silk Robe", "Wizard Robe", "Chameleon Robe", "White Robe", "Black Robe", "Light Robe",
+    "Robe of Lords",
+
+    "Battle Boots", "Spike Shoes", "Germinas Boots", "Rubber Shoes", "Feather Boots", "Sprint Shoes", "Red Shoes",
+
+    "Power Wrist", "Genji Gauntlet", "Magic Gauntlet", "Bracer",
+
+    "Reflect Ring", "Defense Ring", "Magic Ring", "Cursed Ring", "Angel Ring",
+
+    "Diamond Armlet", "Jade Armlet", "108 Gems", "N-Kai Armlet", "Defense Armlet",
+
+    "Small Mantle", "Leather Mantle", "Wizard Mantle", "Elf Mantle", "Dracula Mantle", "Feather Mantle",
+    "Vanish Mantle",
+
+    "Chantage", "Cherche", "Setiemson", "Salty Rage",
+
+    "Potion", "Hi-Potion", "X-Potion", "Ether", "Hi-Ether", "Elixir", "Antidote", "Eye Drop", "Echo Grass",
+    "Maiden's Kiss", "Soft", "Holy Water", "Remedy", "Phoenix Down"
+]
+
+
+for index, item_name in enumerate(gear_item_names, start=1):
+    all_item_data.append(ItemData(item_name, index))
+
 zodiac_stone_names = [
-    "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo ",
+    "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
     "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces", "Serpentarius",
 ]
 
@@ -27,23 +126,22 @@ ramza_job_levels = [
 
 
 special_character_names = [
-    "Boco", "Agrias", "Mustadio", "Rafa",
-    "Malak", "Beowulf", "Reis", "Orlandu",
+    "Boco", "Rad", "Alicia", "Lavian", "Agrias", "Mustadio", "Rafa",
+    "Malak", "Beowulf", "Reis (Dragon)", "Reis (Human)", "Orlandu",
     "Worker 8", "Cloud", "Meliadoul", "Byblos"
 ]
 
 rare_item_names = [
-    "Rare Item"
-]
-
-useful_item_names = [
-    "Useful Item"
-]
-
-filler_item_names = [
-    "Filler Item"
+    "Zorlin Shape", "Sasuke Knife", "Iga Knife", "Koga Knife", "Nagrarock", "Materia Blade", "Defender",
+    "Save the Queen", "Excalibur", "Ragnarok", "Chaos Blade", "Masamune", "Chirijiraden", "Faith Rod",
+    "Mace of Zeus", "Sage Staff", "Scorpion Tail", "Stone Gun", "Blaze Gun", "Glacier Gun", "Blast Gun",
+    "Ultimus Bow", "Yoichi Bow", "Perseus Bow", "Fairy Harp", "Madlemgen", "Holy Lance", "Dragon Whisker",
+    "Javelin 2", "Ivory Rod", "Whale Whisker", "FS Bag", "Ryozan Silk", "Genji Shield", "Kaiser Plate",
+    "Venetian Shield", "Escutcheon 2", "Grand Helmet", "Genji Helemet", "Cachusha", "Barette", "Ribbon",
+    "Genji Armor", "Maximillian", "Secret Clothes", "Rubber Costume", "Robe of Lords", "Genji Gauntlet",
+    "Cursed Ring", "Vanish Mantle", "Chantage", "Cherche", "Salty Rage", "Setiemson"
 ]
 
 all_item_names = [
-    *major_item_names, *special_character_names, *job_names, *rare_item_names, *useful_item_names, *filler_item_names
+    *major_item_names, *special_character_names, *job_names, *rare_item_names, *gear_item_names
 ]

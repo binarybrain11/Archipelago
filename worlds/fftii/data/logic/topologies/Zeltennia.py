@@ -62,5 +62,5 @@ Nelveska.connections = [
 
 Nelveska.locations = [
     FFTLocation("Nelveska Temple Sidequest Battle"),
-    FFTLocation("Recruit Reis")
+    FFTLocation("Recruit Reis (Human)")
 ]

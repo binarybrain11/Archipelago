@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Range, PerGameCommonOptions, OptionGroup, StartInventoryPool, DefaultOnToggle, Toggle
+from Options import Range, PerGameCommonOptions, OptionGroup, StartInventoryPool, DefaultOnToggle, Toggle, Choice
 
 
 # Main Options
@@ -34,6 +34,22 @@ class RareBattlesInLocationPool(Toggle):
 class JobUnlocksInItemPool(DefaultOnToggle):
     """Are job unlocks part of the pool of items? If disabled, jobs are unlocked normally."""
     display_name = "Job Unlocks in Item Pool"
+
+class StartingRegion(Choice):
+    """What region to start in. Gallione is easiest, followed by Lesalia and Lionel. Fovoham, Zeltennia, and Limberry
+    should only be chosen if you're looking for a challenge."""
+    display_name = "Starting Region"
+    option_gallione = 0
+    option_lesalia = 1
+    option_lionel = 2
+    option_fovoham = 3
+    option_zeltennia = 4
+    option_limberry = 5
+    default = 0
+
+class CharactersJoinWithEquipment(DefaultOnToggle):
+    """Do characters come with their vanilla equipment?"""
+    display_name = "Characters Join with Equipment"
 
 @dataclass
 class FinalFantasyTacticsIIOptions(PerGameCommonOptions):

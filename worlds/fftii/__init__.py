@@ -18,9 +18,10 @@ from .Locations import all_locations, FinalFantasyTacticsIILocation
 from .Logic import create_logic_rule, create_logic_rule_for_list, LogicObject
 from .Options import FinalFantasyTacticsIIOptions, fftii_option_groups
 from .Rom import FinalFantasyTacticsIIProcedurePatch
+from .Client import FinalFantasyTacticsIvaliceIslandClient
 
-from .data.items import zodiac_stone_names, world_map_pass_names, job_names, filler_item_names, shop_levels, \
-    special_character_names, ramza_job_levels
+from .data.items import zodiac_stone_names, world_map_pass_names, job_names, shop_levels, \
+    special_character_names, ramza_job_levels, rare_item_names
 from .data.locations import all_regions, world_map_regions, story_battle_locations, character_recruit_locations, \
     sidequest_battle_locations, job_unlock_locations, rare_battle_locations, default_murond_fights, \
     shop_unlock_locations
@@ -66,7 +67,7 @@ class FinalFantasyTacticsIIWeb(WebWorld):
 class FinalFantasyTacticsIvaliceIslandWorld(World):
     """
     An open world mod for Final Fantasy Tactics for Archipelago.
-    Find all the Zodiac Stones and make your way to Murond Death City to confront Ultima!
+    Find all the Zodiac Stones and make your way to Murond Death City to confront Altima!
     """
     settings: typing.ClassVar[FinalFantasyTacticsIISettings]
     game = "Final Fantasy Tactics Ivalice Island"
@@ -87,7 +88,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
     murond_fights: list[str]
 
     version = 1
-    debug = False
+    debug = True
     topology_present = debug
 
 
@@ -133,6 +134,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
 
         starting_region = self.get_region("Gariland")
         menu.connect(starting_region)
+        self.options.start_inventory_from_pool.value["Gallione Pass"] = 1
 
         gallione_locations = []
         fovoham_locations = []
@@ -190,38 +192,27 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         victory_location = self.get_location("Graveyard of Airships 2 Story Battle")
         victory_location.place_locked_item(self.create_item("Farlem"))
 
-        if self.debug:
-            print(f"Gallione Locations ({len(gallione_locations)})")
-            for location in gallione_locations:
-                print(f"{location.name}")
-            print("")
-            print(f"Fovoham Locations ({len(fovoham_locations)})")
-            for location in fovoham_locations:
-                print(f"{location.name}")
-            print("")
-            print(f"Lesalia Locations ({len(lesalia_locations)})")
-            for location in lesalia_locations:
-                print(f"{location.name}")
-            print("")
-            print(f"Lionel Locations ({len(lionel_locations)})")
-            for location in lionel_locations:
-                print(f"{location.name}")
-            print("")
-            print(f"Zeltennia Locations ({len(zeltennia_locations)})")
-            for location in zeltennia_locations:
-                print(f"{location.name}")
-            print("")
-            print(f"Limberry Locations ({len(limberry_locations)})")
-            for location in limberry_locations:
-                print(f"{location.name}")
-            print("")
-            print(f"Murond Locations ({len(murond_locations)})")
-            for location in murond_locations:
-                print(f"{location.name}")
 
+        if self.debug:
+            all_region_locations = {
+                "Gallione": gallione_locations,
+                "Fovoham": fovoham_locations,
+                "Lesalia": lesalia_locations,
+                "Lionel": lionel_locations,
+                "Zeltennia": zeltennia_locations,
+                "Limberry": limberry_locations,
+                "Murond": murond_locations
+            }
+            with open("fftlocations.txt", "w") as file:
+                for key, value in all_region_locations.items():
+                    locations = [location.name for location in value if location.name in self.included_locations]
+                    file.write(f"{key} Locations ({len(locations)}):\n")
+                    for location in locations:
+                        file.write(f"{location}\n")
+                    file.write("\n")
 
         for fight in self.murond_fights:
-            self.get_location(fight).place_locked_item(self.create_item("Rare Item"))
+            self.get_location(fight).place_locked_item(self.create_item(self.random.choice(rare_item_names)))
 
         from Utils import visualize_regions
         visualize_regions(self.get_region("Menu"), f"fftdiagram{self.player}.puml")
@@ -229,12 +220,6 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
     def create_items(self):
         world_locations = self.multiworld.get_unfilled_locations(self.player)
         location_count = len(world_locations)
-        for location in world_locations:
-            if location.item is None:
-                pass
-                #location_count += 1
-            else:
-                pass
 
         zodiac_stones_required = self.options.zodiac_stones_required.value
         zodiac_stones_in_pool = self.options.zodiac_stones_in_pool.value
@@ -251,7 +236,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         filler_item_count = location_count - len(major_items)
         filler_items = []
         for i in range(filler_item_count):
-            filler_items.append(self.random.choice(filler_item_names))
+            filler_items.append(self.random.choice(rare_item_names))
 
         itempool = [*major_items, *filler_items]
         for item in map(self.create_item, itempool):
@@ -333,8 +318,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
 
     def get_filler_item_name(self) -> str:
         if self.filler_items is None:
-            self.filler_items = [item for item in item_table if
-                                 item_table[item].classification == ItemClassification.filler]
+            self.filler_items = [item for item in item_table if item in rare_item_names]
         return self.random.choice(self.filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:

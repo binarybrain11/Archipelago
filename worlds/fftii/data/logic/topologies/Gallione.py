@@ -26,7 +26,7 @@ Mandalia.connections = [
 
 Mandalia.locations = [
     FFTLocation("Mandalia Plains Story Battle"),
-    FFTLocation("Manalia Plains Rare Battle"),
+    FFTLocation("Mandalia Plains Rare Battle"),
     FFTLocation("Mandalia Plains Shop Unlock")
 ]
 
@@ -87,5 +87,8 @@ Zeakden.connections = [
 
 Zeakden.locations = [
     FFTLocation("Fort Zeakden Story Battle"),
-    FFTLocation("Fort Zeakden Shop Unlock")
+    FFTLocation("Fort Zeakden Shop Unlock"),
+    FFTLocation("Recruit Rad"),
+    FFTLocation("Recruit Alicia"),
+    FFTLocation("Recruit Lavian")
 ]

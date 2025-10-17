@@ -90,7 +90,8 @@ character_recruit_locations = [
     "Recruit Beowulf",
     "Recruit Worker 8",
     "Recruit Agrias",
-    "Recruit Reis",
+    "Recruit Reis (Dragon)",
+    "Recruit Reis (Human)",
     "Recruit Cloud",
     "Recruit Orlandu",
     "Recruit Meliadoul",
@@ -114,7 +115,13 @@ sidequest_battle_locations = [
     "BRIDGE Sidequest Battle",
     "VOYAGE Sidequest Battle",
     "HORROR Sidequest Battle",
-    "END Sidequest Battle"
+    "END Sidequest Battle",
+    "Recruit Beowulf",
+    "Recruit Worker 8",
+    "Recruit Reis (Dragon)",
+    "Recruit Reis (Human)",
+    "Recruit Cloud",
+    "Recruit Byblos"
 ]
 
 rare_battle_locations = [
@@ -177,7 +184,7 @@ shop_unlock_locations = [
     "Bariaus Valley Shop Unlock",
     "Bethla Garrison Shop Unlock",
     "Limberry Castle Shop Unlock",
-    "Orbonne Monastery Shop Unlock",
+    "Orbonne Monastery Shop Unlock"
 ]
 
 default_murond_fights = [
