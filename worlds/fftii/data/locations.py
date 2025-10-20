@@ -1,4 +1,5 @@
 from .logic.FFTRegion import FFTRegion
+from .logic.Monsters import monster_locations
 from .logic.regions.Fovoham import fovoham_regions
 from .logic.regions.Gallione import gallione_regions
 from .logic.regions.Jobs import jobs_regions
@@ -172,7 +173,7 @@ job_unlock_locations = [
 
 shop_unlock_locations = [
     "Mandalia Plains Shop Unlock",
-    "Thieves' Fort Shop Unlock",
+    "Lenalia Plateau Shop Unlock",
     "Fort Zeakden Shop Unlock",
     "Yardow Fort City Shop Unlock",
     "Riovanes Castle Shop Unlock",
@@ -192,3 +193,5 @@ default_murond_fights = [
     "Lost Sacred Precincts Story Battle",
     "Graveyard of Airships 1 Story Battle"
 ]
+
+monster_location_names = [f"Poach {monster.monster_name.value}" for monster in monster_locations]

@@ -97,6 +97,8 @@ gear_item_names = [
 for index, item_name in enumerate(gear_item_names, start=1):
     all_item_data.append(ItemData(item_name, index))
 
+item_data_lookup = {item.name: item for item in all_item_data}
+
 zodiac_stone_names = [
     "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
     "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces", "Serpentarius",
@@ -142,6 +144,16 @@ rare_item_names = [
     "Cursed Ring", "Vanish Mantle", "Chantage", "Cherche", "Salty Rage", "Setiemson"
 ]
 
+gil_item_names = [
+    "Pile of Gil", "Sack of Gil", "Chest of Gil"
+]
+
+gil_item_sizes = [
+    {"Pile of Gil": 250, "Sack of Gil": 2500, "Chest of Gil": 5000},
+    {"Pile of Gil": 500, "Sack of Gil": 5000, "Chest of Gil": 10000},
+    {"Pile of Gil": 1000, "Sack of Gil": 10000, "Chest of Gil": 20000}
+]
+
 all_item_names = [
-    *major_item_names, *special_character_names, *job_names, *rare_item_names, *gear_item_names
+    *major_item_names, *special_character_names, *job_names, *rare_item_names, *gear_item_names, *gil_item_names
 ]

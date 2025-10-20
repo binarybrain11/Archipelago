@@ -4,12 +4,13 @@ from ..FFTLocation import FFTLocation
 
 from ..regions.Fovoham import *
 from ..regions.Gallione import Zeakden, Lenalia
-from ..regions.Lesalia import Lesalia, Doguola, BerveniaVolcano
+from ..regions.Lesalia import Lesalia, BerveniaVolcano
+from ..regions.Zeltennia import Doguola
 
 Grog.connections = [
     Connection(Yardow),
     Connection(Lesalia, [HasLesaliaPass]),
-    Connection(Doguola, [HasLesaliaPass])
+    Connection(Doguola, [HasZeltenniaPass])
 ]
 
 Grog.locations = [

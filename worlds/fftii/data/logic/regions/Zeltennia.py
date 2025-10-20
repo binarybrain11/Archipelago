@@ -19,6 +19,10 @@ class Zarghidas(FFTRegion):
 class Germinas(FFTRegion):
     name = "Germinas"
 
+class Doguola(FFTRegion):
+    name = "Doguola"
+
+
 zeltennia_regions = [
-    BerveniaCity, Finath, Zeltennia, Nelveska, Zarghidas, Germinas
+    BerveniaCity, Finath, Zeltennia, Nelveska, Zarghidas, Germinas, Doguola
 ]

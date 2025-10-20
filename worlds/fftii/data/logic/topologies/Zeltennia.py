@@ -2,8 +2,9 @@ from ..Connection import Connection
 from ..Requirements import *
 from ..FFTLocation import FFTLocation
 
+
 from ..regions.Zeltennia import *
-from ..regions.Lesalia import Doguola
+from ..regions.Fovoham import Grog
 from ..regions.Limberry import Bed, Poeskas
 
 BerveniaCity.connections = [
@@ -63,4 +64,14 @@ Nelveska.connections = [
 Nelveska.locations = [
     FFTLocation("Nelveska Temple Sidequest Battle"),
     FFTLocation("Recruit Reis (Human)")
+]
+
+Doguola.connections = [
+    Connection(Grog),
+    Connection(BerveniaCity)
+]
+
+Doguola.locations = [
+    FFTLocation("Doguola Pass Story Battle"),
+    FFTLocation("Doguola Pass Rare Battle")
 ]

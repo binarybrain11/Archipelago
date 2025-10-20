@@ -2,6 +2,7 @@ from copy import copy
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
+from .data.logic.Monsters import RegionAccessRequirement
 from .data.logic.Requirement import Requirement
 from .Items import valid_item_names
 
@@ -10,8 +11,6 @@ if TYPE_CHECKING:
 
 class LogicObject:
     requirements: list[list[str]] = []
-    energy_tanks: list[int] = []
-    calculated_energy_tanks: int = 0
     player: int
     options: "FinalFantasyTacticsIIOptions"
 
@@ -105,3 +104,30 @@ def unpack_requirement(
     else:
         if debug:
             print(f"Requirement {requirement.name} disabled due to options.")
+
+
+battle_levels = [0, 0, 2, 4, 6, 10]
+
+class PoachLogicObject:
+    requirements: list[RegionAccessRequirement] = []
+    player: int
+    options: "FinalFantasyTacticsIIOptions"
+
+    def __init__(self, player: int, options: "FinalFantasyTacticsIIOptions"):
+        self.player = player
+        self.options = options
+
+    def poach_logic_rule(self, state: CollectionState) -> bool:
+        expression = None
+        for requirement in self.requirements:
+            region_list = requirement.access_regions
+            battle_level = requirement.battle_level
+            region_expression = True
+            for region in region_list:
+                region_expression = region_expression and state.can_reach_region(region.name, self.player)
+            battle_level_expression = state.has("Progressive Shop Level", self.player, battle_levels[battle_level])
+            if expression is None:
+                expression = region_expression and battle_level_expression
+            else:
+                expression = expression or (region_expression and battle_level_expression)
+        return expression and state.has("Thief", self.player)

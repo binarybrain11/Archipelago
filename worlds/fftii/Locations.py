@@ -1,7 +1,7 @@
 from BaseClasses import Location
 from .data.logic.Requirement import Requirement
 from .data.logic import topologies
-from .data.locations import all_regions
+from .data.locations import all_regions, monster_location_names
 
 
 class FinalFantasyTacticsIILocation(Location):
@@ -30,3 +30,11 @@ for region in all_regions:
         location_data.requirements = location.requirements
         all_locations.append(location_data)
         id += 1
+
+all_monster_locations = []
+
+for monster in monster_location_names:
+    location_data = LocationData(monster, id)
+    all_locations.append(location_data)
+    all_monster_locations.append(location_data)
+    id += 1

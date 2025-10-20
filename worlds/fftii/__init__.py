@@ -15,7 +15,7 @@ from worlds.generic.Rules import add_rule
 
 from .Items import item_table
 from .Locations import all_locations, FinalFantasyTacticsIILocation
-from .Logic import create_logic_rule, create_logic_rule_for_list, LogicObject
+from .Logic import create_logic_rule, create_logic_rule_for_list, LogicObject, PoachLogicObject
 from .Options import FinalFantasyTacticsIIOptions, fftii_option_groups
 from .Rom import FinalFantasyTacticsIIProcedurePatch
 from .Client import FinalFantasyTacticsIvaliceIslandClient
@@ -24,7 +24,8 @@ from .data.items import zodiac_stone_names, world_map_pass_names, job_names, sho
     special_character_names, ramza_job_levels, rare_item_names
 from .data.locations import all_regions, world_map_regions, story_battle_locations, character_recruit_locations, \
     sidequest_battle_locations, job_unlock_locations, rare_battle_locations, default_murond_fights, \
-    shop_unlock_locations
+    shop_unlock_locations, monster_location_names
+from .data.logic.Monsters import monster_locations_lookup, monster_family_lookup, monster_families
 from .data.logic.regions.Fovoham import fovoham_regions
 from .data.logic.regions.Gallione import gallione_regions
 from .data.logic.regions.Jobs import jobs_regions
@@ -37,14 +38,13 @@ from .data.logic.regions.Zeltennia import zeltennia_regions
 
 class FinalFantasyTacticsIISettings(settings.Group):
     class RomFile(settings.UserFilePath):
-        """File name of the Metroid Fusion ROM"""
-        description = "Metroid Fusion (USA) ROM File"
-        copy_to = "Metroid Fusion (USA).gba"
-        md5s = ["af5040fc0f579800151ee2a683e2e5b5"]
+        """File name of the Final Fantasy Tactics ISO"""
+        description = "Final Fantasy Tactics ISO File"
+        copy_to = "Final Fantasy Tactics (USA).bin"
+        md5s = ["b156ba386436d20fd5ed8d37bab6b624"]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
     rom_start: bool = True
-    display_location_found_messages: bool = True
 
 
 class FinalFantasyTacticsIIWeb(WebWorld):
@@ -88,7 +88,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
     murond_fights: list[str]
 
     version = 1
-    debug = True
+    debug = False
     topology_present = debug
 
 
@@ -123,6 +123,8 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
             self.included_locations.extend(job_unlock_locations)
         if self.options.rare_battles_in_location_pool:
             self.included_locations.extend(rare_battle_locations)
+        if self.options.poaches_in_location_pool:
+            self.included_locations.extend(monster_location_names)
         self.murond_fights.extend(default_murond_fights)
 
     def create_regions(self):
@@ -189,6 +191,16 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
                 origin_region.locations.append(new_location)
         for region in jobs_regions:
             menu.connect(self.get_region(region.name))
+
+        poach_region = Region("Poaching", self.player, self.multiworld)
+        self.multiworld.regions.append(poach_region)
+        menu.connect(poach_region)
+        if self.options.poaches_in_location_pool:
+            for poach_location in monster_location_names:
+                new_location = FinalFantasyTacticsIILocation(
+                    self.player, poach_location, self.location_name_to_id[poach_location], poach_region
+                )
+                poach_region.locations.append(new_location)
         victory_location = self.get_location("Graveyard of Airships 2 Story Battle")
         victory_location.place_locked_item(self.create_item("Farlem"))
 
@@ -249,13 +261,31 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         for location in all_locations:
             if location.name not in self.included_locations:
                 continue
+
             ap_location = self.get_location(location.name)
-            logic_object = LogicObject(self.player, self.options)
-            if self.debug:
-                print(f"\n{location.name} requirements:")
-            logic_object.requirements = create_logic_rule_for_list(
-                location.requirements, self.options, self.debug)
-            add_rule(ap_location, logic_object.logic_rule)
+            if location.name in monster_location_names:
+                monster_object = monster_locations_lookup[location.name[6:]]
+                monster_family_name = monster_family_lookup[monster_object.monster_name]
+                monster_family = [
+                    monster_locations_lookup[monster_name.value] for monster_name in monster_families[monster_family_name]
+                ]
+                poach_logic_object = PoachLogicObject(self.player, self.options)
+                poach_logic_object.requirements = monster_object.compiled_requirements
+                breed_logic_object = PoachLogicObject(self.player, self.options)
+                breed_logic_object.requirements = []
+                for monster in monster_family:
+                    breed_logic_object.requirements.extend(monster.compiled_requirements)
+                add_rule(
+                    ap_location,
+                    lambda state: poach_logic_object.poach_logic_rule(state) or
+                                  (breed_logic_object.poach_logic_rule(state) and state.has("Mediator", self.player)))
+            else:
+                logic_object = LogicObject(self.player, self.options)
+                if self.debug:
+                    print(f"\n{location.name} requirements:")
+                logic_object.requirements = create_logic_rule_for_list(
+                    location.requirements, self.options, self.debug)
+                add_rule(ap_location, logic_object.logic_rule)
 
         zodiac_stones_required = self.options.zodiac_stones_required.value
 
@@ -272,8 +302,9 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         pass
 
     def generate_output(self, output_directory: str) -> None:
-        pass
-        # patch_dict = dict()
+        patch_dict: dict[str, Any] = dict()
+        # Hash of the MW seed to associate with save file
+        patch_dict["SeedHash"] = self.multiworld.seed % 0x7FFF
         # patch_dict["SeedHash"] = str(self.multiworld.seed)[:8]
         # patch_dict["Locations"] = {"MajorLocations": [], "MinorLocations": []}
         #
@@ -292,24 +323,24 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         # patch_dict["SectorShortcuts"] = self.build_sector_connections()
         # patch_dict["ElevatorConnections"] = self.build_elevator_connections()
         #
-        # rom_name_text = f'MFU{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}'
-        # rom_name_text = rom_name_text[:20]
-        # rom_name = bytearray(rom_name_text, 'utf-8')
-        # rom_name.extend([0] * (20 - len(rom_name)))
-        # patch_dict["RomName"] = f'MFU{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}'
-        # patch_dict["OutputFile"] = f'{self.multiworld.get_out_file_name_base(self.player)}' + '.gba'
-        #
+        rom_name_text = f'FFTII{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:9}'
+        rom_name_text = rom_name_text[:20]
+        rom_name = bytearray(rom_name_text, 'utf-8')
+        rom_name.extend([0] * (20 - len(rom_name)))
+        patch_dict["RomName"] = f'FFTII{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:9}'
+        patch_dict["OutputFile"] = f'{self.multiworld.get_out_file_name_base(self.player)}'
+
         # # Our actual patch is just a set of instructions and data for MARS to use.
-        # patch = MetroidFusionProcedurePatch(player=self.player, player_name=self.player_name)
-        # patch.write_file("patch_file.json", json.dumps(patch_dict).encode("UTF-8"))
-        # rom_path = os.path.join(
-        #     output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}" f"{patch.patch_file_ending}"
-        # )
-        # patch.write(rom_path)
+        patch = FinalFantasyTacticsIIProcedurePatch(player=self.player, player_name=self.player_name)
+        patch.write_file("patch_file.json", json.dumps(patch_dict).encode("UTF-8"))
+        rom_path = os.path.join(
+            output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}" f"{patch.patch_file_ending}"
+        )
+        patch.write(rom_path)
 
     def modify_multidata(self, multidata: dict):
         import base64
-        rom_name_text = f'MFU{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}'
+        rom_name_text = f'FFTII{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:9}'
         rom_name_text = rom_name_text[:20]
         rom_name = bytearray(rom_name_text, 'utf-8')
         rom_name.extend([0] * (20 - len(rom_name)))
@@ -322,7 +353,8 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         return self.random.choice(self.filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        pass
+        return self.options.as_dict("gil_item_size")
+
 
 
 class FinalFantasyTacticsIIItem(Item):

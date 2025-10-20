@@ -1,6 +1,7 @@
 from .Connection import Connection
 from .FFTLocation import FFTLocation
 
+
 class FFTRegion:
     name: str
     connections: list[Connection] = []

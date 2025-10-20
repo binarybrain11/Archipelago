@@ -19,9 +19,6 @@ class Lesalia(FFTRegion):
 class Goland(FFTRegion):
     name = "Goland"
 
-class Doguola(FFTRegion):
-    name = "Doguola"
-
 lesalia_regions = [
-    Araguay, Zirekile, Zeklaus, BerveniaVolcano, Lesalia, Goland, Doguola
+    Araguay, Zirekile, Zeklaus, BerveniaVolcano, Lesalia, Goland
 ]

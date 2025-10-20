@@ -31,9 +31,20 @@ class RareBattlesInLocationPool(Toggle):
     """Are the rare battles for each battleground in the location pool?"""
     display_name = "Rare Battles in Location Pool"
 
+class PoachesInLocationPool(Toggle):
+    """Are poaches in the location pool? WARNING: Can be grindy and RNG-heavy."""
+    display_name = "Poaches in Location Pool"
+
 class JobUnlocksInItemPool(DefaultOnToggle):
     """Are job unlocks part of the pool of items? If disabled, jobs are unlocked normally."""
     display_name = "Job Unlocks in Item Pool"
+
+class GilItemSize(Choice):
+    """Adjusts the value of filler gil items in the pool. Normal is 1000/5000/10000. Frugal halves that, expensive doubles."""
+    option_frugal = 0
+    option_normal = 1
+    option_expensive = 2
+    default = 1
 
 class StartingRegion(Choice):
     """What region to start in. Gallione is easiest, followed by Lesalia and Lionel. Fovoham, Zeltennia, and Limberry
@@ -58,7 +69,9 @@ class FinalFantasyTacticsIIOptions(PerGameCommonOptions):
     sidequest_battles_in_location_pool: SidequestBattlesInLocationPool
     job_unlocks_in_location_pool: JobUnlocksInLocationPool
     rare_battles_in_location_pool: RareBattlesInLocationPool
+    poaches_in_location_pool: PoachesInLocationPool
     job_unlocks_in_item_pool: JobUnlocksInItemPool
+    gil_item_size: GilItemSize
     start_inventory_from_pool: StartInventoryPool
 
 fftii_option_groups = [
@@ -68,6 +81,7 @@ fftii_option_groups = [
         SidequestBattlesInLocationPool,
         JobUnlocksInLocationPool,
         RareBattlesInLocationPool,
-        JobUnlocksInItemPool
+        JobUnlocksInItemPool,
+        GilItemSize
     ])
 ]

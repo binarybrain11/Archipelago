@@ -1,4 +1,5 @@
 from ..Connection import Connection
+from ..Monsters import MonsterNames
 from ..Requirements import *
 from ..FFTLocation import FFTLocation
 
@@ -28,6 +29,14 @@ Mandalia.locations = [
     FFTLocation("Mandalia Plains Story Battle"),
     FFTLocation("Mandalia Plains Rare Battle"),
     FFTLocation("Mandalia Plains Shop Unlock")
+]
+
+Mandalia.battle_1_monsters = [
+
+]
+
+Mandalia.rare_battle_monsters = [
+    MonsterNames.DRAGON, MonsterNames.BLUE_DRAGON, MonsterNames.RED_DRAGON
 ]
 
 Igros.connections = [
@@ -66,8 +75,7 @@ ThievesFort.connections = [
 ]
 
 ThievesFort.locations = [
-    FFTLocation("Thieves' Fort Story Battle"),
-    FFTLocation("Thieves' Fort Shop Unlock")
+    FFTLocation("Thieves' Fort Story Battle")
 ]
 
 Lenalia.connections = [
@@ -77,7 +85,9 @@ Lenalia.connections = [
 
 Lenalia.locations = [
     FFTLocation("Lenalia Plateau Story Battle"),
-    FFTLocation("Lenalia Plateau Rare Battle")
+    FFTLocation("Lenalia Plateau Rare Battle"),
+    FFTLocation("Lenalia Plateau Shop Unlock")
+
 ]
 
 Zeakden.connections = [

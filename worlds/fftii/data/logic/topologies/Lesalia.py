@@ -77,12 +77,3 @@ Lesalia.locations = [
     FFTLocation("Back Gate of Lesalia Castle Story Battle"),
     FFTLocation("Lesalia Imperial Capital Shop Unlock")
 ]
-
-Doguola.connections = [
-    Connection(Grog)
-]
-
-Doguola.locations = [
-    FFTLocation("Doguola Pass Story Battle"),
-    FFTLocation("Doguola Pass Rare Battle")
-]

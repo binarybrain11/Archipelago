@@ -1,4 +1,5 @@
 from ..Connection import Connection
+from ..Monsters import MonsterNames
 from ..Requirements import *
 from ..FFTLocation import FFTLocation
 
