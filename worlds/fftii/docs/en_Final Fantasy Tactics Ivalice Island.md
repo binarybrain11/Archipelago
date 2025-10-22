@@ -27,6 +27,7 @@ config file.
 - Ramza's unique Squire job chapter upgrades
 - All gear and consumable items
 - Items containing an amount of gil added straight to your War Funds.
+- Items containing an amount of JP added straight to every characer's jobs.
 - Optionally, enabling jobs besides Squire for your team can be in the item pool.
 
 ### Locations
@@ -47,7 +48,12 @@ Items do not have a unique appearance in Final Fantasy Tactics Ivalice Island. I
 will be displayed in text in a custom event. Other items (job unlock rewards and poach rewards) will be shown 
 in the client.
 
-## Where can the Zodiac Stones be on Vanilla Stones?
+## What Quality of Life options have been added?
+
+- JP Boon items have been added, adding JP to your character's jobs to make acquiring abilities easier
+- JP gains have been multiplied across the board (configurable with an option) to make unlocking new jobs easier.
+
+## Where can the Zodiac Stones be on the Vanilla Stones setting?
 
 - Inside of Lionel Castle
 - Slums of Goug
@@ -62,7 +68,7 @@ in the client.
 - END (only when sidequests are enabled)
 
 Because in vanilla the Limberry Castle Cemetary gives out two stones (one from Zalera and one from Meliadoul),
-Inside Limberry Castle was chosen as a possible location for z Zodiac Stone to maintain some parity with vanilla.
+Inside Limberry Castle was chosen as a possible location for a Zodiac Stone to maintain some parity with vanilla.
 
 ## Can I play this single player?
 

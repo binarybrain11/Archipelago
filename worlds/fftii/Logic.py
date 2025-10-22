@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from worlds.fftii import FinalFantasyTacticsIIOptions
 
 battle_levels = [0, 0, 2, 4, 6, 10]
+battle_levels_poaching = [0, 0, 3, 11, 11, 11]
 
 class LogicObject:
     requirements: list[list[str]] = []
@@ -136,7 +137,7 @@ class PoachLogicObject:
             region_expression = True
             for region in region_list:
                 region_expression = region_expression and state.can_reach_region(region.name, self.player)
-            battle_level_expression = state.has("Progressive Shop Level", self.player, battle_levels[battle_level])
+            battle_level_expression = state.has("Progressive Shop Level", self.player, battle_levels_poaching[battle_level])
             if expression is None:
                 expression = region_expression and battle_level_expression
             else:

@@ -103,9 +103,16 @@ class StartingRegion(Choice):
     option_limberry = 5
     default = 0
 
-class CharactersJoinWithEquipment(DefaultOnToggle):
+class CharactersJoinWithEquipment(Toggle):
     """Do characters come with their vanilla equipment?"""
     display_name = "Characters Join with Equipment"
+
+class JPGainMultiplier(Choice):
+    """Multiplier to in-battle JP gains."""
+    option_normal = 0
+    option_double = 1
+    option_triple = 2
+    default = 1
 
 @dataclass
 class FinalFantasyTacticsIIOptions(PerGameCommonOptions):
@@ -122,6 +129,8 @@ class FinalFantasyTacticsIIOptions(PerGameCommonOptions):
     jp_boon_item_weight: JPBoonItemWeight
     gil_item_size: GilItemSize
     jp_boon_size: JPBoonSize
+    characters_join_with_equipment: CharactersJoinWithEquipment
+    jp_gain_multiplier: JPGainMultiplier
     start_inventory_from_pool: StartInventoryPool
 
 fftii_option_groups = [
@@ -141,5 +150,9 @@ fftii_option_groups = [
         JPBoonItemWeight,
         GilItemSize,
         JPBoonSize
+    ]),
+    OptionGroup("QOL Options", [
+        CharactersJoinWithEquipment,
+        JPGainMultiplier
     ])
 ]
