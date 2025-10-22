@@ -13,7 +13,7 @@ Bed.connections = [
 ]
 
 Bed.locations = [
-    FFTLocation("Bed Desert Story Battle"),
+    FFTLocation("Bed Desert Story Battle", battle_level=4),
     FFTLocation("Bed Desert Rare Battle")
 ]
 
@@ -24,11 +24,11 @@ Bethla.connections = [
 ]
 
 Bethla.locations = [
-    FFTLocation("Bethla Garrison North Wall Story Battle"),
-    FFTLocation("Bethla Garrison South Wall Story Battle"),
-    FFTLocation("Bethla Garrison Sluice Story Battle"),
-    FFTLocation("Recruit Orlandu"),
-    FFTLocation("Bethla Garrison Shop Unlock")
+    FFTLocation("Bethla Garrison North Wall Story Battle", battle_level=4),
+    FFTLocation("Bethla Garrison South Wall Story Battle", battle_level=4),
+    FFTLocation("Bethla Garrison Sluice Story Battle", battle_level=4),
+    FFTLocation("Recruit Orlandu", battle_level=4),
+    FFTLocation("Bethla Garrison Shop Unlock", battle_level=4)
 ]
 
 Dolbodar.connections = [
@@ -46,11 +46,11 @@ Limberry.connections = [
 ]
 
 Limberry.locations = [
-    FFTLocation("Limberry Castle Gates Story Battle"),
-    FFTLocation("Inside Limberry Castle Story Battle"),
-    FFTLocation("Limberry Castle Cemetary Story Battle"),
-    FFTLocation("Recruit Meliadoul"),
-    FFTLocation("Limberry Castle Shop Unlock")
+    FFTLocation("Limberry Castle Gates Story Battle", battle_level=5),
+    FFTLocation("Inside Limberry Castle Story Battle", battle_level=5),
+    FFTLocation("Limberry Castle Cemetary Story Battle", battle_level=5),
+    FFTLocation("Recruit Meliadoul", battle_level=5),
+    FFTLocation("Limberry Castle Shop Unlock", battle_level=5)
 ]
 
 Poeskas.connections = [
@@ -59,6 +59,6 @@ Poeskas.connections = [
 ]
 
 Poeskas.locations = [
-    FFTLocation("Poeskas Lake Story Battle"),
+    FFTLocation("Poeskas Lake Story Battle", battle_level=5),
     FFTLocation("Poeskas Lake Rare Battle")
 ]

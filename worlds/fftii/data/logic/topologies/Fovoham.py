@@ -14,7 +14,7 @@ Grog.connections = [
 ]
 
 Grog.locations = [
-    FFTLocation("Grog Hill Story Battle"),
+    FFTLocation("Grog Hill Story Battle", battle_level=3),
     FFTLocation("Grog Hill Rare Battle")
 ]
 
@@ -24,7 +24,7 @@ Yardow.connections = [
 ]
 
 Yardow.locations = [
-    FFTLocation("Yardow Fort City Story Battle"),
+    FFTLocation("Yardow Fort City Story Battle", battle_level=3),
     FFTLocation("Yardow Fort City Shop Unlock")
 ]
 
@@ -34,7 +34,7 @@ Yuguo.connections = [
 ]
 
 Yuguo.locations = [
-    FFTLocation("Yuguo Woods Story Battle"),
+    FFTLocation("Yuguo Woods Story Battle", battle_level=3),
     FFTLocation("Yuguo Woods Rare Battle")
 ]
 
@@ -45,13 +45,13 @@ Riovanes.connections = [
 ]
 
 Riovanes.locations = [
-    FFTLocation("Gate of Riovanes Story Battle"),
-    FFTLocation("Inside Riovanes Castle Story Battle"),
-    FFTLocation("Roof of Riovanes Castle Story Battle"),
-    FFTLocation("Recruit Rafa"),
-    FFTLocation("Recruit Malak"),
-    FFTLocation("Riovanes Castle Shop Unlock"),
-    FFTLocation("Chapter 4 Ramzza Squire Job Unlock")
+    FFTLocation("Gate of Riovanes Story Battle", battle_level=3),
+    FFTLocation("Inside Riovanes Castle Story Battle", battle_level=3),
+    FFTLocation("Roof of Riovanes Castle Story Battle", battle_level=3),
+    FFTLocation("Recruit Rafa", battle_level=3),
+    FFTLocation("Recruit Malak", battle_level=3),
+    FFTLocation("Riovanes Castle Shop Unlock", battle_level=3),
+    FFTLocation("Chapter 4 Ramza Squire Job Unlock", battle_level=3)
 ]
 
 Fovoham.connections = [

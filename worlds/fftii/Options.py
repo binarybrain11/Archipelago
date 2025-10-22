@@ -19,31 +19,76 @@ class ZodiacStonesRequired(Range):
     range_end = 13
     default = 6
 
-class SidequestBattlesInLocationPool(DefaultOnToggle):
+class ZodiacStoneLocations(Choice):
+    """Where can Zodiac Stones appear?
+    Vanilla limits their possible locations to those events which had one in the vanilla game. Note that this limits
+    the number of stones in the pool to 11, with sidequests on, and 8 without.
+    Anywhere Local means stones can be at any location in your world.
+    Anywhere means stones can be anywhere in the multiworld."""
+    option_vanilla_stones = 0
+    option_anywhere_local = 1
+    option_anywhere = 2
+    default = 0
+
+class SidequestBattles(DefaultOnToggle):
     """Are sidequest battles (Colliery, Nelveska, Zarghidas, Deep Dungeon) in the pool of locations?"""
-    display_name = "Sidequest Battle in Location Pool"
+    display_name = "Sidequest Battles"
 
-class JobUnlocksInLocationPool(DefaultOnToggle):
-    """Are job unlocks part of the pool of locations?"""
-    display_name = "Job Unlocks in Location Pool"
+class JobUnlocks(DefaultOnToggle):
+    """Are job unlocks in the item and location pools?"""
+    display_name = "Job Unlocks"
 
-class RareBattlesInLocationPool(Toggle):
+class RareBattles(Toggle):
     """Are the rare battles for each battleground in the location pool?"""
-    display_name = "Rare Battles in Location Pool"
+    display_name = "Rare Battles"
 
-class PoachesInLocationPool(Toggle):
+class PoachLocations(Toggle):
     """Are poaches in the location pool? WARNING: Can be grindy and RNG-heavy."""
-    display_name = "Poaches in Location Pool"
+    display_name = "Poach Locations"
 
-class JobUnlocksInItemPool(DefaultOnToggle):
-    """Are job unlocks part of the pool of items? If disabled, jobs are unlocked normally."""
-    display_name = "Job Unlocks in Item Pool"
+class NormalItemWeight(Range):
+    """Weight of items normally sold in shops in the filler pool."""
+    display_name = "Normal Item Weight"
+    range_start = 0
+    range_end = 10
+    default = 3
+
+class RareItemWeight(Range):
+    """Weight of items not normally sold in shops in the filler pool."""
+    display_name = "Rare Item Weight"
+    range_start = 0
+    range_end = 10
+    default = 1
+
+class GilItemWeight(Range):
+    """Weight of gil award items in the filler pool."""
+    display_name = "Gil Item Weight"
+    range_start = 0
+    range_end = 10
+    default = 2
+
+class JPBoonItemWeight(Range):
+    """Weight of JP Boon items that award JP to the team in the filler pool"""
+    display_name = "JP Boon Item Weight"
+    range_start = 0
+    range_end = 10
+    default = 1
 
 class GilItemSize(Choice):
-    """Adjusts the value of filler gil items in the pool. Normal is 1000/5000/10000. Frugal halves that, expensive doubles."""
+    """Adjusts the value of filler gil items in the pool.
+    Normal is 1000/5000/10000. Frugal halves that, Expensive doubles."""
+    display_name = "Gil Item Size"
     option_frugal = 0
     option_normal = 1
-    option_expensive = 2
+    option_valuable = 2
+    default = 1
+
+class JPBoonSize(Choice):
+    """Adjusts the value of JP Boon items. Normal is 100/200/500 JP. Frugal halves that, Expensive doubles."""
+    display_name = "JP Boon Item Size"
+    option_frugal = 0
+    option_normal = 1
+    option_valuable = 2
     default = 1
 
 class StartingRegion(Choice):
@@ -66,22 +111,35 @@ class CharactersJoinWithEquipment(DefaultOnToggle):
 class FinalFantasyTacticsIIOptions(PerGameCommonOptions):
     zodiac_stones_in_pool: ZodiacStonesInPool
     zodiac_stones_required: ZodiacStonesRequired
-    sidequest_battles_in_location_pool: SidequestBattlesInLocationPool
-    job_unlocks_in_location_pool: JobUnlocksInLocationPool
-    rare_battles_in_location_pool: RareBattlesInLocationPool
-    poaches_in_location_pool: PoachesInLocationPool
-    job_unlocks_in_item_pool: JobUnlocksInItemPool
+    zodiac_stone_locations: ZodiacStoneLocations
+    sidequest_battles: SidequestBattles
+    job_unlocks: JobUnlocks
+    rare_battles: RareBattles
+    poach_locations: PoachLocations
+    normal_item_weight: NormalItemWeight
+    rare_item_weight: RareItemWeight
+    gil_item_weight: GilItemWeight
+    jp_boon_item_weight: JPBoonItemWeight
     gil_item_size: GilItemSize
+    jp_boon_size: JPBoonSize
     start_inventory_from_pool: StartInventoryPool
 
 fftii_option_groups = [
     OptionGroup("Main Options", [
         ZodiacStonesInPool,
         ZodiacStonesRequired,
-        SidequestBattlesInLocationPool,
-        JobUnlocksInLocationPool,
-        RareBattlesInLocationPool,
-        JobUnlocksInItemPool,
-        GilItemSize
+        ZodiacStoneLocations,
+        SidequestBattles,
+        JobUnlocks,
+        PoachLocations,
+        RareBattles,
+    ]),
+    OptionGroup("Filler Options", [
+        NormalItemWeight,
+        RareItemWeight,
+        GilItemWeight,
+        JPBoonItemWeight,
+        GilItemSize,
+        JPBoonSize
     ])
 ]

@@ -1,4 +1,4 @@
-# Setup Guide for Metroid Fusion Archipelago
+# Setup Guide for Final Fantasy Tactics Ivalice Island Archipelago
 
 ## Important
 
@@ -10,12 +10,7 @@ As we are using Bizhawk, this guide is only applicable to Windows and Linux syst
   - Detailed installation instructions for Bizhawk can be found at the above link.
   - Windows users must run the prerequisite installer first, which can also be found at the above link.
 - The built-in Bizhawk client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
-- A US copy of Mario & Luigi: Superstar Saga
-
-## Optional Software
-
-- [Poptracker](https://github.com/black-sliver/PopTracker/releases)
-  - [Metroid Fusion Autotracker](https://github.com/RunInAWeek/Metroid-Fusion-AP-Tracker/releases)
+- A US copy of Final Fantasy Tactics
 
 ## Configuring your YAML file
 
@@ -28,17 +23,18 @@ an experience customized for their taste, and different players in the same mult
 ### Where do I get a YAML file?
 
 You can customize your options by visiting the 
-[Metroid Fusion Options Page](/games/Metroid Fusion/player-options)
+[Final Fantasy Tactics Ivalice Island Options Page](/games/Final Fantasy Tactics Ivalice Island/player-options)
 
 ## Joining a MultiWorld Game
 
-### Obtain your GBA patch file
+### Obtain your PS1 patch file
 
 When you join a multiworld game, you will be asked to provide your YAML file to whoever is hosting. Once that is done,
 the host will provide you with either a link to download your data file, or with a zip file containing everyone's data
-files. Your data file should have a `.apmetfus` extension.
+files. Your data file should have a `.apfftii` extension.
 
-Double-click on your `.apmetfus` file to start your client and start the ROM patch process. Once the process is finished, the client and the emulator will be started automatically (if you associated the extension
+Double-click on your `.apfftii` file to start your client and start the ROM patch process. 
+Once the process is finished, the client and the emulator will be started automatically (if you associated the extension
 to the emulator as recommended).
 
 ### Connect to the Multiserver

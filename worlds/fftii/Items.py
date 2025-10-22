@@ -1,5 +1,5 @@
 from BaseClasses import ItemClassification
-from .data.items import all_item_names, major_item_names
+from .data.items import all_item_names, major_item_names, useful_item_names
 
 
 class ItemData:
@@ -20,6 +20,7 @@ item_table["Farlem"] = ItemData("Farlem", ItemClassification.progression, 1)
 
 for index, item in enumerate(all_item_names, start=2):
     classification = ItemClassification.progression if item in major_item_names else ItemClassification.filler
+    classification = ItemClassification.useful if item in useful_item_names else classification
     item_table[item] = ItemData(item, classification, index + 1)
 
 

@@ -9,17 +9,21 @@ from .Items import valid_item_names
 if TYPE_CHECKING:
     from worlds.fftii import FinalFantasyTacticsIIOptions
 
+battle_levels = [0, 0, 2, 4, 6, 10]
+
 class LogicObject:
     requirements: list[list[str]] = []
     player: int
     options: "FinalFantasyTacticsIIOptions"
+    battle_level: int
 
-    def __init__(self, player: int, options: "FinalFantasyTacticsIIOptions"):
+    def __init__(self, player: int, options: "FinalFantasyTacticsIIOptions", battle_level):
         self.player = player
         self.options = options
+        self.battle_level = battle_level
 
     def logic_rule(self, state: CollectionState) -> bool:
-        if len(self.requirements) == 0:
+        if len(self.requirements) == 0 and self.battle_level < 2:
             return True
         expression = None
         for requirement_list in self.requirements:
@@ -29,6 +33,16 @@ class LogicObject:
                 expression = state.has_all(requirement_list, self.player)
             else:
                 expression = expression or state.has_all(requirement_list, self.player)
+        if self.battle_level > 1:
+            if expression is None:
+                expression = state.has("Progressive Shop Level", self.player, battle_levels[self.battle_level])
+            else:
+                expression = expression and state.has(
+                    "Progressive Shop Unlock",
+                    self.player,
+                    battle_levels[self.battle_level])
+        if expression is None:
+            return True
         return expression
 
 def create_logic_rule_for_list(
@@ -104,9 +118,6 @@ def unpack_requirement(
     else:
         if debug:
             print(f"Requirement {requirement.name} disabled due to options.")
-
-
-battle_levels = [0, 0, 2, 4, 6, 10]
 
 class PoachLogicObject:
     requirements: list[RegionAccessRequirement] = []

@@ -144,8 +144,7 @@ rare_battle_locations = [
     "Germinas Peak Rare Battle",
     "Bed Desert Rare Battle",
     "Dolbodar Swamp Rare Battle",
-    "Poeskas Lake Rare Battle",
-    "Deep Dungeon Rare Battle"
+    "Poeskas Lake Rare Battle"
 ]
 
 job_unlock_locations = [
@@ -188,10 +187,33 @@ shop_unlock_locations = [
     "Orbonne Monastery Shop Unlock"
 ]
 
+ramza_job_unlock_locations = [
+    "Chapter 2 Ramza Squire Job Unlock", "Chapter 4 Ramza Squire Job Unlock"
+]
+
 default_murond_fights = [
     "Murond Death City Story Battle",
     "Lost Sacred Precincts Story Battle",
     "Graveyard of Airships 1 Story Battle"
+]
+
+story_zodiac_stone_locations = [
+    "Igros Castle Story Battle", # Capricorn
+    "Roof of Riovanes Castle Story Battle", # Pisces
+    "Inside Riovanes Castle Story Battle", # Aries
+    "Slums of Goug Story Battle", # Taurus
+    "Inside Limberry Castle Story Battle", # Gemini
+    # "Graveyard of Airships 1 Story Battle", # Leo
+    # "Graveyard of Airships 2 Story Battle", # Virgo
+    "Bethla Garrison Sluice Story Battle", # Libra
+    "Inside of Lionel Castle Story Battle", # Scorpio
+    "Limberry Castle Cemetary Story Battle", # Sagittarius
+]
+
+sidequest_zodiac_stone_locations = [
+    "Goland Underground Passage Sidequest Battle",
+    "Nelveska Temple Sidequest Battle",
+    "END Sidequest Battle",
 ]
 
 monster_location_names = [f"Poach {monster.monster_name.value}" for monster in monster_locations]

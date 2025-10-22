@@ -45,9 +45,9 @@ gear_item_names = [
 
     "Battle Dict", "Monster Dict", "Papyrus Plate", "Madlemgen",
 
-    "Javelin", "Spear", "Mythril Spear", "Partisan", "Oberisk", "Hole Lance", "Dragon Whisker", "Javelin 2",
+    "Javelin", "Spear", "Mythril Spear", "Partisan", "Oberisk", "Holy Lance", "Dragon Whisker", "Javelin 2",
 
-    "Cypress Rod", "Battle Bamboo", "Musk Rod", "Iron Gan", "Gokuu Rod", "Icory Rod", "Octagon Rod", "Whale Whisker",
+    "Cypress Rod", "Battle Bamboo", "Musk Rod", "Iron Gan", "Gokuu Rod", "Ivory Rod", "Octagon Rod", "Whale Whisker",
 
     "C Bag", "FS Bag", "P Bag", "H Bag",
 
@@ -57,7 +57,7 @@ gear_item_names = [
     
     "Escutcheon", "Buckler", "Bronze Shield", "Round Shield", "Mythril Shield", "Gold Shield", "Ice Shield",
     "Flame Shield", "Aegis Shield", "Diamond Shield", "Platina Shield", "Crustal Shield", "Genji Shield",
-    "Kaiser Plate", "Venetian Shield", "Escutcheon",
+    "Kaiser Plate", "Venetian Shield", "Escutcheon 2",
 
     "Leather Helmet", "Bronze Helmet", "Iron Helmet", "Barbuta", "Mythril Helmet", "Gold Helmet", "Cross Helmet",
     "Diamond Helmet", "Platina Helmet", "Circlet", "Crystal Helmet", "Genji Helmet", "Grand Helmet",
@@ -100,8 +100,8 @@ for index, item_name in enumerate(gear_item_names, start=1):
 item_data_lookup = {item.name: item for item in all_item_data}
 
 zodiac_stone_names = [
-    "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
-    "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces", "Serpentarius",
+    "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra",
+    "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces", "Serpentarius",
 ]
 
 world_map_pass_names = [
@@ -112,6 +112,8 @@ job_names = [
     "Squire", "Chemist", "Knight", "Archer", "Monk", "Thief", "Lancer", "Geomancer", "Samurai", "Ninja", "Dancer",
     "Priest", "Wizard", "Oracle", "Time Mage", "Mediator", "Summoner", "Calculator", "Bard", "Mime"
 ]
+
+earned_job_names = [job for job in job_names if job != "Squire"]
 
 shop_levels = []
 
@@ -139,7 +141,7 @@ rare_item_names = [
     "Mace of Zeus", "Sage Staff", "Scorpion Tail", "Stone Gun", "Blaze Gun", "Glacier Gun", "Blast Gun",
     "Ultimus Bow", "Yoichi Bow", "Perseus Bow", "Fairy Harp", "Madlemgen", "Holy Lance", "Dragon Whisker",
     "Javelin 2", "Ivory Rod", "Whale Whisker", "FS Bag", "Ryozan Silk", "Genji Shield", "Kaiser Plate",
-    "Venetian Shield", "Escutcheon 2", "Grand Helmet", "Genji Helemet", "Cachusha", "Barette", "Ribbon",
+    "Venetian Shield", "Escutcheon 2", "Grand Helmet", "Genji Helmet", "Cachusha", "Barette", "Ribbon",
     "Genji Armor", "Maximillian", "Secret Clothes", "Rubber Costume", "Robe of Lords", "Genji Gauntlet",
     "Cursed Ring", "Vanish Mantle", "Chantage", "Cherche", "Salty Rage", "Setiemson"
 ]
@@ -148,12 +150,42 @@ gil_item_names = [
     "Pile of Gil", "Sack of Gil", "Chest of Gil"
 ]
 
+gil_item_names_weighted = [
+    "Pile of Gil", "Pile of Gil", "Pile of Gil", "Sack of Gil", "Sack of Gil", "Chest of Gil"
+]
+
 gil_item_sizes = [
     {"Pile of Gil": 250, "Sack of Gil": 2500, "Chest of Gil": 5000},
     {"Pile of Gil": 500, "Sack of Gil": 5000, "Chest of Gil": 10000},
     {"Pile of Gil": 1000, "Sack of Gil": 10000, "Chest of Gil": 20000}
 ]
 
+jp_item_names = [
+    "Small JP Boon", "Medium JP Boon", "Large JP Boon"
+]
+
+jp_item_names_weighted = [
+    "Small JP Boon", "Small JP Boon", "Small JP Boon", "Medium JP Boon", "Medium JP Boon", "Large JP Boon"
+]
+
+jp_item_sizes = [
+    {"Small JP Boon": 50, "Medium JP Boon": 100, "Large JP Boon": 250},
+    {"Small JP Boon": 100, "Medium JP Boon": 200, "Large JP Boon": 500},
+    {"Small JP Boon": 200, "Medium JP Boon": 400, "Large JP Boon": 1000}
+]
+
+useful_item_names = [
+    *rare_item_names, *special_character_names, *jp_item_names
+]
+
+shop_item_names = [
+    item for item in gear_item_names if item not in useful_item_names
+]
+
+filler_item_names = [
+    *shop_item_names, *gil_item_names, *jp_item_names
+]
+
 all_item_names = [
-    *major_item_names, *special_character_names, *job_names, *rare_item_names, *gear_item_names, *gil_item_names
+    *major_item_names, *special_character_names, *job_names, *gear_item_names, *gil_item_names, *jp_item_names
 ]

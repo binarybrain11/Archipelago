@@ -14,7 +14,7 @@ BerveniaCity.connections = [
 ]
 
 BerveniaCity.locations = [
-    FFTLocation("Bervenia Free City Story Battle")
+    FFTLocation("Bervenia Free City Story Battle", battle_level=4)
 ]
 
 Finath.connections = [
@@ -23,8 +23,8 @@ Finath.connections = [
 ]
 
 Finath.locations = [
-    FFTLocation("Finath River Story Battle"),
-    FFTLocation("Finath River Rare Battle")
+    FFTLocation("Finath River Story Battle", battle_level=4),
+    FFTLocation("Finath River Rare Battle", battle_level=4)
 ]
 
 Zeltennia.connections = [
@@ -34,7 +34,7 @@ Zeltennia.connections = [
 ]
 
 Zeltennia.locations = [
-    FFTLocation("Zeltennia Castle Story Battle")
+    FFTLocation("Zeltennia Castle Story Battle", battle_level=4)
 ]
 
 Zarghidas.connections = [
@@ -43,8 +43,8 @@ Zarghidas.connections = [
 ]
 
 Zarghidas.locations = [
-    FFTLocation("Zarghidas Trade City Sidequest Battle"),
-    FFTLocation("Recruit Cloud")
+    FFTLocation("Zarghidas Trade City Sidequest Battle", battle_level=4),
+    FFTLocation("Recruit Cloud", battle_level=4)
 ]
 
 Germinas.connections = [
@@ -53,8 +53,8 @@ Germinas.connections = [
 ]
 
 Germinas.locations = [
-    FFTLocation("Germinas Peak Story Battle"),
-    FFTLocation("Germinas Peak Rare Battle")
+    FFTLocation("Germinas Peak Story Battle", battle_level=5),
+    FFTLocation("Germinas Peak Rare Battle", battle_level=5)
 ]
 
 Nelveska.connections = [
@@ -62,8 +62,8 @@ Nelveska.connections = [
 ]
 
 Nelveska.locations = [
-    FFTLocation("Nelveska Temple Sidequest Battle"),
-    FFTLocation("Recruit Reis (Human)")
+    FFTLocation("Nelveska Temple Sidequest Battle", battle_level=5),
+    FFTLocation("Recruit Reis (Human)", battle_level=5)
 ]
 
 Doguola.connections = [
@@ -72,6 +72,6 @@ Doguola.connections = [
 ]
 
 Doguola.locations = [
-    FFTLocation("Doguola Pass Story Battle"),
+    FFTLocation("Doguola Pass Story Battle", battle_level=3),
     FFTLocation("Doguola Pass Rare Battle")
 ]

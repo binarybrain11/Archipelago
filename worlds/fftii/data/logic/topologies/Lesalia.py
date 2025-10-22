@@ -14,8 +14,8 @@ Araguay.connections = [
 ]
 
 Araguay.locations = [
-    FFTLocation("Araguay Woods Story Battle"),
-    FFTLocation("Recruit Boco"),
+    FFTLocation("Araguay Woods Story Battle", battle_level=2),
+    FFTLocation("Recruit Boco", battle_level=2),
     FFTLocation("Araguay Woods Rare Battle")
 ]
 
@@ -47,9 +47,9 @@ Zirekile.connections = [
 ]
 
 Zirekile.locations = [
-    FFTLocation("Zirekile Falls Story Battle"),
+    FFTLocation("Zirekile Falls Story Battle", battle_level=2),
     FFTLocation("Zirekile Falls Rare Battle"),
-    FFTLocation("Zirekile Falls Shop Unlock")
+    FFTLocation("Zirekile Falls Shop Unlock", battle_level=2)
 ]
 
 Goland.connections = [
@@ -58,14 +58,14 @@ Goland.connections = [
 ]
 
 Goland.locations = [
-    FFTLocation("Goland Coal City Story Battle"),
-    FFTLocation("Goland Colliery Third Floor Sidequest Battle"),
-    FFTLocation("Goland Colliery Second Floor Sidequest Battle"),
-    FFTLocation("Goland Colliery First Floor Sidequest Battle"),
-    FFTLocation("Goland Underground Passage Sidequest Battle"),
-    FFTLocation("Recruit Beowulf"),
-    FFTLocation("Recruit Reis (Dragon)"),
-    FFTLocation("Recruit Worker 8")
+    FFTLocation("Goland Coal City Story Battle", battle_level=2),
+    FFTLocation("Goland Colliery Third Floor Sidequest Battle", battle_level=4),
+    FFTLocation("Goland Colliery Second Floor Sidequest Battle", battle_level=4),
+    FFTLocation("Goland Colliery First Floor Sidequest Battle", battle_level=4),
+    FFTLocation("Goland Underground Passage Sidequest Battle", battle_level=4),
+    FFTLocation("Recruit Beowulf", battle_level=4),
+    FFTLocation("Recruit Reis (Dragon)", battle_level=4),
+    FFTLocation("Recruit Worker 8", battle_level=4)
 ]
 
 Lesalia.connections = [
@@ -74,6 +74,6 @@ Lesalia.connections = [
 ]
 
 Lesalia.locations = [
-    FFTLocation("Back Gate of Lesalia Castle Story Battle"),
-    FFTLocation("Lesalia Imperial Capital Shop Unlock")
+    FFTLocation("Back Gate of Lesalia Castle Story Battle", battle_level=2),
+    FFTLocation("Lesalia Imperial Capital Shop Unlock", battle_level=2)
 ]

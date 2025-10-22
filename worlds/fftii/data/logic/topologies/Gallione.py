@@ -31,21 +31,13 @@ Mandalia.locations = [
     FFTLocation("Mandalia Plains Shop Unlock")
 ]
 
-Mandalia.battle_1_monsters = [
-
-]
-
-Mandalia.rare_battle_monsters = [
-    MonsterNames.DRAGON, MonsterNames.BLUE_DRAGON, MonsterNames.RED_DRAGON
-]
-
 Igros.connections = [
     Connection(Mandalia),
     Connection(Zeakden)
 ]
 
 Igros.locations = [
-    FFTLocation("Igros Castle Story Battle")
+    FFTLocation("Igros Castle Story Battle", battle_level=5)
 ]
 
 Sweegy.connections = [
@@ -67,7 +59,7 @@ Dorter.connections = [
 
 Dorter.locations = [
     FFTLocation("Dorter Slums Story Battle"),
-    FFTLocation("Dorter City Story Battle")
+    FFTLocation("Dorter City Story Battle", battle_level=2)
 ]
 
 ThievesFort.connections = [
@@ -98,7 +90,7 @@ Zeakden.connections = [
 Zeakden.locations = [
     FFTLocation("Fort Zeakden Story Battle"),
     FFTLocation("Fort Zeakden Shop Unlock"),
-    FFTLocation("Chapter 2 Ramzza Squire Job Unlock"),
+    FFTLocation("Chapter 2 Ramza Squire Job Unlock"),
     FFTLocation("Recruit Rad"),
     FFTLocation("Recruit Alicia"),
     FFTLocation("Recruit Lavian")

@@ -9,7 +9,9 @@ from settings import get_settings
 from worlds._bizhawk.client import BizHawkClient
 
 from .data import memory
-from .data.items import item_data_lookup, gear_item_names, gil_item_names, gil_item_sizes
+from .data.items import item_data_lookup, gear_item_names, gil_item_names, gil_item_sizes, zodiac_stone_names, \
+    jp_item_names, jp_item_sizes
+from .data.memory import stones_lookup
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -134,6 +136,16 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
                 if write_list_candidate is None:
                     return
                 write_list.extend(write_list_candidate)
+            elif current_item_name in zodiac_stone_names:
+                write_list_candidate = await self.write_zodiac_stones(ctx, current_item_name)
+                if write_list_candidate is None:
+                    return
+                write_list.append(write_list_candidate)
+            elif current_item_name in jp_item_names:
+                write_list_candidate = await self.write_jp_items(ctx, current_item_name)
+                if write_list_candidate is None:
+                    return
+                write_list.extend(write_list_candidate)
             items_received_count += 1
             write_list.append((memory.items_received_low, [items_received_count % 256], self.ram))
             write_list.append((memory.items_received_high, [items_received_count // 256], self.ram))
@@ -170,12 +182,11 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
         new_shop_progression = min(15, current_shop_data + 1)
         return (memory.shop_progression_address, [new_shop_progression], self.ram)
 
-    async def write_gil_item(self, ctx: "BizHawkClientContext", gil_item) -> list[tuple[int, list[int], str]] | None:
+    async def write_gil_item(self, ctx: "BizHawkClientContext", gil_item: str) -> list[tuple[int, list[int], str]] | None:
         current_gil_data = await self.read_ram_values_guarded(ctx, memory.war_funds_address, memory.war_funds_length)
         if current_gil_data is None:
             return None
         current_gil = int.from_bytes(current_gil_data, "little")
-        slot_data = ctx.slot_data
         gil_item_size = int(ctx.slot_data["gil_item_size"])
         gil_quantity = gil_item_sizes[gil_item_size][gil_item]
         new_gil = min(99999999, current_gil + gil_quantity)
@@ -185,6 +196,39 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
             (memory.war_funds_address + 2, [new_gil // (2**16) % 256], self.ram),
             (memory.war_funds_address + 3, [new_gil // (2**24)], self.ram),
         ]
+
+    async def write_jp_items(self, ctx: "BizHawkClientContext", jp_item: str) -> list[tuple[int, list[int], str]] | None:
+        jp_item_size = int(ctx.slot_data["jp_boon_size"])
+        return_list: list[tuple[int, list[int], str]] = []
+        jp_quantity = jp_item_sizes[jp_item_size][jp_item]
+        for i in range(memory.unit_count):
+            base_address = memory.unit_stats_address + (i * memory.unit_stat_size)
+            party_id_location = base_address + memory.party_id_offset
+            unit_party_id_data = await self.read_ram_value_guarded(ctx, party_id_location)
+            if unit_party_id_data is None:
+                return None
+            if unit_party_id_data == 0xFF:
+                continue
+            for j in range(memory.job_amount):
+                jp_address = base_address + memory.jp_offset + (j * 2)
+                jp_data = await self.read_ram_values_guarded(ctx, jp_address, 2)
+                if jp_data is None:
+                    return None
+                current_jp = int.from_bytes(jp_data, "little")
+                new_jp = min(current_jp + jp_quantity, 9999)
+                new_jp_lower_byte = new_jp % 256
+                new_jp_upper_byte = new_jp // 256
+                return_list.append((jp_address, [new_jp_lower_byte], self.ram))
+                return_list.append((jp_address + 1, [new_jp_upper_byte], self.ram))
+        return return_list
+
+    async def write_zodiac_stones(self, ctx: "BizHawkClientContext", stone_name: str) -> tuple[int, list[int], str] | None:
+        address, bit = stones_lookup[stone_name]
+        current_stone_data = await self.read_ram_value_guarded(ctx, address)
+        if current_stone_data is None:
+            return None
+        new_stone_data = current_stone_data | get_bit_value_from_position(bit)
+        return (address, [new_stone_data], self.ram)
 
     async def read_ram_values_guarded(self, ctx: "BizHawkClientContext", location: int, size: int):
         value = await bizhawk.guarded_read(ctx.bizhawk_ctx, [(location, size, self.ram)], guard_list)
