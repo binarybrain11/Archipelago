@@ -302,13 +302,13 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
 
         # Place Zodiac Stones if stones are in vanilla spots. Otherwise, add them to itempool.
         if self.options.zodiac_stone_locations == self.options.zodiac_stone_locations.option_vanilla_stones:
-            stone_locations = story_zodiac_stone_locations
+            stone_locations = story_zodiac_stone_locations.copy()
             if self.options.sidequest_battles:
-                stone_locations.extend(sidequest_zodiac_stone_locations)
-            stone_locations = self.random.sample(stone_locations, k=zodiac_stones_in_pool)
+                stone_locations.extend(sidequest_zodiac_stone_locations.copy())
+            stone_locations_pruned = self.random.sample(stone_locations, k=zodiac_stones_in_pool)
             self.random.shuffle(stone_locations)
             for stone in zodiac_stones_in_game:
-                self.get_location(stone_locations.pop()).place_locked_item(self.create_item(stone))
+                self.get_location(stone_locations_pruned.pop()).place_locked_item(self.create_item(stone))
         else:
             major_items.extend(zodiac_stones_in_game)
 
