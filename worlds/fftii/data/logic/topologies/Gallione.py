@@ -16,7 +16,7 @@ Gariland.connections = [
 ]
 
 Gariland.locations = [
-    FFTLocation("Garliand Magic City Story Battle")
+    FFTLocation("Gariland Magic City Story Battle")
 ]
 
 Mandalia.connections = [

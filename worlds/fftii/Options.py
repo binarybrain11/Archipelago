@@ -25,6 +25,7 @@ class ZodiacStoneLocations(Choice):
     the number of stones in the pool to 11, with sidequests on, and 8 without.
     Anywhere Local means stones can be at any location in your world.
     Anywhere means stones can be anywhere in the multiworld."""
+    display_name = "Zodiac Stone Locations"
     option_vanilla_stones = 0
     option_anywhere_local = 1
     option_anywhere = 2

@@ -442,7 +442,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         return self.random.choice(self.filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        return self.options.as_dict("gil_item_size", "jp_boon_size")
+        return self.options.as_dict("gil_item_size", "jp_boon_size", "sidequest_battles")
 
 
 class FinalFantasyTacticsIIItem(Item):

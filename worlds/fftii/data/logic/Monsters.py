@@ -4,7 +4,6 @@ from worlds.fftii.data.logic.FFTRegion import FFTRegion
 from worlds.fftii.data.logic.regions import Mandalia, Grog, Zirekile, BariausHill, Finath, Dolbodar, Fovoham, Bethla, \
     Zaland, BerveniaVolcano, Riovanes, Lenalia, Lesalia, Araguay, BariausValley, Sweegy, Yuguo, Bed, BerveniaCity, \
     Germinas, Zeklaus, Doguola, Poeskas, Zigolis, Dorter, Goug, Zeakden, Nelveska
-from worlds.stardew_valley.data.monster_data import skeleton
 
 
 class MonsterNames(Enum):
@@ -42,7 +41,7 @@ class MonsterNames(Enum):
 
     JURAVIS = "Juravis"
     STEEL_HAWK = "Steel Hawk"
-    COCKATORIS = "Cockatoris"
+    COCATORIS = "Cocatoris"
 
     BULL_DEMON = "Bull Demon"
     MINITAURUS = "Minitaurus"
@@ -99,7 +98,7 @@ monster_families: dict[MonsterFamilies, list[MonsterNames]] = {
     MonsterFamilies.GHOST: [MonsterNames.GHOUL, MonsterNames.GUST, MonsterNames.REVNANT],
     MonsterFamilies.AHRIMAN: [MonsterNames.FLOATIBALL, MonsterNames.AHRIMAN, MonsterNames.PLAGUE],
     MonsterFamilies.MINDFLAYER: [MonsterNames.PISCO_DEMON, MonsterNames.SQUIDLARKIN, MonsterNames.MINDFLARE],
-    MonsterFamilies.BIRD: [MonsterNames.JURAVIS, MonsterNames.STEEL_HAWK, MonsterNames.COCKATORIS],
+    MonsterFamilies.BIRD: [MonsterNames.JURAVIS, MonsterNames.STEEL_HAWK, MonsterNames.COCATORIS],
     MonsterFamilies.MINOTAUR: [MonsterNames.BULL_DEMON, MonsterNames.MINITAURUS, MonsterNames.SACRED],
     MonsterFamilies.MALBORO: [MonsterNames.MORBOL, MonsterNames.OCHU, MonsterNames.GREAT_MORBOL],
     MonsterFamilies.TREANT: [MonsterNames.WOODMAN, MonsterNames.TRENT, MonsterNames.TAIJU],
@@ -348,7 +347,7 @@ steel_hawk.lionel_locations = [RegionAccessRequirement([BariausValley], 2)]
 steel_hawk.zeltennia_locations = [RegionAccessRequirement([Germinas], 1)]
 steel_hawk.limberry_locations = [RegionAccessRequirement([Poeskas], 2)]
 
-cockatoris = MonsterRegion(MonsterNames.COCKATORIS)
+cockatoris = MonsterRegion(MonsterNames.COCATORIS)
 cockatoris.fovoham_locations = [RegionAccessRequirement([Fovoham], 1)]
 cockatoris.lesalia_locations = [RegionAccessRequirement([Zeklaus], 3)]
 cockatoris.lionel_locations = [RegionAccessRequirement([BariausValley], 3)]

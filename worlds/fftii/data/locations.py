@@ -28,7 +28,7 @@ all_regions: list[FFTRegion] = [
 ]
 
 story_battle_locations = [
-    "Garliand Magic City Story Battle",
+    "Gariland Magic City Story Battle",
     "Mandalia Plains Story Battle",
     "Igros Castle Story Battle",
     "Sweegy Woods Story Battle",
@@ -85,6 +85,9 @@ story_battle_locations = [
 ]
 
 character_recruit_locations = [
+    "Recruit Rad",
+    "Recruit Alicia",
+    "Recruit Lavian",
     "Recruit Rafa",
     "Recruit Malak",
     "Recruit Boco",
@@ -118,8 +121,8 @@ sidequest_battle_locations = [
     "HORROR Sidequest Battle",
     "END Sidequest Battle",
     "Recruit Beowulf",
-    "Recruit Worker 8",
     "Recruit Reis (Dragon)",
+    "Recruit Worker 8",
     "Recruit Reis (Human)",
     "Recruit Cloud",
     "Recruit Byblos"
@@ -215,5 +218,80 @@ sidequest_zodiac_stone_locations = [
     "Nelveska Temple Sidequest Battle",
     "END Sidequest Battle",
 ]
+
+linked_rewards = {
+    "Mandalia Plains Story Battle": [
+        "Mandalia Plains Shop Unlock"
+    ],
+    "Lenalia Plateau Story Battle": [
+        "Lenalia Plateau Shop Unlock",
+    ],
+    "Fort Zeakden Story Battle": [
+        "Fort Zeakden Shop Unlock",
+        "Chapter 2 Ramza Squire Job Unlock",
+        "Recruit Rad",
+        "Recruit Alicia",
+        "Recruit Lavian"
+    ],
+    "Yardow Fort City Story Battle": [
+        "Yardow Fort City Shop Unlock"
+    ],
+    "Roof of Riovanes Castle Story Battle": [
+        "Riovanes Castle Shop Unlock",
+        "Recruit Rafa",
+        "Recruit Malak",
+        "Chapter 4 Ramza Squire Job Unlock"
+    ],
+    "Zirekile Falls Story Battle": [
+        "Zirekile Falls Shop Unlock"
+    ],
+    "Zeklaus Desert Story Battle": [
+        "Zeklaus Desert Shop Unlock"
+    ],
+    "Araguay Woods Story Battle": [
+        "Recruit Boco"
+    ],
+    "Goland Underground Passage Sidequest Battle": [
+        "Recruit Beowulf",
+        "Recruit Reis (Dragon)",
+        "Recruit Worker 8"
+    ],
+    "Back Gate of Lesalia Castle Story Battle": [
+        "Lesalia Imperial Capital Shop Unlock"
+    ],
+    "Bariaus Hill Story Battle": [
+        "Bariaus Hill Shop Unlock"
+    ],
+    "Inside of Lionel Castle Story Battle": [
+        "Lionel Castle Shop Unlock"
+    ],
+    "Bariaus Valley Story Battle": [
+        "Bariaus Valley Shop Unlock",
+        "Recruit Agrias"
+    ],
+    "Nelveska Temple Sidequest Battle": [
+        "Recruit Reis (Human)"
+    ],
+    "Zarghidas Trade City Sidequest Battle": [
+        "Recruit Cloud"
+    ],
+    "Bethla Garrison Sluice Story Battle": [
+        "Bethla Garrison Shop Unlock",
+        "Recruit Orlandu"
+    ],
+    "Limberry Castle Cemetary Story Battle": [
+        "Limberry Castle Shop Unlock",
+        "Recruit Meliadoul"
+    ],
+    "Underground Book Storage 2 Story Battle": [
+        "Orbonne Monastery Shop Unlock"
+    ],
+    "Slums of Goug Story Battle": [
+        "Recruit Mustadio"
+    ],
+    "END Sidequest Battle": [
+        "Recruit Byblos"
+    ]
+}
 
 monster_location_names = [f"Poach {monster.monster_name.value}" for monster in monster_locations]

@@ -1,17 +1,19 @@
 import logging
-import time
+
 from typing import TYPE_CHECKING
 
 from NetUtils import ClientStatus
 
 import worlds._bizhawk as bizhawk
-from settings import get_settings
+
 from worlds._bizhawk.client import BizHawkClient
 
 from .data import memory
 from .data.items import item_data_lookup, gear_item_names, gil_item_names, gil_item_sizes, zodiac_stone_names, \
-    jp_item_names, jp_item_sizes
-from .data.memory import stones_lookup
+    jp_item_names, jp_item_sizes, job_names, special_character_names
+from .data.locations import linked_rewards
+from .data.logic.JobUnlocks import unlock_dict
+from .data.memory import stones_lookup, seed_hash_length
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -61,11 +63,11 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
         ctx.want_slot_data = True
         return True
 
-    async def set_auth2(self, ctx: "BizHawkClientContext") -> None:
+    async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         import base64
         auth_raw = (await bizhawk.read(
             ctx.bizhawk_ctx,
-            [(memory.rom_name_location, 20, self.rom)]))[0]
+            [(memory.rom_name_location_in_ram, memory.rom_name_length, self.ram)]))[0]
         ctx.auth = base64.b64encode(auth_raw).decode()
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
@@ -78,16 +80,45 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
             if self.location_name_to_id is None:
                 from . import FinalFantasyTacticsIvaliceIslandWorld
                 self.location_name_to_id = FinalFantasyTacticsIvaliceIslandWorld.location_name_to_id
-            await self.check_victory(ctx)
-            await self.location_check(ctx)
-            await self.received_items_check(ctx)
+            if await self.check_valid_game(ctx) or True:
+                await self.check_victory(ctx)
+                await self.location_check(ctx)
+                await self.received_items_check(ctx)
 
         except bizhawk.RequestFailedError:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
             pass
 
+    async def check_valid_game(self, ctx: "BizHawkClientContext") -> bool:
+        seed_hash_card = await self.read_ram_values_guarded(ctx, memory.seed_hash_in_memory_card, seed_hash_length)
+        seed_hash_ram = await self.read_ram_values_guarded(ctx, memory.seed_hash_location_in_ram, seed_hash_length)
+        if seed_hash_card is None or seed_hash_ram is None:
+            return False
+        seed_hash_card_value = int.from_bytes(seed_hash_card)
+        seed_hash_ram_value = int.from_bytes(seed_hash_ram)
+        if seed_hash_card_value & 0x8000:
+            seed_hash_card_validation = seed_hash_card_value & 0x7FFF
+            return seed_hash_card_validation == seed_hash_ram_value
+        else:
+            seed_hash_to_write = seed_hash_ram_value | 0x8000
+            await self.write_ram_values_guarded(ctx, [
+                    (memory.seed_hash_in_memory_card, [seed_hash_to_write // 256, seed_hash_to_write % 256], self.ram)
+                ])
+
     async def location_check(self, ctx: "BizHawkClientContext"):
-        pass
+        locations_checked = []
+        locations_checked.extend(await self.check_major_locations(ctx))
+        locations_checked.extend(await self.check_poaches(ctx))
+        locations_checked.extend(await self.check_job_unlocks(ctx))
+
+        found_locations = await ctx.check_locations(locations_checked)
+        for location in found_locations:
+            ctx.locations_checked.add(location)
+            #location_name = ctx.location_names.lookup_in_game(location)
+            #if self.display_location_found_messages:
+            #    logger.info(
+            #        f'New Check: {location_name} ({len(ctx.locations_checked)}/'
+            #        f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
         # locations_checked = []
         #
         #
@@ -100,14 +131,83 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
         #     if (int(locations_data[location_byte]) & location_bit) > 0:
         #         locations_checked.append(self.location_name_to_id[location])
         #
-        # found_locations = await ctx.check_locations(locations_checked)
-        # for location in found_locations:
-        #     ctx.locations_checked.add(location)
-        #     location_name = ctx.location_names.lookup_in_game(location)
-        #     if self.display_location_found_messages:
-        #         logger.info(
-        #             f'New Check: {location_name} ({len(ctx.locations_checked)}/'
-        #             f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+
+
+    async def check_major_locations(self, ctx: "BizHawkClientContext") -> list[int]:
+        locations_checked = []
+        major_locations_data = await self.read_ram_values_guarded(
+            ctx,
+            memory.event_flags_location,
+            memory.event_flags_length)
+        if major_locations_data is None:
+            return locations_checked
+        for location, flag in memory.locations_to_read.items():
+            offset, bit = get_byte_bit_from_index(flag)
+            if major_locations_data[offset] & bit:
+                locations_checked.append(self.location_name_to_id[location])
+                if location in linked_rewards.keys():
+                    for linked_location in linked_rewards[location]:
+                        locations_checked.append(self.location_name_to_id[linked_location])
+        return locations_checked
+
+
+    async def check_poaches(self, ctx: "BizHawkClientContext") -> list[int]:
+        locations_checked = []
+        poach_data = await self.read_ram_values_guarded(
+            ctx,
+            memory.poaching_flags_location,
+            memory.poaching_flags_length)
+        if poach_data is None:
+            return locations_checked
+        for location, flag in memory.poaching_addresses.items():
+            offset, bit = get_byte_bit_from_index(flag)
+            if poach_data[offset] & bit:
+                locations_checked.append(self.location_name_to_id[location])
+        return locations_checked
+
+    async def check_job_unlocks(self, ctx: "BizHawkClientContext") -> list[int]:
+        locations_checked = []
+        formation_data = await self.read_ram_values_guarded(ctx, memory.unit_stats_address, memory.unit_stats_length)
+        if formation_data is None:
+            return locations_checked
+        unlocked_jobs = set()
+        for unit_number in range(memory.unit_count):
+            current_unit_jobs = {}
+            base_address = unit_number * memory.unit_stat_size
+            party_id_location = base_address + memory.party_id_offset
+            unit_party_id_data = formation_data[party_id_location]
+            if unit_party_id_data == 0xFF:
+                continue
+            for index, job in enumerate(memory.job_level_order):
+                job_byte_location = base_address + memory.job_level_offset + (index // 2)
+                if index % 2 == 0:
+                    job_nybble = (formation_data[job_byte_location] & 0xF0) >> 4
+                else:
+                    job_nybble = formation_data[job_byte_location] & 0x0F
+                current_unit_jobs[job] = job_nybble
+            for job, requirements in unlock_dict.items():
+                unlock_job = self.check_job_unlock_condition(current_unit_jobs, requirements)
+                if unlock_job:
+                    unlocked_jobs.add(f"{job} Unlock")
+        for job in unlocked_jobs:
+            locations_checked.append(self.location_name_to_id[job])
+        return locations_checked
+
+    def check_job_unlock_condition(self, job_levels, unlock_requirements):
+        unlock = True
+        for requirement_job, required_level in unlock_requirements.items():
+            current_level = job_levels[requirement_job]
+            if current_level < required_level:
+                unlock = False
+            if requirement_job == "Bard":
+                if job_levels["Bard"] == 0:
+                    unlock = False
+            if requirement_job == "Dancer":
+                if job_levels["Dancer"] == 0:
+                    unlock = False
+            if unlock == False:
+                return False
+        return True
 
     async def received_items_check(self, ctx: "BizHawkClientContext"):
         write_list: list[tuple[int, list[int], str]] = []
@@ -143,6 +243,21 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
                 write_list.append(write_list_candidate)
             elif current_item_name in jp_item_names:
                 write_list_candidate = await self.write_jp_items(ctx, current_item_name)
+                if write_list_candidate is None:
+                    return
+                write_list.append(write_list_candidate)
+            elif current_item_name in special_character_names:
+                write_list_candidate = await self.write_character_recruit(ctx, current_item_name)
+                if write_list_candidate is None:
+                    return
+                write_list.append(write_list_candidate)
+            elif current_item_name == "Progressive Ramza Job Form":
+                write_list_candidate = await self.write_ramza_form(ctx)
+                if write_list_candidate is None:
+                    return
+                write_list.append(write_list_candidate)
+            elif current_item_name in job_names:
+                write_list_candidate = await self.write_job_unlocks(ctx, current_item_name)
                 if write_list_candidate is None:
                     return
                 write_list.append(write_list_candidate)
@@ -204,21 +319,20 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
         if formation_data is None:
             return None
         new_formation_data = bytearray(formation_data)
-        for i in range(memory.unit_count):
-            base_address = i * memory.unit_stat_size
+        for unit_number in range(memory.unit_count):
+            base_address = unit_number * memory.unit_stat_size
             party_id_location = base_address + memory.party_id_offset
             unit_party_id_data = formation_data[party_id_location]
             if unit_party_id_data == 0xFF:
                 continue
-            for j in range(memory.job_amount):
-                jp_address = base_address + memory.jp_offset + (j * 2)
+            for job_number in range(memory.job_amount):
+                jp_address = base_address + memory.jp_offset + (job_number * 2)
                 current_jp = int.from_bytes(formation_data[jp_address:jp_address + 2], "little")
                 new_jp = min(current_jp + jp_quantity, 9999)
                 new_jp_lower_byte = new_jp % 256
                 new_jp_upper_byte = new_jp // 256
                 new_formation_data[jp_address] = new_jp_lower_byte
                 new_formation_data[jp_address + 1] = new_jp_upper_byte
-                print(f"writing {new_jp} to {jp_address}")
         return memory.unit_stats_address, list(new_formation_data), self.ram
 
     async def write_zodiac_stones(self, ctx: "BizHawkClientContext", stone_name: str) -> tuple[int, list[int], str] | None:
@@ -228,6 +342,43 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
             return None
         new_stone_data = current_stone_data | get_bit_value_from_position(bit)
         return address, [new_stone_data], self.ram
+
+    async def write_character_recruit(self, ctx: "BizHawkClientContext", character_name: str) -> tuple[int, list[int], str] | None:
+        address, bit = get_byte_bit_from_index(memory.character_recruit_addresses[character_name])
+        recruit_location = memory.event_flags_location + address
+        current_recruit_data = await self.read_ram_value_guarded(ctx, recruit_location)
+        if current_recruit_data is None:
+            return None
+        new_recruit_data = current_recruit_data | bit
+        return recruit_location, [new_recruit_data], self.ram
+
+    async def write_ramza_form(self, ctx: "BizHawkClientContext") -> tuple[int, list[int], str] | None:
+        chapter_2_address, chapter_2_bit = get_byte_bit_from_index(
+            memory.ramza_job_unlock_addresses["Chapter 2 Ramza Squire Job Unlock"])
+        chapter_4_address, chapter_4_bit = get_byte_bit_from_index(
+            memory.ramza_job_unlock_addresses["Chapter 2 Ramza Squire Job Unlock"])
+        chapter_2_location = memory.event_flags_location + chapter_2_address
+        chapter_4_location = memory.event_flags_location + chapter_4_address
+        chapter_2_data = await self.read_ram_value_guarded(ctx, chapter_2_location)
+        chapter_4_data = await self.read_ram_value_guarded(ctx, chapter_4_location)
+        if chapter_2_data is None or chapter_4_data is None:
+            return None
+        if chapter_2_data & chapter_2_bit > 0:
+            new_data = chapter_4_data | chapter_4_bit
+            return chapter_4_location, [new_data], self.ram
+        else:
+            new_data = chapter_2_data | chapter_2_bit
+            return chapter_2_location, [new_data], self.ram
+
+    async def write_job_unlocks(self, ctx: "BizHawkClientContext", job_name: str) -> tuple[int, list[int], str] | None:
+        address, bit = get_byte_bit_from_index(memory.available_jobs_addresses[job_name])
+        job_location = memory.event_flags_location + address
+        job_data = await self.read_ram_value_guarded(ctx, job_location)
+        if job_data is None:
+            return None
+        new_job_data = job_data | bit
+        return job_location, [new_job_data], self.ram
+
 
     async def read_ram_values_guarded(self, ctx: "BizHawkClientContext", location: int, size: int):
         value = await bizhawk.guarded_read(ctx.bizhawk_ctx, [(location, size, self.ram)], guard_list)
@@ -241,5 +392,5 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
             return None
         return int.from_bytes(value[0], "little")
 
-    async def write_ram_values_guarded(self, ctx: "BizHawkClientContext", write_list):
+    async def write_ram_values_guarded(self, ctx: "BizHawkClientContext", write_list: list[tuple[int, list[int], str]]):
         return await bizhawk.guarded_write(ctx.bizhawk_ctx, write_list, guard_list)
