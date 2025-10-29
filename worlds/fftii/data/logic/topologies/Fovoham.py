@@ -1,6 +1,6 @@
 from ..Connection import Connection
 from ..Requirements import *
-from ..FFTLocation import FFTLocation
+from ..FFTLocation import FFTLocation, LocationNames, RareBattleLocation
 
 from ..regions.Fovoham import *
 from ..regions.Gallione import Zeakden, Lenalia
@@ -14,8 +14,8 @@ Grog.connections = [
 ]
 
 Grog.locations = [
-    FFTLocation("Grog Hill Story Battle", battle_level=3),
-    FFTLocation("Grog Hill Rare Battle")
+    FFTLocation(LocationNames.GROG_STORY, battle_level=3),
+    RareBattleLocation(LocationNames.GROG_RARE, battle_level=5)
 ]
 
 Yardow.connections = [
@@ -24,8 +24,8 @@ Yardow.connections = [
 ]
 
 Yardow.locations = [
-    FFTLocation("Yardow Fort City Story Battle", battle_level=3),
-    FFTLocation("Yardow Fort City Shop Unlock")
+    FFTLocation(LocationNames.YARDOW_STORY, battle_level=3),
+    FFTLocation(LocationNames.YARDOW_SHOP)
 ]
 
 Yuguo.connections = [
@@ -34,8 +34,8 @@ Yuguo.connections = [
 ]
 
 Yuguo.locations = [
-    FFTLocation("Yuguo Woods Story Battle", battle_level=3),
-    FFTLocation("Yuguo Woods Rare Battle")
+    FFTLocation(LocationNames.YUGUO_STORY, battle_level=3),
+    RareBattleLocation(LocationNames.YUGUO_RARE, battle_level=5)
 ]
 
 Riovanes.connections = [
@@ -45,13 +45,13 @@ Riovanes.connections = [
 ]
 
 Riovanes.locations = [
-    FFTLocation("Gate of Riovanes Story Battle", battle_level=3),
-    FFTLocation("Inside Riovanes Castle Story Battle", battle_level=3),
-    FFTLocation("Roof of Riovanes Castle Story Battle", battle_level=3),
-    FFTLocation("Recruit Rafa", battle_level=3),
-    FFTLocation("Recruit Malak", battle_level=3),
-    FFTLocation("Riovanes Castle Shop Unlock", battle_level=3),
-    FFTLocation("Chapter 4 Ramza Squire Job Unlock", battle_level=3)
+    FFTLocation(LocationNames.RIOVANES_1_STORY, battle_level=3),
+    FFTLocation(LocationNames.RIOVANES_2_STORY, battle_level=3),
+    FFTLocation(LocationNames.RIOVANES_3_STORY, battle_level=3),
+    FFTLocation(LocationNames.RIOVANES_SHOP, battle_level=3),
+    FFTLocation(LocationNames.RAMZA_CHAPTER_4_UNLOCK, battle_level=3),
+    FFTLocation(LocationNames.RAFA_RECRUIT, battle_level=3),
+    FFTLocation(LocationNames.MALAK_RECRUIT, battle_level=3)
 ]
 
 Fovoham.connections = [
@@ -61,6 +61,6 @@ Fovoham.connections = [
 ]
 
 Fovoham.locations = [
-    FFTLocation("Fovoham Plains Story Battle"),
-    FFTLocation("Fovoham Plains Rare Battle")
+    FFTLocation(LocationNames.FOVOHAM_STORY),
+    RareBattleLocation(LocationNames.FOVOHAM_RARE, battle_level=5)
 ]

@@ -1,87 +1,86 @@
-from ..Connection import Connection
 from ..Requirements import *
-from ..FFTLocation import FFTLocation
+from ..FFTLocation import FFTLocation, LocationNames
 
 from ..regions.Jobs import *
 
 Squire.locations = [
-    FFTLocation("Squire Unlock", [])
+    FFTLocation(LocationNames.SQUIRE_UNLOCK, [])
 ]
 
 Chemist.locations = [
-    FFTLocation("Chemist Unlock", [])
+    FFTLocation(LocationNames.CHEMIST_UNLOCK, [])
 ]
 
 Knight.locations = [
-    FFTLocation("Knight Unlock", [Requirement(["Squire"])])
+    FFTLocation(LocationNames.KNIGHT_UNLOCK, [Requirement(["Squire"])])
 ]
 
 Archer.locations = [
-    FFTLocation("Archer Unlock", [Requirement(["Squire"])])
+    FFTLocation(LocationNames.ARCHER_UNLOCK, [Requirement(["Squire"])])
 ]
 
 Monk.locations = [
-    FFTLocation("Monk Unlock", [Requirement(["Knight"])])
+    FFTLocation(LocationNames.MONK_UNLOCK, [Requirement(["Knight"])])
 ]
 
 Thief.locations = [
-    FFTLocation("Thief Unlock", [Requirement(["Archer"])])
+    FFTLocation(LocationNames.THIEF_UNLOCK, [Requirement(["Archer"])])
 ]
 
 Lancer.locations = [
-    FFTLocation("Lancer Unlock", [Requirement(["Thief"])])
+    FFTLocation(LocationNames.LANCER_UNLOCK, [Requirement(["Thief"])])
 ]
 
 Geomancer.locations = [
-    FFTLocation("Geomancer Unlock", [Requirement(["Monk"])])
+    FFTLocation(LocationNames.GEOMANCER_UNLOCK, [Requirement(["Monk"])])
 ]
 
 Samurai.locations = [
-    FFTLocation("Samurai Unlock", [Requirement(["Knight", "Monk", "Lancer"])])
+    FFTLocation(LocationNames.SAMURAI_UNLOCK, [Requirement(["Knight", "Monk", "Lancer"])])
 ]
 
 Ninja.locations = [
-    FFTLocation("Ninja Unlock", [Requirement(["Archer", "Thief", "Geomancer"])])
+    FFTLocation(LocationNames.NINJA_UNLOCK, [Requirement(["Archer", "Thief", "Geomancer"])])
 ]
 
 Dancer.locations = [
-    FFTLocation("Dancer Unlock", [Requirement(["Lancer", "Geomancer"])])
+    FFTLocation(LocationNames.DANCER_UNLOCK, [Requirement(["Lancer", "Geomancer"])])
 ]
 
 Priest.locations = [
-    FFTLocation("Priest Unlock", [Requirement(["Chemist"])])
+    FFTLocation(LocationNames.PRIEST_UNLOCK, [Requirement(["Chemist"])])
 ]
 
 Wizard.locations = [
-    FFTLocation("Wizard Unlock", [Requirement(["Chemist"])])
+    FFTLocation(LocationNames.WIZARD_UNLOCK, [Requirement(["Chemist"])])
 ]
 
 Oracle.locations = [
-    FFTLocation("Oracle Unlock", [Requirement(["Priest"])])
+    FFTLocation(LocationNames.ORACLE_UNLOCK, [Requirement(["Priest"])])
 ]
 
 TimeMage.locations = [
-    FFTLocation("Time Mage Unlock", [Requirement(["Wizard"])])
+    FFTLocation(LocationNames.TIME_MAGE_UNLOCK, [Requirement(["Wizard"])])
 ]
 
 Mediator.locations = [
-    FFTLocation("Mediator Unlock", [Requirement(["Oracle"])])
+    FFTLocation(LocationNames.MEDIATOR_UNLOCK, [Requirement(["Oracle"])])
 ]
 
 Summoner.locations = [
-    FFTLocation("Summoner Unlock", [Requirement(["Time Mage"])])
+    FFTLocation(LocationNames.SUMMONER_UNLOCK, [Requirement(["Time Mage"])])
 ]
 
 Calculator.locations = [
-    FFTLocation("Calculator Unlock", [Requirement(["Priest", "Wizard", "Oracle", "Time Mage"])])
+    FFTLocation(LocationNames.CALCULATOR_UNLOCK, [Requirement(["Priest", "Wizard", "Oracle", "Time Mage"])])
 ]
 
 Bard.locations = [
-    FFTLocation("Bard Unlock", [Requirement(["Mediator", "Summoner"])])
+    FFTLocation(LocationNames.BARD_UNLOCK, [Requirement(["Mediator", "Summoner"])])
 ]
 
 Mime.locations = [
-    FFTLocation("Mime Unlock", [
+    FFTLocation(LocationNames.MIME_UNLOCK, [
         Requirement(["Squire", "Chemist", "Lancer", "Geomancer", "Mediator", "Summoner"])
     ])
 ]

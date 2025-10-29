@@ -1,6 +1,7 @@
 from ..Connection import Connection
 from ..Requirements import *
-from ..FFTLocation import FFTLocation
+from ..FFTLocation import FFTLocation, LocationNames, SidequestLocation, VanillaFinalFightsLocation, \
+    AltimaOnlyFinalFightLocation
 
 from ..regions.Murond import *
 from ..regions.Gallione import Gariland, Dorter
@@ -12,9 +13,9 @@ Murond.connections = [
 ]
 
 Murond.locations = [
-    FFTLocation("St. Murond Temple Story Battle", battle_level=5),
-    FFTLocation("St. Murond Temple Hall Story Battle", battle_level=5),
-    FFTLocation("Chapel of St. Murond Temple Story Battle", battle_level=5)
+    FFTLocation(LocationNames.MUROND_TEMPLE_1_STORY, battle_level=5),
+    FFTLocation(LocationNames.MUROND_TEMPLE_2_STORY, battle_level=5),
+    FFTLocation(LocationNames.MUROND_TEMPLE_3_STORY, battle_level=5)
 ]
 
 Goug.connections = [
@@ -23,49 +24,54 @@ Goug.connections = [
 ]
 
 Goug.locations = [
-    FFTLocation("Slums of Goug Story Battle", battle_level=2),
-    FFTLocation("Recruit Mustadio", battle_level=2)
+    FFTLocation(LocationNames.GOUG_STORY, battle_level=2),
+    FFTLocation(LocationNames.MUSTADIO_RECRUIT, battle_level=2)
 ]
 
 Orbonne.connections = [
-    Connection(Dorter, [HasGallionePass]),
-    Connection(MurondDeathCity, [HasZodiacStones])
+    Connection(Dorter, [HasGallionePass])
 ]
 
 Orbonne.locations = [
-    FFTLocation("Underground Book Storage 1 Story Battle", battle_level=3),
-    FFTLocation("Underground Book Storage 2 Story Battle", battle_level=3),
-    FFTLocation("Underground Book Storage 3 Story Battle", battle_level=3),
-    FFTLocation("Underground Book Storage 4 Story Battle", battle_level=5),
-    FFTLocation("Underground Book Storage 5 Story Battle", battle_level=5),
-    FFTLocation("Orbonne Monastery Shop Unlock", battle_level=3)
+    FFTLocation(LocationNames.UBS_1_STORY, battle_level=3),
+    FFTLocation(LocationNames.UBS_2_STORY, battle_level=3),
+    FFTLocation(LocationNames.UBS_3_STORY, battle_level=3),
+    AltimaOnlyFinalFightLocation(LocationNames.UBS_4_STORY, battle_level=5),
+    AltimaOnlyFinalFightLocation(LocationNames.UBS_5_STORY, battle_level=5),
+    AltimaOnlyFinalFightLocation(LocationNames.MUROND_DEATH_CITY_STORY, battle_level=5),
+    AltimaOnlyFinalFightLocation(LocationNames.PRECINCTS_STORY, battle_level=5),
+    AltimaOnlyFinalFightLocation(LocationNames.AIRSHIPS_1_STORY, battle_level=5),
+    FFTLocation(LocationNames.ORBONNE_SHOP, battle_level=3)
 ]
 
 DeepDungeon.connections = [
-    Connection(Warjilis,  [HasLionelPass])
+    Connection(Warjilis,  [HasLionelPass]),
+    Connection(MurondDeathCity, [HasZodiacStones])
 ]
 
 DeepDungeon.locations = [
-    FFTLocation("NOGIAS Sidequest Battle", battle_level=5),
-    FFTLocation("TERMINATE Sidequest Battle", battle_level=5),
-    FFTLocation("DELTA Sidequest Battle", battle_level=5),
-    FFTLocation("VALKYRIES Sidequest Battle", battle_level=5),
-    FFTLocation("MLAPAN Sidequest Battle", battle_level=5),
-    FFTLocation("TIGER Sidequest Battle", battle_level=5),
-    FFTLocation("BRIDGE Sidequest Battle", battle_level=5),
-    FFTLocation("VOYAGE Sidequest Battle", battle_level=5),
-    FFTLocation("HORROR Sidequest Battle", battle_level=5),
-    FFTLocation("END Sidequest Battle", battle_level=5),
-    FFTLocation("Recruit Byblos", battle_level=5),
+    SidequestLocation(LocationNames.NOGIAS_SIDEQUEST, battle_level=5),
+    SidequestLocation(LocationNames.TERMINATE_SIDEQUEST, battle_level=5),
+    SidequestLocation(LocationNames.DELTA_SIDEQUEST, battle_level=5),
+    SidequestLocation(LocationNames.VALKYRIES_SIDEQUEST, battle_level=5),
+    SidequestLocation(LocationNames.MLAPAN_SIDEQUEST, battle_level=5),
+    SidequestLocation(LocationNames.TIGER_SIDEQUEST, battle_level=5),
+    SidequestLocation(LocationNames.BRIDGE_SIDEQUEST, battle_level=5),
+    SidequestLocation(LocationNames.VOYAGE_SIDEQUEST, battle_level=5),
+    SidequestLocation(LocationNames.HORROR_SIDEQUEST, battle_level=5),
+    SidequestLocation(LocationNames.END_SIDEQUEST, battle_level=5),
+    SidequestLocation(LocationNames.BYBLOS_RECRUIT, battle_level=5),
 ]
 
 MurondDeathCity.connections = [
-    Connection(Orbonne) # This should never be relevant, but I like completionism
+    Connection(DeepDungeon)
 ]
 
 MurondDeathCity.locations = [
-    FFTLocation("Murond Death City Story Battle", battle_level=5),
-    FFTLocation("Lost Sacred Precincts Story Battle", battle_level=5),
-    FFTLocation("Graveyard of Airships 1 Story Battle", battle_level=5),
-    FFTLocation("Graveyard of Airships 2 Story Battle", battle_level=5)
+    VanillaFinalFightsLocation(LocationNames.UBS_4_STORY, battle_level=5),
+    VanillaFinalFightsLocation(LocationNames.UBS_5_STORY, battle_level=5),
+    VanillaFinalFightsLocation(LocationNames.MUROND_DEATH_CITY_STORY, battle_level=5),
+    VanillaFinalFightsLocation(LocationNames.PRECINCTS_STORY, battle_level=5),
+    VanillaFinalFightsLocation(LocationNames.AIRSHIPS_1_STORY, battle_level=5),
+    FFTLocation(LocationNames.AIRSHIPS_2_STORY, battle_level=5)
 ]

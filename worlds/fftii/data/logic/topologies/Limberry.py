@@ -1,7 +1,6 @@
 from ..Connection import Connection
-from ..Monsters import MonsterNames
 from ..Requirements import *
-from ..FFTLocation import FFTLocation
+from ..FFTLocation import FFTLocation, LocationNames, RareBattleLocation
 
 from ..regions.Limberry import *
 from ..regions.Zeltennia import BerveniaCity, Germinas
@@ -13,8 +12,8 @@ Bed.connections = [
 ]
 
 Bed.locations = [
-    FFTLocation("Bed Desert Story Battle", battle_level=4),
-    FFTLocation("Bed Desert Rare Battle")
+    FFTLocation(LocationNames.BED_STORY, battle_level=4),
+    RareBattleLocation(LocationNames.BED_RARE, battle_level=5)
 ]
 
 Bethla.connections = [
@@ -24,11 +23,11 @@ Bethla.connections = [
 ]
 
 Bethla.locations = [
-    FFTLocation("Bethla Garrison North Wall Story Battle", battle_level=4),
-    FFTLocation("Bethla Garrison South Wall Story Battle", battle_level=4),
-    FFTLocation("Bethla Garrison Sluice Story Battle", battle_level=4),
-    FFTLocation("Recruit Orlandu", battle_level=4),
-    FFTLocation("Bethla Garrison Shop Unlock", battle_level=4)
+    FFTLocation(LocationNames.BETHLA_NORTH_STORY, battle_level=4),
+    FFTLocation(LocationNames.BETHLA_SOUTH_STORY, battle_level=4),
+    FFTLocation(LocationNames.BETHLA_SLUICE_STORY, battle_level=4),
+    FFTLocation(LocationNames.BETHLA_SHOP, battle_level=4),
+    FFTLocation(LocationNames.ORLANDU_RECRUIT, battle_level=4)
 ]
 
 Dolbodar.connections = [
@@ -37,7 +36,7 @@ Dolbodar.connections = [
 ]
 
 Dolbodar.locations = [
-    FFTLocation("Dolbodar Swamp Rare Battle")
+    RareBattleLocation(LocationNames.DOLBODAR_RARE, battle_level=5)
 ]
 
 Limberry.connections = [
@@ -46,11 +45,11 @@ Limberry.connections = [
 ]
 
 Limberry.locations = [
-    FFTLocation("Limberry Castle Gates Story Battle", battle_level=5),
-    FFTLocation("Inside Limberry Castle Story Battle", battle_level=5),
-    FFTLocation("Limberry Castle Cemetary Story Battle", battle_level=5),
-    FFTLocation("Recruit Meliadoul", battle_level=5),
-    FFTLocation("Limberry Castle Shop Unlock", battle_level=5)
+    FFTLocation(LocationNames.LIMBERRY_1_STORY, battle_level=5),
+    FFTLocation(LocationNames.LIMBERRY_2_STORY, battle_level=5),
+    FFTLocation(LocationNames.LIMBERRY_3_STORY, battle_level=5),
+    FFTLocation(LocationNames.LIMBERRY_SHOP, battle_level=5),
+    FFTLocation(LocationNames.MELIADOUL_RECRUIT, battle_level=5)
 ]
 
 Poeskas.connections = [
@@ -59,6 +58,6 @@ Poeskas.connections = [
 ]
 
 Poeskas.locations = [
-    FFTLocation("Poeskas Lake Story Battle", battle_level=5),
-    FFTLocation("Poeskas Lake Rare Battle")
+    FFTLocation(LocationNames.POESKAS_STORY, battle_level=5),
+    RareBattleLocation(LocationNames.POESKAS_RARE, battle_level=5)
 ]

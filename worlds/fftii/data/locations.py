@@ -1,3 +1,4 @@
+from .logic.FFTLocation import LocationNames
 from .logic.FFTRegion import FFTRegion
 from .logic.Monsters import monster_locations
 from .logic.regions.Fovoham import fovoham_regions
@@ -27,271 +28,311 @@ all_regions: list[FFTRegion] = [
     *world_map_regions, *menu_regions
 ]
 
-story_battle_locations = [
-    "Gariland Magic City Story Battle",
-    "Mandalia Plains Story Battle",
-    "Igros Castle Story Battle",
-    "Sweegy Woods Story Battle",
-    "Dorter Slums Story Battle",
-    "Dorter City Story Battle",
-    "Thieves' Fort Story Battle",
-    "Lenalia Plateau Story Battle",
-    "Fort Zeakden Story Battle",
-    "Grog Hill Story Battle",
-    "Yardow Fort City Story Battle",
-    "Yuguo Woods Story Battle",
-    "Gate of Riovanes Story Battle",
-    "Inside Riovanes Castle Story Battle",
-    "Roof of Riovanes Castle Story Battle",
-    "Fovoham Plains Story Battle",
-    "Araguay Woods Story Battle",
-    "Zirekile Falls Story Battle",
-    "Zeklaus Desert Story Battle",
-    "Back Gate of Lesalia Castle Story Battle",
-    "Goland Coal City Story Battle",
-    "Doguola Pass Story Battle",
-    "Zaland Fort City Story Battle",
-    "Bariaus Hill Story Battle",
-    "Gate of Lionel Castle Story Battle",
-    "Inside of Lionel Castle Story Battle",
-    "Zigolis Swamp Story Battle",
-    "Golgorand Execution Site Story Battle",
-    "Bariaus Valley Story Battle",
-    "Bervenia Free City Story Battle",
-    "Finath River Story Battle",
-    "Zeltennia Castle Story Battle",
-    "Germinas Peak Story Battle",
-    "Bethla Garrison North Wall Story Battle",
-    "Bethla Garrison South Wall Story Battle",
-    "Bethla Garrison Sluice Story Battle",
-    "Bed Desert Story Battle",
-    "Limberry Castle Gates Story Battle",
-    "Inside Limberry Castle Story Battle",
-    "Limberry Castle Cemetary Story Battle",
-    "Poeskas Lake Story Battle",
-    "St. Murond Temple Story Battle",
-    "St. Murond Temple Hall Story Battle",
-    "Chapel of St. Murond Temple Story Battle",
-    "Underground Book Storage 1 Story Battle",
-    "Underground Book Storage 2 Story Battle",
-    "Underground Book Storage 3 Story Battle",
-    "Underground Book Storage 4 Story Battle",
-    "Underground Book Storage 5 Story Battle",
-    "Slums of Goug Story Battle",
-    "Murond Death City Story Battle",
-    "Lost Sacred Precincts Story Battle",
-    "Graveyard of Airships 1 Story Battle",
-    "Graveyard of Airships 2 Story Battle"
+story_battle_locations: list[LocationNames] = [
+    LocationNames.GARILAND_STORY,
+    LocationNames.MANDALIA_STORY,
+    LocationNames.IGROS_STORY,
+    LocationNames.SWEEGY_STORY,
+    LocationNames.DORTER_1_STORY,
+    LocationNames.DORTER_2_STORY,
+    LocationNames.THIEVES_FORT_STORY,
+    LocationNames.LENALIA_STORY,
+    LocationNames.ZEAKDEN_STORY,
+    LocationNames.GROG_STORY,
+    LocationNames.YARDOW_STORY,
+    LocationNames.YUGUO_STORY,
+    LocationNames.RIOVANES_1_STORY,
+    LocationNames.RIOVANES_2_STORY,
+    LocationNames.RIOVANES_3_STORY,
+    LocationNames.FOVOHAM_STORY,
+    LocationNames.ARAGUAY_STORY,
+    LocationNames.ZIREKILE_STORY,
+    LocationNames.ZEKLAUS_STORY,
+    LocationNames.LESALIA_STORY,
+    LocationNames.GOLAND_STORY,
+    LocationNames.DOGUOLA_STORY,
+    LocationNames.ZALAND_STORY,
+    LocationNames.BARIAUS_HILL_STORY,
+    LocationNames.LIONEL_1_STORY,
+    LocationNames.LIONEL_2_STORY,
+    LocationNames.ZIGOLIS_STORY,
+    LocationNames.GOLGORAND_STORY,
+    LocationNames.BARIAUS_VALLEY_STORY,
+    LocationNames.BERVENIA_CITY_STORY,
+    LocationNames.FINATH_STORY,
+    LocationNames.ZELTENNIA_STORY,
+    LocationNames.GERMINAS_STORY,
+    LocationNames.BETHLA_NORTH_STORY,
+    LocationNames.BETHLA_SOUTH_STORY,
+    LocationNames.BETHLA_SLUICE_STORY,
+    LocationNames.BED_STORY,
+    LocationNames.LIMBERRY_1_STORY,
+    LocationNames.LIMBERRY_2_STORY,
+    LocationNames.LIMBERRY_3_STORY,
+    LocationNames.POESKAS_STORY,
+    LocationNames.MUROND_TEMPLE_1_STORY,
+    LocationNames.MUROND_TEMPLE_2_STORY,
+    LocationNames.MUROND_TEMPLE_3_STORY,
+    LocationNames.UBS_1_STORY,
+    LocationNames.UBS_2_STORY,
+    LocationNames.UBS_3_STORY,
+    LocationNames.UBS_4_STORY,
+    LocationNames.UBS_5_STORY,
+    LocationNames.GOUG_STORY,
+    LocationNames.MUROND_DEATH_CITY_STORY,
+    LocationNames.PRECINCTS_STORY,
+    LocationNames.AIRSHIPS_1_STORY,
+    LocationNames.AIRSHIPS_2_STORY
 ]
 
-character_recruit_locations = [
-    "Recruit Rad",
-    "Recruit Alicia",
-    "Recruit Lavian",
-    "Recruit Rafa",
-    "Recruit Malak",
-    "Recruit Boco",
-    "Recruit Beowulf",
-    "Recruit Worker 8",
-    "Recruit Agrias",
-    "Recruit Reis (Dragon)",
-    "Recruit Reis (Human)",
-    "Recruit Cloud",
-    "Recruit Orlandu",
-    "Recruit Meliadoul",
-    "Recruit Mustadio",
-    "Recruit Byblos"
+character_recruit_locations: list[LocationNames] = [
+    LocationNames.RAD_RECRUIT,
+    LocationNames.ALICIA_RECRUIT,
+    LocationNames.LAVIAN_RECRUIT,
+    LocationNames.RAFA_RECRUIT,
+    LocationNames.MALAK_RECRUIT,
+    LocationNames.BOCO_RECRUIT,
+    LocationNames.BEOWULF_RECRUIT,
+    LocationNames.WORKER_8_RECRUIT,
+    LocationNames.AGRIAS_RECRUIT,
+    LocationNames.REIS_DRAGON_RECRUIT,
+    LocationNames.REIS_HUMAN_RECRUIT,
+    LocationNames.CLOUD_RECRUIT,
+    LocationNames.ORLANDU_RECRUIT,
+    LocationNames.MELIADOUL_RECRUIT,
+    LocationNames.MUSTADIO_RECRUIT,
+    LocationNames.BYBLOS_RECRUIT
 ]
 
-sidequest_battle_locations = [
-    "Goland Colliery Third Floor Sidequest Battle",
-    "Goland Colliery Second Floor Sidequest Battle",
-    "Goland Colliery First Floor Sidequest Battle",
-    "Goland Underground Passage Sidequest Battle",
-    "Nelveska Temple Sidequest Battle",
-    "Zarghidas Trade City Sidequest Battle",
-    "NOGIAS Sidequest Battle",
-    "TERMINATE Sidequest Battle",
-    "DELTA Sidequest Battle",
-    "VALKYRIES Sidequest Battle",
-    "MLAPAN Sidequest Battle",
-    "TIGER Sidequest Battle",
-    "BRIDGE Sidequest Battle",
-    "VOYAGE Sidequest Battle",
-    "HORROR Sidequest Battle",
-    "END Sidequest Battle",
-    "Recruit Beowulf",
-    "Recruit Reis (Dragon)",
-    "Recruit Worker 8",
-    "Recruit Reis (Human)",
-    "Recruit Cloud",
-    "Recruit Byblos"
+sidequest_battles: list[LocationNames] = [
+    LocationNames.GOLAND_1_SIDEQUEST,
+    LocationNames.GOLAND_2_SIDEQUEST,
+    LocationNames.GOLAND_3_SIDEQUEST,
+    LocationNames.GOLAND_4_SIDEQUEST,
+    LocationNames.NELVESKA_SIDEQUEST,
+    LocationNames.ZARGHIDAS_SIDEQUEST,
+    LocationNames.NOGIAS_SIDEQUEST,
+    LocationNames.TERMINATE_SIDEQUEST,
+    LocationNames.DELTA_SIDEQUEST,
+    LocationNames.VALKYRIES_SIDEQUEST,
+    LocationNames.MLAPAN_SIDEQUEST,
+    LocationNames.TIGER_SIDEQUEST,
+    LocationNames.BRIDGE_SIDEQUEST,
+    LocationNames.VOYAGE_SIDEQUEST,
+    LocationNames.HORROR_SIDEQUEST,
+    LocationNames.END_SIDEQUEST,
 ]
 
-rare_battle_locations = [
-    "Manalia Plains Rare Battle",
-    "Sweegy Woods Rare Battle",
-    "Lenalia Plateau Rare Battle",
-    "Grog Hill Rare Battle",
-    "Yuguo Woods Rare Battle",
-    "Fovoham Plains Rare Battle",
-    "Araguay Woods Rare Battle",
-    "Zirekile Falls Rare Battle",
-    "Zeklaus Desert Rare Battle",
-    "Bervenia Volvano Rare Battle",
-    "Doguola Pass Rare Battle",
-    "Bariaus Hill Rare Battle",
-    "Zigolis Swamp Rare Battle",
-    "Bariaus Valley Rare Battle",
-    "Finath River Rare Battle",
-    "Germinas Peak Rare Battle",
-    "Bed Desert Rare Battle",
-    "Dolbodar Swamp Rare Battle",
-    "Poeskas Lake Rare Battle"
+sidequest_battle_locations: list[LocationNames] = [
+    *sidequest_battles,
+    LocationNames.BEOWULF_RECRUIT,
+    LocationNames.WORKER_8_RECRUIT,
+    LocationNames.REIS_DRAGON_RECRUIT,
+    LocationNames.REIS_HUMAN_RECRUIT,
+    LocationNames.CLOUD_RECRUIT,
+    LocationNames.BYBLOS_RECRUIT
 ]
 
-job_unlock_locations = [
-    "Squire Unlock",
-    "Chemist Unlock",
-    "Knight Unlock",
-    "Archer Unlock",
-    "Thief Unlock",
-    "Monk Unlock",
-    "Priest Unlock",
-    "Wizard Unlock",
-    "Time Mage Unlock",
-    "Summoner Unlock",
-    "Oracle Unlock",
-    "Mediator Unlock",
-    "Geomancer Unlock",
-    "Lancer Unlock",
-    "Samurai Unlock",
-    "Ninja Unlock",
-    "Calculator Unlock",
-    "Bard Unlock",
-    "Dancer Unlock",
-    "Mime Unlock"
+rare_battle_locations: list[LocationNames] = [
+    LocationNames.MANDALIA_RARE,
+    LocationNames.SWEEGY_RARE,
+    LocationNames.LENALIA_RARE,
+    LocationNames.GROG_RARE,
+    LocationNames.YUGUO_RARE,
+    LocationNames.FOVOHAM_RARE,
+    LocationNames.ARAGUAY_RARE,
+    LocationNames.ZIREKILE_RARE,
+    LocationNames.ZEKLAUS_RARE,
+    LocationNames.BERVENIA_VOLCANO_RARE,
+    LocationNames.DOGUOLA_RARE,
+    LocationNames.BARIAUS_HILL_RARE,
+    LocationNames.ZIGOLIS_RARE,
+    LocationNames.BARIAUS_VALLEY_RARE,
+    LocationNames.FINATH_RARE,
+    LocationNames.GERMINAS_RARE,
+    LocationNames.BED_RARE,
+    LocationNames.DOLBODAR_RARE,
+    LocationNames.POESKAS_RARE
 ]
 
-shop_unlock_locations = [
-    "Mandalia Plains Shop Unlock",
-    "Lenalia Plateau Shop Unlock",
-    "Fort Zeakden Shop Unlock",
-    "Yardow Fort City Shop Unlock",
-    "Riovanes Castle Shop Unlock",
-    "Zirekile Falls Shop Unlock",
-    "Zeklaus Desert Shop Unlock",
-    "Lesalia Imperial Capital Shop Unlock",
-    "Bariaus Hill Shop Unlock",
-    "Lionel Castle Shop Unlock",
-    "Bariaus Valley Shop Unlock",
-    "Bethla Garrison Shop Unlock",
-    "Limberry Castle Shop Unlock",
-    "Orbonne Monastery Shop Unlock"
+job_unlock_locations: list[LocationNames] = [
+    LocationNames.SQUIRE_UNLOCK,
+    LocationNames.CHEMIST_UNLOCK,
+    LocationNames.KNIGHT_UNLOCK,
+    LocationNames.ARCHER_UNLOCK,
+    LocationNames.THIEF_UNLOCK,
+    LocationNames.MONK_UNLOCK,
+    LocationNames.PRIEST_UNLOCK,
+    LocationNames.WIZARD_UNLOCK,
+    LocationNames.TIME_MAGE_UNLOCK,
+    LocationNames.SUMMONER_UNLOCK,
+    LocationNames.ORACLE_UNLOCK,
+    LocationNames.MEDIATOR_UNLOCK,
+    LocationNames.GEOMANCER_UNLOCK,
+    LocationNames.LANCER_UNLOCK,
+    LocationNames.SAMURAI_UNLOCK,
+    LocationNames.NINJA_UNLOCK,
+    LocationNames.CALCULATOR_UNLOCK,
+    LocationNames.BARD_UNLOCK,
+    LocationNames.DANCER_UNLOCK,
+    LocationNames.MIME_UNLOCK
 ]
 
-ramza_job_unlock_locations = [
-    "Chapter 2 Ramza Squire Job Unlock", "Chapter 4 Ramza Squire Job Unlock"
+shop_unlock_locations: list[LocationNames] = [
+    LocationNames.MANDALIA_SHOP,
+    LocationNames.LENALIA_SHOP,
+    LocationNames.ZEAKDEN_SHOP,
+    LocationNames.YARDOW_SHOP,
+    LocationNames.RIOVANES_SHOP,
+    LocationNames.ZIREKILE_SHOP,
+    LocationNames.ZEKLAUS_SHOP,
+    LocationNames.LESALIA_SHOP,
+    LocationNames.BARIAUS_HILL_SHOP,
+    LocationNames.LIONEL_SHOP,
+    LocationNames.BARIAUS_VALLEY_SHOP,
+    LocationNames.BETHLA_SHOP,
+    LocationNames.LIMBERRY_SHOP,
+    LocationNames.ORBONNE_SHOP
 ]
 
-default_murond_fights = [
-    "Murond Death City Story Battle",
-    "Lost Sacred Precincts Story Battle",
-    "Graveyard of Airships 1 Story Battle"
+ramza_job_unlock_locations: list[LocationNames] = [
+    LocationNames.RAMZA_CHAPTER_2_UNLOCK,
+    LocationNames.RAMZA_CHAPTER_4_UNLOCK
 ]
 
-story_zodiac_stone_locations = [
-    "Igros Castle Story Battle", # Capricorn
-    "Roof of Riovanes Castle Story Battle", # Pisces
-    "Inside Riovanes Castle Story Battle", # Aries
-    "Slums of Goug Story Battle", # Taurus
-    "Inside Limberry Castle Story Battle", # Gemini
+default_murond_fights: list[LocationNames] = [
+    LocationNames.UBS_4_STORY,
+    LocationNames.UBS_5_STORY,
+    LocationNames.MUROND_DEATH_CITY_STORY,
+    LocationNames.PRECINCTS_STORY,
+    LocationNames.AIRSHIPS_1_STORY
+]
+
+story_zodiac_stone_locations: list[LocationNames] = [
+    LocationNames.IGROS_STORY, # Capricorn
+    LocationNames.RIOVANES_3_STORY, # Pisces
+    LocationNames.RIOVANES_2_STORY, # Aries
+    LocationNames.GOUG_STORY, # Taurus
+    LocationNames.LIMBERRY_2_STORY, # Gemini
     # "Graveyard of Airships 1 Story Battle", # Leo
     # "Graveyard of Airships 2 Story Battle", # Virgo
-    "Bethla Garrison Sluice Story Battle", # Libra
-    "Inside of Lionel Castle Story Battle", # Scorpio
-    "Limberry Castle Cemetary Story Battle", # Sagittarius
+    LocationNames.BETHLA_SLUICE_STORY, # Libra
+    LocationNames.LIONEL_2_STORY, # Scorpio
+    LocationNames.LIMBERRY_3_STORY, # Sagittarius
 ]
 
-sidequest_zodiac_stone_locations = [
-    "Goland Underground Passage Sidequest Battle",
-    "Nelveska Temple Sidequest Battle",
-    "END Sidequest Battle",
+sidequest_zodiac_stone_locations: list[LocationNames] = [
+    LocationNames.GOLAND_4_SIDEQUEST,
+    LocationNames.NELVESKA_SIDEQUEST,
+    LocationNames.END_SIDEQUEST,
 ]
 
-linked_rewards = {
-    "Mandalia Plains Story Battle": [
-        "Mandalia Plains Shop Unlock"
+linked_rewards: dict[LocationNames, list[LocationNames]] = {
+    LocationNames.MANDALIA_STORY: [
+        LocationNames.MANDALIA_SHOP
     ],
-    "Lenalia Plateau Story Battle": [
-        "Lenalia Plateau Shop Unlock",
+    LocationNames.LENALIA_STORY: [
+        LocationNames.LENALIA_SHOP,
     ],
-    "Fort Zeakden Story Battle": [
-        "Fort Zeakden Shop Unlock",
-        "Chapter 2 Ramza Squire Job Unlock",
-        "Recruit Rad",
-        "Recruit Alicia",
-        "Recruit Lavian"
+    LocationNames.ZEAKDEN_STORY: [
+        LocationNames.ZEAKDEN_SHOP,
+        LocationNames.RAMZA_CHAPTER_2_UNLOCK,
+        LocationNames.RAD_RECRUIT,
+        LocationNames.ALICIA_RECRUIT,
+        LocationNames.LAVIAN_RECRUIT
     ],
-    "Yardow Fort City Story Battle": [
-        "Yardow Fort City Shop Unlock"
+    LocationNames.YARDOW_STORY: [
+        LocationNames.YARDOW_SHOP
     ],
-    "Roof of Riovanes Castle Story Battle": [
-        "Riovanes Castle Shop Unlock",
-        "Recruit Rafa",
-        "Recruit Malak",
-        "Chapter 4 Ramza Squire Job Unlock"
+    LocationNames.RIOVANES_3_STORY: [
+        LocationNames.RIOVANES_SHOP,
+        LocationNames.RAFA_RECRUIT,
+        LocationNames.MALAK_RECRUIT,
+        LocationNames.RAMZA_CHAPTER_4_UNLOCK
     ],
-    "Zirekile Falls Story Battle": [
-        "Zirekile Falls Shop Unlock"
+    LocationNames.ZIREKILE_STORY: [
+        LocationNames.ZIREKILE_SHOP
     ],
-    "Zeklaus Desert Story Battle": [
-        "Zeklaus Desert Shop Unlock"
+    LocationNames.ZEKLAUS_STORY: [
+        LocationNames.ZEKLAUS_SHOP
     ],
-    "Araguay Woods Story Battle": [
-        "Recruit Boco"
+    LocationNames.ARAGUAY_STORY: [
+        LocationNames.BOCO_RECRUIT
     ],
-    "Goland Underground Passage Sidequest Battle": [
-        "Recruit Beowulf",
-        "Recruit Reis (Dragon)",
-        "Recruit Worker 8"
+    LocationNames.GOLAND_4_SIDEQUEST: [
+        LocationNames.BEOWULF_RECRUIT,
+        LocationNames.REIS_DRAGON_RECRUIT,
+        LocationNames.WORKER_8_RECRUIT
     ],
-    "Back Gate of Lesalia Castle Story Battle": [
-        "Lesalia Imperial Capital Shop Unlock"
+    LocationNames.LESALIA_STORY: [
+        LocationNames.LESALIA_SHOP
     ],
-    "Bariaus Hill Story Battle": [
-        "Bariaus Hill Shop Unlock"
+    LocationNames.BARIAUS_HILL_STORY: [
+        LocationNames.BARIAUS_HILL_SHOP
     ],
-    "Inside of Lionel Castle Story Battle": [
-        "Lionel Castle Shop Unlock"
+    LocationNames.LIONEL_2_STORY: [
+        LocationNames.LIONEL_SHOP
     ],
-    "Bariaus Valley Story Battle": [
-        "Bariaus Valley Shop Unlock",
-        "Recruit Agrias"
+    LocationNames.BARIAUS_VALLEY_STORY: [
+        LocationNames.BARIAUS_VALLEY_SHOP,
+        LocationNames.AGRIAS_RECRUIT
     ],
-    "Nelveska Temple Sidequest Battle": [
-        "Recruit Reis (Human)"
+    LocationNames.NELVESKA_SIDEQUEST: [
+        LocationNames.REIS_HUMAN_RECRUIT
     ],
-    "Zarghidas Trade City Sidequest Battle": [
-        "Recruit Cloud"
+    LocationNames.ZARGHIDAS_SIDEQUEST: [
+        LocationNames.CLOUD_RECRUIT
     ],
-    "Bethla Garrison Sluice Story Battle": [
-        "Bethla Garrison Shop Unlock",
-        "Recruit Orlandu"
+    LocationNames.BETHLA_SLUICE_STORY: [
+        LocationNames.BETHLA_SHOP,
+        LocationNames.ORLANDU_RECRUIT
     ],
-    "Limberry Castle Cemetary Story Battle": [
-        "Limberry Castle Shop Unlock",
-        "Recruit Meliadoul"
+    LocationNames.LIMBERRY_3_STORY: [
+        LocationNames.LIMBERRY_SHOP,
+        LocationNames.MELIADOUL_RECRUIT
     ],
-    "Underground Book Storage 2 Story Battle": [
-        "Orbonne Monastery Shop Unlock"
+    LocationNames.UBS_2_STORY: [
+        LocationNames.ORBONNE_SHOP
     ],
-    "Slums of Goug Story Battle": [
-        "Recruit Mustadio"
+    LocationNames.GOUG_STORY: [
+        LocationNames.MUSTADIO_RECRUIT
     ],
-    "END Sidequest Battle": [
-        "Recruit Byblos"
+    LocationNames.END_SIDEQUEST: [
+        LocationNames.BYBLOS_RECRUIT
     ]
 }
 
-monster_location_names = [f"Poach {monster.monster_name.value}" for monster in monster_locations]
+linked_reward_names: dict[str, list[str]] = {}
+for location, value in linked_rewards.items():
+    new_list = []
+    for linked_location in value:
+        new_list.append(linked_location.value)
+    linked_reward_names[location.value] = new_list
+
+
+locations_with_text: list[str] = []
+
+for location in story_battle_locations:
+    locations_with_text.append(location.value)
+
+for location in sidequest_battles:
+    locations_with_text.append(location.value)
+
+for location in rare_battle_locations:
+    locations_with_text.append(location.value)
+
+monster_location_names: list[str] = [f"Poach {monster.monster_name.value}" for monster in monster_locations]
+
+location_sort_list: list[LocationNames] = [
+    *story_battle_locations,
+    *shop_unlock_locations,
+    *ramza_job_unlock_locations,
+    *character_recruit_locations,
+    *sidequest_battles,
+    *rare_battle_locations,
+    *job_unlock_locations
+]
+
+location_sort_list_names: list[str] = [
+    location.value for location in location_sort_list
+]

@@ -25,7 +25,8 @@ from .data.items import zodiac_stone_names, world_map_pass_names, job_names, sho
 from .data.locations import all_regions, world_map_regions, story_battle_locations, character_recruit_locations, \
     sidequest_battle_locations, job_unlock_locations, rare_battle_locations, default_murond_fights, \
     shop_unlock_locations, monster_location_names, story_zodiac_stone_locations, sidequest_zodiac_stone_locations, \
-    ramza_job_unlock_locations
+    ramza_job_unlock_locations, location_sort_list_names, locations_with_text, linked_reward_names
+from .data.logic.FFTLocation import LocationNames
 from .data.logic.Monsters import monster_locations_lookup, monster_family_lookup, monster_families
 from .data.logic.regions.Fovoham import fovoham_regions
 from .data.logic.regions.Gallione import gallione_regions
@@ -35,6 +36,7 @@ from .data.logic.regions.Limberry import limberry_regions
 from .data.logic.regions.Lionel import lionel_regions
 from .data.logic.regions.Murond import murond_regions
 from .data.logic.regions.Zeltennia import zeltennia_regions
+from .data.text import create_text_for_own_item, create_text_for_offworld_item
 
 
 class FinalFantasyTacticsIISettings(settings.Group):
@@ -118,7 +120,8 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
 
     def generate_early(self) -> None:
         # Story battles are always in
-        self.included_locations.extend(story_battle_locations)
+        included_locations: list[LocationNames] = []
+        included_locations.extend(story_battle_locations)
 
         # Character recruitment locations are always in if not tied to a sidequest
         if self.options.sidequest_battles:
@@ -127,28 +130,30 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
             character_recruitments = [
                 character for character in character_recruit_locations if character not in sidequest_battle_locations
             ]
-        self.included_locations.extend(character_recruitments)
+        included_locations.extend(character_recruitments)
 
         # Shop unlocks are always in
-        self.included_locations.extend(shop_unlock_locations)
+        included_locations.extend(shop_unlock_locations)
 
         # Ramza form unlocks are always in
-        self.included_locations.extend(ramza_job_unlock_locations)
+        included_locations.extend(ramza_job_unlock_locations)
 
         # Optional locations
         if self.options.sidequest_battles:
-            self.included_locations.extend(sidequest_battle_locations)
+            included_locations.extend(sidequest_battle_locations)
         if self.options.job_unlocks:
-            self.included_locations.extend(job_unlock_locations)
+            included_locations.extend(job_unlock_locations)
         if self.options.rare_battles:
-            self.included_locations.extend(rare_battle_locations)
+            included_locations.extend(rare_battle_locations)
+
+
+        if self.options.final_battles == self.options.final_battles.option_vanilla:
+            self.murond_fights.extend([fight.value for fight in default_murond_fights])
+
+        self.included_locations = [location.value for location in included_locations]
+
         if self.options.poach_locations:
             self.included_locations.extend(monster_location_names)
-
-        # Right now, the final series can't unlock anything since we don't return to the world map, so pull those out.
-        self.murond_fights.extend(default_murond_fights)
-        for fight in self.murond_fights:
-            self.included_locations.remove(fight)
 
         # Make Zodiac Stones local if option is set
         if self.options.zodiac_stone_locations == self.options.zodiac_stone_locations.option_anywhere_local:
@@ -176,6 +181,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         murond_locations = []
 
         # Define connections
+        locations_to_add = []
         for origin_region_data in all_regions:
             origin_region = self.get_region(origin_region_data.name)
             for connection in origin_region_data.connections:
@@ -207,9 +213,9 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
                     limberry_locations.append(location)
                 if origin_region_data in murond_regions:
                     murond_locations.append(location)
-                if location.name not in self.included_locations:
+                if not location.check_enabled(self.options):
                     if self.debug:
-                        print(f"Excluding {location.name}")
+                        print(f"Excluding {location}")
                     continue
                 new_location = FinalFantasyTacticsIILocation(
                     self.player,
@@ -217,7 +223,10 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
                     self.location_name_to_id[location.name],
                     origin_region
                 )
-                origin_region.locations.append(new_location)
+                locations_to_add.append(new_location)
+        locations_to_add.sort(key=lambda loc: location_sort_list_names.index(loc.name))
+        for location in locations_to_add:
+            location.parent_region.locations.append(location)
         for region in jobs_regions:
             menu.connect(self.get_region(region.name))
 
@@ -231,7 +240,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
                 )
                 poach_region.locations.append(new_location)
 
-        victory_location = self.get_location("Graveyard of Airships 2 Story Battle")
+        victory_location = self.get_location(LocationNames.AIRSHIPS_2_STORY.value)
         victory_location.place_locked_item(self.create_item("Farlem"))
 
         # Debug print list and number of locations for analysis purposes
@@ -302,9 +311,9 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
 
         # Place Zodiac Stones if stones are in vanilla spots. Otherwise, add them to itempool.
         if self.options.zodiac_stone_locations == self.options.zodiac_stone_locations.option_vanilla_stones:
-            stone_locations = story_zodiac_stone_locations.copy()
+            stone_locations = [location.value for location in story_zodiac_stone_locations]
             if self.options.sidequest_battles:
-                stone_locations.extend(sidequest_zodiac_stone_locations.copy())
+                stone_locations.extend([location.value for location in sidequest_zodiac_stone_locations])
             stone_locations_pruned = self.random.sample(stone_locations, k=zodiac_stones_in_pool)
             self.random.shuffle(stone_locations)
             for stone in zodiac_stones_in_game:
@@ -334,7 +343,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         filler_lists = []
         normal_weight = self.options.normal_item_weight.value
         rare_weight = self.options.rare_item_weight.value
-        gil_weight = self.options.gil_item_weight.value
+        gil_weight = self.options.bonus_gil_item_weight.value
         jp_weight = self.options.jp_boon_item_weight.value
 
         # Shortcut if everything's the same weight (or if someone gets funny and sets them all to zero)
@@ -396,7 +405,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
 
         # Victory condition
         add_rule(
-            self.get_location("Graveyard of Airships 2 Story Battle"),
+            self.get_location(LocationNames.AIRSHIPS_2_STORY.value),
             lambda state: state.has_group("Zodiac Stones", self.player, self.zodiac_stones_required)
                           and state.can_reach_region("Murond Death City", self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Farlem", self.player)
@@ -411,6 +420,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         patch_dict: dict[str, Any] = dict()
         # Hash of the MW seed to associate with save file
         patch_dict["SeedHash"] = self.multiworld.seed % 0x7FFF
+        patch_dict["LocationDict"] = self.create_location_dict()
 
         rom_name_text = f'FFTII{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:9}'
         rom_name_text = rom_name_text[:20]
@@ -427,6 +437,54 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         )
         patch.write(rom_path)
 
+    def create_location_dict(self):
+        locations = self.get_locations()
+        location_dict = dict()
+        for location in locations:
+            if location.name not in locations_with_text:
+                continue
+            item_locations = [location.name]
+            if location.name in linked_reward_names.keys():
+                for linked_location in linked_reward_names[location.name]:
+                    item_locations.append(linked_location)
+            item_strings = []
+            is_any_progression: bool = False
+            for location_name in item_locations:
+                ap_location = self.get_location(location_name)
+                item = ap_location.item
+                if item.classification & ItemClassification.progression:
+                    is_any_progression = True
+                    classification = ItemClassification.progression
+                elif item.classification & ItemClassification.useful:
+                    classification = ItemClassification.useful
+                elif item.classification & ItemClassification.trap:
+                    classification = ItemClassification.trap
+                else:
+                    classification = ItemClassification.filler
+                player = item.player
+                if player == self.player:
+                    text = create_text_for_own_item(item.name, classification)
+                else:
+                    other_game = self.multiworld.game[player]
+                    is_fft = other_game == "Final Fantasy Tactics Ivalice Island"
+                    text = create_text_for_offworld_item(self.multiworld.player_name[player],
+                                                         item.name,
+                                                         classification,
+                                                         is_fft)
+                item_strings.append(text)
+            if len(item_strings) > 1:
+                if len(item_strings) == 2:
+                    item_strings[-1] = " and " + item_strings[-1]
+                else:
+                    for index, string in enumerate(item_strings[0:-1]):
+                        item_strings[index] = string + ", "
+                    item_strings[-1] = "and " + item_strings[-1]
+            terminator = "!" if is_any_progression else "."
+            final_item_string = f"{self.player_name}'s party found " + "".join(item_strings) + terminator
+            print(final_item_string)
+            location_dict[location.name] = final_item_string
+        return location_dict
+
     def modify_multidata(self, multidata: dict):
         import base64
         rom_name_text = f'FFTII{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:9}'
@@ -442,7 +500,12 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         return self.random.choice(self.filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        return self.options.as_dict("gil_item_size", "jp_boon_size", "sidequest_battles")
+        return self.options.as_dict(
+            "bonus_gil_item_size",
+            "jp_boon_size",
+            "sidequest_battles",
+            "zodiac_stones_required"
+        )
 
 
 class FinalFantasyTacticsIIItem(Item):

@@ -9,8 +9,11 @@ from .Items import valid_item_names
 if TYPE_CHECKING:
     from worlds.fftii import FinalFantasyTacticsIIOptions
 
-battle_levels = [0, 0, 2, 4, 6, 10]
-battle_levels_poaching = [0, 0, 3, 11, 11, 11]
+# Number of shop progression unlocks needed to logically access a battle
+battle_levels = [0, 0, 2, 5, 8, 8]
+
+# Number of shop unlocks needed to access a monster
+battle_levels_poaching = [0, 0, 2, 5, 8, 8]
 
 class LogicObject:
     requirements: list[list[str]] = []

@@ -1,3 +1,5 @@
+from .logic.FFTLocation import LocationNames
+
 cd_name_location = 0x9304
 cd_name = "SCUS_942.21"
 
@@ -30,6 +32,7 @@ war_funds_length = 4
 zodiac_stones_1_address = 0x057974
 zodiac_stones_2_address = 0x057975
 
+# These could have been with the event flags but I wrote them first so here they are in this format.
 stones_lookup = {
     "Aries": (zodiac_stones_1_address, 3),
     "Taurus": (zodiac_stones_1_address, 4),
@@ -232,6 +235,9 @@ locations_to_read = {
     **story_addresses, **sidequest_addresses, **rare_battle_addresses
 }
 
+# We offset a bunch of flags by 0x80 because the bitflag offset starts later than the flag bits do
+# as the first set of flags correspond to words, not bits...but we want the flag numbers to match our notes
+
 for location, flag in locations_to_read.items():
     locations_to_read[location] = flag - 0x80
 
@@ -329,3 +335,57 @@ job_level_order = [
     "Dancer",
     "Mime"
 ]
+
+pass_paths = {
+    "Gallione Pass": {
+        "Fovoham Pass": [
+            0x231 - 0x80, # Lenalia <> Fovoham
+            0x232 - 0x80  # Fovoham <> Zeakden
+        ],
+        "Lesalia Pass": [
+            0x236 - 0x80, # Dorter <> Zeklaus
+            0x240 - 0x80  # Dorter <> Araguay
+        ],
+        "Murond Pass": [
+            0x23F - 0x80, # Dorter <> Orbonne
+            0x25A - 0x80  # Gariland <> Murond Temple
+        ]
+    },
+    "Fovoham Pass": {
+        "Lesalia Pass": [
+            0x234 - 0x80, # Riovanes <> Bervenia Volcano
+            0x23C - 0x80  # Grog <> Lesalia
+        ],
+        "Zeltennia Pass": [
+            0x246 - 0x80, # Grog <> Doguola
+        ]
+    },
+    "Lesalia Pass": {
+        "Lionel Pass": [
+            0x250 - 0x80  # Zirekile <> Zaland
+        ],
+        "Limberry Pass": [
+            0x242 - 0x80  # Zirekile <> Bethla
+        ]
+    },
+    "Lionel Pass": {
+        "Murond Pass": [
+            0x258 - 0x80, # Goug <> Zigolis
+            0x255 - 0x80  # Warjilis <> Deep Dungeon
+        ]
+    },
+    "Zeltennia Pass": {
+        "Limberry Pass": [
+            0x244 - 0x80, # Bervenia City <> Bed
+            0x24C - 0x80  # Germinas <> Poeskas
+        ]
+    },
+}
+
+finale_oath = 0x25B - 0x80 # Formerly Goug <> Warjilis, now Deep Dungeon <> Murond Death City
+game_started_flag_address = 0x18E - 0x80
+
+
+victory_text_offsets = {
+    LocationNames.GARILAND_STORY.value: 0x86D5A0,
+}

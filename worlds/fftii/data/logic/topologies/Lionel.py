@@ -1,7 +1,6 @@
 from ..Connection import Connection
 from ..Requirements import *
-from ..FFTLocation import FFTLocation
-
+from ..FFTLocation import FFTLocation, LocationNames, RareBattleLocation
 
 from ..regions.Lionel import *
 from ..regions.Lesalia import Zirekile
@@ -13,7 +12,7 @@ Zaland.connections = [
 ]
 
 Zaland.locations = [
-    FFTLocation("Zaland Fort City Story Battle", battle_level=2)
+    FFTLocation(LocationNames.ZALAND_STORY, battle_level=2)
 ]
 
 BariausHill.connections = [
@@ -22,20 +21,21 @@ BariausHill.connections = [
 ]
 
 BariausHill.locations = [
-    FFTLocation("Bariaus Hill Story Battle", battle_level=2),
-    FFTLocation("Bariaus Hill Rare Battle"),
-    FFTLocation("Bariaus Hill Shop Unlock", battle_level=2)
+    FFTLocation(LocationNames.BARIAUS_HILL_STORY, battle_level=2),
+    FFTLocation(LocationNames.BARIAUS_HILL_SHOP, battle_level=2),
+    RareBattleLocation(LocationNames.BARIAUS_HILL_RARE, battle_level=5)
 ]
 
 Lionel.connections = [
+    Connection(BariausHill),
     Connection(Zigolis),
     Connection(BariausValley)
 ]
 
 Lionel.locations = [
-    FFTLocation("Gate of Lionel Castle Story Battle", battle_level=2),
-    FFTLocation("Inside of Lionel Castle Story Battle", battle_level=2),
-    FFTLocation("Lionel Castle Shop Unlock", battle_level=2)
+    FFTLocation(LocationNames.LIONEL_1_STORY, battle_level=2),
+    FFTLocation(LocationNames.LIONEL_2_STORY, battle_level=2),
+    FFTLocation(LocationNames.LIONEL_SHOP, battle_level=2)
 ]
 
 BariausValley.connections = [
@@ -45,10 +45,10 @@ BariausValley.connections = [
 ]
 
 BariausValley.locations = [
-    FFTLocation("Bariaus Valley Story Battle", battle_level=2),
-    FFTLocation("Recruit Agrias", battle_level=2),
-    FFTLocation("Bariaus Valley Rare Battle"),
-    FFTLocation("Bariaus Valley Shop Unlock", battle_level=2)
+    FFTLocation(LocationNames.BARIAUS_VALLEY_STORY, battle_level=2),
+    FFTLocation(LocationNames.BARIAUS_VALLEY_SHOP, battle_level=2),
+    FFTLocation(LocationNames.AGRIAS_RECRUIT, battle_level=2),
+    RareBattleLocation(LocationNames.BARIAUS_VALLEY_RARE, battle_level=5)
 ]
 
 Golgorand.connections = [
@@ -56,7 +56,7 @@ Golgorand.connections = [
 ]
 
 Golgorand.locations = [
-    FFTLocation("Golgorand Execution Site Story Battle", battle_level=2)
+    FFTLocation(LocationNames.GOLGORAND_STORY, battle_level=2)
 ]
 
 Warjilis.connections = [
@@ -70,6 +70,6 @@ Zigolis.connections = [
 ]
 
 Zigolis.locations = [
-    FFTLocation("Zigolis Swamp Story Battle", battle_level=2),
-    FFTLocation("Zigolis Swamp Rare Battle")
+    FFTLocation(LocationNames.ZIGOLIS_STORY, battle_level=2),
+    RareBattleLocation(LocationNames.ZIGOLIS_RARE, battle_level=5)
 ]

@@ -1,7 +1,7 @@
 from BaseClasses import Location
 from .data.logic.Requirement import Requirement
 from .data.logic import topologies
-from .data.locations import all_regions, monster_location_names
+from .data.locations import all_regions, monster_location_names, location_sort_list, location_sort_list_names
 
 
 class FinalFantasyTacticsIILocation(Location):

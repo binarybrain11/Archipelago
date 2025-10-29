@@ -1,7 +1,6 @@
 from ..Connection import Connection
 from ..Requirements import *
-from ..FFTLocation import FFTLocation
-
+from ..FFTLocation import FFTLocation, LocationNames, RareBattleLocation, SidequestLocation
 
 from ..regions.Zeltennia import *
 from ..regions.Fovoham import Grog
@@ -14,7 +13,7 @@ BerveniaCity.connections = [
 ]
 
 BerveniaCity.locations = [
-    FFTLocation("Bervenia Free City Story Battle", battle_level=4)
+    FFTLocation(LocationNames.BERVENIA_CITY_STORY, battle_level=4)
 ]
 
 Finath.connections = [
@@ -23,8 +22,8 @@ Finath.connections = [
 ]
 
 Finath.locations = [
-    FFTLocation("Finath River Story Battle", battle_level=4),
-    FFTLocation("Finath River Rare Battle", battle_level=4)
+    FFTLocation(LocationNames.FINATH_STORY, battle_level=4),
+    RareBattleLocation(LocationNames.FINATH_RARE, battle_level=4)
 ]
 
 Zeltennia.connections = [
@@ -34,7 +33,7 @@ Zeltennia.connections = [
 ]
 
 Zeltennia.locations = [
-    FFTLocation("Zeltennia Castle Story Battle", battle_level=4)
+    FFTLocation(LocationNames.ZELTENNIA_STORY, battle_level=4)
 ]
 
 Zarghidas.connections = [
@@ -43,8 +42,8 @@ Zarghidas.connections = [
 ]
 
 Zarghidas.locations = [
-    FFTLocation("Zarghidas Trade City Sidequest Battle", battle_level=4),
-    FFTLocation("Recruit Cloud", battle_level=4)
+    SidequestLocation(LocationNames.ZARGHIDAS_SIDEQUEST, battle_level=4),
+    SidequestLocation(LocationNames.CLOUD_RECRUIT, battle_level=4)
 ]
 
 Germinas.connections = [
@@ -53,8 +52,8 @@ Germinas.connections = [
 ]
 
 Germinas.locations = [
-    FFTLocation("Germinas Peak Story Battle", battle_level=5),
-    FFTLocation("Germinas Peak Rare Battle", battle_level=5)
+    FFTLocation(LocationNames.GERMINAS_STORY, battle_level=5),
+    RareBattleLocation(LocationNames.GERMINAS_RARE, battle_level=5)
 ]
 
 Nelveska.connections = [
@@ -62,8 +61,8 @@ Nelveska.connections = [
 ]
 
 Nelveska.locations = [
-    FFTLocation("Nelveska Temple Sidequest Battle", battle_level=5),
-    FFTLocation("Recruit Reis (Human)", battle_level=5)
+    SidequestLocation(LocationNames.NELVESKA_SIDEQUEST, battle_level=5),
+    SidequestLocation(LocationNames.REIS_HUMAN_RECRUIT, battle_level=5)
 ]
 
 Doguola.connections = [
@@ -72,6 +71,6 @@ Doguola.connections = [
 ]
 
 Doguola.locations = [
-    FFTLocation("Doguola Pass Story Battle", battle_level=3),
-    FFTLocation("Doguola Pass Rare Battle")
+    FFTLocation(LocationNames.DOGUOLA_STORY, battle_level=3),
+    RareBattleLocation(LocationNames.DOGUOLA_RARE, battle_level=5)
 ]

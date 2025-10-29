@@ -48,28 +48,3 @@ Items do not have a unique appearance in Final Fantasy Tactics Ivalice Island. I
 will be displayed in text in a custom event. Other items (job unlock rewards and poach rewards) will be shown 
 in the client.
 
-## What Quality of Life options have been added?
-
-- JP Boon items have been added, adding JP to your character's jobs to make acquiring abilities easier
-- JP gains have been multiplied across the board (configurable with an option) to make unlocking new jobs easier.
-
-## Where can the Zodiac Stones be on the Vanilla Stones setting?
-
-- Inside of Lionel Castle
-- Slums of Goug
-- Inside Riovanes Castle
-- Roof of Riovanes Castle
-- Bethla Garrison Sluice
-- Igros Castle
-- Inside Limberry Castle
-- Limberry Castle Cemetary
-- Goland Underground Passage (only when sidequests are enabled)
-- Nelveska Temple (only when sidequests are enabled)
-- END (only when sidequests are enabled)
-
-Because in vanilla the Limberry Castle Cemetary gives out two stones (one from Zalera and one from Meliadoul),
-Inside Limberry Castle was chosen as a possible location for a Zodiac Stone to maintain some parity with vanilla.
-
-## Can I play this single player?
-
-Yes, though a server connection is still required, as most items are given by the client.

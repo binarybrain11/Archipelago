@@ -1,7 +1,6 @@
 from ..Connection import Connection
-from ..Monsters import MonsterNames
 from ..Requirements import *
-from ..FFTLocation import FFTLocation
+from ..FFTLocation import FFTLocation, RareBattleLocation, LocationNames
 
 from ..regions.Gallione import *
 from ..regions.Fovoham import Fovoham
@@ -16,7 +15,7 @@ Gariland.connections = [
 ]
 
 Gariland.locations = [
-    FFTLocation("Gariland Magic City Story Battle")
+    FFTLocation(LocationNames.GARILAND_STORY)
 ]
 
 Mandalia.connections = [
@@ -26,9 +25,9 @@ Mandalia.connections = [
 ]
 
 Mandalia.locations = [
-    FFTLocation("Mandalia Plains Story Battle"),
-    FFTLocation("Mandalia Plains Rare Battle"),
-    FFTLocation("Mandalia Plains Shop Unlock")
+    FFTLocation(LocationNames.MANDALIA_STORY),
+    FFTLocation(LocationNames.MANDALIA_SHOP),
+    RareBattleLocation(LocationNames.MANDALIA_RARE, battle_level=5)
 ]
 
 Igros.connections = [
@@ -37,7 +36,7 @@ Igros.connections = [
 ]
 
 Igros.locations = [
-    FFTLocation("Igros Castle Story Battle", battle_level=5)
+    FFTLocation(LocationNames.IGROS_STORY, battle_level=5)
 ]
 
 Sweegy.connections = [
@@ -46,8 +45,8 @@ Sweegy.connections = [
 ]
 
 Sweegy.locations = [
-    FFTLocation("Sweegy Woods Story Battle"),
-    FFTLocation("Sweegy Woods Rare Battle")
+    FFTLocation(LocationNames.SWEEGY_STORY),
+    RareBattleLocation(LocationNames.SWEEGY_RARE, battle_level=5)
 ]
 
 Dorter.connections = [
@@ -58,8 +57,8 @@ Dorter.connections = [
 ]
 
 Dorter.locations = [
-    FFTLocation("Dorter Slums Story Battle"),
-    FFTLocation("Dorter City Story Battle", battle_level=2)
+    FFTLocation(LocationNames.DORTER_1_STORY),
+    FFTLocation(LocationNames.DORTER_2_STORY, battle_level=2)
 ]
 
 ThievesFort.connections = [
@@ -67,7 +66,7 @@ ThievesFort.connections = [
 ]
 
 ThievesFort.locations = [
-    FFTLocation("Thieves' Fort Story Battle")
+    FFTLocation(LocationNames.THIEVES_FORT_STORY)
 ]
 
 Lenalia.connections = [
@@ -76,9 +75,9 @@ Lenalia.connections = [
 ]
 
 Lenalia.locations = [
-    FFTLocation("Lenalia Plateau Story Battle"),
-    FFTLocation("Lenalia Plateau Rare Battle"),
-    FFTLocation("Lenalia Plateau Shop Unlock")
+    FFTLocation(LocationNames.LENALIA_STORY),
+    FFTLocation(LocationNames.LENALIA_SHOP),
+    RareBattleLocation(LocationNames.LENALIA_RARE, battle_level=5)
 
 ]
 
@@ -88,10 +87,10 @@ Zeakden.connections = [
 ]
 
 Zeakden.locations = [
-    FFTLocation("Fort Zeakden Story Battle"),
-    FFTLocation("Fort Zeakden Shop Unlock"),
-    FFTLocation("Chapter 2 Ramza Squire Job Unlock"),
-    FFTLocation("Recruit Rad"),
-    FFTLocation("Recruit Alicia"),
-    FFTLocation("Recruit Lavian")
+    FFTLocation(LocationNames.ZEAKDEN_STORY),
+    FFTLocation(LocationNames.ZEAKDEN_SHOP),
+    FFTLocation(LocationNames.RAMZA_CHAPTER_2_UNLOCK),
+    FFTLocation(LocationNames.RAD_RECRUIT),
+    FFTLocation(LocationNames.ALICIA_RECRUIT),
+    FFTLocation(LocationNames.LAVIAN_RECRUIT)
 ]

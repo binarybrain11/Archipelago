@@ -1,6 +1,6 @@
 from ..Connection import Connection
 from ..Requirements import *
-from ..FFTLocation import FFTLocation
+from ..FFTLocation import FFTLocation, LocationNames, RareBattleLocation, SidequestLocation
 
 from ..regions.Lesalia import *
 from ..regions.Gallione import Dorter
@@ -14,9 +14,9 @@ Araguay.connections = [
 ]
 
 Araguay.locations = [
-    FFTLocation("Araguay Woods Story Battle", battle_level=2),
-    FFTLocation("Recruit Boco", battle_level=2),
-    FFTLocation("Araguay Woods Rare Battle")
+    FFTLocation(LocationNames.ARAGUAY_STORY, battle_level=2),
+    FFTLocation(LocationNames.BOCO_RECRUIT, battle_level=2),
+    RareBattleLocation(LocationNames.ARAGUAY_RARE, battle_level=5)
 ]
 
 Zeklaus.connections = [
@@ -26,9 +26,9 @@ Zeklaus.connections = [
 ]
 
 Zeklaus.locations = [
-    FFTLocation("Zeklaus Desert Story Battle"),
-    FFTLocation("Zeklaus Desert Rare Battle"),
-    FFTLocation("Zeklaus Desert Shop Unlock")
+    FFTLocation(LocationNames.ZEKLAUS_STORY),
+    FFTLocation(LocationNames.ZEKLAUS_SHOP),
+    RareBattleLocation(LocationNames.ZEKLAUS_RARE, battle_level=5)
 ]
 
 BerveniaVolcano.connections = [
@@ -37,7 +37,7 @@ BerveniaVolcano.connections = [
 ]
 
 BerveniaVolcano.locations = [
-    FFTLocation("Bervenia Volvano Rare Battle")
+    RareBattleLocation(LocationNames.BERVENIA_VOLCANO_RARE, battle_level=5)
 ]
 
 Zirekile.connections = [
@@ -47,9 +47,9 @@ Zirekile.connections = [
 ]
 
 Zirekile.locations = [
-    FFTLocation("Zirekile Falls Story Battle", battle_level=2),
-    FFTLocation("Zirekile Falls Rare Battle"),
-    FFTLocation("Zirekile Falls Shop Unlock", battle_level=2)
+    FFTLocation(LocationNames.ZIREKILE_STORY, battle_level=2),
+    FFTLocation(LocationNames.ZIREKILE_SHOP, battle_level=2),
+    RareBattleLocation(LocationNames.ZIREKILE_RARE, battle_level=5)
 ]
 
 Goland.connections = [
@@ -58,14 +58,14 @@ Goland.connections = [
 ]
 
 Goland.locations = [
-    FFTLocation("Goland Coal City Story Battle", battle_level=2),
-    FFTLocation("Goland Colliery Third Floor Sidequest Battle", battle_level=4),
-    FFTLocation("Goland Colliery Second Floor Sidequest Battle", battle_level=4),
-    FFTLocation("Goland Colliery First Floor Sidequest Battle", battle_level=4),
-    FFTLocation("Goland Underground Passage Sidequest Battle", battle_level=4),
-    FFTLocation("Recruit Beowulf", battle_level=4),
-    FFTLocation("Recruit Reis (Dragon)", battle_level=4),
-    FFTLocation("Recruit Worker 8", battle_level=4)
+    FFTLocation(LocationNames.GOLAND_STORY, battle_level=2),
+    SidequestLocation(LocationNames.GOLAND_1_SIDEQUEST, battle_level=4),
+    SidequestLocation(LocationNames.GOLAND_2_SIDEQUEST, battle_level=4),
+    SidequestLocation(LocationNames.GOLAND_3_SIDEQUEST, battle_level=4),
+    SidequestLocation(LocationNames.GOLAND_4_SIDEQUEST, battle_level=4),
+    SidequestLocation(LocationNames.BEOWULF_RECRUIT, battle_level=4),
+    SidequestLocation(LocationNames.REIS_DRAGON_RECRUIT, battle_level=4),
+    SidequestLocation(LocationNames.WORKER_8_RECRUIT, battle_level=4)
 ]
 
 Lesalia.connections = [
@@ -74,6 +74,6 @@ Lesalia.connections = [
 ]
 
 Lesalia.locations = [
-    FFTLocation("Back Gate of Lesalia Castle Story Battle", battle_level=2),
-    FFTLocation("Lesalia Imperial Capital Shop Unlock", battle_level=2)
+    FFTLocation(LocationNames.LESALIA_STORY, battle_level=2),
+    FFTLocation(LocationNames.LESALIA_SHOP, battle_level=2)
 ]

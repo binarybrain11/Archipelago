@@ -147,17 +147,36 @@ rare_item_names = [
 ]
 
 gil_item_names = [
-    "Pile of Gil", "Sack of Gil", "Chest of Gil"
+    "Bonus Gil: l i t t l e  m o n e y",
+    "Bonus Gil: m o r e  m o n e y",
+    "Bonus Gil: l o t s  o f  m o n e y"
 ]
 
 gil_item_names_weighted = [
-    "Pile of Gil", "Pile of Gil", "Pile of Gil", "Sack of Gil", "Sack of Gil", "Chest of Gil"
+    "Bonus Gil: l i t t l e  m o n e y",
+    "Bonus Gil: l i t t l e  m o n e y",
+    "Bonus Gil: l i t t l e  m o n e y",
+    "Bonus Gil: m o r e  m o n e y",
+    "Bonus Gil: m o r e  m o n e y",
+    "Bonus Gil: l o t s  o f  m o n e y"
 ]
 
 gil_item_sizes = [
-    {"Pile of Gil": 250, "Sack of Gil": 2500, "Chest of Gil": 5000},
-    {"Pile of Gil": 500, "Sack of Gil": 5000, "Chest of Gil": 10000},
-    {"Pile of Gil": 1000, "Sack of Gil": 10000, "Chest of Gil": 20000}
+    {
+        "Bonus Gil: l i t t l e  m o n e y": 250,
+        "Bonus Gil: m o r e  m o n e y": 2500,
+        "Bonus Gil: l o t s  o f  m o n e y": 5000
+    },
+    {
+        "Bonus Gil: l i t t l e  m o n e y": 500,
+        "Bonus Gil: m o r e  m o n e y": 5000,
+        "Bonus Gil: l o t s  o f  m o n e y": 10000
+    },
+    {
+        "Bonus Gil: l i t t l e  m o n e y": 1000,
+        "Bonus Gil: m o r e  m o n e y": 10000,
+        "Bonus Gil: l o t s  o f  m o n e y": 20000
+    }
 ]
 
 jp_item_names = [

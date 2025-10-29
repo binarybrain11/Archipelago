@@ -1,10 +1,10 @@
 import json
-import logging
+import sys
 import os
 import pkgutil
-import tempfile
-import typing
+
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import bsdiff4
 
@@ -13,6 +13,8 @@ from settings import get_settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APPatchExtension
 from worlds.fftii.ErrorRecalc import ErrorRecalculator
 from worlds.fftii.data import memory
+from worlds.fftii.data.memory import victory_text_offsets
+from worlds.fftii.data.text import split_text_into_lines
 
 
 def get_base_rom_as_bytes() -> bytes:
@@ -30,12 +32,26 @@ class FinalFantasyTacticsIIPatchExtension(APPatchExtension):
         base_patch = pkgutil.get_data(__name__, "fftii.bsdiff4")
         rom_data = bsdiff4.patch(iso, base_patch)
         rom_data = bytearray(rom_data)
+
+        location_dict = patch_dict["LocationDict"]
+        for location, text in location_dict.items():
+            if location in victory_text_offsets:
+                offset = victory_text_offsets[location]
+                print(location)
+                print(text)
+                text_lines, byte_lines = split_text_into_lines(location_dict["Fort Zeakden Story Battle"])
+                print(text_lines)
+                print(byte_lines)
+                all_bytes = []
+                for byte_line in byte_lines:
+                    all_bytes.extend(byte_line)
+                rom_data[offset:offset + len(all_bytes)] = all_bytes
+
         rom_name_text = patch_dict["RomName"]
         rom_name = bytearray(rom_name_text, 'utf-8')
         rom_name.extend([0] * (20 - len(rom_name)))
         rom_data[memory.rom_name_location:memory.rom_name_location + 20] = bytes(rom_name[:20])
         seed_hash = int(patch_dict["SeedHash"])
-        print(hex(seed_hash))
         seed_hash_bytes = seed_hash.to_bytes(2)
         rom_data[memory.seed_hash_location:memory.seed_hash_location + 2] = bytes(seed_hash_bytes)
 

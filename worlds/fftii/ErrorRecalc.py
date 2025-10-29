@@ -1,3 +1,5 @@
+# Copied from the SOTN APWorld under MIT license. Credit goes to fdelduque
+
 import os
 
 ecc_f_lut = bytearray(256)

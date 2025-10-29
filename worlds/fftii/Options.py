@@ -31,6 +31,15 @@ class ZodiacStoneLocations(Choice):
     option_anywhere = 2
     default = 0
 
+class FinalBattles(Choice):
+    """What the final goal is.
+    Vanilla requires the completion of all six final battles in sequence at Murond Death City.
+    Altima Only requires only Altima at Murond Death City, and the other endgame battles will be located at Orbonne."""
+    display_name = "Final Battles"
+    option_vanilla = 0
+    option_altima_only = 1
+    default = 0
+
 class SidequestBattles(DefaultOnToggle):
     """Are sidequest battles (Colliery, Nelveska, Zarghidas, Deep Dungeon) in the pool of locations?"""
     display_name = "Sidequest Battles"
@@ -61,9 +70,9 @@ class RareItemWeight(Range):
     range_end = 10
     default = 1
 
-class GilItemWeight(Range):
-    """Weight of gil award items in the filler pool."""
-    display_name = "Gil Item Weight"
+class BonusGilItemWeight(Range):
+    """Weight of bonus items in the filler pool."""
+    display_name = "Bonus Gil Item Weight"
     range_start = 0
     range_end = 10
     default = 2
@@ -75,10 +84,10 @@ class JPBoonItemWeight(Range):
     range_end = 10
     default = 1
 
-class GilItemSize(Choice):
-    """Adjusts the value of filler gil items in the pool.
+class BonusGilItemSize(Choice):
+    """Adjusts the value of bonus gil items in the pool.
     Normal is 1000/5000/10000. Frugal halves that, Expensive doubles."""
-    display_name = "Gil Item Size"
+    display_name = "Bonus Gil Item Size"
     option_frugal = 0
     option_normal = 1
     option_valuable = 2
@@ -120,15 +129,16 @@ class FinalFantasyTacticsIIOptions(PerGameCommonOptions):
     zodiac_stones_in_pool: ZodiacStonesInPool
     zodiac_stones_required: ZodiacStonesRequired
     zodiac_stone_locations: ZodiacStoneLocations
+    final_battles: FinalBattles
     sidequest_battles: SidequestBattles
     job_unlocks: JobUnlocks
     rare_battles: RareBattles
     poach_locations: PoachLocations
     normal_item_weight: NormalItemWeight
     rare_item_weight: RareItemWeight
-    gil_item_weight: GilItemWeight
+    bonus_gil_item_weight: BonusGilItemWeight
     jp_boon_item_weight: JPBoonItemWeight
-    gil_item_size: GilItemSize
+    bonus_gil_item_size: BonusGilItemSize
     jp_boon_size: JPBoonSize
     characters_join_with_equipment: CharactersJoinWithEquipment
     jp_gain_multiplier: JPGainMultiplier
@@ -139,6 +149,7 @@ fftii_option_groups = [
         ZodiacStonesInPool,
         ZodiacStonesRequired,
         ZodiacStoneLocations,
+        FinalBattles,
         SidequestBattles,
         JobUnlocks,
         PoachLocations,
@@ -147,9 +158,9 @@ fftii_option_groups = [
     OptionGroup("Filler Options", [
         NormalItemWeight,
         RareItemWeight,
-        GilItemWeight,
+        BonusGilItemWeight,
         JPBoonItemWeight,
-        GilItemSize,
+        BonusGilItemSize,
         JPBoonSize
     ]),
     OptionGroup("QOL Options", [

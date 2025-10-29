@@ -1,3 +1,9 @@
+from docutils.io import InputError
+
+from BaseClasses import ItemClassification
+from .items import zodiac_stone_names
+
+
 class TextData:
     character: str
     id: int
@@ -80,15 +86,15 @@ all_characters: list[TextData] = [
     #TextData("+", 0x42),
     TextData("/", 0x44),
     TextData(":", 0x46, 4),
-    TextData(".", 0x8B, 4),
+    TextData(".", 0x5F, 4),
     TextData("(", 0x8D, 4),
     TextData(")", 0x8E, 4),
     TextData("\"", 0x91, 4),
     TextData("'", 0x93, 4),
     TextData("♪", 0xB2, 10),
     TextData("*", 0xB5, 10),
-    TextData(",", 0xD119, 4),
-    TextData(".", 0xD11C, 2),
+    TextData(",", 0xDA74, 4),
+    #TextData(".", 0xD11C, 2),
 
     TextData("-", 0xD11D, 2),
     TextData("+", 0xD11E, 2),
@@ -116,10 +122,131 @@ all_characters: list[TextData] = [
     TextData("$", 0xDA0C, 6),
     TextData("¥", 0xDA0C, 6),
 
+    TextData(" ", 0xDA73, 2),
+    TextData("{unitname}", 0xE1),
     TextData("{Newline}", 0xF8),
-    TextData("{End}", 0xFE)
+    TextData("{End}", 0xFE),
+    TextData("{ColorNormal}", 0xE300, 0),
+    TextData("{ColorSpecial1}", 0xE304, 0),
+    TextData("{ColorSpecial2}", 0xE308, 0),
+    TextData("{ColorSpecial3}", 0xE3FF, 0)
 ]
 
 text_data_lookup = {
     text_data.character: text_data for text_data in all_characters
 }
+
+max_text_width = 180
+
+def create_text_for_offworld_item(player_name: str, item_name: str, classification: ItemClassification, is_fft_item: bool):
+    if is_fft_item and item_name in zodiac_stone_names:
+        item_string = "{item_name}" + f"{item_name}"
+    else:
+        item_string = f"{item_name}"
+    if classification == ItemClassification.progression:
+        item_string = "{ColorSpecial2}" + f"{item_string}" + "{ColorNormal}"
+    elif classification == ItemClassification.useful:
+        item_string = f"{item_string}"
+    elif classification == ItemClassification.trap:
+        item_string = "{ColorSpecial1}" + f"{item_string}" + "{ColorNormal}"
+    else:
+        item_string = "{ColorSpecial1}" + f"{item_string}" + "{ColorNormal}"
+    return f"{player_name}'s {item_string}"
+
+def create_text_for_own_item(item_name: str, classification: ItemClassification):
+    if item_name in zodiac_stone_names:
+        item_string = f"{{{item_name}}}" + f"{item_name}"
+    else:
+        item_string = f"{item_name}"
+    if classification == ItemClassification.progression:
+        item_string = "{ColorSpecial2}" + f"{item_string}" + "{ColorNormal}"
+    elif classification == ItemClassification.useful:
+        item_string = f"{item_string}"
+    elif classification == ItemClassification.trap:
+        item_string = "{ColorSpecial1}" + f"{item_string}" + "{ColorNormal}"
+    else:
+        item_string = "{ColorSpecial1}" + f"{item_string}" + "{ColorNormal}"
+    return f"their own {item_string}"
+
+def split_text_into_lines(location_text: str) -> tuple[list[str], list[list[int]]]:
+    lines: list[str] = []
+    byte_lines: list[list[int]] = []
+    current_line_width = 0
+    index = 0
+    current_line = ""
+    current_bytes = []
+    last_space_index = 0
+    while index < len(location_text):
+        character = location_text[index]
+        if character not in ["{", "}"]:
+            data_key = character
+            index += 1
+        elif character == "{":
+            start = index
+            end = location_text.index("}", start)
+            data_key = location_text[start:end + 1]
+            index = end + 1
+        else:
+            print(character)
+            print(index)
+            raise InputError("We shouldn't be processing this.")
+        if data_key not in text_data_lookup.keys():
+            data_key = "?"
+        data = text_data_lookup[data_key]
+        if current_line_width + data.width > max_text_width:
+            last_space = current_line.rfind(" ")
+            last_space_byte = -1
+            for byte_index, value in enumerate(current_bytes):
+                if value == 0x73:
+                    last_space_byte = byte_index
+            if last_space == -1:
+                lines.append(current_line)
+                byte_lines.append(current_bytes)
+                current_line = data_key
+                current_bytes = [data.id]
+                current_line_width = 0
+            else:
+                lines.append(current_line[:last_space])
+                byte_lines.append(current_bytes[:last_space_byte - 1])
+                current_line = current_line[last_space + 1:] + data_key
+                current_bytes = current_bytes[last_space_byte + 1:]
+                if data.id > 0xFF:
+                    current_bytes.append((data.id & 0xFF00) >> 8)
+                    current_bytes.append(data.id & 0xFF)
+                else:
+                    current_bytes.append(data.id)
+                current_line_width = 0
+                sub_index = 0
+                while sub_index < len(current_line):
+                    sub_character = current_line[sub_index]
+                    if sub_character not in ["{", "}"]:
+                        sub_data_key = character
+                        sub_index += 1
+                    elif sub_character == "{":
+                        sub_start = sub_index
+                        sub_end = current_line.index("}", sub_start)
+                        sub_data_key = current_line[sub_start:sub_end + 1]
+                        sub_index = sub_end + 1
+                    else:
+                        print(character)
+                        print(index)
+                        raise InputError("We shouldn't be processing this.")
+                    if sub_data_key not in text_data_lookup.keys():
+                        sub_data_key = "?"
+                    sub_data = text_data_lookup[sub_data_key]
+                    current_line_width += sub_data.width
+        else:
+            current_line_width += data.width
+            current_line += data_key
+            if data.id > 0xFF:
+                current_bytes.append((data.id & 0xFF00) >> 8)
+                current_bytes.append(data.id & 0xFF)
+            else:
+                current_bytes.append(data.id)
+    if len(current_line) > 0:
+        lines.append(current_line)
+        byte_lines.append(current_bytes)
+    for line in byte_lines[:-1]:
+        line.append(text_data_lookup["{Newline}"].id)
+    byte_lines[-1].append(text_data_lookup["{End}"].id)
+    return lines, byte_lines
