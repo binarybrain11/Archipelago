@@ -1,8 +1,9 @@
 from Fill import distribute_items_restrictive
 from .bases import FFTIITestBase
-from .. import rare_battle_locations
 from ..data.items import zodiac_stone_names, world_map_pass_names
-from ..data.locations import location_sort_list, job_unlock_locations
+from ..data.locations import (location_sort_list, job_unlock_locations, monster_location_names, world_map_regions,
+                              gallione_regions, fovoham_regions, lesalia_regions, lionel_regions, zeltennia_regions,
+                              limberry_regions, murond_regions)
 from ..data.logic.FFTLocation import LocationNames
 
 zodiac_stone_locations = [
@@ -76,6 +77,56 @@ rare_battle_names = [
     LocationNames.DOLBODAR_RARE.value,
     LocationNames.POESKAS_RARE.value
 ]
+
+class TestAllRegionsReachable(FFTIITestBase):
+    def test_regions_from_gallione(self):
+        with self.subTest("Test all"):
+            self.collect_by_name(world_map_pass_names)
+            self.collect_by_name("Progressive Shop Level")
+            self.collect_by_name(zodiac_stone_names)
+            for region in world_map_regions:
+                self.assertTrue(self.can_reach_region(region.name), region.name)
+        with self.subTest("Test Fovoham regions"):
+            self.remove_by_name(world_map_pass_names)
+            self.collect_by_name("Fovoham Pass")
+            for region in fovoham_regions:
+                self.assertTrue(self.can_reach_region(region.name), region.name)
+        with self.subTest("Test Lesalia regions"):
+            self.remove_by_name(world_map_pass_names)
+            self.collect_by_name("Lesalia Pass")
+            for region in lesalia_regions:
+                self.assertTrue(self.can_reach_region(region.name), region.name)
+        with self.subTest("Test Lionel regions from Lesalia"):
+            self.remove_by_name(world_map_pass_names)
+            self.collect_by_name("Lesalia Pass")
+            self.collect_by_name("Lionel Pass")
+            for region in lionel_regions:
+                self.assertTrue(self.can_reach_region(region.name), region.name)
+        with self.subTest("Test Lionel regions from Murond"):
+            self.remove_by_name(world_map_pass_names)
+            self.collect_by_name("Murond Pass")
+            self.collect_by_name("Lionel Pass")
+            for region in lionel_regions:
+                self.assertTrue(self.can_reach_region(region.name), region.name)
+        with self.subTest("Test Zeltennia regions"):
+            self.remove_by_name(world_map_pass_names)
+            self.collect_by_name("Fovoham Pass")
+            self.collect_by_name("Zeltennia Pass")
+            for region in zeltennia_regions:
+                self.assertTrue(self.can_reach_region(region.name), region.name)
+        with self.subTest("Test Limberry regions"):
+            self.remove_by_name(world_map_pass_names)
+            self.collect_by_name("Lesalia Pass")
+            self.collect_by_name("Limberry Pass")
+            for region in limberry_regions:
+                self.assertTrue(self.can_reach_region(region.name), region.name)
+        with self.subTest("Test Murond regions"):
+            self.remove_by_name(world_map_pass_names)
+            self.collect_by_name("Murond Pass")
+            self.collect_by_name("Lionel Pass")
+            for region in murond_regions:
+                self.assertTrue(self.can_reach_region(region.name), region.name)
+
 class TestZodiacStonesOnVanillaStones(FFTIITestBase):
     options = {
         "zodiac_stone_locations": 0,
@@ -497,3 +548,34 @@ class TestRegionLogicGallioneStartAltimaOnly(FFTIITestBase):
             self.collect_by_name("Lionel Pass")
             for location in [*location_names_west, *location_names_east]:
                 self.assertTrue(self.world.get_location(location).can_reach(self.multiworld.state), location)
+
+class TestPoachLogicWithGallioneStart(FFTIITestBase):
+    options = {
+        "poach_locations": "true",
+        "job_unlocks": "true"
+    }
+
+    def test_jobs_required(self):
+        with self.subTest("Test Thief Required"):
+            self.assertAccessDependency(
+                monster_location_names,
+                [["Thief"]],
+                only_check_listed=True,
+            )
+        with self.subTest("Test Mediator and Thief required for Wildbow"):
+            self.assertAccessDependency(
+                ["Poach Wildbow"],
+                [["Thief", "Mediator"]],
+                only_check_listed=True
+            )
+        with self.subTest("Test passes required"):
+            self.assertAccessDependency(
+                ["Poach Porky"],
+                [
+                    ["Lesalia Pass", "Limberry Pass", "Thief"],
+                    ["Fovoham Pass", "Zeltennia Pass", "Limberry Pass", "Thief"],
+                    ["Fovoham Pass", "Zeltennia Pass", "Thief", "Mediator"],
+                    ["Lesalia Pass", "Lionel Pass", "Thief", "Mediator"]
+                ],
+                only_check_listed=True
+            )

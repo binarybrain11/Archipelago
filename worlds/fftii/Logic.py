@@ -137,9 +137,12 @@ class PoachLogicObject:
         for requirement in self.requirements:
             region_list = requirement.access_regions
             battle_level = requirement.battle_level
-            region_expression = True
+            region_expression = None
             for region in region_list:
-                region_expression = region_expression and state.can_reach_region(region.name, self.player)
+                if region_expression is None:
+                    region_expression = state.can_reach_region(region.name, self.player)
+                else:
+                    region_expression = region_expression and state.can_reach_region(region.name, self.player)
             battle_level_expression = state.has("Progressive Shop Level", self.player, battle_levels_poaching[battle_level])
             if expression is None:
                 expression = region_expression and battle_level_expression

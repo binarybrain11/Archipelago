@@ -392,8 +392,10 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
                     breed_logic_object.requirements.extend(monster.compiled_requirements)
                 add_rule(
                     ap_location,
-                    lambda state: poach_logic_object.poach_logic_rule(state) or
-                                  (breed_logic_object.poach_logic_rule(state) and state.has("Mediator", self.player)))
+                    lambda state,
+                           poach_object=poach_logic_object,
+                           breed_object=breed_logic_object: poach_object.poach_logic_rule(state) or
+                                  (breed_object.poach_logic_rule(state) and state.has("Mediator", self.player)))
             else:
                 # Regular location rules
                 logic_object = LogicObject(self.player, self.options, location.battle_level)
