@@ -15,7 +15,7 @@ Gariland.connections = [
 ]
 
 Gariland.locations = [
-    FFTLocation(LocationNames.GARILAND_STORY)
+    FFTLocation(LocationNames.GARILAND_STORY, battle_level=0)
 ]
 
 Mandalia.connections = [
@@ -25,9 +25,9 @@ Mandalia.connections = [
 ]
 
 Mandalia.locations = [
-    FFTLocation(LocationNames.MANDALIA_STORY),
-    FFTLocation(LocationNames.MANDALIA_SHOP),
-    RareBattleLocation(LocationNames.MANDALIA_RARE, battle_level=5)
+    FFTLocation(LocationNames.MANDALIA_STORY, battle_level=0),
+    FFTLocation(LocationNames.MANDALIA_SHOP, battle_level=0),
+    RareBattleLocation(LocationNames.MANDALIA_RARE, battle_level=8)
 ]
 
 Igros.connections = [
@@ -36,7 +36,7 @@ Igros.connections = [
 ]
 
 Igros.locations = [
-    FFTLocation(LocationNames.IGROS_STORY, battle_level=5)
+    FFTLocation(LocationNames.IGROS_STORY, battle_level=14)
 ]
 
 Sweegy.connections = [
@@ -45,8 +45,8 @@ Sweegy.connections = [
 ]
 
 Sweegy.locations = [
-    FFTLocation(LocationNames.SWEEGY_STORY),
-    RareBattleLocation(LocationNames.SWEEGY_RARE, battle_level=5)
+    FFTLocation(LocationNames.SWEEGY_STORY, battle_level=1),
+    RareBattleLocation(LocationNames.SWEEGY_RARE, battle_level=8)
 ]
 
 Dorter.connections = [
@@ -57,8 +57,8 @@ Dorter.connections = [
 ]
 
 Dorter.locations = [
-    FFTLocation(LocationNames.DORTER_1_STORY),
-    FFTLocation(LocationNames.DORTER_2_STORY, battle_level=2)
+    FFTLocation(LocationNames.DORTER_1_STORY, battle_level=1),
+    FFTLocation(LocationNames.DORTER_2_STORY, battle_level=4)
 ]
 
 ThievesFort.connections = [
@@ -66,7 +66,7 @@ ThievesFort.connections = [
 ]
 
 ThievesFort.locations = [
-    FFTLocation(LocationNames.THIEVES_FORT_STORY)
+    FFTLocation(LocationNames.THIEVES_FORT_STORY, battle_level=2)
 ]
 
 Lenalia.connections = [
@@ -75,9 +75,9 @@ Lenalia.connections = [
 ]
 
 Lenalia.locations = [
-    FFTLocation(LocationNames.LENALIA_STORY),
-    FFTLocation(LocationNames.LENALIA_SHOP),
-    RareBattleLocation(LocationNames.LENALIA_RARE, battle_level=5)
+    FFTLocation(LocationNames.LENALIA_STORY, battle_level=2),
+    FFTLocation(LocationNames.LENALIA_SHOP, battle_level=2),
+    RareBattleLocation(LocationNames.LENALIA_RARE, battle_level=8)
 
 ]
 
@@ -87,10 +87,10 @@ Zeakden.connections = [
 ]
 
 Zeakden.locations = [
-    FFTLocation(LocationNames.ZEAKDEN_STORY),
-    FFTLocation(LocationNames.ZEAKDEN_SHOP),
-    FFTLocation(LocationNames.RAMZA_CHAPTER_2_UNLOCK),
-    FFTLocation(LocationNames.RAD_RECRUIT),
-    FFTLocation(LocationNames.ALICIA_RECRUIT),
-    FFTLocation(LocationNames.LAVIAN_RECRUIT)
+    FFTLocation(LocationNames.ZEAKDEN_STORY, battle_level=3),
+    FFTLocation(LocationNames.ZEAKDEN_SHOP, battle_level=3),
+    FFTLocation(LocationNames.RAMZA_CHAPTER_2_UNLOCK, battle_level=3),
+    FFTLocation(LocationNames.RAD_RECRUIT, battle_level=3),
+    FFTLocation(LocationNames.ALICIA_RECRUIT, battle_level=3),
+    FFTLocation(LocationNames.LAVIAN_RECRUIT, battle_level=3)
 ]

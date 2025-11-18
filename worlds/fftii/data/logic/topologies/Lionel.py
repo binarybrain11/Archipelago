@@ -12,7 +12,7 @@ Zaland.connections = [
 ]
 
 Zaland.locations = [
-    FFTLocation(LocationNames.ZALAND_STORY, battle_level=2)
+    FFTLocation(LocationNames.ZALAND_STORY, battle_level=5)
 ]
 
 BariausHill.connections = [
@@ -21,9 +21,9 @@ BariausHill.connections = [
 ]
 
 BariausHill.locations = [
-    FFTLocation(LocationNames.BARIAUS_HILL_STORY, battle_level=2),
-    FFTLocation(LocationNames.BARIAUS_HILL_SHOP, battle_level=2),
-    RareBattleLocation(LocationNames.BARIAUS_HILL_RARE, battle_level=5)
+    FFTLocation(LocationNames.BARIAUS_HILL_STORY, battle_level=5),
+    FFTLocation(LocationNames.BARIAUS_HILL_SHOP, battle_level=5),
+    RareBattleLocation(LocationNames.BARIAUS_HILL_RARE, battle_level=8)
 ]
 
 Lionel.connections = [
@@ -33,9 +33,9 @@ Lionel.connections = [
 ]
 
 Lionel.locations = [
-    FFTLocation(LocationNames.LIONEL_1_STORY, battle_level=2),
-    FFTLocation(LocationNames.LIONEL_2_STORY, battle_level=2),
-    FFTLocation(LocationNames.LIONEL_SHOP, battle_level=2)
+    FFTLocation(LocationNames.LIONEL_1_STORY, battle_level=7),
+    FFTLocation(LocationNames.LIONEL_2_STORY, battle_level=7),
+    FFTLocation(LocationNames.LIONEL_SHOP, battle_level=7)
 ]
 
 BariausValley.connections = [
@@ -45,10 +45,10 @@ BariausValley.connections = [
 ]
 
 BariausValley.locations = [
-    FFTLocation(LocationNames.BARIAUS_VALLEY_STORY, battle_level=2),
-    FFTLocation(LocationNames.BARIAUS_VALLEY_SHOP, battle_level=2),
-    FFTLocation(LocationNames.AGRIAS_RECRUIT, battle_level=2),
-    RareBattleLocation(LocationNames.BARIAUS_VALLEY_RARE, battle_level=5)
+    FFTLocation(LocationNames.BARIAUS_VALLEY_STORY, battle_level=6),
+    FFTLocation(LocationNames.BARIAUS_VALLEY_SHOP, battle_level=6),
+    FFTLocation(LocationNames.AGRIAS_RECRUIT, battle_level=6),
+    RareBattleLocation(LocationNames.BARIAUS_VALLEY_RARE, battle_level=8)
 ]
 
 Golgorand.connections = [
@@ -56,7 +56,7 @@ Golgorand.connections = [
 ]
 
 Golgorand.locations = [
-    FFTLocation(LocationNames.GOLGORAND_STORY, battle_level=2)
+    FFTLocation(LocationNames.GOLGORAND_STORY, battle_level=7)
 ]
 
 Warjilis.connections = [
@@ -70,6 +70,6 @@ Zigolis.connections = [
 ]
 
 Zigolis.locations = [
-    FFTLocation(LocationNames.ZIGOLIS_STORY, battle_level=2),
-    RareBattleLocation(LocationNames.ZIGOLIS_RARE, battle_level=5)
+    FFTLocation(LocationNames.ZIGOLIS_STORY, battle_level=6),
+    RareBattleLocation(LocationNames.ZIGOLIS_RARE, battle_level=8)
 ]

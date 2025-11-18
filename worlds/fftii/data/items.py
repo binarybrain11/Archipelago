@@ -163,19 +163,19 @@ gil_item_names_weighted = [
 
 gil_item_sizes = [
     {
-        "Bonus Gil: l i t t l e  m o n e y": 250,
-        "Bonus Gil: m o r e  m o n e y": 2500,
-        "Bonus Gil: l o t s  o f  m o n e y": 5000
-    },
-    {
-        "Bonus Gil: l i t t l e  m o n e y": 500,
-        "Bonus Gil: m o r e  m o n e y": 5000,
-        "Bonus Gil: l o t s  o f  m o n e y": 10000
-    },
-    {
         "Bonus Gil: l i t t l e  m o n e y": 1000,
-        "Bonus Gil: m o r e  m o n e y": 10000,
+        "Bonus Gil: m o r e  m o n e y": 5000,
         "Bonus Gil: l o t s  o f  m o n e y": 20000
+    },
+    {
+        "Bonus Gil: l i t t l e  m o n e y": 2000,
+        "Bonus Gil: m o r e  m o n e y": 10000,
+        "Bonus Gil: l o t s  o f  m o n e y": 40000
+    },
+    {
+        "Bonus Gil: l i t t l e  m o n e y": 4000,
+        "Bonus Gil: m o r e  m o n e y": 20000,
+        "Bonus Gil: l o t s  o f  m o n e y": 80000
     }
 ]
 

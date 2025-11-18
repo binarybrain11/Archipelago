@@ -25,7 +25,8 @@ from .data.items import zodiac_stone_names, world_map_pass_names, job_names, sho
 from .data.locations import all_regions, world_map_regions, story_battle_locations, character_recruit_locations, \
     sidequest_battle_locations, job_unlock_locations, rare_battle_locations, default_murond_fights, \
     shop_unlock_locations, monster_location_names, story_zodiac_stone_locations, sidequest_zodiac_stone_locations, \
-    ramza_job_unlock_locations, location_sort_list_names, locations_with_text, linked_reward_names
+    ramza_job_unlock_locations, location_sort_list_names, locations_with_text, linked_reward_names, \
+    altima_only_story_zodiac_stone_locations, location_groups
 from .data.logic.FFTLocation import LocationNames
 from .data.logic.Monsters import monster_locations_lookup, monster_family_lookup, monster_families
 from .data.logic.regions.Fovoham import fovoham_regions
@@ -47,7 +48,7 @@ class FinalFantasyTacticsIISettings(settings.Group):
         md5s = ["b156ba386436d20fd5ed8d37bab6b624"]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
-    rom_start: bool = True
+    rom_start: bool = False
 
 
 class FinalFantasyTacticsIIWeb(WebWorld):
@@ -83,14 +84,19 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
     item_name_to_id = {item: item_data.id for item, item_data in item_table.items()}
     location_name_to_id = {location.name: location.id for location in all_locations}
     item_name_groups = {
-        "Zodiac Stones": zodiac_stone_names
+        "Zodiac Stones": zodiac_stone_names,
+        "Characters": special_character_names,
+        "Jobs": job_names
     }
+
+    location_name_groups = location_groups
 
     filler_items: list[str] | None
     included_locations: list[str]
     murond_fights: list[str]
     starting_pass: str
     zodiac_stones_required: int
+    zodiac_stones_in_pool: int
 
     version = 1
     debug = False
@@ -156,8 +162,41 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
             self.included_locations.extend(monster_location_names)
 
         # Make Zodiac Stones local if option is set
+
         if self.options.zodiac_stone_locations == self.options.zodiac_stone_locations.option_anywhere_local:
             self.options.local_items.value.add("Zodiac Stones")
+
+        self.zodiac_stones_required = self.options.zodiac_stones_required.value
+        self.zodiac_stones_in_pool = self.options.zodiac_stones_in_pool.value
+        # Determine number of zodiac stones based on options
+        if self.options.zodiac_stone_locations == self.options.zodiac_stone_locations.option_vanilla_stones:
+            max_stones = len(story_zodiac_stone_locations)
+            if self.options.final_battles == self.options.final_battles.option_altima_only:
+                max_stones += len(altima_only_story_zodiac_stone_locations)
+            if self.options.sidequest_battles:
+                max_stones += len(sidequest_zodiac_stone_locations)
+            self.zodiac_stones_required = min(self.zodiac_stones_required, max_stones)
+            self.zodiac_stones_in_pool = min(self.zodiac_stones_in_pool, max_stones)
+        if self.zodiac_stones_in_pool < self.zodiac_stones_required:
+            self.zodiac_stones_in_pool = self.zodiac_stones_required
+
+        early_items_dict = {}
+        if self.options.early_pass:
+            early_pass = self.random.choice(["Fovoham Pass", "Lesalia Pass", "Murond Pass"])
+            early_items_dict.update({early_pass: 1})
+        if self.options.chemist_placement == self.options.chemist_placement.option_early:
+            early_items_dict["Chemist"] = 1
+        self.multiworld.early_items[self.player].update(early_items_dict)
+
+        if self.options.chemist_placement == self.options.chemist_placement.option_starting:
+            self.options.start_inventory_from_pool.value.update({"Chemist": 1})
+            #self.push_precollected(self.create_item("Chemist"))
+
+        if self.options.starting_shop_level > 0:
+            shop_level = self.options.starting_shop_level.value
+            self.options.start_inventory_from_pool.value.update({"Progressive Shop Level": shop_level})
+            #for i in range(shop_level):
+            #    self.push_precollected(self.create_item("Progressive Shop Level"))
 
     def create_regions(self):
         menu = Region("Menu", self.player, self.multiworld)
@@ -186,7 +225,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
             origin_region = self.get_region(origin_region_data.name)
             for connection in origin_region_data.connections:
                 connecting_region = self.get_region(connection.destination.name)
-                logic_object = LogicObject(self.player, self.options, 0)
+                logic_object = LogicObject(self.player, self.options, 0, self.zodiac_stones_required)
                 if self.debug:
                     print(f"Connection: {origin_region.name} to {connecting_region.name}")
                 logic_object.requirements = create_logic_rule_for_list(
@@ -270,22 +309,6 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
             visualize_regions(self.get_region("Menu"), f"fftdiagram{self.player}.puml")
 
     def create_items(self):
-        # Determine number of zodiac stones based on options
-        self.zodiac_stones_required = self.options.zodiac_stones_required.value
-        zodiac_stones_in_pool = self.options.zodiac_stones_in_pool.value
-        if self.options.zodiac_stone_locations == self.options.zodiac_stone_locations.option_vanilla_stones:
-            if self.options.sidequest_battles:
-                self.zodiac_stones_required = min(
-                    self.zodiac_stones_required,
-                    len(story_zodiac_stone_locations) + len(sidequest_zodiac_stone_locations))
-                zodiac_stones_in_pool = min(
-                    zodiac_stones_in_pool,
-                    len(story_zodiac_stone_locations) + len(sidequest_zodiac_stone_locations))
-            else:
-                self.zodiac_stones_required = min(self.zodiac_stones_required, len(story_zodiac_stone_locations))
-                zodiac_stones_in_pool = min(zodiac_stones_in_pool, len(story_zodiac_stone_locations))
-        if zodiac_stones_in_pool < self.zodiac_stones_required:
-            zodiac_stones_in_pool = self.zodiac_stones_required
 
         # Get all world map passes we don't start with
         world_map_passes = [item for item in world_map_pass_names if item != self.starting_pass]
@@ -302,7 +325,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
                 self.push_precollected(self.create_item(job_name))
 
         # Pick Zodiac Stones to place ingame
-        zodiac_stones_in_game = self.random.sample(zodiac_stone_names, k=zodiac_stones_in_pool)
+        zodiac_stones_in_game = self.random.sample(zodiac_stone_names, k=self.zodiac_stones_in_pool)
 
         # Handle major items
         major_items = [
@@ -314,7 +337,9 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
             stone_locations = [location.value for location in story_zodiac_stone_locations]
             if self.options.sidequest_battles:
                 stone_locations.extend([location.value for location in sidequest_zodiac_stone_locations])
-            stone_locations_pruned = self.random.sample(stone_locations, k=zodiac_stones_in_pool)
+            if self.options.final_battles == self.options.final_battles.option_altima_only:
+                stone_locations.extend([location.value for location in altima_only_story_zodiac_stone_locations])
+            stone_locations_pruned = self.random.sample(stone_locations, k=self.zodiac_stones_in_pool)
             self.random.shuffle(stone_locations)
             for stone in zodiac_stones_in_game:
                 self.get_location(stone_locations_pruned.pop()).place_locked_item(self.create_item(stone))
@@ -398,9 +423,9 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
                                   (breed_object.poach_logic_rule(state) and state.has("Mediator", self.player)))
             else:
                 # Regular location rules
-                logic_object = LogicObject(self.player, self.options, location.battle_level)
+                logic_object = LogicObject(self.player, self.options, location.battle_level, self.zodiac_stones_required)
                 if self.debug:
-                    print(f"\n{location.name} requirements:")
+                    print(f"\n{location.name} requirements (Battle level {location.battle_level}):")
                 logic_object.requirements = create_logic_rule_for_list(
                     location.requirements, self.options, self.debug)
                 add_rule(ap_location, logic_object.logic_rule)
@@ -422,6 +447,9 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         patch_dict: dict[str, Any] = dict()
         # Hash of the MW seed to associate with save file
         patch_dict["SeedHash"] = self.multiworld.seed % 0x7FFF
+        patch_dict["APJobs"] = self.options.job_unlocks.value
+        patch_dict["Sidequests"] = self.options.sidequest_battles.value
+        patch_dict["FinalBattles"] = self.options.final_battles.value
         patch_dict["LocationDict"] = self.create_location_dict()
 
         rom_name_text = f'FFTII{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:9}'
@@ -483,7 +511,6 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
                     item_strings[-1] = "and " + item_strings[-1]
             terminator = "!" if is_any_progression else "."
             final_item_string = f"{self.player_name}'s party found " + "".join(item_strings) + terminator
-            print(final_item_string)
             location_dict[location.name] = final_item_string
         return location_dict
 
@@ -502,12 +529,18 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         return self.random.choice(self.filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        return self.options.as_dict(
+        return_dict = self.options.as_dict(
             "bonus_gil_item_size",
             "jp_boon_size",
             "sidequest_battles",
-            "zodiac_stones_required"
+            "rare_battles",
+            "final_battles",
+            "poach_locations",
+            "job_unlocks",
+            "logical_difficulty"
         )
+        return_dict["zodiac_stones_required"] = self.zodiac_stones_required
+        return return_dict
 
 
 class FinalFantasyTacticsIIItem(Item):

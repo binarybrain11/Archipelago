@@ -14,8 +14,8 @@ Grog.connections = [
 ]
 
 Grog.locations = [
-    FFTLocation(LocationNames.GROG_STORY, battle_level=3),
-    RareBattleLocation(LocationNames.GROG_RARE, battle_level=5)
+    FFTLocation(LocationNames.GROG_STORY, battle_level=10),
+    RareBattleLocation(LocationNames.GROG_RARE, battle_level=8)
 ]
 
 Yardow.connections = [
@@ -24,8 +24,8 @@ Yardow.connections = [
 ]
 
 Yardow.locations = [
-    FFTLocation(LocationNames.YARDOW_STORY, battle_level=3),
-    FFTLocation(LocationNames.YARDOW_SHOP)
+    FFTLocation(LocationNames.YARDOW_STORY, battle_level=10),
+    FFTLocation(LocationNames.YARDOW_SHOP, battle_level=10)
 ]
 
 Yuguo.connections = [
@@ -34,8 +34,8 @@ Yuguo.connections = [
 ]
 
 Yuguo.locations = [
-    FFTLocation(LocationNames.YUGUO_STORY, battle_level=3),
-    RareBattleLocation(LocationNames.YUGUO_RARE, battle_level=5)
+    FFTLocation(LocationNames.YUGUO_STORY, battle_level=11),
+    RareBattleLocation(LocationNames.YUGUO_RARE, battle_level=8)
 ]
 
 Riovanes.connections = [
@@ -45,13 +45,13 @@ Riovanes.connections = [
 ]
 
 Riovanes.locations = [
-    FFTLocation(LocationNames.RIOVANES_1_STORY, battle_level=3),
-    FFTLocation(LocationNames.RIOVANES_2_STORY, battle_level=3),
-    FFTLocation(LocationNames.RIOVANES_3_STORY, battle_level=3),
-    FFTLocation(LocationNames.RIOVANES_SHOP, battle_level=3),
-    FFTLocation(LocationNames.RAMZA_CHAPTER_4_UNLOCK, battle_level=3),
-    FFTLocation(LocationNames.RAFA_RECRUIT, battle_level=3),
-    FFTLocation(LocationNames.MALAK_RECRUIT, battle_level=3)
+    FFTLocation(LocationNames.RIOVANES_1_STORY, battle_level=11),
+    FFTLocation(LocationNames.RIOVANES_2_STORY, battle_level=11),
+    FFTLocation(LocationNames.RIOVANES_3_STORY, battle_level=11),
+    FFTLocation(LocationNames.RIOVANES_SHOP, battle_level=11),
+    FFTLocation(LocationNames.RAMZA_CHAPTER_4_UNLOCK, battle_level=11),
+    FFTLocation(LocationNames.RAFA_RECRUIT, battle_level=11),
+    FFTLocation(LocationNames.MALAK_RECRUIT, battle_level=11)
 ]
 
 Fovoham.connections = [
@@ -61,6 +61,6 @@ Fovoham.connections = [
 ]
 
 Fovoham.locations = [
-    FFTLocation(LocationNames.FOVOHAM_STORY),
-    RareBattleLocation(LocationNames.FOVOHAM_RARE, battle_level=5)
+    FFTLocation(LocationNames.FOVOHAM_STORY, battle_level=1),
+    RareBattleLocation(LocationNames.FOVOHAM_RARE, battle_level=8)
 ]

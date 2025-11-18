@@ -140,7 +140,7 @@ max_text_width = 180
 
 def create_text_for_offworld_item(player_name: str, item_name: str, classification: ItemClassification, is_fft_item: bool):
     if is_fft_item and item_name in zodiac_stone_names:
-        item_string = "{item_name}" + f"{item_name}"
+        item_string = f"{{{item_name}}}" + f"{item_name}"
     else:
         item_string = f"{item_name}"
     if classification == ItemClassification.progression:

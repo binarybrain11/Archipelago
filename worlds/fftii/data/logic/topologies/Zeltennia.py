@@ -13,7 +13,7 @@ BerveniaCity.connections = [
 ]
 
 BerveniaCity.locations = [
-    FFTLocation(LocationNames.BERVENIA_CITY_STORY, battle_level=4)
+    FFTLocation(LocationNames.BERVENIA_CITY_STORY, battle_level=12)
 ]
 
 Finath.connections = [
@@ -22,8 +22,8 @@ Finath.connections = [
 ]
 
 Finath.locations = [
-    FFTLocation(LocationNames.FINATH_STORY, battle_level=4),
-    RareBattleLocation(LocationNames.FINATH_RARE, battle_level=4)
+    FFTLocation(LocationNames.FINATH_STORY, battle_level=12),
+    RareBattleLocation(LocationNames.FINATH_RARE, battle_level=8)
 ]
 
 Zeltennia.connections = [
@@ -33,7 +33,7 @@ Zeltennia.connections = [
 ]
 
 Zeltennia.locations = [
-    FFTLocation(LocationNames.ZELTENNIA_STORY, battle_level=4)
+    FFTLocation(LocationNames.ZELTENNIA_STORY, battle_level=12)
 ]
 
 Zarghidas.connections = [
@@ -42,8 +42,8 @@ Zarghidas.connections = [
 ]
 
 Zarghidas.locations = [
-    SidequestLocation(LocationNames.ZARGHIDAS_SIDEQUEST, battle_level=4),
-    SidequestLocation(LocationNames.CLOUD_RECRUIT, battle_level=4)
+    SidequestLocation(LocationNames.ZARGHIDAS_SIDEQUEST, battle_level=14),
+    SidequestLocation(LocationNames.CLOUD_RECRUIT, battle_level=14)
 ]
 
 Germinas.connections = [
@@ -52,8 +52,8 @@ Germinas.connections = [
 ]
 
 Germinas.locations = [
-    FFTLocation(LocationNames.GERMINAS_STORY, battle_level=5),
-    RareBattleLocation(LocationNames.GERMINAS_RARE, battle_level=5)
+    FFTLocation(LocationNames.GERMINAS_STORY, battle_level=13),
+    RareBattleLocation(LocationNames.GERMINAS_RARE, battle_level=8)
 ]
 
 Nelveska.connections = [
@@ -61,8 +61,8 @@ Nelveska.connections = [
 ]
 
 Nelveska.locations = [
-    SidequestLocation(LocationNames.NELVESKA_SIDEQUEST, battle_level=5),
-    SidequestLocation(LocationNames.REIS_HUMAN_RECRUIT, battle_level=5)
+    SidequestLocation(LocationNames.NELVESKA_SIDEQUEST, battle_level=12),
+    SidequestLocation(LocationNames.REIS_HUMAN_RECRUIT, battle_level=12)
 ]
 
 Doguola.connections = [
@@ -71,6 +71,6 @@ Doguola.connections = [
 ]
 
 Doguola.locations = [
-    FFTLocation(LocationNames.DOGUOLA_STORY, battle_level=3),
-    RareBattleLocation(LocationNames.DOGUOLA_RARE, battle_level=5)
+    FFTLocation(LocationNames.DOGUOLA_STORY, battle_level=12),
+    RareBattleLocation(LocationNames.DOGUOLA_RARE, battle_level=8)
 ]

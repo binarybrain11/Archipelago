@@ -50,7 +50,6 @@ story_battle_locations: list[LocationNames] = [
     LocationNames.ZEKLAUS_STORY,
     LocationNames.LESALIA_STORY,
     LocationNames.GOLAND_STORY,
-    LocationNames.DOGUOLA_STORY,
     LocationNames.ZALAND_STORY,
     LocationNames.BARIAUS_HILL_STORY,
     LocationNames.LIONEL_1_STORY,
@@ -58,6 +57,7 @@ story_battle_locations: list[LocationNames] = [
     LocationNames.ZIGOLIS_STORY,
     LocationNames.GOLGORAND_STORY,
     LocationNames.BARIAUS_VALLEY_STORY,
+    LocationNames.DOGUOLA_STORY,
     LocationNames.BERVENIA_CITY_STORY,
     LocationNames.FINATH_STORY,
     LocationNames.ZELTENNIA_STORY,
@@ -123,6 +123,21 @@ sidequest_battles: list[LocationNames] = [
     LocationNames.END_SIDEQUEST,
 ]
 
+dd_locations: list[LocationNames] = [
+    LocationNames.NOGIAS_SIDEQUEST,
+    LocationNames.TERMINATE_SIDEQUEST,
+    LocationNames.DELTA_SIDEQUEST,
+    LocationNames.VALKYRIES_SIDEQUEST,
+    LocationNames.MLAPAN_SIDEQUEST,
+    LocationNames.TIGER_SIDEQUEST,
+    LocationNames.BRIDGE_SIDEQUEST,
+    LocationNames.VOYAGE_SIDEQUEST,
+    LocationNames.HORROR_SIDEQUEST,
+    LocationNames.END_SIDEQUEST,
+]
+
+dd_location_names: list[str] = [location.value for location in dd_locations]
+
 sidequest_battle_locations: list[LocationNames] = [
     *sidequest_battles,
     LocationNames.BEOWULF_RECRUIT,
@@ -154,6 +169,8 @@ rare_battle_locations: list[LocationNames] = [
     LocationNames.DOLBODAR_RARE,
     LocationNames.POESKAS_RARE
 ]
+
+rare_battle_location_names: list[str] = [location.value for location in rare_battle_locations]
 
 job_unlock_locations: list[LocationNames] = [
     LocationNames.SQUIRE_UNLOCK,
@@ -219,6 +236,10 @@ story_zodiac_stone_locations: list[LocationNames] = [
     LocationNames.BETHLA_SLUICE_STORY, # Libra
     LocationNames.LIONEL_2_STORY, # Scorpio
     LocationNames.LIMBERRY_3_STORY, # Sagittarius
+]
+
+altima_only_story_zodiac_stone_locations: list[LocationNames] = [
+    LocationNames.AIRSHIPS_1_STORY
 ]
 
 sidequest_zodiac_stone_locations: list[LocationNames] = [
@@ -336,3 +357,18 @@ location_sort_list: list[LocationNames] = [
 location_sort_list_names: list[str] = [
     location.value for location in location_sort_list
 ]
+
+location_groups = {
+    "Story Battles": [
+        location.value for location in [
+            *story_battle_locations,
+            *shop_unlock_locations,
+            *ramza_job_unlock_locations,
+            *character_recruit_locations
+        ]
+    ],
+    "Sidequest Battles": [location.value for location in sidequest_battles],
+    "Rare Battles": rare_battle_location_names,
+    "Poaches": monster_location_names,
+    "Job Unlocks": [location.value for location in job_unlock_locations]
+}

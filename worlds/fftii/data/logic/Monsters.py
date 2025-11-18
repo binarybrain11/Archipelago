@@ -1,9 +1,9 @@
 from enum import Enum
 
-from worlds.fftii.data.logic.FFTRegion import FFTRegion
-from worlds.fftii.data.logic.regions import Mandalia, Grog, Zirekile, BariausHill, Finath, Dolbodar, Fovoham, Bethla, \
+from .FFTRegion import FFTRegion
+from .regions import Mandalia, Grog, Zirekile, BariausHill, Finath, Dolbodar, Fovoham, Bethla, \
     Zaland, BerveniaVolcano, Riovanes, Lenalia, Lesalia, Araguay, BariausValley, Sweegy, Yuguo, Bed, BerveniaCity, \
-    Germinas, Zeklaus, Doguola, Poeskas, Zigolis, Dorter, Goug, Zeakden, Nelveska
+    Germinas, Zeklaus, Doguola, Poeskas, Zigolis, Dorter, Goug, Zeakden, Nelveska, DeepDungeon, Goland
 
 
 class MonsterNames(Enum):
@@ -49,7 +49,7 @@ class MonsterNames(Enum):
 
     MORBOL = "Morbol"
     OCHU = "Ochu"
-    GREAT_MORBOL = "Great Morbul"
+    GREAT_MORBOL = "Great Morbol"
 
     WOODMAN = "Woodman"
     TRENT = "Trent"
@@ -118,10 +118,12 @@ for family, monsters in monster_families.items():
 class RegionAccessRequirement:
     access_regions: list[type[FFTRegion]]
     battle_level: int
+    sidequest: bool
 
-    def __init__(self, access_regions: list[type[FFTRegion]], battle_level: int):
+    def __init__(self, access_regions: list[type[FFTRegion]], battle_level: int, sidequest: bool = False):
         self.access_regions = access_regions
         self.battle_level = battle_level
+        self.sidequest = sidequest
 
 class MonsterRegion:
     monster_name: MonsterNames
@@ -131,347 +133,350 @@ class MonsterRegion:
     lionel_locations: list[RegionAccessRequirement] = []
     zeltennia_locations: list[RegionAccessRequirement] = []
     limberry_locations: list[RegionAccessRequirement] = []
+    murond_locations: list[RegionAccessRequirement] = []
     compiled_requirements: list[RegionAccessRequirement] = []
 
     def __init__(self, name: MonsterNames):
         self.monster_name = name
 
 yellow_chocobo = MonsterRegion(MonsterNames.YELLOW_CHOCOBO)
-yellow_chocobo.gallione_locations = [RegionAccessRequirement([Mandalia], 1)]
-yellow_chocobo.fovoham_locations = [RegionAccessRequirement([Grog], 1)]
-yellow_chocobo.lesalia_locations = [RegionAccessRequirement([Zirekile], 1)]
-yellow_chocobo.lionel_locations = [RegionAccessRequirement([BariausHill], 1)]
-yellow_chocobo.zeltennia_locations = [RegionAccessRequirement([Finath], 1)]
-yellow_chocobo.limberry_locations = [RegionAccessRequirement([Dolbodar], 5)]
+yellow_chocobo.gallione_locations = [RegionAccessRequirement([Mandalia], 0)]
+yellow_chocobo.fovoham_locations = [RegionAccessRequirement([Grog], 0)]
+yellow_chocobo.lesalia_locations = [RegionAccessRequirement([Zirekile], 0)]
+yellow_chocobo.lionel_locations = [RegionAccessRequirement([BariausHill], 0)]
+yellow_chocobo.zeltennia_locations = [RegionAccessRequirement([Finath], 0)]
+yellow_chocobo.limberry_locations = [RegionAccessRequirement([Dolbodar], 9)]
 
 black_chocobo = MonsterRegion(MonsterNames.BLACK_CHOCOBO)
-black_chocobo.gallione_locations = [RegionAccessRequirement([Mandalia], 3)]
-black_chocobo.fovoham_locations = [RegionAccessRequirement([Fovoham], 1)]
+black_chocobo.gallione_locations = [RegionAccessRequirement([Mandalia], 5)]
+black_chocobo.fovoham_locations = [RegionAccessRequirement([Fovoham], 0)]
 black_chocobo.lesalia_locations = [
-    RegionAccessRequirement([Zirekile], 3),
-    RegionAccessRequirement([Zirekile, Zaland], 2),
-    RegionAccessRequirement([Zirekile, Bethla], 1),
-    RegionAccessRequirement([BerveniaVolcano, Riovanes], 5)
+    RegionAccessRequirement([Zirekile], 5),
+    RegionAccessRequirement([Zirekile, Zaland], 0),
+    RegionAccessRequirement([Zirekile, Bethla], 2),
+    RegionAccessRequirement([BerveniaVolcano, Riovanes], 9)
 ]
-black_chocobo.lionel_locations = [RegionAccessRequirement([BariausHill], 1)]
-black_chocobo.zeltennia_locations = [RegionAccessRequirement([Finath], 1)]
-black_chocobo.limberry_locations = [RegionAccessRequirement([Dolbodar], 5)]
+black_chocobo.lionel_locations = [RegionAccessRequirement([BariausHill], 0)]
+black_chocobo.zeltennia_locations = [RegionAccessRequirement([Finath], 0)]
+black_chocobo.limberry_locations = [RegionAccessRequirement([Dolbodar], 9)]
 
 red_chocobo = MonsterRegion(MonsterNames.RED_CHOCOBO)
-red_chocobo.gallione_locations = [RegionAccessRequirement([Lenalia], 3)]
+red_chocobo.gallione_locations = [RegionAccessRequirement([Lenalia], 5)]
 red_chocobo.fovoham_locations = [RegionAccessRequirement([Grog], 2)]
 red_chocobo.lesalia_locations = [
-    RegionAccessRequirement([Zirekile, Bethla], 3),
-    RegionAccessRequirement([Zirekile, Zaland], 3),
-    RegionAccessRequirement([BerveniaVolcano, Riovanes], 5)
+    RegionAccessRequirement([Zirekile, Bethla], 5),
+    RegionAccessRequirement([Zirekile, Zaland], 5),
+    RegionAccessRequirement([BerveniaVolcano, Riovanes], 9)
 ]
-red_chocobo.lionel_locations = [RegionAccessRequirement([BariausHill], 1)]
-red_chocobo.zeltennia_locations = [RegionAccessRequirement([Finath], 1)]
-red_chocobo.limberry_locations = [RegionAccessRequirement([Dolbodar], 5)]
+red_chocobo.lionel_locations = [RegionAccessRequirement([BariausHill], 0)]
+red_chocobo.zeltennia_locations = [RegionAccessRequirement([Finath], 0)]
+red_chocobo.limberry_locations = [RegionAccessRequirement([Dolbodar], 9)]
 
 goblin = MonsterRegion(MonsterNames.GOBLIN)
-goblin.gallione_locations = [RegionAccessRequirement([Mandalia], 1)]
+goblin.gallione_locations = [RegionAccessRequirement([Mandalia], 0)]
 goblin.fovoham_locations = [
-    RegionAccessRequirement([Fovoham, Lenalia], 1),
-    RegionAccessRequirement([Grog, Lesalia], 3)
+    RegionAccessRequirement([Fovoham, Lenalia], 0),
+    RegionAccessRequirement([Grog, Lesalia], 5)
 ]
-goblin.lesalia_locations = [RegionAccessRequirement([Araguay], 1)]
-goblin.lionel_locations = [RegionAccessRequirement([BariausValley], 1)]
-goblin.zeltennia_locations = [RegionAccessRequirement([Finath], 5)]
-goblin.limberry_locations = [RegionAccessRequirement([Dolbodar], 1)]
+goblin.lesalia_locations = [RegionAccessRequirement([Araguay], 0)]
+goblin.lionel_locations = [RegionAccessRequirement([BariausValley], 0)]
+goblin.zeltennia_locations = [RegionAccessRequirement([Finath], 9)]
+goblin.limberry_locations = [RegionAccessRequirement([Dolbodar], 0)]
 
 black_goblin = MonsterRegion(MonsterNames.BLACK_GOBLIN)
-black_goblin.gallione_locations = [RegionAccessRequirement([Sweegy], 1)]
+black_goblin.gallione_locations = [RegionAccessRequirement([Sweegy], 0)]
 black_goblin.fovoham_locations = [RegionAccessRequirement([Yuguo], 2)]
-black_goblin.lesalia_locations = [RegionAccessRequirement([Araguay], 1)]
-black_goblin.lionel_locations = [RegionAccessRequirement([BariausValley], 1)]
-black_goblin.limberry_locations = [RegionAccessRequirement([Dolbodar], 1)]
+black_goblin.lesalia_locations = [RegionAccessRequirement([Araguay], 0)]
+black_goblin.lionel_locations = [RegionAccessRequirement([BariausValley], 0)]
+black_goblin.limberry_locations = [RegionAccessRequirement([Dolbodar], 0)]
 
 gobbledeguck = MonsterRegion(MonsterNames.GOBBLEDEGUCK)
-gobbledeguck.gallione_locations = [RegionAccessRequirement([Mandalia], 3)]
-gobbledeguck.fovoham_locations = [RegionAccessRequirement([Yuguo], 3)]
-gobbledeguck.lesalia_locations = [RegionAccessRequirement([Araguay], 4)]
+gobbledeguck.gallione_locations = [RegionAccessRequirement([Mandalia], 5)]
+gobbledeguck.fovoham_locations = [RegionAccessRequirement([Yuguo], 5)]
+gobbledeguck.lesalia_locations = [RegionAccessRequirement([Araguay], 8)]
 gobbledeguck.lionel_locations = [RegionAccessRequirement([BariausValley], 2)]
-gobbledeguck.limberry_locations = [RegionAccessRequirement([Dolbodar], 3)]
+gobbledeguck.limberry_locations = [RegionAccessRequirement([Dolbodar], 5)]
 
 red_panther = MonsterRegion(MonsterNames.RED_PANTHER)
-red_panther.gallione_locations = [RegionAccessRequirement([Mandalia], 1)]
-red_panther.fovoham_locations = [RegionAccessRequirement([Grog], 1)]
-red_panther.lesalia_locations = [RegionAccessRequirement([Araguay], 1)]
-red_panther.lionel_locations = [RegionAccessRequirement([BariausValley], 1)]
-red_panther.zeltennia_locations = [RegionAccessRequirement([Finath], 1)]
-red_panther.limberry_locations = [RegionAccessRequirement([Bed], 3)]
+red_panther.gallione_locations = [RegionAccessRequirement([Mandalia], 0)]
+red_panther.fovoham_locations = [RegionAccessRequirement([Grog], 0)]
+red_panther.lesalia_locations = [RegionAccessRequirement([Araguay], 0)]
+red_panther.lionel_locations = [RegionAccessRequirement([BariausValley], 0)]
+red_panther.zeltennia_locations = [RegionAccessRequirement([Finath], 0)]
+red_panther.limberry_locations = [RegionAccessRequirement([Bed], 5)]
 
 cuar = MonsterRegion(MonsterNames.CUAR)
 cuar.gallione_locations = [
-    RegionAccessRequirement([Sweegy], 3),
+    RegionAccessRequirement([Sweegy], 5),
     RegionAccessRequirement([Lenalia, Fovoham], 2),
 ]
 cuar.fovoham_locations = [RegionAccessRequirement([Grog], 2)]
-cuar.lesalia_locations = [RegionAccessRequirement([Araguay], 1)]
+cuar.lesalia_locations = [RegionAccessRequirement([Araguay], 0)]
 cuar.lionel_locations = [RegionAccessRequirement([BariausValley], 2)]
-cuar.zeltennia_locations = [RegionAccessRequirement([Finath], 1)]
-cuar.limberry_locations = [RegionAccessRequirement([Bed, BerveniaCity], 1)]
+cuar.zeltennia_locations = [RegionAccessRequirement([Finath], 0)]
+cuar.limberry_locations = [RegionAccessRequirement([Bed, BerveniaCity], 0)]
 
 vampire = MonsterRegion(MonsterNames.VAMPIRE)
-vampire.gallione_locations = [RegionAccessRequirement([Sweegy], 3)]
-vampire.fovoham_locations = [RegionAccessRequirement([Yuguo], 3)]
-vampire.lesalia_locations = [RegionAccessRequirement([Araguay], 3)]
+vampire.gallione_locations = [RegionAccessRequirement([Sweegy], 5)]
+vampire.fovoham_locations = [RegionAccessRequirement([Yuguo], 5)]
+vampire.lesalia_locations = [RegionAccessRequirement([Araguay], 5)]
 vampire.lionel_locations = [RegionAccessRequirement([BariausValley], 2)]
-vampire.zeltennia_locations = [RegionAccessRequirement([Germinas], 3)]
-vampire.limberry_locations = [RegionAccessRequirement([Bed], 2)]
+vampire.zeltennia_locations = [RegionAccessRequirement([Germinas], 5)]
+vampire.limberry_locations = [RegionAccessRequirement([Bed, BerveniaCity], 2)]
 
 bomb = MonsterRegion(MonsterNames.BOMB)
-bomb.gallione_locations = [RegionAccessRequirement([Sweegy], 1)]
-bomb.fovoham_locations = [RegionAccessRequirement([Yuguo], 1)]
-bomb.lesalia_locations = [RegionAccessRequirement([Zeklaus], 1)]
-bomb.lionel_locations = [RegionAccessRequirement([BariausHill], 1)]
-bomb.zeltennia_locations = [RegionAccessRequirement([Doguola], 3)]
-bomb.limberry_locations = [RegionAccessRequirement([Poeskas], 1)]
+bomb.gallione_locations = [RegionAccessRequirement([Sweegy], 0)]
+bomb.fovoham_locations = [RegionAccessRequirement([Yuguo], 0)]
+bomb.lesalia_locations = [RegionAccessRequirement([Zeklaus], 0)]
+bomb.lionel_locations = [RegionAccessRequirement([BariausHill], 0)]
+bomb.zeltennia_locations = [RegionAccessRequirement([Doguola], 5)]
+bomb.limberry_locations = [RegionAccessRequirement([Poeskas], 0)]
 
 grenade = MonsterRegion(MonsterNames.GRENADE)
-grenade.gallione_locations = [RegionAccessRequirement([Mandalia], 3)]
-grenade.fovoham_locations = [RegionAccessRequirement([Grog], 1)]
-grenade.lesalia_locations = [RegionAccessRequirement([Zeklaus], 1)]
-grenade.lionel_locations = [RegionAccessRequirement([BariausHill], 1)]
-grenade.zeltennia_locations = [RegionAccessRequirement([Doguola, Grog], 3)]
-grenade.limberry_locations = [RegionAccessRequirement([Poeskas], 1)]
+grenade.gallione_locations = [RegionAccessRequirement([Mandalia], 5)]
+grenade.fovoham_locations = [RegionAccessRequirement([Grog], 0)]
+grenade.lesalia_locations = [RegionAccessRequirement([Zeklaus], 0)]
+grenade.lionel_locations = [RegionAccessRequirement([BariausHill], 5)]
+grenade.zeltennia_locations = [RegionAccessRequirement([Doguola, Grog], 5)]
+grenade.limberry_locations = [RegionAccessRequirement([Poeskas], 0)]
 
 explosive = MonsterRegion(MonsterNames.EXPLOSIVE)
-explosive.gallione_locations = [RegionAccessRequirement([Sweegy], 4)]
-explosive.fovoham_locations = [RegionAccessRequirement([Grog], 3)]
+explosive.gallione_locations = [RegionAccessRequirement([Sweegy], 8)]
+explosive.fovoham_locations = [RegionAccessRequirement([Grog], 5)]
 explosive.lesalia_locations = [
-    RegionAccessRequirement([BerveniaVolcano], 3),
+    RegionAccessRequirement([BerveniaVolcano], 5),
     RegionAccessRequirement([BerveniaVolcano, Riovanes], 2)
 ]
-explosive.lionel_locations = [RegionAccessRequirement([BariausHill], 3)]
-explosive.zeltennia_locations = [RegionAccessRequirement([Doguola, Grog], 3)]
-explosive.limberry_locations = [RegionAccessRequirement([Poeskas], 1)]
+explosive.lionel_locations = [RegionAccessRequirement([BariausHill], 5)]
+explosive.zeltennia_locations = [RegionAccessRequirement([Doguola, Grog], 5)]
+explosive.limberry_locations = [RegionAccessRequirement([Poeskas], 0)]
 
 skeleton = MonsterRegion(MonsterNames.SKELETON)
-skeleton.gallione_locations = [RegionAccessRequirement([Sweegy], 3)]
-skeleton.fovoham_locations = [RegionAccessRequirement([Yuguo], 1)]
-skeleton.lesalia_locations = [RegionAccessRequirement([Zeklaus, Dorter], 1)]
-skeleton.lionel_locations = [RegionAccessRequirement([Zigolis], 1)]
-skeleton.limberry_locations = [RegionAccessRequirement([Dolbodar], 1)]
+skeleton.gallione_locations = [RegionAccessRequirement([Sweegy], 0)]
+skeleton.fovoham_locations = [RegionAccessRequirement([Yuguo], 0)]
+skeleton.lesalia_locations = [RegionAccessRequirement([Zeklaus, Dorter], 0)]
+skeleton.lionel_locations = [RegionAccessRequirement([Zigolis], 0)]
+skeleton.limberry_locations = [RegionAccessRequirement([Dolbodar], 0)]
 
 bone_snatch = MonsterRegion(MonsterNames.BONE_SNATCH)
-bone_snatch.gallione_locations = [RegionAccessRequirement([Sweegy], 3)]
-bone_snatch.fovoham_locations = [RegionAccessRequirement([Yuguo], 1)]
-bone_snatch.lesalia_locations = [RegionAccessRequirement([Araguay], 1)]
-bone_snatch.lionel_locations = [RegionAccessRequirement([Zigolis], 1)]
-bone_snatch.limberry_locations = [RegionAccessRequirement([Dolbodar], 1)]
+bone_snatch.gallione_locations = [RegionAccessRequirement([Sweegy], 5)]
+bone_snatch.fovoham_locations = [RegionAccessRequirement([Yuguo], 0)]
+bone_snatch.lesalia_locations = [RegionAccessRequirement([Araguay], 0)]
+bone_snatch.lionel_locations = [RegionAccessRequirement([Zigolis], 0)]
+bone_snatch.limberry_locations = [RegionAccessRequirement([Dolbodar], 0)]
 
 living_bone = MonsterRegion(MonsterNames.LIVING_BONE)
-living_bone.gallione_locations = [RegionAccessRequirement([Sweegy], 3)]
-living_bone.lesalia_locations = [RegionAccessRequirement([BerveniaVolcano], 3)]
-living_bone.lionel_locations = [RegionAccessRequirement([Zigolis, Goug], 3)]
+living_bone.gallione_locations = [RegionAccessRequirement([Sweegy], 5)]
+living_bone.lesalia_locations = [RegionAccessRequirement([BerveniaVolcano], 5)]
+living_bone.lionel_locations = [RegionAccessRequirement([Zigolis, Goug], 5)]
 living_bone.limberry_locations = [RegionAccessRequirement([Dolbodar], 2)]
 
 ghoul = MonsterRegion(MonsterNames.GHOUL)
-ghoul.fovoham_locations = [RegionAccessRequirement([Yuguo], 1)]
-ghoul.lesalia_locations = [RegionAccessRequirement([Araguay, Dorter], 1)]
-ghoul.lionel_locations = [RegionAccessRequirement([Zigolis], 1)]
-ghoul.limberry_locations = [RegionAccessRequirement([Poeskas], 1)]
+ghoul.fovoham_locations = [RegionAccessRequirement([Yuguo], 0)]
+ghoul.lesalia_locations = [RegionAccessRequirement([Araguay, Dorter], 0)]
+ghoul.lionel_locations = [RegionAccessRequirement([Zigolis], 0)]
+ghoul.limberry_locations = [RegionAccessRequirement([Poeskas], 0)]
 
 gust = MonsterRegion(MonsterNames.GUST)
-gust.fovoham_locations = [RegionAccessRequirement([Yuguo], 1)]
+gust.fovoham_locations = [RegionAccessRequirement([Yuguo], 0)]
 gust.lesalia_locations = [RegionAccessRequirement([Araguay, Dorter], 2)]
 gust.lionel_locations = [RegionAccessRequirement([Zigolis], 2)]
-gust.limberry_locations = [RegionAccessRequirement([Poeskas], 1)]
+gust.limberry_locations = [RegionAccessRequirement([Poeskas], 0)]
 
 revnant = MonsterRegion(MonsterNames.REVNANT)
-revnant.fovoham_locations = [RegionAccessRequirement([Yuguo], 3)]
-revnant.lesalia_locations = [RegionAccessRequirement([Araguay, Dorter], 3)]
-revnant.lionel_locations = [RegionAccessRequirement([Zigolis], 3)]
+revnant.fovoham_locations = [RegionAccessRequirement([Yuguo], 5)]
+revnant.lesalia_locations = [RegionAccessRequirement([Araguay, Dorter], 5)]
+revnant.lionel_locations = [RegionAccessRequirement([Zigolis], 5)]
 revnant.limberry_locations = [RegionAccessRequirement([Poeskas], 2)]
 
 floatiball = MonsterRegion(MonsterNames.FLOATIBALL)
-floatiball.fovoham_locations = [RegionAccessRequirement([Fovoham], 1)]
-floatiball.lesalia_locations = [RegionAccessRequirement([Zirekile], 1)]
-floatiball.lionel_locations = [RegionAccessRequirement([Zigolis], 1)]
-floatiball.limberry_locations = [RegionAccessRequirement([Bed], 1)]
+floatiball.fovoham_locations = [RegionAccessRequirement([Fovoham], 0)]
+floatiball.lesalia_locations = [RegionAccessRequirement([Zirekile], 0)]
+floatiball.lionel_locations = [RegionAccessRequirement([Zigolis], 0)]
+floatiball.limberry_locations = [RegionAccessRequirement([Bed], 0)]
 
 ahriman = MonsterRegion(MonsterNames.AHRIMAN)
-ahriman.fovoham_locations = [RegionAccessRequirement([Fovoham], 1)]
+ahriman.fovoham_locations = [RegionAccessRequirement([Fovoham], 0)]
 ahriman.lesalia_locations = [
     RegionAccessRequirement([Zirekile, Bethla], 2),
-    RegionAccessRequirement([BerveniaVolcano, Riovanes], 1)
+    RegionAccessRequirement([BerveniaVolcano, Riovanes], 0)
 ]
-ahriman.lionel_locations = [RegionAccessRequirement([Zigolis], 2)]
-ahriman.limberry_locations = [RegionAccessRequirement([Bed], 1)]
+ahriman.lionel_locations = [RegionAccessRequirement([Zigolis, Goug], 2)]
+ahriman.limberry_locations = [RegionAccessRequirement([Bed], 0)]
 
 plague = MonsterRegion(MonsterNames.PLAGUE)
-plague.fovoham_locations = [RegionAccessRequirement([Fovoham], 4)]
-plague.lesalia_locations = [RegionAccessRequirement([BerveniaVolcano, Riovanes], 3)]
-plague.lionel_locations = [RegionAccessRequirement([BariausValley], 5)]
-plague.zeltennia_locations = [RegionAccessRequirement([Germinas], 3)]
-plague.limberry_locations = [RegionAccessRequirement([Bed, BerveniaCity], 3)]
+plague.fovoham_locations = [RegionAccessRequirement([Fovoham], 8)]
+plague.lesalia_locations = [RegionAccessRequirement([BerveniaVolcano, Riovanes], 5)]
+plague.lionel_locations = [RegionAccessRequirement([BariausValley], 9)]
+plague.zeltennia_locations = [RegionAccessRequirement([Germinas], 5)]
+plague.limberry_locations = [RegionAccessRequirement([Bed, BerveniaCity], 5)]
 
 pisco_demon = MonsterRegion(MonsterNames.PISCO_DEMON)
 pisco_demon.gallione_locations = [
     RegionAccessRequirement([Lenalia], 2),
-    RegionAccessRequirement([Lenalia, Fovoham], 1)
+    RegionAccessRequirement([Lenalia, Fovoham], 0)
 ]
-pisco_demon.fovoham_locations = [RegionAccessRequirement([Fovoham], 1)]
-pisco_demon.lesalia_locations = [RegionAccessRequirement([Zirekile], 1)]
-pisco_demon.lionel_locations = [RegionAccessRequirement([BariausValley], 1)]
-pisco_demon.zeltennia_locations = [RegionAccessRequirement([Finath], 1)]
-pisco_demon.limberry_locations = [RegionAccessRequirement([Dolbodar], 1)]
+pisco_demon.fovoham_locations = [RegionAccessRequirement([Fovoham], 0)]
+pisco_demon.lesalia_locations = [RegionAccessRequirement([Zirekile], 0)]
+pisco_demon.lionel_locations = [RegionAccessRequirement([BariausValley], 0)]
+pisco_demon.zeltennia_locations = [RegionAccessRequirement([Finath], 0)]
+pisco_demon.limberry_locations = [RegionAccessRequirement([Dolbodar], 0)]
 
 squidlarkin = MonsterRegion(MonsterNames.SQUIDLARKIN)
 squidlarkin.gallione_locations = [RegionAccessRequirement([Lenalia], 2)]
-squidlarkin.fovoham_locations = [RegionAccessRequirement([Fovoham], 1)]
-squidlarkin.lesalia_locations = [RegionAccessRequirement([Zirekile], 1)]
-squidlarkin.lionel_locations = [RegionAccessRequirement([BariausValley], 1)]
-squidlarkin.zeltennia_locations = [RegionAccessRequirement([Finath], 1)]
-squidlarkin.limberry_locations = [RegionAccessRequirement([Dolbodar], 1)]
+squidlarkin.fovoham_locations = [RegionAccessRequirement([Fovoham], 0)]
+squidlarkin.lesalia_locations = [RegionAccessRequirement([Zirekile], 0)]
+squidlarkin.lionel_locations = [RegionAccessRequirement([BariausValley], 0)]
+squidlarkin.zeltennia_locations = [RegionAccessRequirement([Finath], 0)]
+squidlarkin.limberry_locations = [RegionAccessRequirement([Dolbodar], 0)]
 
 mindflare = MonsterRegion(MonsterNames.MINDFLARE)
-mindflare.fovoham_locations = [RegionAccessRequirement([Fovoham], 1)]
-mindflare.lesalia_locations = [RegionAccessRequirement([Zirekile], 1)]
+mindflare.fovoham_locations = [RegionAccessRequirement([Fovoham], 2)]
+mindflare.lesalia_locations = [RegionAccessRequirement([Zirekile, Zaland], 2)]
 mindflare.lionel_locations = [RegionAccessRequirement([BariausValley], 2)]
-mindflare.zeltennia_locations = [RegionAccessRequirement([Finath], 1)]
-mindflare.limberry_locations = [RegionAccessRequirement([Dolbodar], 3)]
+mindflare.zeltennia_locations = [RegionAccessRequirement([Finath], 0)]
+mindflare.limberry_locations = [RegionAccessRequirement([Dolbodar], 5)]
 
 juravis = MonsterRegion(MonsterNames.JURAVIS)
-juravis.fovoham_locations = [RegionAccessRequirement([Fovoham, Zeakden], 1)]
-juravis.lesalia_locations = [RegionAccessRequirement([BerveniaVolcano], 1)]
+juravis.fovoham_locations = [RegionAccessRequirement([Fovoham, Zeakden], 0)]
+juravis.lesalia_locations = [RegionAccessRequirement([BerveniaVolcano], 0)]
 juravis.lionel_locations = [RegionAccessRequirement([BariausValley], 2)]
-juravis.zeltennia_locations = [RegionAccessRequirement([Germinas], 1)]
+juravis.zeltennia_locations = [RegionAccessRequirement([Germinas], 0)]
 
 steel_hawk = MonsterRegion(MonsterNames.STEEL_HAWK)
 steel_hawk.fovoham_locations = [RegionAccessRequirement([Fovoham, Zeakden], 2)]
-steel_hawk.lesalia_locations = [RegionAccessRequirement([Zeklaus], 1)]
+steel_hawk.lesalia_locations = [RegionAccessRequirement([Zeklaus], 0)]
 steel_hawk.lionel_locations = [RegionAccessRequirement([BariausValley], 2)]
-steel_hawk.zeltennia_locations = [RegionAccessRequirement([Germinas], 1)]
+steel_hawk.zeltennia_locations = [RegionAccessRequirement([Germinas], 0)]
 steel_hawk.limberry_locations = [RegionAccessRequirement([Poeskas], 2)]
 
-cockatoris = MonsterRegion(MonsterNames.COCATORIS)
-cockatoris.fovoham_locations = [RegionAccessRequirement([Fovoham], 1)]
-cockatoris.lesalia_locations = [RegionAccessRequirement([Zeklaus], 3)]
-cockatoris.lionel_locations = [RegionAccessRequirement([BariausValley], 3)]
-cockatoris.limberry_locations = [RegionAccessRequirement([Poeskas], 2)]
+cocatoris = MonsterRegion(MonsterNames.COCATORIS)
+cocatoris.fovoham_locations = [RegionAccessRequirement([Fovoham], 0)]
+cocatoris.lesalia_locations = [RegionAccessRequirement([Zeklaus], 5)]
+cocatoris.lionel_locations = [RegionAccessRequirement([BariausValley], 5)]
+cocatoris.limberry_locations = [RegionAccessRequirement([Poeskas, Germinas], 2)]
 
 bull_demon = MonsterRegion(MonsterNames.BULL_DEMON)
-bull_demon.gallione_locations = [RegionAccessRequirement([Sweegy], 1)]
+bull_demon.gallione_locations = [RegionAccessRequirement([Sweegy], 0)]
 bull_demon.fovoham_locations = [
-    RegionAccessRequirement([Fovoham], 3),
-    RegionAccessRequirement([Fovoham, Zeakden], 1),
+    RegionAccessRequirement([Fovoham], 5),
+    RegionAccessRequirement([Fovoham, Zeakden], 0),
 ]
-bull_demon.lesalia_locations = [RegionAccessRequirement([Zeklaus], 1)]
-bull_demon.lionel_locations = [RegionAccessRequirement([BariausHill], 1)]
-bull_demon.zeltennia_locations = [RegionAccessRequirement([Doguola], 1)]
-bull_demon.limberry_locations = [RegionAccessRequirement([Dolbodar], 1)]
+bull_demon.lesalia_locations = [RegionAccessRequirement([Zeklaus], 0)]
+bull_demon.lionel_locations = [RegionAccessRequirement([BariausHill], 0)]
+bull_demon.zeltennia_locations = [RegionAccessRequirement([Doguola], 0)]
+bull_demon.limberry_locations = [RegionAccessRequirement([Dolbodar], 0)]
 
 minitaurus = MonsterRegion(MonsterNames.MINITAURUS)
-minitaurus.fovoham_locations = [RegionAccessRequirement([Fovoham], 3)]
-minitaurus.lesalia_locations = [RegionAccessRequirement([Zeklaus], 3)]
+minitaurus.fovoham_locations = [RegionAccessRequirement([Fovoham], 5)]
+minitaurus.lesalia_locations = [RegionAccessRequirement([Zeklaus], 5)]
 minitaurus.lionel_locations = [RegionAccessRequirement([BariausValley], 2)]
-minitaurus.zeltennia_locations = [RegionAccessRequirement([Germinas], 1)]
+minitaurus.zeltennia_locations = [RegionAccessRequirement([Germinas], 0)]
 minitaurus.limberry_locations = [RegionAccessRequirement([Poeskas], 2)]
 
 sacred = MonsterRegion(MonsterNames.SACRED)
 sacred.fovoham_locations = [
-    RegionAccessRequirement([Fovoham], 4),
-    RegionAccessRequirement([Fovoham, Lenalia], 3)
+    RegionAccessRequirement([Fovoham], 8),
+    RegionAccessRequirement([Fovoham, Lenalia], 5)
 ]
-sacred.lesalia_locations = [RegionAccessRequirement([Zeklaus], 3)]
-sacred.lionel_locations = [RegionAccessRequirement([BariausHill], 3)]
-sacred.limberry_locations = [RegionAccessRequirement([Dolbodar], 5)]
+sacred.lesalia_locations = [RegionAccessRequirement([Zeklaus], 5)]
+sacred.lionel_locations = [RegionAccessRequirement([BariausHill], 5)]
+sacred.limberry_locations = [RegionAccessRequirement([Dolbodar], 9)]
 
 morbol = MonsterRegion(MonsterNames.MORBOL)
-morbol.gallione_locations = [RegionAccessRequirement([Mandalia], 3)]
+morbol.gallione_locations = [RegionAccessRequirement([Mandalia], 5)]
 morbol.fovoham_locations = [RegionAccessRequirement([Fovoham], 2)]
 morbol.lesalia_locations = [RegionAccessRequirement([Araguay], 2)]
-morbol.lionel_locations = [RegionAccessRequirement([Zigolis], 1)]
-morbol.zeltennia_locations = [RegionAccessRequirement([Finath], 1)]
-morbol.limberry_locations = [RegionAccessRequirement([Dolbodar], 1)]
+morbol.lionel_locations = [RegionAccessRequirement([Zigolis], 0)]
+morbol.zeltennia_locations = [RegionAccessRequirement([Finath], 0)]
+morbol.limberry_locations = [RegionAccessRequirement([Dolbodar], 0)]
 
 ochu = MonsterRegion(MonsterNames.OCHU)
-ochu.gallione_locations = [RegionAccessRequirement([Lenalia], 3)]
-ochu.lesalia_locations = [RegionAccessRequirement([Araguay], 3)]
-ochu.lionel_locations = [RegionAccessRequirement([Zigolis], 3)]
-ochu.zeltennia_locations = [RegionAccessRequirement([Finath], 1)]
+ochu.gallione_locations = [RegionAccessRequirement([Lenalia], 5)]
+ochu.lesalia_locations = [RegionAccessRequirement([Araguay], 5)]
+ochu.lionel_locations = [RegionAccessRequirement([Zigolis], 5)]
+ochu.zeltennia_locations = [RegionAccessRequirement([Finath], 0)]
 
 great_morbol = MonsterRegion(MonsterNames.GREAT_MORBOL)
-great_morbol.zeltennia_locations = [RegionAccessRequirement([Finath], 4)]
+great_morbol.zeltennia_locations = [RegionAccessRequirement([Finath], 8)]
 
 woodman = MonsterRegion(MonsterNames.WOODMAN)
-woodman.gallione_locations = [RegionAccessRequirement([Sweegy], 3)]
-woodman.fovoham_locations = [RegionAccessRequirement([Yuguo], 1)]
-woodman.lesalia_locations = [RegionAccessRequirement([Araguay], 3)]
+woodman.gallione_locations = [RegionAccessRequirement([Sweegy], 5)]
+woodman.fovoham_locations = [RegionAccessRequirement([Yuguo], 0)]
+woodman.lesalia_locations = [RegionAccessRequirement([Araguay], 5)]
 woodman.zeltennia_locations = [RegionAccessRequirement([Doguola], 2)]
 
 trent = MonsterRegion(MonsterNames.TRENT)
-trent.gallione_locations = [RegionAccessRequirement([Sweegy], 3)]
-trent.fovoham_locations = [RegionAccessRequirement([Yuguo], 1)]
+trent.gallione_locations = [RegionAccessRequirement([Sweegy], 5)]
+trent.fovoham_locations = [RegionAccessRequirement([Yuguo], 0)]
 trent.lesalia_locations = [RegionAccessRequirement([Araguay], 2)]
 trent.zeltennia_locations = [RegionAccessRequirement([Finath], 2)]
 
 taiju = MonsterRegion(MonsterNames.TAIJU)
-taiju.fovoham_locations = [RegionAccessRequirement([Yuguo], 3)]
-taiju.lesalia_locations = [RegionAccessRequirement([Araguay], 3)]
-taiju.zeltennia_locations = [RegionAccessRequirement([Finath], 4)]
+taiju.fovoham_locations = [RegionAccessRequirement([Yuguo], 5)]
+taiju.lesalia_locations = [RegionAccessRequirement([Araguay], 5)]
+taiju.zeltennia_locations = [RegionAccessRequirement([Finath], 8)]
+taiju.murond_locations = [RegionAccessRequirement([DeepDungeon], 10, sidequest=True)]
 
 dragon = MonsterRegion(MonsterNames.DRAGON)
-dragon.gallione_locations = [RegionAccessRequirement([Lenalia], 1)]
-dragon.lesalia_locations = [RegionAccessRequirement([Zeklaus], 3)]
-dragon.lionel_locations = [RegionAccessRequirement([BariausHill], 5)]
-dragon.zeltennia_locations = [RegionAccessRequirement([Germinas], 1)]
+dragon.gallione_locations = [RegionAccessRequirement([Lenalia], 0)]
+dragon.lesalia_locations = [RegionAccessRequirement([Zeklaus], 5)]
+dragon.lionel_locations = [RegionAccessRequirement([BariausHill], 9)]
+dragon.zeltennia_locations = [RegionAccessRequirement([Germinas], 0)]
 dragon.limberry_locations = [RegionAccessRequirement([Bed], 2)]
 
 blue_dragon = MonsterRegion(MonsterNames.BLUE_DRAGON)
-blue_dragon.gallione_locations = [RegionAccessRequirement([Mandalia], 5)]
-blue_dragon.fovoham_locations = [RegionAccessRequirement([Grog], 1)]
-blue_dragon.lionel_locations = [RegionAccessRequirement([BariausValley], 3)]
-blue_dragon.zeltennia_locations = [RegionAccessRequirement([Finath], 4)]
+blue_dragon.gallione_locations = [RegionAccessRequirement([Mandalia], 9)]
+blue_dragon.fovoham_locations = [RegionAccessRequirement([Grog], 0)]
+blue_dragon.lionel_locations = [RegionAccessRequirement([BariausValley], 5)]
+blue_dragon.zeltennia_locations = [RegionAccessRequirement([Finath], 8)]
 blue_dragon.limberry_locations = [
-    RegionAccessRequirement([Bed], 4),
-    RegionAccessRequirement([Bed, BerveniaCity], 3)
+    RegionAccessRequirement([Bed], 8),
+    RegionAccessRequirement([Bed, BerveniaCity], 5)
 ]
 
 red_dragon = MonsterRegion(MonsterNames.RED_DRAGON)
-red_dragon.gallione_locations = [RegionAccessRequirement([Mandalia], 5)]
-red_dragon.lesalia_locations = [RegionAccessRequirement([Zeklaus], 3)]
-red_dragon.lionel_locations = [RegionAccessRequirement([BariausHill], 5)]
-red_dragon.zeltennia_locations = [RegionAccessRequirement([Finath], 1)]
+red_dragon.gallione_locations = [RegionAccessRequirement([Mandalia], 9)]
+red_dragon.lesalia_locations = [RegionAccessRequirement([Zeklaus], 5)]
+red_dragon.lionel_locations = [RegionAccessRequirement([BariausHill], 9)]
+red_dragon.zeltennia_locations = [RegionAccessRequirement([Finath], 0)]
 
 behemoth = MonsterRegion(MonsterNames.BEHEMOTH)
 behemoth.lesalia_locations = [RegionAccessRequirement([BerveniaVolcano], 2)]
-behemoth.lionel_locations = [RegionAccessRequirement([BariausValley], 3)]
-behemoth.zeltennia_locations = [RegionAccessRequirement([Doguola], 1)]
-behemoth.limberry_locations = [RegionAccessRequirement([Poeskas], 1)]
+behemoth.lionel_locations = [RegionAccessRequirement([BariausValley], 5)]
+behemoth.zeltennia_locations = [RegionAccessRequirement([Doguola], 0)]
+behemoth.limberry_locations = [RegionAccessRequirement([Poeskas], 0)]
 
 king_behemoth = MonsterRegion(MonsterNames.KING_BEHEMOTH)
-king_behemoth.lesalia_locations = [RegionAccessRequirement([BerveniaVolcano, Riovanes], 5)]
-king_behemoth.lionel_locations = [RegionAccessRequirement([BariausHill], 5)]
+king_behemoth.lesalia_locations = [RegionAccessRequirement([BerveniaVolcano, Riovanes], 9)]
+king_behemoth.lionel_locations = [RegionAccessRequirement([BariausHill], 9)]
 king_behemoth.limberry_locations = [
-    RegionAccessRequirement([Poeskas, Germinas], 1),
-    RegionAccessRequirement([Bed], 3)
+    RegionAccessRequirement([Poeskas, Germinas], 0),
+    RegionAccessRequirement([Bed], 5)
 ]
 
 dark_behemoth = MonsterRegion(MonsterNames.DARK_BEHEMOTH)
-dark_behemoth.lionel_locations = [RegionAccessRequirement([BariausHill], 5)]
-dark_behemoth.limberry_locations = [RegionAccessRequirement([Poeskas], 4)]
+dark_behemoth.lionel_locations = [RegionAccessRequirement([BariausHill], 9)]
+dark_behemoth.limberry_locations = [RegionAccessRequirement([Poeskas], 8)]
 
 hyudra = MonsterRegion(MonsterNames.HYUDRA)
-hyudra.lionel_locations = [RegionAccessRequirement([BariausHill], 5)]
-hyudra.zeltennia_locations = [RegionAccessRequirement([Nelveska], 5)]
+hyudra.lionel_locations = [RegionAccessRequirement([BariausHill], 9)]
+hyudra.zeltennia_locations = [RegionAccessRequirement([Nelveska], 12, sidequest=True)]
 
 hydra = MonsterRegion(MonsterNames.HYDRA)
-hydra.lionel_locations = [RegionAccessRequirement([BariausHill], 5)]
+hydra.lionel_locations = [RegionAccessRequirement([BariausHill], 9)]
 
 tiamat = MonsterRegion(MonsterNames.TIAMAT)
-tiamat.lionel_locations = [RegionAccessRequirement([BariausHill], 5)]
+tiamat.lionel_locations = [RegionAccessRequirement([BariausHill], 9)]
 
 uribo = MonsterRegion(MonsterNames.URIBO)
-uribo.lionel_locations = [RegionAccessRequirement([Zigolis], 3)]
-uribo.zeltennia_locations = [RegionAccessRequirement([Finath], 5)]
+uribo.lesalia_locations = [RegionAccessRequirement([Goland], 8, sidequest=True)]
+uribo.lionel_locations = [RegionAccessRequirement([Zigolis], 6)]
+uribo.zeltennia_locations = [RegionAccessRequirement([Finath], 12)]
 uribo.limberry_locations = [RegionAccessRequirement([Dolbodar], 2)]
 
 porky = MonsterRegion(MonsterNames.PORKY)
-porky.limberry_locations = [RegionAccessRequirement([Dolbodar], 5)]
+porky.limberry_locations = [RegionAccessRequirement([Dolbodar], 9)]
 
 wildbow = MonsterRegion(MonsterNames.WILDBOW)
 
@@ -484,7 +489,7 @@ monster_locations = [
     ghoul, gust, revnant,
     floatiball, ahriman, plague,
     pisco_demon, squidlarkin, mindflare,
-    juravis, steel_hawk, cockatoris,
+    juravis, steel_hawk, cocatoris,
     bull_demon, minitaurus, sacred,
     morbol, ochu, great_morbol,
     woodman, trent, taiju,
@@ -505,5 +510,6 @@ for monster in monster_locations:
         *monster.lesalia_locations,
         *monster.lionel_locations,
         *monster.zeltennia_locations,
-        *monster.limberry_locations
+        *monster.limberry_locations,
+        *monster.murond_locations
     ]

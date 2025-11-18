@@ -9,11 +9,12 @@ class FFTLocation:
     requirements: list[Requirement]
     battle_level: int
 
-    def __init__(self, name: "LocationNames", requirements: list[Requirement] = None, battle_level: int = 0):
+    def __init__(self, name: "LocationNames", requirements: list[Requirement] = None, battle_level: int = None):
         if requirements is None:
             requirements = list()
         self.name = name.value
         self.requirements = requirements
+        assert battle_level is not None, self.name
         self.battle_level = battle_level
 
     def __repr__(self):

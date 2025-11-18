@@ -1,10 +1,12 @@
 from Fill import distribute_items_restrictive
 from .bases import FFTIITestBase
-from ..data.items import zodiac_stone_names, world_map_pass_names
+
+from ..data.items import zodiac_stone_names, world_map_pass_names, earned_job_names
 from ..data.locations import (location_sort_list, job_unlock_locations, monster_location_names, world_map_regions,
                               gallione_regions, fovoham_regions, lesalia_regions, lionel_regions, zeltennia_regions,
                               limberry_regions, murond_regions)
 from ..data.logic.FFTLocation import LocationNames
+from ..data.logic.Monsters import monster_locations_lookup, monster_family_lookup, MonsterNames, monster_families
 
 zodiac_stone_locations = [
     LocationNames.LIONEL_2_STORY.value,
@@ -84,6 +86,7 @@ class TestAllRegionsReachable(FFTIITestBase):
             self.collect_by_name(world_map_pass_names)
             self.collect_by_name("Progressive Shop Level")
             self.collect_by_name(zodiac_stone_names)
+            self.collect_by_name(earned_job_names)
             for region in world_map_regions:
                 self.assertTrue(self.can_reach_region(region.name), region.name)
         with self.subTest("Test Fovoham regions"):
@@ -124,6 +127,7 @@ class TestAllRegionsReachable(FFTIITestBase):
             self.remove_by_name(world_map_pass_names)
             self.collect_by_name("Murond Pass")
             self.collect_by_name("Lionel Pass")
+            self.collect_by_name(zodiac_stone_names)
             for region in murond_regions:
                 self.assertTrue(self.can_reach_region(region.name), region.name)
 
@@ -232,6 +236,8 @@ class TestRegionLogicGallioneStart(FFTIITestBase):
         "final_battles": 0
     }
 
+    run_default_tests = False
+
     def test_region_access(self) -> None:
         tested_locations = set()
         with self.subTest("Test Gallione Access"):
@@ -258,6 +264,7 @@ class TestRegionLogicGallioneStart(FFTIITestBase):
             ]
             tested_locations.update(set(test_locations))
             self.collect_by_name("Progressive Shop Level")
+            self.collect_by_name(earned_job_names)
             location_names = [str(location.value) for location in test_locations]
             for location in location_names:
                 self.assertTrue(self.world.get_location(location).can_reach(self.multiworld.state), location)
@@ -502,6 +509,8 @@ class TestRegionLogicGallioneStartAltimaOnly(FFTIITestBase):
         "final_battles": 1
     }
 
+    run_default_tests = False
+
     def test_region_access(self) -> None:
         with self.subTest("Test Murond Access"):
             test_locations_west = [
@@ -552,11 +561,14 @@ class TestRegionLogicGallioneStartAltimaOnly(FFTIITestBase):
 class TestPoachLogicWithGallioneStart(FFTIITestBase):
     options = {
         "poach_locations": "true",
-        "job_unlocks": "true"
+        "job_unlocks": "true",
+        "sidequest_battles": "true"
     }
 
+    run_default_tests = False
+
     def test_jobs_required(self):
-        with self.subTest("Test Thief Required"):
+        with self.subTest("Test Thief required"):
             self.assertAccessDependency(
                 monster_location_names,
                 [["Thief"]],
@@ -579,3 +591,89 @@ class TestPoachLogicWithGallioneStart(FFTIITestBase):
                 ],
                 only_check_listed=True
             )
+
+    def test_gallione_monsters(self):
+        self.collect_by_name("Progressive Shop Level")
+        self.collect_by_name(earned_job_names)
+        with self.subTest("Test Thief logic"):
+            self.collect_by_name("Thief")
+            for monster_location in monster_location_names:
+                monster_data = monster_locations_lookup[monster_location[6:]]
+                if len(monster_data.gallione_locations) > 0:
+                    self.assertTrue(self.can_reach_location(monster_location), monster_location)
+                self.collect_by_name("Fovoham Pass")
+                if len(monster_data.fovoham_locations) > 0:
+                    self.assertTrue(self.can_reach_location(monster_location), monster_location)
+                #self.remove_by_name("Fovoham Pass")
+                self.collect_by_name("Lesalia Pass")
+                if len(monster_data.lesalia_locations) > 0:
+                    self.assertTrue(self.can_reach_location(monster_location), monster_location)
+                self.remove_by_name("Fovoham Pass")
+                self.collect_by_name("Lionel Pass")
+                if len(monster_data.lionel_locations) > 0:
+                    self.assertTrue(self.can_reach_location(monster_location), monster_location)
+                self.remove_by_name("Lionel Pass")
+                self.collect_by_name("Fovoham Pass")
+                self.collect_by_name("Zeltennia Pass")
+                if len(monster_data.zeltennia_locations) > 0:
+                    self.assertTrue(self.can_reach_location(monster_location), monster_location)
+                self.remove_by_name("Zeltennia Pass")
+                self.collect_by_name("Limberry Pass")
+                if len(monster_data.limberry_locations) > 0:
+                    self.assertTrue(self.can_reach_location(monster_location), monster_location)
+        with self.subTest("Test Mediator logic"):
+            self.remove_by_name(world_map_pass_names)
+            self.collect_by_name("Mediator")
+            for monster_location in monster_location_names:
+                monster_name = monster_location[6:]
+                monster_family_name = monster_family_lookup[MonsterNames(monster_name)]
+                monster_family_values = monster_families[monster_family_name]
+                monster_datas = []
+                for monster in monster_family_values:
+                    monster_datas.append(monster_locations_lookup[monster.value])
+                if any([
+                    len(monster_datas[0].gallione_locations) > 0,
+                    len(monster_datas[1].gallione_locations) > 0,
+                    len(monster_datas[2].gallione_locations) > 0,
+                ]):
+                    self.assertTrue(self.can_reach_location(monster_location), monster_location)
+                self.collect_by_name("Fovoham Pass")
+                if any([
+                    len(monster_datas[0].fovoham_locations) > 0,
+                    len(monster_datas[1].fovoham_locations) > 0,
+                    len(monster_datas[2].fovoham_locations) > 0,
+                ]):
+                    self.assertTrue(self.can_reach_location(monster_location), monster_location)
+                self.remove_by_name("Fovoham Pass")
+                # self.remove_by_name("Fovoham Pass")
+                self.collect_by_name("Lesalia Pass")
+                if any([
+                    len(monster_datas[0].lesalia_locations) > 0,
+                    len(monster_datas[1].lesalia_locations) > 0,
+                    len(monster_datas[2].lesalia_locations) > 0,
+                ]):
+                    self.assertTrue(self.can_reach_location(monster_location), monster_location)
+                self.collect_by_name("Lionel Pass")
+                if any([
+                    len(monster_datas[0].lionel_locations) > 0,
+                    len(monster_datas[1].lionel_locations) > 0,
+                    len(monster_datas[2].lionel_locations) > 0,
+                ]):
+                    self.assertTrue(self.can_reach_location(monster_location), monster_location)
+                self.remove_by_name("Lionel Pass")
+                self.collect_by_name("Fovoham Pass")
+                self.collect_by_name("Zeltennia Pass")
+                if any([
+                    len(monster_datas[0].zeltennia_locations) > 0,
+                    len(monster_datas[1].zeltennia_locations) > 0,
+                    len(monster_datas[2].zeltennia_locations) > 0,
+                ]):
+                    self.assertTrue(self.can_reach_location(monster_location), monster_location)
+                self.remove_by_name("Zeltennia Pass")
+                self.collect_by_name("Limberry Pass")
+                if any([
+                    len(monster_datas[0].limberry_locations) > 0,
+                    len(monster_datas[1].limberry_locations) > 0,
+                    len(monster_datas[2].limberry_locations) > 0,
+                ]):
+                    self.assertTrue(self.can_reach_location(monster_location), monster_location)

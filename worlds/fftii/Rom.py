@@ -1,20 +1,20 @@
 import json
-import sys
 import os
 import pkgutil
 
 from pathlib import Path
-from tempfile import TemporaryDirectory
 
 import bsdiff4
 
 import Utils
 from settings import get_settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APPatchExtension
-from worlds.fftii.ErrorRecalc import ErrorRecalculator
-from worlds.fftii.data import memory
-from worlds.fftii.data.memory import victory_text_offsets
-from worlds.fftii.data.text import split_text_into_lines
+from .ErrorRecalc import ErrorRecalculator
+from .data import memory
+from .data.locations import rare_battle_location_names, dd_location_names
+from .data.memory import victory_text_offsets, rare_battles_offset, dd_battles_offset
+from .data.text import split_text_into_lines
+from .data.logic.FFTLocation import LocationNames
 
 
 def get_base_rom_as_bytes() -> bytes:
@@ -26,27 +26,82 @@ def get_base_rom_as_bytes() -> bytes:
 class FinalFantasyTacticsIIPatchExtension(APPatchExtension):
     game = "Final Fantasy Tactics Ivalice Island"
 
+
+    @staticmethod
+    def write_text_to_location(bytes_to_write, location, rom_data):
+        sector_size = 0x930
+        data_start = 0x18
+        data_size = 0x800
+        header_size = 0x18
+        ec_size = 0x118
+        other_size = header_size + ec_size
+
+        current_sector = location // sector_size
+        current_sector_start = current_sector * sector_size
+        offset_in_sector = location % sector_size
+        data_end = current_sector_start + data_start + data_size
+
+        current_offset = location
+        while len(bytes_to_write) > 0:
+            rom_data[current_offset] = bytes_to_write.pop(0)
+            current_offset += 1
+            if current_offset >= data_end:
+                current_offset = data_end + other_size
+                current_sector = current_offset // sector_size
+                current_sector_start = current_sector * sector_size
+                data_end = current_sector_start + data_start + data_size
+        pass
+
     @staticmethod
     def patch_bin(caller, iso, placement_file):
         patch_dict = json.loads(caller.get_file(placement_file))
-        base_patch = pkgutil.get_data(__name__, "fftii.bsdiff4")
+        if patch_dict["APJobs"] == 1:
+            base_patch = pkgutil.get_data(__name__, "fftiiapjobs.bsdiff4")
+        else:
+            base_patch = pkgutil.get_data(__name__, "fftiivanillajobs.bsdiff4")
         rom_data = bsdiff4.patch(iso, base_patch)
         rom_data = bytearray(rom_data)
+
+        if patch_dict["Sidequests"] == 1:
+            address, bit = memory.yaml_options["Sidequests"]
+            rom_data[address] = rom_data[address] | bit
+        if patch_dict["FinalBattles"] == 1:
+            address, bit = memory.yaml_options["FinalBattles"]
+            rom_data[address] = rom_data[address] | bit
 
         location_dict = patch_dict["LocationDict"]
         for location, text in location_dict.items():
             if location in victory_text_offsets:
-                offset = victory_text_offsets[location]
-                print(location)
-                print(text)
-                text_lines, byte_lines = split_text_into_lines(location_dict["Fort Zeakden Story Battle"])
-                print(text_lines)
-                print(byte_lines)
+                text_lines, byte_lines = split_text_into_lines(text)
                 all_bytes = []
                 for byte_line in byte_lines:
                     all_bytes.extend(byte_line)
-                rom_data[offset:offset + len(all_bytes)] = all_bytes
+                if isinstance(victory_text_offsets[location], list):
+                    for offset in victory_text_offsets[location]:
+                        bytes_to_write = all_bytes.copy()
+                        FinalFantasyTacticsIIPatchExtension.write_text_to_location(bytes_to_write, offset, rom_data)
+                else:
+                    offset = victory_text_offsets[location]
+                    FinalFantasyTacticsIIPatchExtension.write_text_to_location(all_bytes, offset, rom_data)
 
+
+                #rom_data[offset:offset + len(all_bytes)] = all_bytes
+        if LocationNames.MANDALIA_RARE.value in location_dict.keys():
+            all_rare_bytes = []
+            for location in rare_battle_location_names:
+                text = location_dict[location]
+                text_lines, byte_lines = split_text_into_lines(text)
+                for byte_line in byte_lines:
+                    all_rare_bytes.extend(byte_line)
+            FinalFantasyTacticsIIPatchExtension.write_text_to_location(all_rare_bytes, rare_battles_offset, rom_data)
+        if LocationNames.NOGIAS_SIDEQUEST.value in location_dict.keys():
+            all_dd_bytes = []
+            for location in dd_location_names:
+                text = location_dict[location]
+                text_lines, byte_lines = split_text_into_lines(text)
+                for byte_line in byte_lines:
+                    all_dd_bytes.extend(byte_line)
+            FinalFantasyTacticsIIPatchExtension.write_text_to_location(all_dd_bytes, dd_battles_offset, rom_data)
         rom_name_text = patch_dict["RomName"]
         rom_name = bytearray(rom_name_text, 'utf-8')
         rom_name.extend([0] * (20 - len(rom_name)))
@@ -56,6 +111,7 @@ class FinalFantasyTacticsIIPatchExtension(APPatchExtension):
         rom_data[memory.seed_hash_location:memory.seed_hash_location + 2] = bytes(seed_hash_bytes)
 
         return rom_data
+
 
 
 class FinalFantasyTacticsIIProcedurePatch(APProcedurePatch, APTokenMixin):
@@ -76,18 +132,18 @@ class FinalFantasyTacticsIIProcedurePatch(APProcedurePatch, APTokenMixin):
         file_name = target[:-4]
         if os.path.exists(file_name + ".cue"):
             os.unlink(file_name + ".cue")
-        if os.path.exists(file_name + ".bin"):
-            os.unlink(file_name + ".bin")
+        if os.path.exists(file_name + "patched" + ".bin"):
+            os.unlink(file_name + "patched" + ".bin")
 
         super().patch(target)
-        os.rename(target, file_name + ".bin")
+        os.rename(target, file_name + "patched" + ".bin")
         error_recalculator = ErrorRecalculator(calculate_form_2_edc=False)
-        stats = error_recalculator.recalc(target_file=Path(file_name + ".bin"),
+        stats = error_recalculator.recalc(target_file=Path(file_name + "patched" + ".bin"),
                                           base_file=get_settings().fftii_options.rom_file)
         print(
             f"{stats.identical_sectors} identical sectors out of {stats.total_sectors()}, {stats.recalc_sectors} sectors recalculated")
         print(f"{stats.edc_blocks_computed} EDC blocks computed, {stats.ecc_blocks_generated} ECC blocks generated")
 
-        cue_text = f'FILE "{file_name}.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00'
+        cue_text = f'FILE "{file_name}patched.bin" BINARY\n  TRACK 01 MODE2/2352\n    INDEX 01 00:00:00'
         with open(file_name + ".cue", "w") as cue_file:
             cue_file.write(cue_text)

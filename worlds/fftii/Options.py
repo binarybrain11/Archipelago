@@ -56,6 +56,39 @@ class PoachLocations(Toggle):
     """Are poaches in the location pool? WARNING: Can be grindy and RNG-heavy."""
     display_name = "Poach Locations"
 
+class LogicalDifficulty(Choice):
+    """Affects the placement of logically required shop levels and jobs in the multiworld."""
+    display_name = "Logical Difficulty"
+    option_easy = 0
+    option_normal = 1
+    option_difficult = 2
+    option_extreme = 3
+    default = 1
+
+# Item options
+class ChemistPlacement(Choice):
+    """Where Chemist is placed in the multiworld when Job Unlocks are enabled.
+    Starting will have you start with Chemist.
+    Early will ensure Chemist is one of your first items in the multiworld.
+    Shuffled will shuffle Chemist into the pool like other jobs."""
+    display_name = "Chemist Placement"
+    option_starting = 0
+    option_early = 1
+    option_shuffled = 2
+    default = 1
+
+class EarlyPass(DefaultOnToggle):
+    """Will a Pass for a neighboring region be an early item?"""
+    display_name = "Early Pass"
+
+class StartingShopLevel(Range):
+    """The starting shop level of your game."""
+    display_name = "Starting Shop Level"
+    range_start = 0
+    range_end = 14
+    default = 0
+
+# Filler item options
 class NormalItemWeight(Range):
     """Weight of items normally sold in shops in the filler pool."""
     display_name = "Normal Item Weight"
@@ -101,6 +134,7 @@ class JPBoonSize(Choice):
     option_valuable = 2
     default = 1
 
+# Unused options
 class StartingRegion(Choice):
     """What region to start in. Gallione is easiest, followed by Lesalia and Lionel. Fovoham, Zeltennia, and Limberry
     should only be chosen if you're looking for a challenge."""
@@ -134,14 +168,18 @@ class FinalFantasyTacticsIIOptions(PerGameCommonOptions):
     job_unlocks: JobUnlocks
     rare_battles: RareBattles
     poach_locations: PoachLocations
+    logical_difficulty: LogicalDifficulty
+    chemist_placement: ChemistPlacement
+    early_pass: EarlyPass
+    starting_shop_level: StartingShopLevel
     normal_item_weight: NormalItemWeight
     rare_item_weight: RareItemWeight
     bonus_gil_item_weight: BonusGilItemWeight
     jp_boon_item_weight: JPBoonItemWeight
     bonus_gil_item_size: BonusGilItemSize
     jp_boon_size: JPBoonSize
-    characters_join_with_equipment: CharactersJoinWithEquipment
-    jp_gain_multiplier: JPGainMultiplier
+    #characters_join_with_equipment: CharactersJoinWithEquipment
+    #jp_gain_multiplier: JPGainMultiplier
     start_inventory_from_pool: StartInventoryPool
 
 fftii_option_groups = [
@@ -154,6 +192,12 @@ fftii_option_groups = [
         JobUnlocks,
         PoachLocations,
         RareBattles,
+        LogicalDifficulty
+    ]),
+    OptionGroup("Item Options", [
+        ChemistPlacement,
+        EarlyPass,
+        StartingShopLevel
     ]),
     OptionGroup("Filler Options", [
         NormalItemWeight,
@@ -163,8 +207,8 @@ fftii_option_groups = [
         BonusGilItemSize,
         JPBoonSize
     ]),
-    OptionGroup("QOL Options", [
-        CharactersJoinWithEquipment,
-        JPGainMultiplier
-    ])
+    # OptionGroup("QOL Options", [
+    #     CharactersJoinWithEquipment,
+    #     JPGainMultiplier
+    # ])
 ]

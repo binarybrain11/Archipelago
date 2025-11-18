@@ -1,50 +1,86 @@
 from copy import copy
-from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from .data.logic.Monsters import RegionAccessRequirement
 from .data.logic.Requirement import Requirement
 from .Items import valid_item_names
-
-if TYPE_CHECKING:
-    from worlds.fftii import FinalFantasyTacticsIIOptions
+from .Options import FinalFantasyTacticsIIOptions
 
 # Number of shop progression unlocks needed to logically access a battle
-battle_levels = [0, 0, 2, 5, 8, 8]
+easy_battle_levels =      [0, 1, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 14, 14]
+normal_battle_levels =    [0, 1, 2, 3, 4, 5, 6, 7,  8,  9, 10, 11, 12, 13, 14]
+difficult_battle_levels = [0, 1, 1, 2, 3, 4, 5, 5,  6,  6,  7,  8,  9, 10, 11]
+extreme_battle_levels =   [0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0]
+battle_levels = [easy_battle_levels, normal_battle_levels, difficult_battle_levels, extreme_battle_levels]
 
-# Number of shop unlocks needed to access a monster
-battle_levels_poaching = [0, 0, 2, 5, 8, 8]
+# 0, 2, 5, 8, and 9 correspond to formations 1, 2, 3, 4, and the rare respectively. These are hard requirements.
+# Others are for story/sidequest battles. These are soft requirements.
+easy_poach_battle_levels =      [0, None, 2, None, None, 5, 8, None, 8, 8, 10, None, 14, None, 14]
+normal_poach_battle_levels =    [0, None, 2, None, None, 5, 6, None, 8, 8,  8, None, 12, None, 14]
+difficult_poach_battle_levels = [0, None, 2, None, None, 5, 5, None, 8, 8,  6, None,  8, None, 11]
+extreme_poach_battle_levels =   [0, None, 2, None, None, 5, 0, None, 8, 8,  0, None,  0, None,  0]
+
+poach_battle_levels = [
+    easy_poach_battle_levels, normal_poach_battle_levels,
+    difficult_poach_battle_levels, extreme_poach_battle_levels
+]
+
+# Number of jobs required to logically access a battle
+easy_job_battle_levels =      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+normal_job_battle_levels =    [1, 1, 2, 3, 3, 4, 4, 5, 6,  7,  7,  8,  9, 10, 10]
+difficult_job_battle_levels = [1, 1, 1, 2, 2, 3, 3, 4, 4,  5,  5,  6,  6,  7,  7]
+extreme_job_battle_levels =   [0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0]
+job_battle_levels = [
+    easy_job_battle_levels, normal_job_battle_levels,
+    difficult_job_battle_levels, extreme_job_battle_levels
+]
+
+easy_poach_job_battle_levels =      [0, None, 2, None, None, 5, 6, None, 8, 9, 10, None, 12, None, 14]
+normal_poach_job_battle_levels =    [0, None, 2, None, None, 4, 4, None, 5, 6,  7, None,  8, None, 10]
+difficult_poach_job_battle_levels = [0, None, 2, None, None, 3, 3, None, 4, 4,  5, None,  6, None,  7]
+extreme_poach_job_battle_levels =   [0, None, 1, None, None, 1, 1, None, 1, 1,  1, None,  1, None,  0]
+poach_job_battle_levels = [
+    easy_poach_job_battle_levels, normal_poach_job_battle_levels,
+    difficult_poach_job_battle_levels, extreme_poach_job_battle_levels
+]
 
 class LogicObject:
     requirements: list[list[str]] = []
     player: int
     options: "FinalFantasyTacticsIIOptions"
     battle_level: int
+    zodiac_stones_required: int
 
-    def __init__(self, player: int, options: "FinalFantasyTacticsIIOptions", battle_level):
+    def __init__(self, player: int, options: "FinalFantasyTacticsIIOptions", battle_level: int, zodiac_stones_required: int):
         self.player = player
         self.options = options
         self.battle_level = battle_level
+        self.zodiac_stones_required = zodiac_stones_required
 
     def logic_rule(self, state: CollectionState) -> bool:
-        if len(self.requirements) == 0 and self.battle_level < 2:
+        if len(self.requirements) == 0 and self.battle_level < 1:
             return True
         expression = None
         for requirement_list in self.requirements:
             if "Zodiac Stones" in requirement_list:
-                expression = state.has_group("Zodiac Stones", self.player, self.options.zodiac_stones_required.value)
+                expression = state.has_group("Zodiac Stones", self.player, self.zodiac_stones_required)
             elif expression is None:
                 expression = state.has_all(requirement_list, self.player)
             else:
                 expression = expression or state.has_all(requirement_list, self.player)
-        if self.battle_level > 1:
+        if self.battle_level > 0:
+            battle_level_expression = (state.has(
+                "Progressive Shop Level",
+                self.player,
+                battle_levels[self.options.logical_difficulty.value][self.battle_level])
+                              and state.has_group_unique(
+                        "Jobs",
+                        self.player,
+                        job_battle_levels[self.options.logical_difficulty.value][self.battle_level]))
             if expression is None:
-                expression = state.has("Progressive Shop Level", self.player, battle_levels[self.battle_level])
+                expression = battle_level_expression
             else:
-                expression = expression and state.has(
-                    "Progressive Shop Unlock",
-                    self.player,
-                    battle_levels[self.battle_level])
+                expression = expression and battle_level_expression
         if expression is None:
             return True
         return expression
@@ -135,6 +171,8 @@ class PoachLogicObject:
     def poach_logic_rule(self, state: CollectionState) -> bool:
         expression = None
         for requirement in self.requirements:
+            if requirement.sidequest and not self.options.sidequest_battles:
+                continue
             region_list = requirement.access_regions
             battle_level = requirement.battle_level
             region_expression = None
@@ -143,7 +181,12 @@ class PoachLogicObject:
                     region_expression = state.can_reach_region(region.name, self.player)
                 else:
                     region_expression = region_expression and state.can_reach_region(region.name, self.player)
-            battle_level_expression = state.has("Progressive Shop Level", self.player, battle_levels_poaching[battle_level])
+            poach_shop_level = poach_battle_levels[self.options.logical_difficulty.value][battle_level]
+            poach_job_count = poach_job_battle_levels[self.options.logical_difficulty.value][battle_level]
+            assert poach_shop_level is not None, requirement.access_regions
+            assert poach_job_count is not None, requirement.access_regions
+            battle_level_expression = (state.has("Progressive Shop Level", self.player, poach_shop_level)
+                                       and state.has_group_unique("Jobs", self.player, poach_job_count))
             if expression is None:
                 expression = region_expression and battle_level_expression
             else:

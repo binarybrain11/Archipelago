@@ -5,10 +5,10 @@ cd_name = "SCUS_942.21"
 
 world_bin_start = 0x0BD00408
 
-rom_name_location = 0x0BD6A136
+rom_name_location = 0x00028CC0
 seed_hash_location = 0x0BD6A134
 
-rom_name_location_in_ram = 0x13C2AE
+rom_name_location_in_ram = 0x027058
 rom_name_length = 20
 seed_hash_location_in_ram = 0x13C2AC
 seed_hash_length = 2
@@ -139,7 +139,7 @@ sidequest_addresses = {
 }
 
 rare_battle_addresses = {
-    "Manalia Plains Rare Battle": 0x11C,
+    "Mandalia Plains Rare Battle": 0x11C,
     "Sweegy Woods Rare Battle": 0xCA,
     "Lenalia Plateau Rare Battle": 0xCB,
     "Grog Hill Rare Battle": 0xCC,
@@ -203,9 +203,10 @@ ramza_job_unlock_addresses = {
     "Chapter 4 Ramza Squire Job Unlock": 0x11B
 }
 
-# These are set on client connect.
+# These are set during patching
 yaml_options = {
-    "Sidequests": 0x18F
+    "Sidequests": (0x00348931, 0x02),
+    "FinalBattles": (0x00348931, 0x01)
 }
 
 # This is written to be the client to unlock jobs
@@ -228,7 +229,8 @@ available_jobs_addresses = {
     "Summoner": 0x19F,
     "Mime": 0x1A4,
     "Dancer": 0x1A5,
-    "Bard": 0x1A6
+    "Bard": 0x1A6,
+    "Calculator": 0x1A7
 }
 
 locations_to_read = {
@@ -241,7 +243,6 @@ locations_to_read = {
 for location, flag in locations_to_read.items():
     locations_to_read[location] = flag - 0x80
 
-
 for location, flag in available_jobs_addresses.items():
     available_jobs_addresses[location] = flag - 0x80
 
@@ -253,7 +254,7 @@ for location, flag in ramza_job_unlock_addresses.items():
 
 all_main_bits = {
     **story_addresses, **sidequest_addresses, **shop_unlock_addresses, **character_recruit_addresses,
-    **ramza_job_unlock_addresses, **yaml_options, **available_jobs_addresses
+    **ramza_job_unlock_addresses, **available_jobs_addresses
 }
 
 for location, flag in all_main_bits.items():
@@ -388,4 +389,80 @@ game_started_flag_address = 0x18E - 0x80
 
 victory_text_offsets = {
     LocationNames.GARILAND_STORY.value: 0x86D5A0,
+    LocationNames.MANDALIA_STORY.value: [
+        0x88439F, 0x886A26
+    ],
+    LocationNames.IGROS_STORY.value: 0xC44725,
+    LocationNames.SWEEGY_STORY.value: 0x89B335,
+    LocationNames.DORTER_1_STORY.value: 0x8A45F8,
+    LocationNames.DORTER_2_STORY.value: 0x965739,
+    LocationNames.THIEVES_FORT_STORY.value: 0x8C48B3,
+    LocationNames.LENALIA_STORY.value: 0x8EBADE,
+    LocationNames.ZEAKDEN_STORY.value: 0x91BD3A,
+
+    LocationNames.GROG_STORY.value: 0xAA24B9,
+    LocationNames.YARDOW_STORY.value: 0xAB95A0,
+    LocationNames.YUGUO_STORY.value: 0xAC4BF2,
+    LocationNames.RIOVANES_1_STORY.value: 0xAD7348,
+    LocationNames.RIOVANES_2_STORY.value: 0xAE7335,
+    LocationNames.RIOVANES_3_STORY.value: 0xAF5168,
+    LocationNames.FOVOHAM_STORY.value: 0x8FE378,
+
+    LocationNames.ARAGUAY_STORY.value: 0x9757C8,
+    LocationNames.ZIREKILE_STORY.value: 0x98A0F8,
+    LocationNames.ZEKLAUS_STORY.value: 0x8AFDF8,
+    LocationNames.LESALIA_STORY.value: 0xA5FAF0,
+    LocationNames.GOLAND_STORY.value: 0xA2D238,
+
+    LocationNames.ZALAND_STORY.value: 0x99EC0A,
+    LocationNames.BARIAUS_HILL_STORY.value: 0x9AEE89,
+    LocationNames.LIONEL_1_STORY.value: 0xA11976,
+    LocationNames.LIONEL_2_STORY.value: 0xA1ADD8,
+    LocationNames.ZIGOLIS_STORY.value: 0x9C82E0,
+    LocationNames.GOLGORAND_STORY.value: 0xA01828,
+    LocationNames.BARIAUS_VALLEY_STORY.value: 0x9ECF1C,
+
+    LocationNames.DOGUOLA_STORY.value: 0xB50D78,
+    LocationNames.BERVENIA_CITY_STORY.value: 0xB5EBAA,
+    LocationNames.FINATH_STORY.value: 0xB65838,
+    LocationNames.ZELTENNIA_STORY.value: 0xB759A8,
+    LocationNames.GERMINAS_STORY.value: 0xBB8338,
+
+    LocationNames.BETHLA_NORTH_STORY.value: 0xB95C31,
+    LocationNames.BETHLA_SOUTH_STORY.value: 0xB8EDF1,
+    LocationNames.BETHLA_SLUICE_STORY.value: [
+        0xBA3894, 0xBA8214
+    ],
+    LocationNames.BED_STORY.value: 0xB8364D,
+    LocationNames.LIMBERRY_1_STORY.value: 0xBCAAE3,
+    LocationNames.LIMBERRY_2_STORY.value: 0xBDAC70,
+    LocationNames.LIMBERRY_3_STORY.value: 0xBE6275,
+    LocationNames.POESKAS_STORY.value: 0xBBF178,
+
+    LocationNames.MUROND_TEMPLE_1_STORY.value: 0xC4FCE3,
+    LocationNames.MUROND_TEMPLE_2_STORY.value: 0xC5B4C6,
+    LocationNames.MUROND_TEMPLE_3_STORY.value: 0xC66E1C,
+    LocationNames.UBS_1_STORY.value: 0xA8920B,
+    LocationNames.UBS_2_STORY.value: 0xA6FC46,
+    LocationNames.UBS_3_STORY.value: 0xA7B599,
+    LocationNames.UBS_4_STORY.value: 0xB09C48,
+    LocationNames.UBS_5_STORY.value: 0xB12F5E,
+    LocationNames.GOUG_STORY.value: 0x9D3922,
+    LocationNames.MUROND_DEATH_CITY_STORY.value: 0xB209FB,
+    LocationNames.PRECINCTS_STORY.value: 0xB29E56,
+    LocationNames.AIRSHIPS_1_STORY.value: 0xB331FD,
+    LocationNames.AIRSHIPS_2_STORY.value: 0xB3C2D6,
+
+    LocationNames.GOLAND_1_SIDEQUEST.value: 0xC89378,
+    LocationNames.GOLAND_2_SIDEQUEST.value: 0xC901B8,
+    LocationNames.GOLAND_3_SIDEQUEST.value: 0xC96FF8,
+    LocationNames.GOLAND_4_SIDEQUEST.value: 0xCA27B8,
+    LocationNames.NELVESKA_SIDEQUEST.value: 0xCB05DA,
+    LocationNames.ZARGHIDAS_SIDEQUEST.value: 0xA4FC25,
+
+    LocationNames.END_SIDEQUEST.value: 0x9553FB,
+
 }
+
+rare_battles_offset = 0x871478
+dd_battles_offset = 0x929978

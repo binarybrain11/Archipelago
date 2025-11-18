@@ -82,8 +82,8 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
                 from . import FinalFantasyTacticsIvaliceIslandWorld
                 self.location_name_to_id = FinalFantasyTacticsIvaliceIslandWorld.location_name_to_id
                 self.item_name_to_id = FinalFantasyTacticsIvaliceIslandWorld.item_name_to_id
-            if await self.check_valid_game(ctx) or True:
-                await self.set_options_flags(ctx)
+            if await self.check_valid_game(ctx):
+                #await self.set_options_flags(ctx)
                 await self.check_victory(ctx)
                 await self.location_check(ctx)
                 await self.received_items_check(ctx)
@@ -101,9 +101,10 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
         if game_started_data is None:
             return False
         if game_started_data & game_started_bit == 0:
-            pass
+            return False
         if seed_hash_card is None or seed_hash_ram is None:
             return False
+        return True
         seed_hash_card_value = int.from_bytes(seed_hash_card)
         seed_hash_ram_value = int.from_bytes(seed_hash_ram)
         if seed_hash_card_value & 0x8000:
@@ -182,6 +183,7 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
                     job_ids.append(self.item_name_to_id[earned_job])
                 all_jobs_obtained = [item.item for item in ctx.items_received if item.item in job_ids]
                 jobs_obtained_names = [ctx.item_names.lookup_in_game(pass_id) for pass_id in all_jobs_obtained]
+                jobs_obtained_names.extend(["Squire"])
                 unlock_job = self.check_job_unlock_condition(current_unit_jobs, requirements, jobs_obtained_names)
                 if unlock_job:
                     unlocked_jobs.add(f"{job} Unlock")
@@ -268,10 +270,10 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
 
     async def check_victory(self, ctx):
         value = None
-        if value is None or ctx.finished_game:
+        if ctx.finished_game:
             return
         else:
-            if int.from_bytes(value[0]) == 0:
+            if self.location_name_to_id["Graveyard of Airships 2 Story Battle"] in ctx.locations_checked:
                 await ctx.send_msgs([
                     {"cmd": "StatusUpdate",
                      "status": ClientStatus.CLIENT_GOAL}
