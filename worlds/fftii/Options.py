@@ -119,11 +119,11 @@ class JPBoonItemWeight(Range):
 
 class BonusGilItemSize(Choice):
     """Adjusts the value of bonus gil items in the pool.
-    Normal is 1000/5000/10000. Frugal halves that, Expensive doubles."""
+    Normal is 5000/10000/20000. Frugal halves that, Expensive doubles."""
     display_name = "Bonus Gil Item Size"
     option_frugal = 0
     option_normal = 1
-    option_valuable = 2
+    option_expensive = 2
     default = 1
 
 class JPBoonSize(Choice):
@@ -131,7 +131,7 @@ class JPBoonSize(Choice):
     display_name = "JP Boon Item Size"
     option_frugal = 0
     option_normal = 1
-    option_valuable = 2
+    option_expensive = 2
     default = 1
 
 # Unused options
@@ -151,11 +151,18 @@ class CharactersJoinWithEquipment(Toggle):
     """Do characters come with their vanilla equipment?"""
     display_name = "Characters Join with Equipment"
 
+class EXPGainMultiplier(Choice):
+    """Multiplier to in-battle EXP gains."""
+    option_normal = 0
+    option_double = 1
+    option_quadruple = 2
+    default = 1
+
 class JPGainMultiplier(Choice):
     """Multiplier to in-battle JP gains."""
     option_normal = 0
     option_double = 1
-    option_triple = 2
+    option_quadruple = 2
     default = 1
 
 @dataclass
@@ -179,7 +186,8 @@ class FinalFantasyTacticsIIOptions(PerGameCommonOptions):
     bonus_gil_item_size: BonusGilItemSize
     jp_boon_size: JPBoonSize
     #characters_join_with_equipment: CharactersJoinWithEquipment
-    #jp_gain_multiplier: JPGainMultiplier
+    exp_gain_multiplier: EXPGainMultiplier
+    jp_gain_multiplier: JPGainMultiplier
     start_inventory_from_pool: StartInventoryPool
 
 fftii_option_groups = [
@@ -207,8 +215,8 @@ fftii_option_groups = [
         BonusGilItemSize,
         JPBoonSize
     ]),
-    # OptionGroup("QOL Options", [
-    #     CharactersJoinWithEquipment,
-    #     JPGainMultiplier
-    # ])
+    OptionGroup("QOL Options", [
+        EXPGainMultiplier,
+        JPGainMultiplier
+    ])
 ]

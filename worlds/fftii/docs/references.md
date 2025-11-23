@@ -1,3 +1,8 @@
+# Table of Contents
+1. [Regions and Locations](#regions-and-locations)
+2. [Poach Locations](#poach-locations)
+3. [Location and Item Group Names](#location-and-item-group-names)
+
 # Regions and Locations
 
 ## Gallione
@@ -366,3 +371,29 @@ and Formation 4 as well as the Rare battle require eight.
 
 ### Tiamat
 - Bariaus Hill Rare
+
+# Location and Item Group Names
+
+## Preface
+These are the location name and item name groups for Ivalice Island. These are for use in general item and location
+options such as `local_items` and `excluded_locations` in your YAML.
+
+### Location Groups
+- `Story Battles`
+- - Includes all battles mandatory for the story in the vanilla game.
+- `Sidequest Battles`
+- - Includes all optional event battles from the vanilla game.
+- `Rare Battles`
+- - Includes the special fifth formation for every random battlefield.
+- `Poaches`
+- - Includes the Archipelago locations for every poached monster. Does not affect vanilla rewards in the Fur Shop.
+- `Job Unlocks`
+- - Includes the Archipelago locations for unlocking individual jobs. Does not affect the awarded job items.
+
+### Item Groups
+- `Zodiac Stones`
+- - Includes all thirteen Zodiac Stones.
+- `Characters`
+- - Includes all sixteen special recruitable characters.
+- `Jobs`
+- - Includes all twenty jobs. Note that Squire will always be a starting item, regardless of how this setting is used.

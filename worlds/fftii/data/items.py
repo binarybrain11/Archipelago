@@ -47,7 +47,7 @@ gear_item_names = [
 
     "Javelin", "Spear", "Mythril Spear", "Partisan", "Oberisk", "Holy Lance", "Dragon Whisker", "Javelin 2",
 
-    "Cypress Rod", "Battle Bamboo", "Musk Rod", "Iron Gan", "Gokuu Rod", "Ivory Rod", "Octagon Rod", "Whale Whisker",
+    "Cypress Rod", "Battle Bamboo", "Musk Rod", "Iron Fan", "Gokuu Rod", "Ivory Rod", "Octagon Rod", "Whale Whisker",
 
     "C Bag", "FS Bag", "P Bag", "H Bag",
 

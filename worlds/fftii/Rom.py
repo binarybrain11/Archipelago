@@ -68,6 +68,16 @@ class FinalFantasyTacticsIIPatchExtension(APPatchExtension):
         if patch_dict["FinalBattles"] == 1:
             address, bit = memory.yaml_options["FinalBattles"]
             rom_data[address] = rom_data[address] | bit
+        if "EXPMultiplier" in patch_dict.keys():
+            exp_mult_values = [0x00, 0x40, 0x80]
+            exp_mult_value = exp_mult_values[patch_dict["EXPMultiplier"]]
+            address = memory.yaml_options["EXPMultiplier"]
+            rom_data[address] = exp_mult_value
+        if "JPMultiplier" in patch_dict.keys():
+            exp_mult_values = [0x00, 0x40, 0x80]
+            exp_mult_value = exp_mult_values[patch_dict["JPMultiplier"]]
+            address = memory.yaml_options["JPMultiplier"]
+            rom_data[address] = exp_mult_value
 
         location_dict = patch_dict["LocationDict"]
         for location, text in location_dict.items():

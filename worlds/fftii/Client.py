@@ -13,7 +13,7 @@ from .data.items import item_data_lookup, gear_item_names, gil_item_names, gil_i
     jp_item_names, jp_item_sizes, job_names, special_character_names, world_map_pass_names, earned_job_names
 from .data.locations import linked_reward_names
 from .data.logic.JobUnlocks import unlock_dict
-from .data.memory import stones_lookup, seed_hash_length, pass_paths
+from .data.memory import stones_lookup, seed_hash_length, pass_paths, finale_path
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -55,7 +55,7 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
             except UnicodeDecodeError:
                 return False
             if rom_name != memory.cd_name:
-                return False  # Not a Metroid Fusion ROM
+                return False
         except bizhawk.RequestFailedError:
             return False  # Not able to get a response, say no for now
 
@@ -365,7 +365,7 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
         chapter_2_address, chapter_2_bit = get_byte_bit_from_index(
             memory.ramza_job_unlock_addresses["Chapter 2 Ramza Squire Job Unlock"])
         chapter_4_address, chapter_4_bit = get_byte_bit_from_index(
-            memory.ramza_job_unlock_addresses["Chapter 2 Ramza Squire Job Unlock"])
+            memory.ramza_job_unlock_addresses["Chapter 4 Ramza Squire Job Unlock"])
         chapter_2_location = memory.event_flags_location + chapter_2_address
         chapter_4_location = memory.event_flags_location + chapter_4_address
         chapter_2_data = await self.read_ram_value_guarded(ctx, chapter_2_location)
@@ -400,6 +400,13 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
                 for companion_pass in pass_paths[pass_name]:
                     if companion_pass in pass_obtained_names:
                         flags_to_write.extend(pass_paths[pass_name][companion_pass])
+
+        stone_ids = []
+        for stone in zodiac_stone_names:
+            stone_ids.append(self.item_name_to_id[stone])
+        all_stones_obtained = [item.item for item in ctx.items_received if item.item in stone_ids]
+        if len(all_stones_obtained) >= ctx.slot_data["zodiac_stones_required"]:
+            flags_to_write.append(finale_path)
         write_list = []
         for flag in flags_to_write:
             address, bit = get_byte_bit_from_index(flag)

@@ -164,7 +164,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         # Make Zodiac Stones local if option is set
 
         if self.options.zodiac_stone_locations == self.options.zodiac_stone_locations.option_anywhere_local:
-            self.options.local_items.value.add("Zodiac Stones")
+            self.options.local_items.value |= set(zodiac_stone_names)
 
         self.zodiac_stones_required = self.options.zodiac_stones_required.value
         self.zodiac_stones_in_pool = self.options.zodiac_stones_in_pool.value
@@ -450,6 +450,8 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         patch_dict["APJobs"] = self.options.job_unlocks.value
         patch_dict["Sidequests"] = self.options.sidequest_battles.value
         patch_dict["FinalBattles"] = self.options.final_battles.value
+        patch_dict["RequiredStones"] = self.zodiac_stones_required
+        patch_dict["EXPMultiplier"] = self.options.exp_gain_multiplier.value
         patch_dict["LocationDict"] = self.create_location_dict()
 
         rom_name_text = f'FFTII{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:9}'

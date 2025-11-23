@@ -96,7 +96,7 @@ story_addresses = {
     "Finath River Story Battle": 0xB2,
     "Zeltennia Castle Story Battle": 0xB3,
     "Germinas Peak Story Battle": 0xB4,
-    "Bethla Garrison North Wall Story Battle": 0xB6,
+    "Bethla Garrison North Wall Story Battle": 0xB5,
     "Bethla Garrison South Wall Story Battle": 0xB6,
     "Bethla Garrison Sluice Story Battle": 0xB7,
     "Bed Desert Story Battle": 0xB8,
@@ -206,7 +206,9 @@ ramza_job_unlock_addresses = {
 # These are set during patching
 yaml_options = {
     "Sidequests": (0x00348931, 0x02),
-    "FinalBattles": (0x00348931, 0x01)
+    "FinalBattles": (0x00348931, 0x01),
+    "EXPMultiplier": 0x35565C,
+    "JPMultiplier": 0x355670
 }
 
 # This is written to be the client to unlock jobs
@@ -383,7 +385,7 @@ pass_paths = {
     },
 }
 
-finale_oath = 0x25B - 0x80 # Formerly Goug <> Warjilis, now Deep Dungeon <> Murond Death City
+finale_path = 0x25B - 0x80 # Formerly Goug <> Warjilis, now Deep Dungeon <> Murond Death City
 game_started_flag_address = 0x18E - 0x80
 
 
