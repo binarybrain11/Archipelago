@@ -3,7 +3,7 @@ from enum import Enum
 from .FFTRegion import FFTRegion
 from .regions import Mandalia, Grog, Zirekile, BariausHill, Finath, Dolbodar, Fovoham, Bethla, \
     Zaland, BerveniaVolcano, Riovanes, Lenalia, Lesalia, Araguay, BariausValley, Sweegy, Yuguo, Bed, BerveniaCity, \
-    Germinas, Zeklaus, Doguola, Poeskas, Zigolis, Dorter, Goug, Zeakden, Nelveska, DeepDungeon, Goland
+    Germinas, Zeklaus, Doguola, Poeskas, Zigolis, Dorter, Goug, Zeakden, Nelveska, DeepDungeon, Goland, Zeltennia
 
 
 class MonsterNames(Enum):
@@ -162,7 +162,7 @@ black_chocobo.limberry_locations = [RegionAccessRequirement([Dolbodar], 9)]
 
 red_chocobo = MonsterRegion(MonsterNames.RED_CHOCOBO)
 red_chocobo.gallione_locations = [RegionAccessRequirement([Lenalia], 5)]
-red_chocobo.fovoham_locations = [RegionAccessRequirement([Grog], 2)]
+red_chocobo.fovoham_locations = [RegionAccessRequirement([Grog, Lesalia], 2)]
 red_chocobo.lesalia_locations = [
     RegionAccessRequirement([Zirekile, Bethla], 5),
     RegionAccessRequirement([Zirekile, Zaland], 5),
@@ -242,7 +242,7 @@ grenade.limberry_locations = [RegionAccessRequirement([Poeskas], 0)]
 
 explosive = MonsterRegion(MonsterNames.EXPLOSIVE)
 explosive.gallione_locations = [RegionAccessRequirement([Sweegy], 8)]
-explosive.fovoham_locations = [RegionAccessRequirement([Grog], 5)]
+explosive.fovoham_locations = [RegionAccessRequirement([Grog, Zeltennia], 5)]
 explosive.lesalia_locations = [
     RegionAccessRequirement([BerveniaVolcano], 5),
     RegionAccessRequirement([BerveniaVolcano, Riovanes], 2)

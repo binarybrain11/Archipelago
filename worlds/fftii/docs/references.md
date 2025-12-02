@@ -102,7 +102,7 @@ and Formation 4 as well as the Rare battle require eight.
 
 ### Red Chocobo
 - Lenalia Plateau 3 (from Gariland Magic City)
-- Grog Hill 2 (from Yardow Fort City)
+- Grog Hill 2 (from Lesalia Imperial Capital)
 - Bariaus Hill 1 (from Lionel Castle)
 - Finath River 1 (from Bervenia Free City)
 
@@ -132,7 +132,7 @@ and Formation 4 as well as the Rare battle require eight.
 
 ### Explosive
 - Sweegy Woods 4 (from Gariland Magic City)
-- Grog Hill 3 (from Yardow Fort City)
+- Grog Hill 3 (from Doguola Pass)
 - Bervenia Volcano 2 (from Riovanes Castle)
 - Bervenia Volcano 3 (from Zeklaus Desert)
 - Bariaus Hill 3 (from Lionel Castle)

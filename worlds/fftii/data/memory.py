@@ -6,14 +6,15 @@ cd_name = "SCUS_942.21"
 world_bin_start = 0x0BD00408
 
 rom_name_location = 0x00028CC0
-seed_hash_location = 0x0BD6A134
+volume_name_location = 0x00009340
+seed_hash_location = 0x0BD6A136
 
 rom_name_location_in_ram = 0x027058
 rom_name_length = 20
-seed_hash_location_in_ram = 0x13C2AC
+seed_hash_location_in_ram = 0x13C2AE
 seed_hash_length = 2
 
-seed_hash_in_memory_card = 0x0578CC
+seed_hash_in_memory_card = 0x0578CE
 
 items_received_low = 0x578CE
 items_received_high = 0x578CF
@@ -159,6 +160,7 @@ rare_battle_addresses = {
     "Dolbodar Swamp Rare Battle": 0xDA,
     "Poeskas Lake Rare Battle": 0xDB
 }
+
 # shouldn't need these but noting just in case
 shop_unlock_addresses = {
     "Mandalia Plains Shop Unlock": 0xEC,
@@ -205,13 +207,14 @@ ramza_job_unlock_addresses = {
 
 # These are set during patching
 yaml_options = {
+    "RareBattles": (0x00348931, 0x04),
     "Sidequests": (0x00348931, 0x02),
     "FinalBattles": (0x00348931, 0x01),
     "EXPMultiplier": 0x35565C,
     "JPMultiplier": 0x355670
 }
 
-# This is written to be the client to unlock jobs
+# This is written to the client to unlock jobs
 available_jobs_addresses = {
     "Time Mage": 0x190,
     "Wizard": 0x191,
@@ -304,7 +307,7 @@ poaching_addresses = {
     "Poach Sacred": 0x23,
     "Poach Morbol": 0x24,
     "Poach Ochu": 0x25,
-    "Poach Great Morbul": 0x26,
+    "Poach Great Morbol": 0x26,
     "Poach Behemoth": 0x27,
     "Poach King Behemoth": 0x28,
     "Poach Dark Behemoth": 0x29,
@@ -468,3 +471,6 @@ victory_text_offsets = {
 
 rare_battles_offset = 0x871478
 dd_battles_offset = 0x929978
+
+total_jp_boon_gained = 0x057930
+total_jp_boon_gained_length = 2

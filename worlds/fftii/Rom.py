@@ -62,6 +62,9 @@ class FinalFantasyTacticsIIPatchExtension(APPatchExtension):
         rom_data = bsdiff4.patch(iso, base_patch)
         rom_data = bytearray(rom_data)
 
+        if patch_dict["RareBattles"] == 1:
+            address, bit = memory.yaml_options["RareBattles"]
+            rom_data[address] = rom_data[address] | bit
         if patch_dict["Sidequests"] == 1:
             address, bit = memory.yaml_options["Sidequests"]
             rom_data[address] = rom_data[address] | bit
@@ -116,6 +119,7 @@ class FinalFantasyTacticsIIPatchExtension(APPatchExtension):
         rom_name = bytearray(rom_name_text, 'utf-8')
         rom_name.extend([0] * (20 - len(rom_name)))
         rom_data[memory.rom_name_location:memory.rom_name_location + 20] = bytes(rom_name[:20])
+        rom_data[memory.volume_name_location:memory.volume_name_location + 20] = bytes(rom_name[:20])
         seed_hash = int(patch_dict["SeedHash"])
         seed_hash_bytes = seed_hash.to_bytes(2)
         rom_data[memory.seed_hash_location:memory.seed_hash_location + 2] = bytes(seed_hash_bytes)

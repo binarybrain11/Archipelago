@@ -384,8 +384,13 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
                 filler_lists.append(gil_item_names_weighted)
             for i in range(jp_weight):
                 filler_lists.append(jp_item_names_weighted)
-        return_list = []
+        all_filler = []
+        for filler_list in filler_lists:
+            all_filler.extend(filler_list)
+        filler_set = set(all_filler)
+        self.filler_items = sorted(list(filler_set))
 
+        return_list = []
         # For every itempool slot, just pull a random item from each pool in order based on weight
         # Could change this if we want the weights to be random and not static
         for i in range(filler_item_count):
@@ -448,6 +453,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         # Hash of the MW seed to associate with save file
         patch_dict["SeedHash"] = self.multiworld.seed % 0x7FFF
         patch_dict["APJobs"] = self.options.job_unlocks.value
+        patch_dict["RareBattles"] = self.options.rare_battles.value
         patch_dict["Sidequests"] = self.options.sidequest_battles.value
         patch_dict["FinalBattles"] = self.options.final_battles.value
         patch_dict["RequiredStones"] = self.zodiac_stones_required
@@ -527,7 +533,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
 
     def get_filler_item_name(self) -> str:
         if self.filler_items is None:
-            self.filler_items = [item for item in item_table if item in filler_item_names]
+            self.filler_items = ["Potion"]
         return self.random.choice(self.filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:

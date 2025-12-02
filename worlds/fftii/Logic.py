@@ -35,8 +35,8 @@ job_battle_levels = [
     difficult_job_battle_levels, extreme_job_battle_levels
 ]
 
-easy_poach_job_battle_levels =      [0, None, 2, None, None, 5, 6, None, 8, 9, 10, None, 12, None, 14]
-normal_poach_job_battle_levels =    [0, None, 2, None, None, 4, 4, None, 5, 6,  7, None,  8, None, 10]
+easy_poach_job_battle_levels =      [0, None, 2, None, None, 5, 6, None, 8, 8, 10, None, 12, None, 14]
+normal_poach_job_battle_levels =    [0, None, 2, None, None, 4, 4, None, 5, 5,  7, None,  8, None, 10]
 difficult_poach_job_battle_levels = [0, None, 2, None, None, 3, 3, None, 4, 4,  5, None,  6, None,  7]
 extreme_poach_job_battle_levels =   [0, None, 1, None, None, 1, 1, None, 1, 1,  1, None,  1, None,  0]
 poach_job_battle_levels = [

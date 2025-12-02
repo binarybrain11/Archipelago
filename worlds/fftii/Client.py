@@ -107,8 +107,14 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
         return True
         seed_hash_card_value = int.from_bytes(seed_hash_card)
         seed_hash_ram_value = int.from_bytes(seed_hash_ram)
+        print(f"Card value: {hex(seed_hash_card_value)}")
+        print(f"RAM value: {hex(seed_hash_ram_value)}")
         if seed_hash_card_value & 0x8000:
             seed_hash_card_validation = seed_hash_card_value & 0x7FFF
+            if seed_hash_card_validation == seed_hash_ram_value:
+                print("Validation successful")
+            else:
+                print("Validation failed")
             return seed_hash_card_validation == seed_hash_ram_value
         else:
             seed_hash_to_write = seed_hash_ram_value | 0x8000
@@ -246,6 +252,10 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
                 if write_list_candidate is None:
                     return
                 write_list.append(write_list_candidate)
+                write_list_candidate = await self.write_cumulative_boon(ctx, current_item_name)
+                if write_list_candidate is None:
+                    return
+                write_list.extend(write_list_candidate)
             elif current_item_name in special_character_names:
                 write_list_candidate = await self.write_character_recruit(ctx, current_item_name)
                 if write_list_candidate is None:
@@ -343,6 +353,23 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
                 new_formation_data[jp_address] = new_jp_lower_byte
                 new_formation_data[jp_address + 1] = new_jp_upper_byte
         return memory.unit_stats_address, list(new_formation_data), self.ram
+
+    async def write_cumulative_boon(self, ctx: "BizHawkClientContext", jp_item: str) -> list[tuple[int, list[int], str]] | None:
+        jp_item_size = int(ctx.slot_data["jp_boon_size"])
+        jp_quantity = jp_item_sizes[jp_item_size][jp_item]
+        current_jp_data = await self.read_ram_values_guarded(
+            ctx,
+            memory.total_jp_boon_gained,
+            memory.total_jp_boon_gained_length)
+        if current_jp_data is None:
+            return
+        current_jp_amount = int.from_bytes(current_jp_data, "little")
+        new_jp_amount = min(9999, current_jp_amount + jp_quantity)
+        return [
+            (memory.total_jp_boon_gained, [new_jp_amount % 256], self.ram),
+            (memory.total_jp_boon_gained + 1, [new_jp_amount // 256 % 256], self.ram)
+        ]
+
 
     async def write_zodiac_stones(self, ctx: "BizHawkClientContext", stone_name: str) -> tuple[int, list[int], str] | None:
         address, bit = stones_lookup[stone_name]
