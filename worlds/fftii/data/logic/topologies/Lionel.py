@@ -7,7 +7,7 @@ from ..regions.Lesalia import Zirekile
 from ..regions.Murond import Goug, DeepDungeon
 
 Zaland.connections = [
-    Connection(Zirekile),
+    Connection(Zirekile, [HasLesaliaPass]),
     Connection(BariausHill)
 ]
 

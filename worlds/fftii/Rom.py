@@ -62,9 +62,10 @@ class FinalFantasyTacticsIIPatchExtension(APPatchExtension):
         rom_data = bsdiff4.patch(iso, base_patch)
         rom_data = bytearray(rom_data)
 
-        if patch_dict["RareBattles"] == 1:
-            address, bit = memory.yaml_options["RareBattles"]
-            rom_data[address] = rom_data[address] | bit
+        if "RareBattles" in patch_dict.keys():
+            if patch_dict["RareBattles"] == 1:
+                address, bit = memory.yaml_options["RareBattles"]
+                rom_data[address] = rom_data[address] | bit
         if patch_dict["Sidequests"] == 1:
             address, bit = memory.yaml_options["Sidequests"]
             rom_data[address] = rom_data[address] | bit

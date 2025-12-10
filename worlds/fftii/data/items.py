@@ -56,7 +56,7 @@ gear_item_names = [
     "Shuriken", "Magic Shuriken", "Yagyu Darkness", "Fire Ball", "Water Ball", "Lightning Ball",
     
     "Escutcheon", "Buckler", "Bronze Shield", "Round Shield", "Mythril Shield", "Gold Shield", "Ice Shield",
-    "Flame Shield", "Aegis Shield", "Diamond Shield", "Platina Shield", "Crustal Shield", "Genji Shield",
+    "Flame Shield", "Aegis Shield", "Diamond Shield", "Platina Shield", "Crystal Shield", "Genji Shield",
     "Kaiser Plate", "Venetian Shield", "Escutcheon 2",
 
     "Leather Helmet", "Bronze Helmet", "Iron Helmet", "Barbuta", "Mythril Helmet", "Gold Helmet", "Cross Helmet",
@@ -156,8 +156,11 @@ gil_item_names_weighted = [
     "Bonus Gil: l i t t l e  m o n e y",
     "Bonus Gil: l i t t l e  m o n e y",
     "Bonus Gil: l i t t l e  m o n e y",
+    "Bonus Gil: l i t t l e  m o n e y",
     "Bonus Gil: m o r e  m o n e y",
     "Bonus Gil: m o r e  m o n e y",
+    "Bonus Gil: m o r e  m o n e y",
+    "Bonus Gil: l o t s  o f  m o n e y",
     "Bonus Gil: l o t s  o f  m o n e y"
 ]
 
@@ -184,13 +187,15 @@ jp_item_names = [
 ]
 
 jp_item_names_weighted = [
-    "Small JP Boon", "Small JP Boon", "Small JP Boon", "Medium JP Boon", "Medium JP Boon", "Large JP Boon"
+    "Small JP Boon", "Small JP Boon", "Small JP Boon", "Small JP Boon",
+    "Medium JP Boon", "Medium JP Boon", "Medium JP Boon",
+    "Large JP Boon", "Large JP Boon",
 ]
 
 jp_item_sizes = [
+    {"Small JP Boon": 25, "Medium JP Boon": 50, "Large JP Boon": 125},
     {"Small JP Boon": 50, "Medium JP Boon": 100, "Large JP Boon": 250},
-    {"Small JP Boon": 100, "Medium JP Boon": 200, "Large JP Boon": 500},
-    {"Small JP Boon": 200, "Medium JP Boon": 400, "Large JP Boon": 1000}
+    {"Small JP Boon": 100, "Medium JP Boon": 200, "Large JP Boon": 500}
 ]
 
 useful_item_names = [

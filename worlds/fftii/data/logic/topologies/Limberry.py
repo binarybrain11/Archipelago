@@ -12,7 +12,7 @@ Bed.connections = [
 ]
 
 Bed.locations = [
-    FFTLocation(LocationNames.BED_STORY, battle_level=4),
+    FFTLocation(LocationNames.BED_STORY, battle_level=12),
     RareBattleLocation(LocationNames.BED_RARE, battle_level=8)
 ]
 
@@ -23,11 +23,11 @@ Bethla.connections = [
 ]
 
 Bethla.locations = [
-    FFTLocation(LocationNames.BETHLA_NORTH_STORY, battle_level=4),
-    FFTLocation(LocationNames.BETHLA_SOUTH_STORY, battle_level=4),
-    FFTLocation(LocationNames.BETHLA_SLUICE_STORY, battle_level=4),
-    FFTLocation(LocationNames.BETHLA_SHOP, battle_level=4),
-    FFTLocation(LocationNames.ORLANDU_RECRUIT, battle_level=4)
+    FFTLocation(LocationNames.BETHLA_NORTH_STORY, battle_level=12),
+    FFTLocation(LocationNames.BETHLA_SOUTH_STORY, battle_level=12),
+    FFTLocation(LocationNames.BETHLA_SLUICE_STORY, battle_level=12),
+    FFTLocation(LocationNames.BETHLA_SHOP, battle_level=12),
+    FFTLocation(LocationNames.ORLANDU_RECRUIT, battle_level=12)
 ]
 
 Dolbodar.connections = [

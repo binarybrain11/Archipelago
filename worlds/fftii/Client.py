@@ -83,7 +83,6 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
                 self.location_name_to_id = FinalFantasyTacticsIvaliceIslandWorld.location_name_to_id
                 self.item_name_to_id = FinalFantasyTacticsIvaliceIslandWorld.item_name_to_id
             if await self.check_valid_game(ctx):
-                #await self.set_options_flags(ctx)
                 await self.check_victory(ctx)
                 await self.location_check(ctx)
                 await self.received_items_check(ctx)
@@ -94,33 +93,13 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
             pass
 
     async def check_valid_game(self, ctx: "BizHawkClientContext") -> bool:
-        seed_hash_card = await self.read_ram_values_guarded(ctx, memory.seed_hash_in_memory_card, seed_hash_length)
-        seed_hash_ram = await self.read_ram_values_guarded(ctx, memory.seed_hash_location_in_ram, seed_hash_length)
         game_started_address, game_started_bit = get_byte_bit_from_index(memory.game_started_flag_address)
         game_started_data = await self.read_ram_value_guarded(ctx, memory.event_flags_location + game_started_address)
         if game_started_data is None:
             return False
         if game_started_data & game_started_bit == 0:
             return False
-        if seed_hash_card is None or seed_hash_ram is None:
-            return False
         return True
-        seed_hash_card_value = int.from_bytes(seed_hash_card)
-        seed_hash_ram_value = int.from_bytes(seed_hash_ram)
-        print(f"Card value: {hex(seed_hash_card_value)}")
-        print(f"RAM value: {hex(seed_hash_ram_value)}")
-        if seed_hash_card_value & 0x8000:
-            seed_hash_card_validation = seed_hash_card_value & 0x7FFF
-            if seed_hash_card_validation == seed_hash_ram_value:
-                print("Validation successful")
-            else:
-                print("Validation failed")
-            return seed_hash_card_validation == seed_hash_ram_value
-        else:
-            seed_hash_to_write = seed_hash_ram_value | 0x8000
-            await self.write_ram_values_guarded(ctx, [
-                    (memory.seed_hash_in_memory_card, [seed_hash_to_write // 256, seed_hash_to_write % 256], self.ram)
-                ])
 
     async def location_check(self, ctx: "BizHawkClientContext"):
         locations_checked = []
@@ -251,7 +230,7 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
                 write_list_candidate = await self.write_jp_items(ctx, current_item_name)
                 if write_list_candidate is None:
                     return
-                write_list.append(write_list_candidate)
+                write_list.extend(write_list_candidate)
                 write_list_candidate = await self.write_cumulative_boon(ctx, current_item_name)
                 if write_list_candidate is None:
                     return
@@ -331,9 +310,10 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
             (memory.war_funds_address + 3, [new_gil // (2**24)], self.ram),
         ]
 
-    async def write_jp_items(self, ctx: "BizHawkClientContext", jp_item: str) -> tuple[int, list[int], str] | None:
+    async def write_jp_items(self, ctx: "BizHawkClientContext", jp_item: str) -> list[tuple[int, list[int], str]] | None:
         jp_item_size = int(ctx.slot_data["jp_boon_size"])
         jp_quantity = jp_item_sizes[jp_item_size][jp_item]
+
         formation_data = await self.read_ram_values_guarded(ctx, memory.unit_stats_address, memory.unit_stats_length)
         if formation_data is None:
             return None
@@ -352,7 +332,25 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
                 new_jp_upper_byte = new_jp // 256
                 new_formation_data[jp_address] = new_jp_lower_byte
                 new_formation_data[jp_address + 1] = new_jp_upper_byte
-        return memory.unit_stats_address, list(new_formation_data), self.ram
+
+        temp_formation_data = await self.read_ram_values_guarded(ctx, memory.temp_unit_stats_address, memory.temp_unit_stats_length)
+        if temp_formation_data is None:
+            return None
+        temp_new_formation_data = bytearray(temp_formation_data)
+        for unit_number in range(memory.temp_unit_count):
+            base_address = unit_number * memory.temp_unit_stat_size
+            for job_number in range(memory.temp_job_amount):
+                jp_address = base_address + memory.temp_jp_offset + (job_number * 2)
+                current_jp = int.from_bytes(temp_formation_data[jp_address:jp_address + 2], "little")
+                new_jp = min(current_jp + jp_quantity, 9999)
+                new_jp_lower_byte = new_jp % 256
+                new_jp_upper_byte = new_jp // 256
+                temp_new_formation_data[jp_address] = new_jp_lower_byte
+                temp_new_formation_data[jp_address + 1] = new_jp_upper_byte
+        return [
+            (memory.unit_stats_address, list(new_formation_data), self.ram),
+            (memory.temp_unit_stats_address, list(temp_new_formation_data), self.ram)
+        ]
 
     async def write_cumulative_boon(self, ctx: "BizHawkClientContext", jp_item: str) -> list[tuple[int, list[int], str]] | None:
         jp_item_size = int(ctx.slot_data["jp_boon_size"])

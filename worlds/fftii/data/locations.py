@@ -85,6 +85,19 @@ story_battle_locations: list[LocationNames] = [
     LocationNames.AIRSHIPS_2_STORY
 ]
 
+story_character_recruit_locations: list[LocationNames] = [
+    LocationNames.RAD_RECRUIT,
+    LocationNames.ALICIA_RECRUIT,
+    LocationNames.LAVIAN_RECRUIT,
+    LocationNames.BOCO_RECRUIT,
+    LocationNames.MUSTADIO_RECRUIT,
+    LocationNames.AGRIAS_RECRUIT,
+    LocationNames.RAFA_RECRUIT,
+    LocationNames.MALAK_RECRUIT,
+    LocationNames.ORLANDU_RECRUIT,
+    LocationNames.MELIADOUL_RECRUIT
+]
+
 character_recruit_locations: list[LocationNames] = [
     LocationNames.RAD_RECRUIT,
     LocationNames.ALICIA_RECRUIT,
@@ -312,7 +325,7 @@ linked_rewards: dict[LocationNames, list[LocationNames]] = {
         LocationNames.LIMBERRY_SHOP,
         LocationNames.MELIADOUL_RECRUIT
     ],
-    LocationNames.UBS_2_STORY: [
+    LocationNames.UBS_1_STORY: [
         LocationNames.ORBONNE_SHOP
     ],
     LocationNames.GOUG_STORY: [
@@ -364,7 +377,7 @@ location_groups = {
             *story_battle_locations,
             *shop_unlock_locations,
             *ramza_job_unlock_locations,
-            *character_recruit_locations
+            *story_character_recruit_locations
         ]
     ],
     "Sidequest Battles": [location.value for location in sidequest_battles],

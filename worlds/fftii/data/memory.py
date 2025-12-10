@@ -58,6 +58,14 @@ party_id_offset = 0x01
 jp_offset = 0x6E
 job_amount = 20
 
+temp_unit_stats_address = 0x1C8638
+temp_unit_stat_size = 0x128
+temp_unit_count = 16
+temp_unit_stats_length = temp_unit_stat_size * temp_unit_count
+temp_party_id_offset = 0x01
+temp_jp_offset = 0xBE
+temp_job_amount = 20
+
 event_flags_location = 0x05791C
 event_flags_length = 0x224
 
@@ -318,6 +326,7 @@ poaching_addresses = {
     "Poach Hydra": 0x2E,
     "Poach Tiamat": 0x2F,
 }
+
 job_level_offset = 0x64
 job_level_order = [
     "Squire",

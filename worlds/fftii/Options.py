@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from Options import Range, PerGameCommonOptions, OptionGroup, StartInventoryPool, DefaultOnToggle, Toggle, Choice
+from Options import Range, PerGameCommonOptions, OptionGroup, StartInventoryPool, DefaultOnToggle, Toggle, Choice, \
+    Visibility
 
 
 # Main Options
@@ -119,7 +120,7 @@ class JPBoonItemWeight(Range):
 
 class BonusGilItemSize(Choice):
     """Adjusts the value of bonus gil items in the pool.
-    Normal is 5000/10000/20000. Frugal halves that, Expensive doubles."""
+    Normal is 5000/10000/40000. Frugal halves that, Expensive doubles."""
     display_name = "Bonus Gil Item Size"
     option_frugal = 0
     option_normal = 1
@@ -127,12 +128,93 @@ class BonusGilItemSize(Choice):
     default = 1
 
 class JPBoonSize(Choice):
-    """Adjusts the value of JP Boon items. Normal is 100/200/500 JP. Frugal halves that, Expensive doubles."""
+    """Adjusts the value of JP Boon items. Normal is 50/100/250 JP. Frugal halves that, Expensive doubles."""
     display_name = "JP Boon Item Size"
     option_frugal = 0
     option_normal = 1
     option_expensive = 2
     default = 1
+
+# QoL options
+
+class EXPGainMultiplier(Choice):
+    """Multiplier to in-battle EXP gains."""
+    display_name = "EXP Gain Multiplier"
+    option_normal = 0
+    option_double = 1
+    option_quadruple = 2
+    default = 1
+
+class JPGainMultiplier(Choice):
+    """Multiplier to in-battle JP gains."""
+    display_name = "JP Gain Multiplier"
+    option_normal = 0
+    option_double = 1
+    option_quadruple = 2
+    default = 1
+
+# Enemy rando options
+
+class EnemyRandomizer(Choice):
+    """Randomizes enemies.
+    Disabled leaves enemies as vanilla.
+    Limited randomizes only bosses with bosses.
+    Simple randomizes only generics (both humans and monsters) with generics.
+    Advanced randomizes all unique units and all generics with their categories.
+    Complex randomizes both generic and special units with each other."""
+    display_name = "Enemy Randomizer"
+    option_disabled = 0
+    option_limited = 1
+    option_simple = 2
+    option_advanced = 3
+    option_complex = 4
+    default = 0
+    visibility = Visibility.none
+
+class CrossEnemyRandomizer(Toggle):
+    """If enabled, randomized humans can become monster units and vice versa."""
+    display_name = "Cross Enemy Randomizer"
+    visibility = Visibility.none
+
+class RandomizeStoryFightsOnly(Toggle):
+    """If enabled, only story and sidequest fights will be randomized,
+    and random encounters will be left alone"""
+    display_name = "Randomize Story Fights Only"
+    visibility = Visibility.none
+
+class EnemyRandomizerLocality(Choice):
+    """Controls the scope of enemy randomization.
+    Battle randomizes enemy units of the same job differently per battle.
+    Region randomizes enemy units of the same job differently per region.
+    Global randomizes all enemy units in the game of the same job to the same randpmized job."""
+    display_name = "Enemy Randomizer Locality"
+    option_battle = 0
+    option_region = 1
+    option_global = 2
+    default = 0
+    visibility = Visibility.none
+
+class LucaviRandomizer(Choice):
+    """Controls if Lucavi and Altima are included in randomization.
+    Disabled leaves Lucavi (Queklain, Velius, Zalera, Adramelk, Hashmalum, Elidibs) the same as vanilla.
+    Lucavi enables those locations and jobs to be included in randomization.
+    Include Altima also includes Altima 1 and 2 in the randomization. Will cause graphical glitches."""
+    display_name = "Lucavi Randomizer"
+    option_disabled = 0
+    option_lucavi = 1
+    option_include_altima = 2
+    default = 0
+    visibility = Visibility.none
+
+class EnemyRandomizerMethod(Choice):
+    """Controls the randomization method for determining randomized units.
+    Shuffle disallows duplicate randomized units in the chosen locality.
+    Chaos allows duplicate randomized units in the chosen locality."""
+    display_name = "Enemy Randomizer Method"
+    option_shuffle = 0
+    option_chaos = 1
+    default = 0
+    visibility = Visibility.none
 
 # Unused options
 class StartingRegion(Choice):
@@ -146,24 +228,6 @@ class StartingRegion(Choice):
     option_zeltennia = 4
     option_limberry = 5
     default = 0
-
-class CharactersJoinWithEquipment(Toggle):
-    """Do characters come with their vanilla equipment?"""
-    display_name = "Characters Join with Equipment"
-
-class EXPGainMultiplier(Choice):
-    """Multiplier to in-battle EXP gains."""
-    option_normal = 0
-    option_double = 1
-    option_quadruple = 2
-    default = 1
-
-class JPGainMultiplier(Choice):
-    """Multiplier to in-battle JP gains."""
-    option_normal = 0
-    option_double = 1
-    option_quadruple = 2
-    default = 1
 
 @dataclass
 class FinalFantasyTacticsIIOptions(PerGameCommonOptions):
@@ -185,7 +249,12 @@ class FinalFantasyTacticsIIOptions(PerGameCommonOptions):
     jp_boon_item_weight: JPBoonItemWeight
     bonus_gil_item_size: BonusGilItemSize
     jp_boon_size: JPBoonSize
-    #characters_join_with_equipment: CharactersJoinWithEquipment
+    enemy_randomizer: EnemyRandomizer
+    cross_enemy_randomizer: CrossEnemyRandomizer
+    randomize_story_fights_only: RandomizeStoryFightsOnly
+    enemy_randomizer_locality: EnemyRandomizerLocality
+    lucavi_randomizer: LucaviRandomizer
+    enemy_randomizer_method: EnemyRandomizerMethod
     exp_gain_multiplier: EXPGainMultiplier
     jp_gain_multiplier: JPGainMultiplier
     start_inventory_from_pool: StartInventoryPool
@@ -214,6 +283,14 @@ fftii_option_groups = [
         JPBoonItemWeight,
         BonusGilItemSize,
         JPBoonSize
+    ]),
+    OptionGroup("Enemy Randomizer Options", [
+        EnemyRandomizer,
+        CrossEnemyRandomizer,
+        RandomizeStoryFightsOnly,
+        EnemyRandomizerLocality,
+        LucaviRandomizer,
+        EnemyRandomizerMethod
     ]),
     OptionGroup("QOL Options", [
         EXPGainMultiplier,
