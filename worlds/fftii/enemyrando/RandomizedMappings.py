@@ -1,5 +1,4 @@
-from enum import IntEnum
-
+from worlds.fftii.enemyrando.RandomizedUnitFactory import RandomizedUnitFactory
 from worlds.fftii.enemyrando.RandomizedUnits import *
 
 base_mapping = {
@@ -16,7 +15,7 @@ allowed_mappings: dict[Job, dict[type[RandomizedUnit], int]] = {
     Job.SQUIRE_DELITA: {DelitaSquire: 1},
     Job.HOLY_KNIGHT_DELITA: {DelitaHolyKnight: 1},
     Job.ARC_KNIGHT_DELITA: {DelitaArcKnight: 1},
-    Job.SQUIRE_ALGUS: {Algus: 1},
+    Job.SQUIRE_ALGUS: {Algus: 9, AlgusWithCrossbow: 1},
     Job.ARC_KNIGHT_ZALBAG: {ZalbagArcKnight: 1},
     Job.LUNE_KNIGHT: {LuneKnight: 1},
     Job.PRINCESS: {Princess: 1},
@@ -139,6 +138,6 @@ allowed_mappings: dict[Job, dict[type[RandomizedUnit], int]] = {
     Job.ELIDIBS: {Elidibs: 1}
 }
 
-unique_enemies = [
-
-]
+factories = {
+    job: RandomizedUnitFactory(mapping) for job, mapping in allowed_mappings.items()
+}

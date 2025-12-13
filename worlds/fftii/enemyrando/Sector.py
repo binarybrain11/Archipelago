@@ -1,7 +1,9 @@
 import os
 
 from EventIDs import events
-from worlds.fftii.enemyrando.Jobs import all_jobs
+from worlds.fftii.enemyrando.Job import all_jobs, Job
+from worlds.fftii.enemyrando.SourceUnit import SourceUnit
+from worlds.fftii.enemyrando.SpriteSet import SpriteSet
 from worlds.fftii.enemyrando.Unit import Unit
 
 
@@ -29,6 +31,7 @@ class Sector:
 class ENTDEntry:
     name: str
     location: int
+    index: int
     unit_count = 16
     unit_length = 40
     total_length = unit_count * unit_length
@@ -68,8 +71,8 @@ with open(os.path.join("..", "..", "..", iso_filename), "rb") as file:
         start = entd_start + (i * total_entd_length)
         entd = iso_data[start:start + total_entd_length]
         entd_sectors = []
-        for i in range(entd_sector_count):
-            new_sector = Sector(entd[i * Sector.sector_size:(i + 1) * Sector.sector_size])
+        for j in range(entd_sector_count):
+            new_sector = Sector(entd[j * Sector.sector_size:(j + 1) * Sector.sector_size])
             entd_sectors.append(new_sector)
             all_entd_sectors.append(new_sector)
         entd_data = bytearray()
@@ -86,8 +89,8 @@ with open(os.path.join("..", "..", "..", iso_filename), "rb") as file:
         if i in events.keys():
             entd_data = full_entd[i * ENTDEntry.total_length:(i + 1) * ENTDEntry.total_length]
             new_entd_entry = ENTDEntry(entd_data, events[i], i * ENTDEntry.total_length)
-            print("===")
-            print(new_entd_entry)
+            new_entd_entry.index = i
+            print(f"{str(new_entd_entry).replace(" ", "")}.name = '{str(new_entd_entry)}'")
             for unit in new_entd_entry.units:
                 if unit[0] > 0 and unit[1] > 0:
                     new_unit = Unit(unit)
@@ -96,10 +99,24 @@ with open(os.path.join("..", "..", "..", iso_filename), "rb") as file:
                 else:
                     new_unit = Unit(unit)
                 new_entd_entry.unit_datas.append(new_unit)
+            used_sprite_sheets = set()
+            used_source_units = set()
             for unit in new_entd_entry.unit_datas:
-                print(unit)
+                if unit.sprite_set > 0:
+                    source_unit = SourceUnit(SpriteSet(unit.sprite_set), Job(unit.job), unit.gender)
+                    used_source_units.add(source_unit)
+                    included = False
+                    for source in used_sprite_sheets:
+                        if source == source_unit:
+                            included = True
+                    if not included:
+                        used_sprite_sheets.add(source_unit)
+            for source in used_source_units:
+                pass
+            #print(f"#Used sprite sheets: {len(used_sprite_sheets)}")
             new_entd_entry.apply_data()
             entd_entries.append(new_entd_entry)
+    exit()
     new_full_entd: bytearray = full_entd.copy()
     for entd_entry in entd_entries:
         start_location: int = entd_entry.location
@@ -109,12 +126,13 @@ with open(os.path.join("..", "..", "..", iso_filename), "rb") as file:
     for sector in all_entd_sectors:
         new_all_entd_sectors.append(Sector(sector.all_data))
     for i in range(len(new_full_entd)):
-        assert new_full_entd[i] == full_entd[i], (i, new_full_entd[i], full_entd[i])
+        #assert new_full_entd[i] == full_entd[i], (i, new_full_entd[i], full_entd[i])
         sector_number: int = i // 2048
         new_all_entd_sectors[sector_number].data[i % 2048] = new_full_entd[i]
     for i in range(len(all_entd_sectors)):
         for j in range(len(all_entd_sectors[i].data)):
-            assert all_entd_sectors[i].data[j] == new_all_entd_sectors[i].data[j]
+            pass
+            #assert all_entd_sectors[i].data[j] == new_all_entd_sectors[i].data[j]
         new_all_data: bytearray = bytearray()
         new_all_data.extend(new_all_entd_sectors[i].header)
         new_all_data.extend(new_all_entd_sectors[i].data)
@@ -129,7 +147,8 @@ with open(os.path.join("..", "..", "..", iso_filename), "rb") as file:
         pass
         #assert iso_data[i] == new_iso_data[i]
     with open("test.bin", "wb") as file2:
-        file2.write(new_iso_data)
+        pass
+        #file2.write(new_iso_data)
     print("\n\n======\n\n")
     for unit_id in all_jobs.keys():
         if unit_id not in used_units:

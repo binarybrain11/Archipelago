@@ -12,7 +12,7 @@ class UnitGender(Enum):
     NONE = "None"
 
 class UnitTeam(Enum):
-    BLUE = 0
+    BLUE = 0x40
     RED = 1
 
 class Unit:
@@ -30,9 +30,21 @@ class Unit:
     flags: int
     gender: UnitGender
 
-    flags2_offset = 0x118
+    flags2_offset = 0x18
     flags2: int
     team: UnitTeam
+
+    birthday_month_offset = 0x04
+    birthday_month: int
+
+    birthday_day_offset = 0x05
+    birthday_day: int
+
+    brave_offset = 0x06
+    brave: int
+
+    faith_offset = 0x07
+    faith: int
 
     unlocked_job_offset = 0x08
     unlocked_job: int
@@ -75,6 +87,10 @@ class Unit:
         self.sprite_set = unit_data[self.sprite_set_offset]
         self.flags = unit_data[self.flags_offset]
         self.flags2 = unit_data[self.flags2_offset]
+        self.birthday_month = unit_data[self.birthday_month_offset]
+        self.birthday_day = unit_data[self.birthday_day_offset]
+        self.brave = unit_data[self.brave_offset]
+        self.faith = unit_data[self.faith_offset]
         self.unlocked_job = unit_data[self.unlocked_job_offset]
         self.unlocked_job_level = unit_data[self.unlocked_job_level_offset]
         self.primary = unit_data[self.primary_offset]
@@ -127,15 +143,12 @@ class Unit:
         return UnitGender.NONE
 
     def get_team(self):
-        blue = self.flags2 & UnitTeam.BLUE.value
-        red = self.flags2 & UnitTeam.RED.value
-        if blue > 0:
-            assert red == 0
+        team_bits = (self.flags2 & 0x30) >> 4
+        if team_bits == 0:
             return UnitTeam.BLUE
-        if red > 0:
-            assert blue == 0
+        if team_bits == 1:
             return UnitTeam.RED
-        raise ValueError
+        raise ValueError(str(bin(self.flags2)))
 
     def apply_unit_data(self):
         self.unit_data[self.job_offset] = self.job
@@ -144,6 +157,10 @@ class Unit:
         self.unit_data[self.flags2_offset] = self.flags2
         self.unit_data[self.unlocked_job_offset] = self.unlocked_job
         self.unit_data[self.unlocked_job_level_offset] = self.unlocked_job_level
+        self.unit_data[self.birthday_month_offset] = self.birthday_month
+        self.unit_data[self.birthday_day_offset] = self.birthday_day
+        self.unit_data[self.brave_offset] = self.brave
+        self.unit_data[self.faith_offset] = self.faith
         self.unit_data[self.primary_offset] = self.primary
         self.unit_data[self.secondary_offset] = self.secondary
         self.unit_data[self.reaction_offset] = self.reaction // 256

@@ -36,7 +36,6 @@ On the world map, there are a few special controls used to interface with the ch
 to engage in. For example, pressing R2 when at Dorter Trade City will load a menu allowing you to select the Dorter Slums
 battle from Chapter 1 or the Dorter City battle from Chapter 2.
 - Press `L2` to process any received character recruitments and Ramza job form upgrades.
-- When traveling on the world map, hold `X` to avoid all random battles.
 - When traveling on the world map, hold `O` to engage in a random battle at your destination.
 
 ### Goal
