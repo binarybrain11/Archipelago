@@ -29,7 +29,7 @@ gear_item_names = [
 
     "Rod", "Thunder Rod", "Flame Rod", "Ice Rod", "Poison Rod", "Wizard Rod", "Dragon Rod", "Faith Rod",
 
-    "Oak Staff", "White Staff", "Rainbow Staff", "Wizard Staff", "Gold Staff", "Mace of Zeus",
+    "Oak Staff", "White Staff", "Healing Staff", "Rainbow Staff", "Wizard Staff", "Gold Staff", "Mace of Zeus",
     "Sage Staff",
 
     "Flail", "Flame Whip", "Morning Star", "Scorpion Tail",
