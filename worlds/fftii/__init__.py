@@ -458,6 +458,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         patch_dict["FinalBattles"] = self.options.final_battles.value
         patch_dict["RequiredStones"] = self.zodiac_stones_required
         patch_dict["EXPMultiplier"] = self.options.exp_gain_multiplier.value
+        patch_dict["JPMultiplier"] = self.options.jp_gain_multiplier.value
         patch_dict["LocationDict"] = self.create_location_dict()
 
         rom_name_text = f'FFTII{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:9}'

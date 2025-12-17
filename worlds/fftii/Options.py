@@ -284,14 +284,14 @@ fftii_option_groups = [
         BonusGilItemSize,
         JPBoonSize
     ]),
-    OptionGroup("Enemy Randomizer Options", [
-        EnemyRandomizer,
-        CrossEnemyRandomizer,
-        RandomizeStoryFightsOnly,
-        EnemyRandomizerLocality,
-        LucaviRandomizer,
-        EnemyRandomizerMethod
-    ]),
+    # OptionGroup("Enemy Randomizer Options", [
+    #     EnemyRandomizer,
+    #     CrossEnemyRandomizer,
+    #     RandomizeStoryFightsOnly,
+    #     EnemyRandomizerLocality,
+    #     LucaviRandomizer,
+    #     EnemyRandomizerMethod
+    # ]),
     OptionGroup("QOL Options", [
         EXPGainMultiplier,
         JPGainMultiplier

@@ -45,6 +45,7 @@ The goal of the game is to collect enough Zodiac Stones to unlock the way to Mur
 - Inside Limberry Castle
 - Limberry Castle Cemetary
 - Igros Castle
+- Graveyard of Airships 1 (only when Altima Only is enabled)
 - Goland Underground Passage (only when sidequests are enabled)
 - Nelveska Temple (only when sidequests are enabled)
 - END (only when sidequests are enabled)

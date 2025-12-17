@@ -306,7 +306,10 @@ ahriman.limberry_locations = [RegionAccessRequirement([Bed], 0)]
 
 plague = MonsterRegion(MonsterNames.PLAGUE)
 plague.fovoham_locations = [RegionAccessRequirement([Fovoham], 8)]
-plague.lesalia_locations = [RegionAccessRequirement([BerveniaVolcano, Riovanes], 5)]
+plague.lesalia_locations = [
+    RegionAccessRequirement([BerveniaVolcano, Riovanes], 5),
+    RegionAccessRequirement([Goland], 8, sidequest=True)
+]
 plague.lionel_locations = [RegionAccessRequirement([BariausValley], 9)]
 plague.zeltennia_locations = [RegionAccessRequirement([Germinas], 5)]
 plague.limberry_locations = [RegionAccessRequirement([Bed, BerveniaCity], 5)]

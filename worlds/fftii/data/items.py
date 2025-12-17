@@ -29,7 +29,7 @@ gear_item_names = [
 
     "Rod", "Thunder Rod", "Flame Rod", "Ice Rod", "Poison Rod", "Wizard Rod", "Dragon Rod", "Faith Rod",
 
-    "Oak Staff", "White Staff", "Healing Staff", "Rainbow Staff", "Wizard Staff", "Gold Staff", "Mace of Zeus",
+    "Oak Staff", "White Staff", "Rainbow Staff", "Wizard Staff", "Gold Staff", "Mace of Zeus",
     "Sage Staff",
 
     "Flail", "Flame Whip", "Morning Star", "Scorpion Tail",
@@ -124,6 +124,8 @@ major_item_names = [
     *zodiac_stone_names, *world_map_pass_names, *job_names, "Progressive Shop Level", "Progressive Ramza Job Form"
 ]
 
+nonbalanced_major_item_names = [*job_names, "Progressive Shop Level"]
+
 ramza_job_levels = [
     "Progressive Ramza Job Form", "Progressive Ramza Job Form"
 ]
@@ -137,7 +139,7 @@ special_character_names = [
 
 rare_item_names = [
     "Zorlin Shape", "Sasuke Knife", "Iga Knife", "Koga Knife", "Nagrarock", "Materia Blade", "Defender",
-    "Save the Queen", "Excalibur", "Ragnarok", "Chaos Blade", "Masamune", "Chirijiraden", "Faith Rod",
+    "Save the Queen", "Excalibur", "Ragnarok", "Chaos Blade", "Masamune", "Chirijiraden", "Faith Rod", "Healing Staff",
     "Mace of Zeus", "Sage Staff", "Scorpion Tail", "Stone Gun", "Blaze Gun", "Glacier Gun", "Blast Gun",
     "Ultimus Bow", "Yoichi Bow", "Perseus Bow", "Fairy Harp", "Madlemgen", "Holy Lance", "Dragon Whisker",
     "Javelin 2", "Ivory Rod", "Whale Whisker", "FS Bag", "Ryozan Silk", "Genji Shield", "Kaiser Plate",
@@ -211,5 +213,5 @@ filler_item_names = [
 ]
 
 all_item_names = [
-    *major_item_names, *special_character_names, *job_names, *gear_item_names, *gil_item_names, *jp_item_names
+    *major_item_names, *special_character_names, *gear_item_names, *gil_item_names, *jp_item_names
 ]
