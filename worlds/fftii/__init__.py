@@ -8,6 +8,7 @@ import typing
 
 from typing import Dict, Any, TextIO
 from BaseClasses import MultiWorld, ItemClassification, Tutorial, Item, Region, Entrance
+from Utils import version_tuple
 
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule
@@ -98,7 +99,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
     zodiac_stones_required: int
     zodiac_stones_in_pool: int
 
-    version = 1
+    version = "0.1.0"
     debug = False
     topology_present = debug
 
