@@ -13,3 +13,7 @@
 - Characters are recruited with no equipment and in their base job at job level 2.
 - - However, they will receive the benefit of JP Boon items obtained prior to their recruitment.
 - The Deep Dungeon is fully lit.
+- Rafa and Malak's unique abilities now can hit up to ten times (like in the War of the Lions 
+and Ivalice Chronicles versions).
+- Cloud can use Limit with any sword, not just the Materia Blade.
+- You can fast forward through event text by holding X.

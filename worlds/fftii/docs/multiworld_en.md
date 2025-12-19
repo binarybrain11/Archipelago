@@ -11,6 +11,7 @@ As we are using Bizhawk, this guide is only applicable to Windows and Linux syst
   - Windows users must run the prerequisite installer first, which can also be found at the above link.
 - The built-in Bizhawk client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
 - A US copy of Final Fantasy Tactics
+- - The MD5 hash will be "b156ba386436d20fd5ed8d37bab6b624"
 
 ## Configuring your YAML file
 

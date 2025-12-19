@@ -32,7 +32,7 @@ goals will unlock items and upgrades to aid you in your journey.
 ### Controls
 On the world map, there are a few special controls used to interface with the changes made for Ivalice Island.
 
-- Press `R2` to load into a menu for your current location that will allow you to select a story battle at that location
+- Press `R2` to load into a menu for your current location that will allow you to select an event battle at that location
 to engage in. For example, pressing R2 when at Dorter Trade City will load a menu allowing you to select the Dorter Slums
 battle from Chapter 1 or the Dorter City battle from Chapter 2.
 - Press `L2` to process any received character recruitments and Ramza job form upgrades.
