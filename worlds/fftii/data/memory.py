@@ -483,3 +483,348 @@ dd_battles_offset = 0x929978
 
 total_jp_boon_gained = 0x057930
 total_jp_boon_gained_length = 2
+
+STORY_LOCATIONS = "StoryLocations"
+RARE_BATTLE = "RareBattle"
+SIDEQUEST_LOCATIONS = "SidequestLocations"
+ALTIMA_ONLY_STORY_LOCATIONS = "AltimaOnlyStoryLocations"
+ADDRESS = "Address"
+
+location_dot_info = {
+    "Gariland": {
+        STORY_LOCATIONS: [
+            LocationNames.GARILAND_STORY
+        ],
+        ADDRESS: (0x057959, 0x20)
+    },
+    "Mandalia": {
+        STORY_LOCATIONS: [
+            LocationNames.MANDALIA_STORY,
+            LocationNames.MANDALIA_SHOP
+        ],
+        RARE_BATTLE: LocationNames.MANDALIA_RARE,
+        ADDRESS: (0x05795B, 0x80)
+    },
+    "Igros": {
+        STORY_LOCATIONS: [
+            LocationNames.IGROS_STORY
+        ],
+        ADDRESS: (0x057959, 0x02)
+    },
+    "Sweegy": {
+        STORY_LOCATIONS: [
+            LocationNames.SWEEGY_STORY
+        ],
+        RARE_BATTLE: LocationNames.SWEEGY_RARE,
+        ADDRESS: (0x05795C, 0x02)
+    },
+    "Dorter": {
+        STORY_LOCATIONS: [
+            LocationNames.DORTER_1_STORY,
+            LocationNames.DORTER_2_STORY
+        ],
+        ADDRESS: (0x05795A, 0x01)
+    },
+    "ThievesFort": {
+        STORY_LOCATIONS: [
+            LocationNames.THIEVES_FORT_STORY
+        ],
+        ADDRESS: (0x05795B, 0x01)
+    },
+    "Lenalia": {
+        STORY_LOCATIONS: [
+            LocationNames.LENALIA_STORY,
+            LocationNames.LENALIA_SHOP
+        ],
+        RARE_BATTLE: LocationNames.LENALIA_RARE,
+        ADDRESS: (0x05795C, 0x10)
+    },
+    "Zeakden": {
+        STORY_LOCATIONS: [
+            LocationNames.ZEAKDEN_STORY,
+            LocationNames.ZEAKDEN_SHOP,
+            LocationNames.RAMZA_CHAPTER_2_UNLOCK,
+            LocationNames.RAD_RECRUIT,
+            LocationNames.ALICIA_RECRUIT,
+            LocationNames.LAVIAN_RECRUIT
+        ],
+        ADDRESS: (0x05795A, 0x40)
+    },
+    "Fovoham": {
+        STORY_LOCATIONS: [
+            LocationNames.FOVOHAM_STORY
+        ],
+        RARE_BATTLE: LocationNames.FOVOHAM_RARE,
+        ADDRESS: (0x05795C, 0x01)
+    },
+    "Riovanes": {
+        STORY_LOCATIONS: [
+            LocationNames.RIOVANES_1_STORY,
+            LocationNames.RIOVANES_2_STORY,
+            LocationNames.RIOVANES_3_STORY,
+            LocationNames.RIOVANES_SHOP,
+            LocationNames.RAMZA_CHAPTER_4_UNLOCK,
+            LocationNames.RAFA_RECRUIT,
+            LocationNames.MALAK_RECRUIT
+        ],
+        ADDRESS: (0x057959, 0x01)
+    },
+    "Yuguo": {
+        STORY_LOCATIONS: [
+            LocationNames.YUGUO_STORY
+        ],
+        RARE_BATTLE: LocationNames.YUGUO_RARE,
+        ADDRESS: (0x05795C, 0x40)
+    },
+    "Yardow": {
+        STORY_LOCATIONS: [
+            LocationNames.YARDOW_STORY,
+            LocationNames.YARDOW_SHOP
+        ],
+        ADDRESS: (0x057959, 0x40)
+    },
+    "Grog": {
+        STORY_LOCATIONS: [
+            LocationNames.GROG_STORY
+        ],
+        RARE_BATTLE: LocationNames.GROG_RARE,
+        ADDRESS: (0x05795D, 0x01)
+    },
+    "Zeklaus": {
+        STORY_LOCATIONS: [
+            LocationNames.ZEKLAUS_STORY,
+            LocationNames.ZEKLAUS_SHOP
+        ],
+        RARE_BATTLE: LocationNames.ZEKLAUS_RARE,
+        ADDRESS: (0x05795C, 0x08)
+    },
+    "Araguay": {
+        STORY_LOCATIONS: [
+            LocationNames.ARAGUAY_STORY,
+            LocationNames.BOCO_RECRUIT
+        ],
+        RARE_BATTLE: LocationNames.ARAGUAY_RARE,
+        ADDRESS: (0x05795C, 0x80)
+    },
+    "Zirekile": {
+        STORY_LOCATIONS: [
+            LocationNames.ZIREKILE_STORY,
+            LocationNames.ZIREKILE_SHOP
+        ],
+        RARE_BATTLE: LocationNames.ZIREKILE_RARE,
+        ADDRESS: (0x05795D, 0x04)
+    },
+    "Goland": {
+        STORY_LOCATIONS: [
+            LocationNames.GOLAND_STORY
+        ],
+        SIDEQUEST_LOCATIONS: [
+            LocationNames.GOLAND_1_SIDEQUEST,
+            LocationNames.GOLAND_2_SIDEQUEST,
+            LocationNames.GOLAND_3_SIDEQUEST,
+            LocationNames.GOLAND_4_SIDEQUEST,
+            LocationNames.BEOWULF_RECRUIT,
+            LocationNames.REIS_DRAGON_RECRUIT,
+            LocationNames.WORKER_8_RECRUIT
+        ],
+        ADDRESS: (0x057959, 0x80)
+    },
+    "Lesalia": {
+        STORY_LOCATIONS: [
+            LocationNames.LESALIA_STORY,
+            LocationNames.LESALIA_SHOP
+        ],
+        ADDRESS: (0x057958, 0x80)
+    },
+    "BerveniaVolcano": {
+        STORY_LOCATIONS: [],
+        RARE_BATTLE: LocationNames.BERVENIA_VOLCANO_RARE,
+        ADDRESS: (0x05795C, 0x04)
+    },
+    "Zaland": {
+        STORY_LOCATIONS: [
+            LocationNames.ZALAND_STORY
+        ],
+        ADDRESS: (0x05795A, 0x02)
+    },
+    "BariausHill": {
+        STORY_LOCATIONS: [
+            LocationNames.BARIAUS_HILL_STORY,
+            LocationNames.BARIAUS_HILL_SHOP
+        ],
+        RARE_BATTLE: LocationNames.BARIAUS_HILL_RARE,
+        ADDRESS: (0x05795D, 0x10)
+    },
+    "Lionel": {
+        STORY_LOCATIONS: [
+            LocationNames.LIONEL_1_STORY,
+            LocationNames.LIONEL_2_STORY,
+            LocationNames.LIONEL_SHOP
+        ],
+        ADDRESS: (0x057959, 0x04)
+    },
+    "Zigolis": {
+        STORY_LOCATIONS: [
+            LocationNames.ZIGOLIS_STORY
+        ],
+        RARE_BATTLE: LocationNames.ZIGOLIS_RARE,
+        ADDRESS: (0x05795C, 0x20)
+    },
+    "BariausValley": {
+        STORY_LOCATIONS: [
+            LocationNames.BARIAUS_VALLEY_STORY,
+            LocationNames.BARIAUS_VALLEY_SHOP,
+            LocationNames.AGRIAS_RECRUIT
+        ],
+        RARE_BATTLE: LocationNames.BARIAUS_VALLEY_RARE,
+        ADDRESS: (0x05795D, 0x40)
+    },
+    "Golgorand": {
+        STORY_LOCATIONS: [
+            LocationNames.GOLGORAND_STORY
+        ],
+        ADDRESS: (0x05795B, 0x04)
+    },
+    "Doguola": {
+        STORY_LOCATIONS: [
+            LocationNames.DOGUOLA_STORY
+        ],
+        RARE_BATTLE: LocationNames.DOGUOLA_RARE,
+        ADDRESS: (0x05795D, 0x20)
+    },
+    "BerveniaCity": {
+        STORY_LOCATIONS: [
+            LocationNames.BERVENIA_CITY_STORY
+        ],
+        ADDRESS: (0x05795A, 0x10)
+    },
+    "Finath": {
+        STORY_LOCATIONS: [
+            LocationNames.FINATH_STORY
+        ],
+        RARE_BATTLE: LocationNames.FINATH_RARE,
+        ADDRESS: (0x05795D, 0x80)
+    },
+    "Zeltennia": {
+        STORY_LOCATIONS: [
+            LocationNames.ZELTENNIA_STORY
+        ],
+        ADDRESS: (0x057959, 0x10)
+    },
+    "Nelveska": {
+        STORY_LOCATIONS: [],
+        SIDEQUEST_LOCATIONS: [
+            LocationNames.NELVESKA_SIDEQUEST,
+            LocationNames.REIS_HUMAN_RECRUIT
+        ],
+        ADDRESS: (0x05795B, 0x40)
+    },
+    "Zarghidas": {
+        STORY_LOCATIONS: [],
+        SIDEQUEST_LOCATIONS: [
+            LocationNames.ZARGHIDAS_SIDEQUEST,
+            LocationNames.CLOUD_RECRUIT
+        ],
+        ADDRESS: (0x05795A, 0x20)
+    },
+    "Germinas": {
+        STORY_LOCATIONS: [
+            LocationNames.GERMINAS_STORY
+        ],
+        RARE_BATTLE: LocationNames.GERMINAS_RARE,
+        ADDRESS: (0x05795E, 0x02)
+    },
+    "Poeskas": {
+        STORY_LOCATIONS: [
+            LocationNames.POESKAS_STORY
+        ],
+        RARE_BATTLE: LocationNames.POESKAS_RARE,
+        ADDRESS: (0x05795E, 0x01)
+    },
+    "Limberry": {
+        STORY_LOCATIONS: [
+            LocationNames.LIMBERRY_1_STORY,
+            LocationNames.LIMBERRY_2_STORY,
+            LocationNames.LIMBERRY_3_STORY,
+            LocationNames.LIMBERRY_SHOP,
+            LocationNames.MELIADOUL_RECRUIT
+        ],
+        ADDRESS: (0x057959, 0x08)
+    },
+    "Dolbodar": {
+        STORY_LOCATIONS: [],
+        RARE_BATTLE: LocationNames.DOLBODAR_RARE,
+        ADDRESS: (0x05795D, 0x08)
+    },
+    "Bethla": {
+        STORY_LOCATIONS: [
+            LocationNames.BETHLA_NORTH_STORY,
+            LocationNames.BETHLA_SOUTH_STORY,
+            LocationNames.BETHLA_SLUICE_STORY,
+            LocationNames.BETHLA_SHOP,
+            LocationNames.ORLANDU_RECRUIT
+        ],
+        ADDRESS: (0x05795B, 0x10)
+    },
+    "Bed": {
+        STORY_LOCATIONS: [
+            LocationNames.BED_STORY
+        ],
+        RARE_BATTLE: LocationNames.BED_RARE,
+        ADDRESS: (0x05795D, 0x02)
+    },
+    "Orbonne": {
+        STORY_LOCATIONS: [
+            LocationNames.UBS_2_STORY,
+            LocationNames.UBS_3_STORY,
+            LocationNames.UBS_1_STORY,
+            LocationNames.ORBONNE_SHOP
+        ],
+        ALTIMA_ONLY_STORY_LOCATIONS: [
+            LocationNames.UBS_4_STORY,
+            LocationNames.UBS_5_STORY,
+            LocationNames.MUROND_DEATH_CITY_STORY,
+            LocationNames.PRECINCTS_STORY,
+            LocationNames.AIRSHIPS_1_STORY
+        ],
+        ADDRESS: (0x05795B, 0x02)
+    },
+    "Goug": {
+        STORY_LOCATIONS: [
+            LocationNames.GOUG_STORY,
+            LocationNames.MUSTADIO_RECRUIT
+        ],
+        ADDRESS: (0x05795A, 0x04)
+    },
+    "MurondTemple": {
+        STORY_LOCATIONS: [
+            LocationNames.MUROND_TEMPLE_1_STORY,
+            LocationNames.MUROND_TEMPLE_2_STORY,
+            LocationNames.MUROND_TEMPLE_3_STORY,
+        ],
+        ADDRESS: (0x05795A, 0x80)
+    },
+    "DeepDungeon": {
+        STORY_LOCATIONS: [],
+        SIDEQUEST_LOCATIONS: [
+            LocationNames.NOGIAS_SIDEQUEST,
+            LocationNames.TERMINATE_SIDEQUEST,
+            LocationNames.DELTA_SIDEQUEST,
+            LocationNames.VALKYRIES_SIDEQUEST,
+            LocationNames.MLAPAN_SIDEQUEST,
+            LocationNames.TIGER_SIDEQUEST,
+            LocationNames.BRIDGE_SIDEQUEST,
+            LocationNames.VOYAGE_SIDEQUEST,
+            LocationNames.HORROR_SIDEQUEST,
+            LocationNames.END_SIDEQUEST,
+            LocationNames.BYBLOS_RECRUIT
+        ],
+        ADDRESS: (0x05795B, 0x20)
+    },
+    "MurondDeathCity": {
+        STORY_LOCATIONS: [
+            LocationNames.AIRSHIPS_2_STORY
+        ],
+        ADDRESS: (0x05795B, 0x08)
+    }
+}
