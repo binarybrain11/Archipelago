@@ -1,8 +1,11 @@
 from copy import copy
 from enum import Enum
+from typing import TYPE_CHECKING
 
 from worlds.fftii.enemyrando.Job import all_jobs, UnlockedJob
 from worlds.fftii.enemyrando.SpriteSet import sprite_sets
+if TYPE_CHECKING:
+    from worlds.fftii.enemyrando.RandomizedUnits import RandomizedUnit
 
 
 class UnitGender(Enum):
@@ -175,6 +178,26 @@ class Unit:
         self.unit_data[self.right_hand_offset] = self.right_hand
         self.unit_data[self.left_hand_offset] = self.left_hand
 
+    def set_new_data(self, destination_unit: "RandomizedUnit"):
+        self.job = destination_unit.job
+        self.sprite_set = destination_unit.sprite_set.value
+        self.gender = destination_unit.gender
+        self.birthday_month = destination_unit.birthday_month.value
+        self.birthday_day = destination_unit.birthday_day
+        self.brave = destination_unit.brave
+        self.faith = destination_unit.faith
+        self.unlocked_job = destination_unit.unlocked_job.value
+        self.unlocked_job_level = destination_unit.unlocked_job_level
+        self.primary = destination_unit.primary.value
+        self.secondary = destination_unit.secondary.value
+        self.reaction = destination_unit.reaction.value
+        self.support = destination_unit.support.value
+        self.movement = destination_unit.movement.value
+        self.head = destination_unit.head.value
+        self.body = destination_unit.body.value
+        self.accessory = destination_unit.accessory.value
+        self.right_hand = destination_unit.right_hand.value
+        self.left_hand = destination_unit.left_hand.value
 
     def __repr__(self):
         try:
