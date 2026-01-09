@@ -104,19 +104,19 @@ all_characters: list[TextData] = [
     TextData("&", 0xD9B7),
     TextData("%", 0xD9B8),
 
-    TextData("{Aries Stone}", 0xDA00, 10),
-    TextData("{Taurus Stone}", 0xDA01, 10),
-    TextData("{Gemini Stone}", 0xDA02, 10),
-    TextData("{Cancer Stone}", 0xDA03, 10),
-    TextData("{Leo Stone}", 0xDA04, 10),
-    TextData("{Virgo Stone}", 0xDA05, 10),
-    TextData("{Libra Stone}", 0xDA06, 10),
-    TextData("{Scorpio Stone}", 0xDA07, 10),
-    TextData("{Sagittarius Stone}", 0xDA08, 10),
-    TextData("{Capricorn Stone}", 0xDA09, 10),
-    TextData("{Aquarius Stone}", 0xDA0A, 10),
-    TextData("{Pisces Stone}", 0xDA0B, 10),
-    TextData("{Serpentarius Stone}", 0xDA0C, 10),
+    TextData("{Aries}", 0xDA00, 10),
+    TextData("{Taurus}", 0xDA01, 10),
+    TextData("{Gemini}", 0xDA02, 10),
+    TextData("{Cancer}", 0xDA03, 10),
+    TextData("{Leo}", 0xDA04, 10),
+    TextData("{Virgo}", 0xDA05, 10),
+    TextData("{Libra}", 0xDA06, 10),
+    TextData("{Scorpio}", 0xDA07, 10),
+    TextData("{Sagittarius}", 0xDA08, 10),
+    TextData("{Capricorn}", 0xDA09, 10),
+    TextData("{Aquarius}", 0xDA0A, 10),
+    TextData("{Pisces}", 0xDA0B, 10),
+    TextData("{Serpentarius}", 0xDA0C, 10),
 
     TextData("=", 0xDA0C, 6),
     TextData("$", 0xDA0C, 6),
@@ -140,7 +140,7 @@ max_text_width = 180
 
 def create_text_for_offworld_item(player_name: str, item_name: str, classification: ItemClassification, is_fft_item: bool):
     if is_fft_item and item_name in zodiac_stone_names:
-        item_string = f"{{{item_name}}}" + f"{item_name}"
+        item_string = f"{{{item_name.replace(" Stone", "")}}}" + f"{item_name}"
     else:
         item_string = f"{item_name}"
     if classification == ItemClassification.progression:
@@ -155,7 +155,7 @@ def create_text_for_offworld_item(player_name: str, item_name: str, classificati
 
 def create_text_for_own_item(item_name: str, classification: ItemClassification):
     if item_name in zodiac_stone_names:
-        item_string = f"{{{item_name}}}" + f"{item_name}"
+        item_string = f"{{{item_name.replace(" Stone", "")}}}" + f"{item_name}"
     else:
         item_string = f"{item_name}"
     if classification == ItemClassification.progression:
@@ -228,8 +228,7 @@ def split_text_into_lines(location_text: str) -> tuple[list[str], list[list[int]
                         sub_data_key = current_line[sub_start:sub_end + 1]
                         sub_index = sub_end + 1
                     else:
-                        print(character)
-                        print(index)
+                        print(location_text, character, index)
                         raise InputError("We shouldn't be processing this.")
                     if sub_data_key not in text_data_lookup.keys():
                         sub_data_key = "?"

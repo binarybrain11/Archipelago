@@ -113,7 +113,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
     zodiac_stones_in_pool: int
     enemy_rando_mapping: dict[EventCode, list[RandomizedMapping]]
 
-    version = "0.2.1"
+    version = "0.2.2"
     debug = False
     topology_present = debug
 
