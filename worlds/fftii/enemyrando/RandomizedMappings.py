@@ -1,11 +1,101 @@
 from .RandomizedUnitFactory import RandomizedUnitFactory
 from .RandomizedUnits import *
 
-base_mapping = {
-    job: job for job in list(Job)
+generic_job_table: dict[Job, list[Job]] = {
+    Job.SQUIRE: [Job.SQUIRE, Job.FEMALE_SQUIRE],
+    Job.CHEMIST: [Job.CHEMIST, Job.FEMALE_CHEMIST],
+    Job.KNIGHT: [Job.KNIGHT, Job.FEMALE_KNIGHT],
+    Job.ARCHER: [Job.ARCHER, Job.FEMALE_ARCHER],
+    Job.MONK: [Job.MONK, Job.FEMALE_MONK],
+    Job.PRIEST: [Job.PRIEST, Job.FEMALE_PRIEST],
+    Job.WIZARD: [Job.WIZARD, Job.FEMALE_WIZARD],
+    Job.TIMEMAGE: [Job.TIMEMAGE, Job.FEMALE_TIMEMAGE],
+    Job.SUMMONER: [Job.SUMMONER, Job.FEMALE_SUMMONER],
+    Job.THIEF: [Job.THIEF, Job.FEMALE_THIEF],
+    Job.MEDIATOR: [Job.MEDIATOR, Job.FEMALE_MEDIATOR],
+    Job.ORACLE: [Job.ORACLE, Job.FEMALE_ORACLE],
+    Job.GEOMANCER: [Job.GEOMANCER, Job.FEMALE_GEOMANCER],
+    Job.LANCER: [Job.LANCER, Job.FEMALE_LANCER],
+    Job.SAMURAI: [Job.SAMURAI, Job.FEMALE_SAMURAI],
+    Job.NINJA: [Job.NINJA, Job.FEMALE_NINJA],
+    Job.CALCULATOR: [Job.CALCULATOR, Job.FEMALE_CALCULATOR],
+    Job.BARD: [Job.BARD],
+    Job.DANCER: [Job.DANCER],
+    Job.MIME: [Job.MIME, Job.FEMALE_MIME]
 }
 
-allowed_mappings: dict[Job, dict[type[RandomizedUnit], int]] = {
+generic_monster_table: dict[Job, list[Job]] = {
+    Job.YELLOW_CHOCOBO: [Job.YELLOW_CHOCOBO],
+    Job.GOBLIN: [Job.GOBLIN],
+    Job.BOMB: [Job.BOMB],
+    Job.RED_PANTHER: [Job.RED_PANTHER],
+    Job.PISCO_DEMON: [Job.PISCO_DEMON],
+    Job.SKELETON: [Job.SKELETON],
+    Job.GHOUL: [Job.GHOUL],
+    Job.FLOTIBALL: [Job.FLOTIBALL],
+    Job.JURAVIS: [Job.JURAVIS],
+    Job.URIBO: [Job.URIBO],
+    Job.WOODMAN: [Job.WOODMAN],
+    Job.BULL_DEMON: [Job.BULL_DEMON],
+    Job.MORBOL: [Job.MORBOL],
+    Job.BEHEMOTH: [Job.BEHEMOTH],
+    Job.DRAGON: [Job.DRAGON],
+    Job.HYUDRA: [Job.HYUDRA]
+}
+
+special_job_table: dict[Job, list[Job]] = {
+    Job.RAMZA_SQUIRE_CHAPTER_1: [Job.RAMZA_SQUIRE_CHAPTER_1],
+    Job.RAMZA_SQUIRE_CHAPTER_23: [Job.RAMZA_SQUIRE_CHAPTER_23],
+    Job.RAMZA_SQUIRE_CHAPTER_4: [Job.RAMZA_SQUIRE_CHAPTER_4],
+    Job.SQUIRE_DELITA: [Job.SQUIRE_DELITA],
+    Job.SQUIRE_ALGUS: [Job.SQUIRE_ALGUS],
+    Job.HOLY_KNIGHT_DELITA: [Job.HOLY_KNIGHT_DELITA],
+    Job.ARC_KNIGHT_DELITA: [Job.ARC_KNIGHT_DELITA],
+    Job.HOLY_KNIGHT_AGRIAS: [Job.HOLY_KNIGHT_AGRIAS],
+    Job.ARC_KNIGHT_ZALBAG: [Job.ARC_KNIGHT_ZALBAG],
+    Job.LUNE_KNIGHT: [Job.LUNE_KNIGHT],
+    Job.PRINCESS: [Job.PRINCESS],
+    Job.HOLY_SWORDSMAN: [Job.HOLY_SWORDSMAN],
+    Job.DRAGONER: [Job.DRAGONER],
+    Job.HOLY_PRIEST: [Job.HOLY_PRIEST],
+    Job.DARK_KNIGHT_ENEMY: [Job.DARK_KNIGHT_ENEMY],
+    Job.ASTROLOGIST: [Job.ASTROLOGIST],
+    Job.ENGINEER_MUSTADIO: [Job.ENGINEER_MUSTADIO, Job.ENGINEER_BALK],
+    Job.HELL_KNIGHT: [Job.HELL_KNIGHT],
+    Job.ARC_KNIGHT_ELMDOR: [Job.ARC_KNIGHT_ELMDOR],
+    Job.TEMPLE_KNIGHT: [Job.TEMPLE_KNIGHT],
+    Job.WHITE_KNIGHT_C1: [Job.WHITE_KNIGHT_C1, Job.WHITE_KNIGHT_C3],
+    Job.DIVINE_KNIGHT_VORMAV: [Job.DIVINE_KNIGHT_VORMAV, Job.DIVINE_KNIGHT_ROFEL, Job.DIVINE_KNIGHT_MELIADOUL],
+    Job.KNIGHT_BLADE: [Job.KNIGHT_BLADE],
+    Job.SORCERER: [Job.SORCERER],
+    Job.HEAVEN_KNIGHT: [Job.HEAVEN_KNIGHT],
+    Job.ASSASSIN_CELIA: [Job.ASSASSIN_CELIA, Job.ASSASSIN_LEDE],
+    Job.CLERIC: [Job.CLERIC],
+    Job.SOLDIER: [Job.SOLDIER],
+    Job.KNIGHT_UNDEAD: [
+        Job.KNIGHT_UNDEAD, Job.ARCHER_UNDEAD, Job.ORACLE_UNDEAD, Job.WIZARD_UNDEAD,
+        Job.TIME_MAGE_UNDEAD, Job.SUMMONER_UNDEAD
+    ]
+}
+
+special_monster_table: dict[Job, list[Job]] = {
+    Job.HOLY_DRAGON: [Job.HOLY_DRAGON],
+    Job.BYBLOS: [Job.BYBLOS],
+    Job.STEEL_GIANT: [Job.STEEL_GIANT],
+    Job.APANDA: [Job.APANDA],
+    Job.ARCHAIC_DEMON: [Job.ARCHAIC_DEMON],
+}
+
+lucavi_table: dict[Job, list[Job]] = {
+    Job.QUEKLAIN: [Job.QUEKLAIN],
+    Job.VELIUS: [Job.VELIUS],
+    Job.ZALERA: [Job.ZALERA],
+    Job.ADRAMELK: [Job.ADRAMELK],
+    Job.ELIDIBS: [Job.ELIDIBS],
+    Job.HASHMALUM: [Job.HASHMALUM]
+}
+
+factory_mappings: dict[Job, dict[type[RandomizedUnit], int]] = {
     Job.RAMZA_SQUIRE_CHAPTER_1: {RamzaC1Squire: 1},
     Job.RAMZA_SQUIRE_CHAPTER_23: {RamzaC23Squire: 1},
     Job.RAMZA_SQUIRE_CHAPTER_4: {RamzaC4Squire: 9, RamzaC4SquireFullSkillset: 1},
@@ -30,20 +120,20 @@ allowed_mappings: dict[Job, dict[type[RandomizedUnit], int]] = {
     Job.TEMPLE_KNIGHT: {TempleKnight: 1},
     Job.WHITE_KNIGHT_C1: {WhiteKnightChapter1: 9, WhiteKnightChapter1WithCounter: 1},
     Job.ENGINEER_GUEST: {EngineerMustadio: 1},
-    Job.DIVINE_KNIGHT_VORMAV: {DivineKnightVormav: 1, DivineKnightRofel: 1, DivineKnightMeliadoul: 1},
-    Job.DIVINE_KNIGHT_ROFEL: {DivineKnightVormav: 1, DivineKnightRofel: 1, DivineKnightMeliadoul: 1},
+    Job.DIVINE_KNIGHT_VORMAV: {DivineKnightVormav: 1},
+    Job.DIVINE_KNIGHT_ROFEL: {DivineKnightRofel: 1},
     Job.KNIGHT_BLADE: {KnightBlade: 9, KnightBladeWithKit: 1},
     Job.SORCERER: {Sorcerer: 1},
     Job.WHITE_KNIGHT_C3: {WhiteKnight: 9, WhiteKnightWithCounter: 1},
     Job.HEAVEN_KNIGHT: {HeavenKnight: 1},
-    Job.DIVINE_KNIGHT_MELIADOUL: {DivineKnightVormav: 1, DivineKnightRofel: 1, DivineKnightMeliadoul: 1},
+    Job.DIVINE_KNIGHT_MELIADOUL: {DivineKnightMeliadoul: 1},
     Job.ENGINEER_BALK: {EngineerBalk: 1},
-    Job.ASSASSIN_CELIA: {AssassinCelia: 1, AssassinLede: 1},
-    Job.ASSASSIN_LEDE: {AssassinCelia: 1, AssassinLede: 1},
-    Job.DIVINE_KNIGHT_MELIADOUL_ENEMY: {DivineKnightVormav: 1, DivineKnightRofel: 1, DivineKnightMeliadoul: 1},
+    Job.ASSASSIN_CELIA: {AssassinCelia: 1},
+    Job.ASSASSIN_LEDE: {AssassinLede: 1},
+    Job.DIVINE_KNIGHT_MELIADOUL_ENEMY: {DivineKnightMeliadoul: 1},
     Job.CLERIC: {Cleric: 9, ClericWithUltima: 1},
     Job.SOLDIER: {Soldier: 1},
-    Job.ARC_KNIGHT_ZOMBIE: {ArcKnightZombie: 1},
+    Job.ARC_KNIGHT_ZOMBIE: {ArcKnightZombie: 9, ArcKnightZombieWithKit: 1},
     Job.HOLY_KNIGHT_AGRIAS_GUEST: {HolyKnightAgrias: 1},
     Job.KNIGHT_UNDEAD: {UndeadKnight: 1},
     Job.ARCHER_UNDEAD: {UndeadArcher: 1},
@@ -53,26 +143,262 @@ allowed_mappings: dict[Job, dict[type[RandomizedUnit], int]] = {
     Job.ORACLE_UNDEAD: {UndeadOracle: 1},
     Job.SUMMONER_UNDEAD: {UndeadSummoner: 1},
     Job.ALTIMA_2: {Altima2: 1},
-    Job.SQUIRE: {MaleSquire: 1, FemaleSquire: 1},
-    Job.CHEMIST: {MaleChemist: 1, FemaleChemist: 1},
-    Job.KNIGHT: {MaleKnight: 1, FemaleChemist: 1},
-    Job.ARCHER: {MaleArcher: 1, FemaleArcher: 1},
-    Job.MONK: {MaleMonk: 1, FemaleMonk: 1},
-    Job.PRIEST: {MalePriest: 1, FemalePriest: 1},
-    Job.WIZARD: {MaleWizard: 1, FemaleWizard: 1},
-    Job.TIMEMAGE: {MaleTimeMage: 1, FemaleTimeMage: 1},
-    Job.SUMMONER: {MaleSummoner: 1, FemaleSummoner: 1},
-    Job.THIEF: {MaleThief: 1, FemaleThief: 1},
-    Job.MEDIATOR: {MaleMediator: 1, FemaleMediator: 1},
-    Job.ORACLE: {MaleOracle: 1, FemaleOracle: 1},
-    Job.GEOMANCER: {MaleGeomancer: 1, FemaleGeomancer: 1},
-    Job.LANCER: {MaleLancer: 1, FemaleLancer: 1},
-    Job.SAMURAI: {MaleSamurai: 1, FemaleSamurai: 1},
-    Job.NINJA: {MaleNinja: 1, FemaleNinja: 1},
-    Job.CALCULATOR: {MaleCalculator: 1, FemaleCalculator: 1},
+    Job.SQUIRE: {
+        MaleSquire: 1,
+        MaleSquireEasy: 2,
+        MaleSquireModerate1: 3, MaleSquireModerate2: 3,
+        MaleSquireAdvanced1: 4, MaleSquireAdvanced2: 4,
+        MaleSquireExpert1: 5, MaleSquireExpert2: 5, MaleSquireExpert3: 5,
+        MaleSquireRare: 1
+    },
+    Job.FEMALE_SQUIRE: {
+        FemaleSquire: 1,
+        FemaleSquireEasy: 2,
+        FemaleSquireModerate1: 3, FemaleSquireModerate2: 3,
+        FemaleSquireAdvanced1: 4, FemaleSquireAdvanced2: 4,
+        FemaleSquireExpert1: 5, FemaleSquireExpert2: 5, FemaleSquireExpert3: 5, FemaleSquireExpert4: 5,
+        FemaleSquireRare: 1
+    },
+    Job.CHEMIST: {
+        MaleChemist: 1,
+        MaleChemistEasy: 2,
+        MaleChemistModerate1: 3, MaleChemistModerate2: 3,
+        MaleChemistAdvanced1: 4, MaleChemistAdvanced2: 4,
+        MaleChemistExpert1: 5, MaleChemistExpert2: 5, MaleChemistExpert3: 5,
+        MaleChemistRare: 1
+    },
+    Job.FEMALE_CHEMIST: {
+        FemaleChemist: 1,
+        FemaleChemistEasy: 2,
+        FemaleChemistModerate1: 3, FemaleChemistModerate2: 3,
+        FemaleChemistAdvanced1: 4, FemaleChemistAdvanced2: 4,
+        FemaleChemistExpert1: 5, FemaleChemistExpert2: 5,
+        FemaleChemistRare: 1
+    },
+    Job.KNIGHT: {
+        MaleKnight: 1,
+        MaleKnightEasy: 2,
+        MaleKnightModerate: 3,
+        MaleKnightAdvanced: 4,
+        MaleKnightExpert1: 5, MaleKnightExpert2: 5, MaleKnightExpert3: 5,
+        MaleKnightRare: 1
+    },
+    Job.FEMALE_KNIGHT: {
+        FemaleKnight: 1,
+        FemaleKnightEasy: 2,
+        FemaleKnightModerate: 3,
+        FemaleKnightAdvanced: 4,
+        FemaleKnightExpert1: 5, FemaleKnightExpert2: 5, FemaleKnightExpert3: 5, FemaleKnightExpert4: 5,
+        FemaleKnightRare: 1
+    },
+    Job.ARCHER: {
+        MaleArcher: 1,
+        MaleArcherEasy: 2,
+        MaleArcherModerate: 3,
+        MaleArcherAdvanced: 4,
+        MaleArcherExpert1: 5, MaleArcherExpert2: 5, MaleArcherExpert3: 5,
+        MaleArcherRare: 1
+    },
+    Job.FEMALE_ARCHER: {
+        FemaleArcher: 1,
+        FemaleArcherEasy: 2,
+        FemaleArcherModerate: 3,
+        FemaleArcherAdvanced: 4,
+        FemaleArcherExpert1: 5, FemaleArcherExpert2: 5, FemaleArcherExpert3: 5, FemaleArcherExpert4: 5,
+        FemaleArcherRare: 1
+    },
+    Job.MONK: {
+        MaleMonk: 1,
+        MaleMonkEasy: 2,
+        MaleMonkModerate: 3,
+        MaleMonkAdvanced: 4,
+        MaleMonkExpert1: 5, MaleMonkExpert2: 5, MaleMonkExpert3: 5,
+        MaleMonkRare: 1
+    },
+    Job.FEMALE_MONK: {
+        FemaleMonk: 1,
+        FemaleMonkEasy: 2,
+        FemaleMonkModerate: 3,
+        FemaleMonkAdvanced: 4,
+        FemaleMonkExpert1: 5, FemaleMonkExpert2: 5, FemaleMonkExpert3: 5, FemaleMonkExpert4: 5,
+        FemaleMonkRare: 1
+    },
+    Job.PRIEST: {
+        MalePriest: 1,
+        MalePriestEasy: 2,
+        MalePriestModerate: 3,
+        MalePriestAdvanced1: 4, MalePriestAdvanced2: 4,
+        MalePriestExpert1: 5, MalePriestExpert2: 5,
+        MalePriestRare: 1
+    },
+    Job.FEMALE_PRIEST: {
+        FemalePriest: 1,
+        FemalePriestEasy: 2,
+        FemalePriestModerate: 3,
+        FemalePriestAdvanced: 4,
+        FemalePriestExpert1: 5, FemalePriestExpert2: 5,
+        FemalePriestRare: 1
+    },
+    Job.WIZARD: {
+        MaleWizard: 1,
+        MaleWizardEasy: 2,
+        MaleWizardModerate: 3,
+        MaleWizardAdvanced1: 4, MaleWizardAdvanced2: 4,
+        MaleWizardExpert1: 5, MaleWizardExpert2: 5,
+        MaleWizardRare: 1
+    },
+    Job.FEMALE_WIZARD: {
+        FemaleWizard: 1,
+        FemaleWizardEasy: 2,
+        FemaleWizardModerate: 3,
+        FemaleWizardAdvanced: 4,
+        FemaleWizardExpert1: 5, FemaleWizardExpert2: 5,
+        FemaleWizardRare: 1
+    },
+    Job.TIMEMAGE: {
+        MaleTimeMage: 1,
+        MaleTimeMageEasy: 2,
+        MaleTimeMageModerate: 3,
+        MaleTimeMageAdvanced1: 4, MaleTimeMageAdvanced2: 4,
+        MaleTimeMageExpert1: 5, MaleTimeMageExpert2: 5,
+        MaleTimeMageRare: 1
+    },
+    Job.FEMALE_TIMEMAGE: {
+        FemaleTimeMage: 1,
+        FemaleTimeMageEasy: 2,
+        FemaleTimeMageModerate: 3,
+        FemaleTimeMageAdvanced: 4,
+        FemaleTimeMageExpert1: 5, FemaleTimeMageExpert2: 5,
+        FemaleTimeMageRare: 1
+    },
+    Job.SUMMONER: {
+        MaleSummoner: 1,
+        MaleSummonerEasy: 2,
+        MaleSummonerModerate: 3,
+        MaleSummonerAdvanced1: 4, MaleSummonerAdvanced2: 4,
+        MaleSummonerExpert: 5,
+        MaleSummonerRare: 1
+    },
+    Job.FEMALE_SUMMONER: {
+        FemaleSummoner: 1,
+        FemaleSummonerEasy: 2,
+        FemaleSummonerModerate: 3,
+        FemaleSummonerAdvanced: 4,
+        FemaleSummonerExpert: 5,
+        FemaleSummonerRare: 1
+    },
+    Job.THIEF: {
+        MaleThief: 1,
+        MaleThiefEasy: 2,
+        MaleThiefModerate: 3,
+        MaleThiefAdvanced: 4,
+        MaleThiefExpert1: 5, MaleThiefExpert2: 5, MaleThiefExpert3: 5,
+        MaleThiefRare: 1
+    },
+    Job.FEMALE_THIEF: {
+        FemaleThief: 1,
+        FemaleThiefEasy: 2,
+        FemaleThiefModerate: 3,
+        FemaleThiefAdvanced: 4,
+        FemaleThiefExpert1: 5, FemaleThiefExpert2: 5, FemaleThiefExpert3: 5, FemaleThiefExpert4: 5,
+        FemaleThiefRare: 1
+    },
+    Job.MEDIATOR: {
+        MaleMediator: 1,
+        MaleMediatorEasy: 2,
+        MaleMediatorModerate: 3,
+        MaleMediatorAdvanced1: 4, MaleMediatorAdvanced2: 4,
+        MaleMediatorExpert: 5,
+        MaleMediatorRare: 1
+    },
+    Job.FEMALE_MEDIATOR: {
+        FemaleMediator: 1,
+        FemaleMediatorEasy: 2,
+        FemaleMediatorModerate: 3,
+        FemaleMediatorAdvanced: 4,
+        FemaleMediatorExpert: 5,
+        FemaleMediatorRare: 1
+    },
+    Job.ORACLE: {
+        MaleOracle: 1,
+        MaleOracleEasy: 2,
+        MaleOracleModerate: 3,
+        MaleOracleAdvanced1: 4, MaleOracleAdvanced2: 4,
+        MaleOracleExpert1: 5, MaleOracleExpert2: 5,
+        MaleOracleRare: 1
+    },
+    Job.FEMALE_ORACLE: {
+        FemaleOracle: 1,
+        FemaleOracleEasy: 2,
+        FemaleOracleModerate: 3,
+        FemaleOracleAdvanced: 4,
+        FemaleOracleExpert1: 5, FemaleOracleExpert2: 5,
+        FemaleOracleRare: 1
+    },
+    Job.GEOMANCER: {
+        MaleGeomancer: 1,
+        MaleGeomancerModerate: 2,
+        MaleGeomancerAdvanced: 3,
+        MaleGeomancerExpert1: 4, MaleGeomancerExpert2: 4, MaleGeomancerExpert3: 4,
+        MaleGeomancerRare: 1
+    },
+    Job.FEMALE_GEOMANCER: {
+        FemaleGeomancer: 1,
+        FemaleGeomancerModerate: 2,
+        FemaleGeomancerAdvanced1: 3, FemaleGeomancerAdvanced2: 3,
+        FemaleGeomancerExpert1: 4, FemaleGeomancerExpert2: 4, FemaleGeomancerExpert3: 4,
+        FemaleGeomancerRare: 1
+    },
+    Job.LANCER: {
+        MaleLancer: 1,
+        MaleLancerModerate: 2,
+        MaleLancerAdvanced: 3,
+        MaleLancerExpert1: 4, MaleLancerExpert2: 4, MaleLancerExpert3: 4,
+        MaleLancerRare: 1
+    },
+    Job.FEMALE_LANCER: {
+        FemaleLancer: 1,
+        FemaleLancerModerate: 2,
+        FemaleLancerAdvanced1: 3, FemaleLancerAdvanced2: 3,
+        FemaleLancerExpert1: 4, FemaleLancerExpert2: 4, FemaleLancerExpert3: 4,
+        FemaleLancerRare: 1
+    },
+    Job.SAMURAI: {
+        MaleSamurai: 2,
+        MaleSamuraiAdvanced: 4,
+        MaleSamuraiExpert: 6,
+        MaleSamuraiRare: 1
+    },
+    Job.FEMALE_SAMURAI: {
+        FemaleSamurai: 2,
+        FemaleSamuraiAdvanced1: 4, FemaleSamuraiAdvanced2: 4,
+        FemaleSamuraiExpert: 6,
+        FemaleSamuraiRare: 1
+    },
+    Job.NINJA: {
+        MaleNinja: 2,
+        MaleNinjaAdvanced: 4,
+        MaleNinjaExpert: 6,
+        MaleNinjaRare: 1
+    },
+    Job.FEMALE_NINJA: {
+        FemaleNinja: 2,
+        FemaleNinjaAdvanced1: 4, FemaleNinjaAdvanced2: 4,
+        FemaleNinjaExpert: 6,
+        FemaleNinjaRare: 1
+    },
+    Job.CALCULATOR: {
+        MaleCalculator: 1,
+        MaleCalculatorExpert: 2
+    },
+    Job.FEMALE_CALCULATOR: {
+        FemaleCalculator: 1,
+        FemaleCalculatorExpert: 2
+    },
     Job.BARD: {MaleBard: 1},
     Job.DANCER: {FemaleDancer: 1},
-    Job.MIME: {MaleMime: 1, FemaleMime: 1},
+    Job.MIME: {MaleMime: 1},
+    Job.FEMALE_MIME: {FemaleMime: 1},
     Job.YELLOW_CHOCOBO: {YellowChocobo: 1, BlackChocobo: 1, RedChocobo: 1},
     Job.BLACK_CHOCOBO: {YellowChocobo: 1, BlackChocobo: 1, RedChocobo: 1},
     Job.RED_CHOCOBO: {YellowChocobo: 1, BlackChocobo: 1, RedChocobo: 1},
@@ -146,6 +472,10 @@ zodiac_story_shuffle_list: list[type[RandomizedUnit]] = [
     QueklainBoss, VeliusBoss, ZaleraBoss, AdramelkBoss, HashmalumBoss
 ]
 
+altima_story_shuffle_list: list[type[RandomizedUnit]] = [
+    Altima1Boss, Altima2Boss
+]
+
 sidequest_boss_shuffle_list: list[type[RandomizedUnit]] = [
     Worker7Boss
 ]
@@ -153,7 +483,3 @@ sidequest_boss_shuffle_list: list[type[RandomizedUnit]] = [
 sidequest_zodiac_shuffle_list: list[type[RandomizedUnit]] = [
     ElidibsBoss
 ]
-
-randomized_factories: dict[Job, RandomizedUnitFactory] = {
-    job: RandomizedUnitFactory(mapping) for job, mapping in allowed_mappings.items()
-}

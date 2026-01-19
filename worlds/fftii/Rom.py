@@ -3,12 +3,15 @@ import os
 import pkgutil
 
 from pathlib import Path
+from random import Random
 
 import bsdiff4
 
 import Utils
 from settings import get_settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APPatchExtension
+from .enemyrando.RandomizedMappings import factory_mappings
+from .enemyrando.RandomizedUnitFactory import RandomizedUnitFactory
 from .enemyrando.EventCodes import EventCode
 from .ErrorRecalc import ErrorRecalculator
 from .data import memory
@@ -63,13 +66,17 @@ class FinalFantasyTacticsIIPatchExtension(APPatchExtension):
         pass
 
     @staticmethod
-    def apply_enemy_rando(patch_dict, rom_data):
+    def apply_enemy_rando(patch_dict, rom_data, seed, randomize_gariland):
         mapping_dict: dict[EventCode, list[RandomizedMapping]] = {}
         for key, value in patch_dict.items():
             new_list = []
             for entry in value:
                 new_list.append(RandomizedMapping.from_json(entry))
             mapping_dict[EventCode(int(key))] = new_list
+
+        randomized_factories: dict[Job, RandomizedUnitFactory] = {
+            job: RandomizedUnitFactory(mapping, Random(seed)) for job, mapping in factory_mappings.items()
+        }
 
 
         entd_size = 80 * 1024
@@ -95,7 +102,6 @@ class FinalFantasyTacticsIIPatchExtension(APPatchExtension):
         full_entd = bytearray()
         for entd in entd_list:
             full_entd.extend(entd)
-        print(hex(len(full_entd)))
         used_units = []
         entd_entries: list[ENTDEntry] = list()
         for i in range(0x1D5):
@@ -103,6 +109,8 @@ class FinalFantasyTacticsIIPatchExtension(APPatchExtension):
                 mapping_list: list[RandomizedMapping] = []
                 if EventCode(i) in mapping_dict.keys():
                     mapping_list = mapping_dict[EventCode(i)]
+                if i == 0x184 and randomize_gariland == 0:
+                    mapping_list = []
                 entd_data = full_entd[i * ENTDEntry.total_length:(i + 1) * ENTDEntry.total_length]
                 new_entd_entry = ENTDEntry(entd_data, events[i], i * ENTDEntry.total_length)
                 new_entd_entry.index = i
@@ -117,12 +125,16 @@ class FinalFantasyTacticsIIPatchExtension(APPatchExtension):
                 used_sprite_sheets = set()
                 used_source_units = set()
                 for unit in new_entd_entry.unit_datas:
-                    if unit.sprite_set > 0 and unit.team == UnitTeam.RED:
+                    if unit.sprite_set > 0:
                         source_unit = SourceUnit(SpriteSet(unit.sprite_set), Job(unit.job), unit.gender)
                         if len(mapping_list) > 0:
                             for mapping_entry in mapping_list:
                                 if source_unit == mapping_entry.source_unit:
-                                    unit.set_new_data(mapping_entry.destination_unit)
+                                    destination_unit = randomized_factories[mapping_entry.destination_unit].get_unit(
+                                        mapping_entry.battle_level)
+                                    if destination_unit is None:
+                                        raise ValueError
+                                    unit.set_new_data(destination_unit)
                                     unit.apply_unit_data()
                         if source_unit in valid_shuffle_source_units:
                             used_source_units.add(source_unit)
@@ -226,8 +238,12 @@ class FinalFantasyTacticsIIPatchExtension(APPatchExtension):
                     all_dd_bytes.extend(byte_line)
             FinalFantasyTacticsIIPatchExtension.write_text_to_location(all_dd_bytes, dd_battles_offset, rom_data)
 
-        if False:
-            rom_data = FinalFantasyTacticsIIPatchExtension.apply_enemy_rando(patch_dict["EnemyRandoMapping"], rom_data)
+        if True:
+            rom_data = FinalFantasyTacticsIIPatchExtension.apply_enemy_rando(
+                patch_dict["EnemyRandoMapping"],
+                rom_data,
+                patch_dict["Seed"],
+                patch_dict["RandomizeGariland"])
         rom_name_text = patch_dict["RomName"]
         rom_name = bytearray(rom_name_text, 'utf-8')
         rom_name.extend([0] * (20 - len(rom_name)))

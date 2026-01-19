@@ -21,6 +21,7 @@ class RandomizedUnit(object, metaclass=RandomizedUnitMetaclass):
     sprite_set: SpriteSet
     sprite_set_name: str
     gender: UnitGender
+    hidden_stats: bool = False
     birthday_month: Month = Month.RANDOM
     birthday_day: int = RANDOM_VALUE
     brave: int = RANDOM_VALUE
@@ -71,228 +72,1339 @@ class MaleSquire(RandomizedUnit):
     job = Job.SQUIRE
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.BASE
+    unlocked_job_level = 2
 
+
+class MaleSquireEasy(MaleSquire):
+    unlocked_job_level = 4
+    difficulty = 2
+
+
+class MaleSquireModerate1(MaleSquire):
+    unlocked_job = UnlockedJob.MONK
+    unlocked_job_level = 2
+    difficulty = 4
+
+
+class MaleSquireModerate2(MaleSquire):
+    unlocked_job = UnlockedJob.THIEF
+    unlocked_job_level = 2
+    difficulty = 4
+
+
+class MaleSquireAdvanced1(MaleSquire):
+    unlocked_job = UnlockedJob.LANCER
+    unlocked_job_level = 3
+    difficulty = 6
+
+
+class MaleSquireAdvanced2(MaleSquire):
+    unlocked_job = UnlockedJob.GEOMANCER
+    unlocked_job_level = 3
+    difficulty = 6
+
+
+class MaleSquireExpert1(MaleSquire):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 1
+    difficulty = 8
+
+
+class MaleSquireExpert2(MaleSquire):
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 4
+    difficulty = 8
+
+
+class MaleSquireExpert3(MaleSquire):
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleSquireRare(MaleSquireExpert1):
+    right_hand = Items.BLOOD_SWORD
+    difficulty = 10
 
 class FemaleSquire(RandomizedUnit):
     job = Job.SQUIRE
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.BASE
+    unlocked_job_level = 2
 
+class FemaleSquireEasy(FemaleSquire):
+    unlocked_job_level = 4
+    difficulty = 2
+
+class FemaleSquireModerate1(FemaleSquire):
+    unlocked_job = UnlockedJob.MONK
+    unlocked_job_level = 2
+    difficulty = 4
+
+class FemaleSquireModerate2(FemaleSquire):
+    unlocked_job = UnlockedJob.THIEF
+    unlocked_job_level = 2
+    difficulty = 4
+
+class FemaleSquireAdvanced1(FemaleSquire):
+    unlocked_job = UnlockedJob.LANCER
+    unlocked_job_level = 3
+    difficulty = 6
+
+class FemaleSquireAdvanced2(FemaleSquire):
+    unlocked_job = UnlockedJob.GEOMANCER
+    unlocked_job_level = 3
+    difficulty = 6
+
+class FemaleSquireExpert1(FemaleSquire):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 1
+    difficulty = 8
+
+class FemaleSquireExpert2(FemaleSquire):
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleSquireExpert3(FemaleSquire):
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleSquireExpert4(FemaleSquire):
+    unlocked_job = UnlockedJob.DANCER
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleSquireRare(FemaleSquireExpert1):
+    right_hand = Items.NAGRAROCK
+    difficulty = 10
 
 class MaleChemist(RandomizedUnit):
     job = Job.CHEMIST
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.CHEMIST
+    unlocked_job_level = 2
+
+
+class MaleChemistEasy(MaleChemist):
+    unlocked_job_level = 4
+    difficulty = 2
+
+
+class MaleChemistModerate1(MaleChemist):
+    unlocked_job = UnlockedJob.ORACLE
+    unlocked_job_level = 2
+    difficulty = 4
+
+
+class MaleChemistModerate2(MaleChemist):
+    unlocked_job = UnlockedJob.TIMEMAGE
+    unlocked_job_level = 2
+    difficulty = 4
+
+
+class MaleChemistAdvanced1(MaleChemist):
+    unlocked_job = UnlockedJob.MEDIATOR
+    unlocked_job_level = 3
+    difficulty = 6
+
+
+class MaleChemistAdvanced2(MaleChemist):
+    unlocked_job = UnlockedJob.SUMMONER
+    unlocked_job_level = 3
+    difficulty = 6
+
+
+class MaleChemistExpert1(MaleChemist):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 1
+    difficulty = 8
+
+
+class MaleChemistExpert2(MaleChemist):
+    unlocked_job = UnlockedJob.CALCULATOR
+    unlocked_job_level = 4
+    difficulty = 8
+
+
+class MaleChemistExpert3(MaleChemist):
+    unlocked_job = UnlockedJob.BARD
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleChemistRare(MaleChemistExpert1):
+    right_hand = Items.BLAST_GUN
+    difficulty = 10
 
 
 class FemaleChemist(RandomizedUnit):
     job = Job.CHEMIST
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.CHEMIST
+    unlocked_job_level = 2
+
+
+
+class FemaleChemistEasy(FemaleChemist):
+    unlocked_job_level = 4
+    difficulty = 2
+
+
+class FemaleChemistModerate1(FemaleChemist):
+    unlocked_job = UnlockedJob.ORACLE
+    unlocked_job_level = 2
+    difficulty = 4
+
+
+class FemaleChemistModerate2(FemaleChemist):
+    unlocked_job = UnlockedJob.TIMEMAGE
+    unlocked_job_level = 2
+    difficulty = 4
+
+
+class FemaleChemistAdvanced1(FemaleChemist):
+    unlocked_job = UnlockedJob.MEDIATOR
+    unlocked_job_level = 3
+    difficulty = 6
+
+
+class FemaleChemistAdvanced2(FemaleChemist):
+    unlocked_job = UnlockedJob.SUMMONER
+    unlocked_job_level = 3
+    difficulty = 6
+
+
+class FemaleChemistExpert1(FemaleChemist):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 1
+    difficulty = 8
+
+
+class FemaleChemistExpert2(FemaleChemist):
+    unlocked_job = UnlockedJob.CALCULATOR
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleChemistRare(FemaleChemistExpert1):
+    right_hand = Items.BLAZE_GUN
+    difficulty = 10
 
 
 class MaleKnight(RandomizedUnit):
     job = Job.KNIGHT
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.KNIGHT
+    unlocked_job_level = 2
+
+class MaleKnightEasy(MaleKnight):
+    unlocked_job_level = 4
+    difficulty = 2
+
+class MaleKnightModerate(MaleKnight):
+    unlocked_job = UnlockedJob.MONK
+    unlocked_job_level = 3
+    difficulty = 4
+
+class MaleKnightAdvanced(MaleKnight):
+    unlocked_job = UnlockedJob.GEOMANCER
+    unlocked_job_level = 3
+    difficulty = 6
+
+class MaleKnightExpert1(MaleKnight):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 1
+    difficulty = 8
+
+class MaleKnightExpert2(MaleKnight):
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleKnightExpert3(MaleKnight):
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleKnightRare(MaleKnightExpert1):
+    right_hand = Items.DEFENDER
+    reaction = ReactionAbility.WEAPON_GUARD
+    difficulty = 10
 
 
 class FemaleKnight(RandomizedUnit):
     job = Job.KNIGHT
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.KNIGHT
+    unlocked_job_level = 2
+
+class FemaleKnightEasy(FemaleKnight):
+    unlocked_job_level = 4
+    difficulty = 2
+
+class FemaleKnightModerate(FemaleKnight):
+    unlocked_job = UnlockedJob.MONK
+    unlocked_job_level = 3
+    difficulty = 4
+
+class FemaleKnightAdvanced(FemaleKnight):
+    unlocked_job = UnlockedJob.GEOMANCER
+    unlocked_job_level = 3
+    difficulty = 6
+
+class FemaleKnightExpert1(FemaleKnight):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 1
+    difficulty = 8
+
+class FemaleKnightExpert2(FemaleKnight):
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleKnightExpert3(FemaleKnight):
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleKnightExpert4(FemaleKnight):
+    unlocked_job = UnlockedJob.DANCER
+    unlocked_job_level = 6
+    difficulty = 8
+
+class FemaleKnightRare(FemaleKnightExpert1):
+    right_hand = Items.SAVE_THE_QUEEN
+    reaction = ReactionAbility.WEAPON_GUARD
+    difficulty = 10
 
 
 class MaleArcher(RandomizedUnit):
     job = Job.ARCHER
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.ARCHER
+    unlocked_job_level = 2
+
+
+class MaleArcherEasy(MaleArcher):
+    unlocked_job_level = 4
+    difficulty = 2
+
+
+class MaleArcherModerate(MaleArcher):
+    unlocked_job = UnlockedJob.THIEF
+    unlocked_job_level = 3
+    difficulty = 4
+
+
+class MaleArcherAdvanced(MaleArcher):
+    unlocked_job = UnlockedJob.LANCER
+    unlocked_job_level = 3
+    difficulty = 6
+
+
+class MaleArcherExpert1(MaleArcher):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 1
+    difficulty = 8
+
+
+class MaleArcherExpert2(MaleArcher):
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 4
+    difficulty = 8
+
+
+class MaleArcherExpert3(MaleArcher):
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleArcherRare(MaleArcherExpert1):
+    right_hand = Items.GASTRAFITIS
+    left_hand = Items.VENETIAN_SHIELD
+    difficulty = 10
 
 
 class FemaleArcher(RandomizedUnit):
     job = Job.ARCHER
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.ARCHER
+    unlocked_job_level = 2
+
+class FemaleArcherEasy(FemaleArcher):
+    unlocked_job_level = 4
+    difficulty = 2
+
+class FemaleArcherModerate(FemaleArcher):
+    unlocked_job = UnlockedJob.THIEF
+    unlocked_job_level = 3
+    difficulty = 4
+
+class FemaleArcherAdvanced(FemaleArcher):
+    unlocked_job = UnlockedJob.LANCER
+    unlocked_job_level = 3
+    difficulty = 6
+
+class FemaleArcherExpert1(FemaleArcher):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 1
+    difficulty = 8
+
+class FemaleArcherExpert2(FemaleArcher):
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleArcherExpert3(FemaleArcher):
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleArcherExpert4(FemaleArcher):
+    unlocked_job = UnlockedJob.DANCER
+    unlocked_job_level = 6
+    difficulty = 8
+
+class FemaleArcherRare(FemaleArcherExpert1):
+    right_hand = Items.PERSEUS_BOW
+    difficulty = 10
 
 
 class MaleMonk(RandomizedUnit):
     job = Job.MONK
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.MONK
+    unlocked_job_level = 2
+
+class MaleMonkEasy(MaleMonk):
+    unlocked_job_level = 4
+    difficulty = 2
+
+class MaleMonkModerate(MaleMonk):
+    unlocked_job_level = 6
+    difficulty = 4
+
+class MaleMonkAdvanced(MaleMonk):
+    unlocked_job = UnlockedJob.GEOMANCER
+    unlocked_job_level = 4
+    difficulty = 6
+
+class MaleMonkExpert1(MaleMonk):
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleMonkExpert2(MaleMonk):
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleMonkExpert3(MaleMonk):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleMonkRare(MaleMonkExpert3):
+    accessory = Items.GENJI_GAUNTLET
+    difficulty = 10
 
 
 class FemaleMonk(RandomizedUnit):
     job = Job.MONK
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.MONK
+    unlocked_job_level = 2
+
+class FemaleMonkEasy(FemaleMonk):
+    unlocked_job_level = 4
+    difficulty = 2
+
+class FemaleMonkModerate(FemaleMonk):
+    unlocked_job_level = 6
+    difficulty = 4
+
+class FemaleMonkAdvanced(FemaleMonk):
+    unlocked_job = UnlockedJob.GEOMANCER
+    unlocked_job_level = 4
+    difficulty = 6
+
+class FemaleMonkExpert1(FemaleMonk):
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleMonkExpert2(FemaleMonk):
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleMonkExpert3(FemaleMonk):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleMonkExpert4(FemaleMonk):
+    unlocked_job = UnlockedJob.DANCER
+    unlocked_job_level = 6
+    difficulty = 8
+
+class FemaleMonkRare(FemaleMonkExpert3):
+    accessory = Items.SALTY_RAGE
+    difficulty = 10
 
 
 class MalePriest(RandomizedUnit):
     job = Job.PRIEST
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.PRIEST
+    unlocked_job_level = 2
+
+class MalePriestEasy(MalePriest):
+    unlocked_job_level = 4
+    difficulty = 2
+
+class MalePriestModerate(MalePriest):
+    unlocked_job = UnlockedJob.ORACLE
+    unlocked_job_level = 3
+    difficulty = 4
+
+class MalePriestAdvanced1(MalePriest):
+    unlocked_job = UnlockedJob.MEDIATOR
+    unlocked_job_level = 3
+    difficulty = 6
+
+class MalePriestAdvanced2(MalePriest):
+    unlocked_job = UnlockedJob.BARD
+    unlocked_job_level = 6
+    difficulty = 6
+
+class MalePriestExpert1(MalePriest):
+    unlocked_job = UnlockedJob.CALCULATOR
+    unlocked_job_level = 6
+    difficulty = 8
+
+class MalePriestExpert2(MalePriest):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 6
+    difficulty = 8
+
+class MalePriestRare(MalePriestExpert2):
+    right_hand = Items.SAGE_STAFF
+    difficulty = 10
+
 
 
 class FemalePriest(RandomizedUnit):
     job = Job.PRIEST
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.PRIEST
+    unlocked_job_level = 2
+
+class FemalePriestEasy(FemalePriest):
+    unlocked_job_level = 4
+    difficulty = 2
+
+class FemalePriestModerate(FemalePriest):
+    unlocked_job = UnlockedJob.ORACLE
+    unlocked_job_level = 3
+    difficulty = 4
+
+class FemalePriestAdvanced(FemalePriest):
+    unlocked_job = UnlockedJob.MEDIATOR
+    unlocked_job_level = 3
+    difficulty = 6
+
+class FemalePriestExpert1(FemalePriest):
+    unlocked_job = UnlockedJob.CALCULATOR
+    unlocked_job_level = 6
+    difficulty = 8
+
+class FemalePriestExpert2(FemalePriest):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 6
+    difficulty = 8
+
+class FemalePriestRare(FemalePriestExpert2):
+    accessory = Items.CHANTAGE
+    difficulty = 10
 
 
 class MaleWizard(RandomizedUnit):
     job = Job.WIZARD
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.WIZARD
+    unlocked_job_level = 2
+
+
+class MaleWizardEasy(MaleWizard):
+    unlocked_job_level = 4
+    difficulty = 2
+
+
+class MaleWizardModerate(MaleWizard):
+    unlocked_job = UnlockedJob.TIMEMAGE
+    unlocked_job_level = 3
+    difficulty = 4
+
+
+class MaleWizardAdvanced1(MaleWizard):
+    unlocked_job = UnlockedJob.SUMMONER
+    unlocked_job_level = 3
+    difficulty = 6
+
+
+class MaleWizardAdvanced2(MaleWizard):
+    unlocked_job = UnlockedJob.BARD
+    unlocked_job_level = 6
+    difficulty = 6
+
+
+class MaleWizardExpert1(MaleWizard):
+    unlocked_job = UnlockedJob.CALCULATOR
+    unlocked_job_level = 6
+    difficulty = 8
+
+
+class MaleWizardExpert2(MaleWizard):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 6
+    difficulty = 8
+
+class MaleWizardRare(MaleWizardExpert2):
+    body = Items.ROBE_OF_LORDS
+    difficulty = 10
 
 
 class FemaleWizard(RandomizedUnit):
     job = Job.WIZARD
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.WIZARD
+    unlocked_job_level = 2
+
+
+class FemaleWizardEasy(FemaleWizard):
+    unlocked_job_level = 4
+    difficulty = 2
+
+
+class FemaleWizardModerate(FemaleWizard):
+    unlocked_job = UnlockedJob.TIMEMAGE
+    unlocked_job_level = 3
+    difficulty = 4
+
+
+class FemaleWizardAdvanced(FemaleWizard):
+    unlocked_job = UnlockedJob.SUMMONER
+    unlocked_job_level = 3
+    difficulty = 6
+
+
+class FemaleWizardExpert1(FemaleWizard):
+    unlocked_job = UnlockedJob.CALCULATOR
+    unlocked_job_level = 6
+    difficulty = 8
+
+
+class FemaleWizardExpert2(FemaleWizard):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 6
+    difficulty = 8
+
+class FemaleWizardRare(FemaleWizardExpert2):
+    right_hand = Items.FAITH_ROD
+    difficulty = 10
 
 
 class MaleTimeMage(RandomizedUnit):
     job = Job.TIMEMAGE
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.TIMEMAGE
+    unlocked_job_level = 2
+
+
+class MaleTimeMageEasy(MaleTimeMage):
+    unlocked_job_level = 4
+    difficulty = 2
+
+
+class MaleTimeMageModerate(MaleTimeMage):
+    unlocked_job_level = 6
+    difficulty = 4
+
+
+class MaleTimeMageAdvanced1(MaleTimeMage):
+    unlocked_job = UnlockedJob.SUMMONER
+    unlocked_job_level = 3
+    difficulty = 6
+
+
+class MaleTimeMageAdvanced2(MaleTimeMage):
+    unlocked_job = UnlockedJob.BARD
+    unlocked_job_level = 6
+    difficulty = 6
+
+
+class MaleTimeMageExpert1(MaleTimeMage):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 2
+    difficulty = 8
+
+
+class MaleTimeMageExpert2(MaleTimeMage):
+    unlocked_job = UnlockedJob.CALCULATOR
+    unlocked_job_level = 6
+    difficulty = 8
+
+class MaleTimeMageRare(MaleTimeMageExpert1):
+    right_hand = Items.MACE_OF_ZEUS
+    difficulty = 10
 
 
 class FemaleTimeMage(RandomizedUnit):
     job = Job.TIMEMAGE
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.TIMEMAGE
+    unlocked_job_level = 2
 
+class FemaleTimeMageEasy(FemaleTimeMage):
+    unlocked_job_level = 4
+    difficulty = 2
+
+class FemaleTimeMageModerate(FemaleTimeMage):
+    unlocked_job_level = 6
+    difficulty = 4
+
+class FemaleTimeMageAdvanced(FemaleTimeMage):
+    unlocked_job = UnlockedJob.SUMMONER
+    unlocked_job_level = 3
+    difficulty = 6
+
+class FemaleTimeMageExpert1(FemaleTimeMage):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 2
+    difficulty = 8
+
+class FemaleTimeMageExpert2(FemaleTimeMage):
+    unlocked_job = UnlockedJob.CALCULATOR
+    unlocked_job_level = 6
+    difficulty = 8
+
+class FemaleTimeMageRare(FemaleTimeMageExpert1):
+    right_hand = Items.HEALING_STAFF
+    difficulty = 10
 
 class MaleSummoner(RandomizedUnit):
     job = Job.SUMMONER
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.SUMMONER
+    unlocked_job_level = 2
 
+class MaleSummonerEasy(MaleSummoner):
+    unlocked_job_level = 4
+    difficulty = 2
+
+class MaleSummonerModerate(MaleSummoner):
+    unlocked_job_level = 6
+    difficulty = 4
+
+class MaleSummonerAdvanced1(MaleSummoner):
+    unlocked_job_level = 8
+    difficulty = 6
+
+class MaleSummonerAdvanced2(MaleSummoner):
+    unlocked_job = UnlockedJob.BARD
+    unlocked_job_level = 6
+    difficulty = 6
+
+class MaleSummonerExpert(MaleSummoner):
+    unlocked_job = UnlockedJob.MIME
+    difficulty = 8
+
+class MaleSummonerRare(MaleSummonerExpert):
+    support = SupportAbility.SHORT_CHARGE
+    difficulty = 10
 
 class FemaleSummoner(RandomizedUnit):
     job = Job.SUMMONER
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.SUMMONER
+    unlocked_job_level = 2
+
+class FemaleSummonerEasy(FemaleSummoner):
+    unlocked_job_level = 4
+    difficulty = 2
+
+class FemaleSummonerModerate(FemaleSummoner):
+    unlocked_job_level = 6
+    difficulty = 4
+
+class FemaleSummonerAdvanced(FemaleSummoner):
+    unlocked_job_level = 8
+    difficulty = 6
+
+class FemaleSummonerExpert(FemaleSummoner):
+    unlocked_job = UnlockedJob.MIME
+    difficulty = 8
+
+class FemaleSummonerRare(FemaleSummonerExpert):
+    accessory = Items.CHERCHE
+    difficulty = 10
 
 
 class MaleThief(RandomizedUnit):
     job = Job.THIEF
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.THIEF
+    unlocked_job_level = 2
 
+class MaleThiefEasy(MaleThief):
+    unlocked_job_level = 4
+    difficulty = 2
+
+class MaleThiefModerate(MaleThief):
+    unlocked_job_level = 6
+    difficulty = 4
+
+class MaleThiefAdvanced(MaleThief):
+    unlocked_job = UnlockedJob.LANCER
+    unlocked_job_level = 4
+    difficulty = 6
+
+class MaleThiefExpert1(MaleThief):
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleThiefExpert2(MaleThief):
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleThiefExpert3(MaleThief):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleThiefRare(MaleThiefExpert3):
+    right_hand = Items.ZORLIN_SHAPE
+    difficulty = 10
 
 class FemaleThief(RandomizedUnit):
     job = Job.THIEF
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.THIEF
+    unlocked_job_level = 2
+
+class FemaleThiefEasy(FemaleThief):
+    unlocked_job_level = 4
+    difficulty = 2
+
+class FemaleThiefModerate(FemaleThief):
+    unlocked_job_level = 6
+    difficulty = 4
+
+class FemaleThiefAdvanced(FemaleThief):
+    unlocked_job = UnlockedJob.GEOMANCER
+    unlocked_job_level = 4
+    difficulty = 6
+
+class FemaleThiefExpert1(FemaleThief):
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleThiefExpert2(FemaleThief):
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleThiefExpert3(FemaleThief):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleThiefExpert4(FemaleThief):
+    unlocked_job = UnlockedJob.DANCER
+    unlocked_job_level = 6
+    difficulty = 8
+
+class FemaleThiefRare(FemaleThiefExpert3):
+    head = Items.RIBBON
+    difficulty = 10
 
 
 class MaleMediator(RandomizedUnit):
     job = Job.MEDIATOR
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.MEDIATOR
+    unlocked_job_level = 2
+
+class MaleMediatorEasy(MaleMediator):
+    unlocked_job_level = 4
+    difficulty = 2
+
+class MaleMediatorModerate(MaleMediator):
+    unlocked_job_level = 6
+    difficulty = 4
+
+class MaleMediatorAdvanced1(MaleMediator):
+    unlocked_job_level = 8
+    difficulty = 6
+
+class MaleMediatorAdvanced2(MaleMediator):
+    unlocked_job = UnlockedJob.BARD
+    unlocked_job_level = 6
+    difficulty = 6
+
+class MaleMediatorExpert(MaleMediator):
+    unlocked_job = UnlockedJob.MIME
+    difficulty = 8
+
+class MaleMediatorRare(MaleMediatorExpert):
+    right_hand = Items.GLACIER_GUN
 
 
 class FemaleMediator(RandomizedUnit):
     job = Job.MEDIATOR
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.MEDIATOR
+    unlocked_job_level = 2
+
+class FemaleMediatorEasy(FemaleMediator):
+    unlocked_job_level = 4
+    difficulty = 2
+
+class FemaleMediatorModerate(FemaleMediator):
+    unlocked_job_level = 6
+    difficulty = 4
+
+class FemaleMediatorAdvanced(FemaleMediator):
+    unlocked_job_level = 8
+    difficulty = 6
+
+class FemaleMediatorExpert(FemaleMediator):
+    unlocked_job = UnlockedJob.MIME
+    difficulty = 8
+
+class FemaleMediatorRare(FemaleMediatorExpert):
+    right_hand = Items.MADLEMGEN
+    difficulty = 10
+
 
 
 class MaleOracle(RandomizedUnit):
     job = Job.ORACLE
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.ORACLE
+    unlocked_job_level = 2
+
+
+class MaleOracleEasy(MaleOracle):
+    unlocked_job_level = 4
+    difficulty = 2
+
+
+class MaleOracleModerate(MaleOracle):
+    unlocked_job_level = 6
+    difficulty = 4
+
+
+class MaleOracleAdvanced1(MaleOracle):
+    unlocked_job = UnlockedJob.MEDIATOR
+    unlocked_job_level = 3
+    difficulty = 6
+
+
+class MaleOracleAdvanced2(MaleOracle):
+    unlocked_job = UnlockedJob.BARD
+    unlocked_job_level = 6
+    difficulty = 6
+
+
+class MaleOracleExpert1(MaleOracle):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 2
+    difficulty = 8
+
+
+class MaleOracleExpert2(MaleOracle):
+    unlocked_job = UnlockedJob.CALCULATOR
+    unlocked_job_level = 6
+    difficulty = 8
+
+class MaleOracleRare(MaleOracleExpert1):
+    body = Items.RUBBER_COSTUME
+    difficulty = 10
 
 
 class FemaleOracle(RandomizedUnit):
     job = Job.ORACLE
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.ORACLE
+    unlocked_job_level = 2
+
+
+class FemaleOracleEasy(FemaleOracle):
+    unlocked_job_level = 4
+    difficulty = 2
+
+
+class FemaleOracleModerate(FemaleOracle):
+    unlocked_job_level = 6
+    difficulty = 4
+
+
+class FemaleOracleAdvanced(FemaleOracle):
+    unlocked_job = UnlockedJob.MEDIATOR
+    unlocked_job_level = 3
+    difficulty = 6
+
+
+class FemaleOracleExpert1(FemaleOracle):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 2
+    difficulty = 8
+
+
+class FemaleOracleExpert2(FemaleOracle):
+    unlocked_job = UnlockedJob.CALCULATOR
+    unlocked_job_level = 6
+    difficulty = 8
+
+class FemaleOracleRare(FemaleOracleExpert1):
+    right_hand = Items.WHALE_WHISKER
+    difficulty = 10
 
 
 class MaleGeomancer(RandomizedUnit):
     job = Job.GEOMANCER
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.GEOMANCER
+    unlocked_job_level = 4
+    difficulty = 2
+
+class MaleGeomancerModerate(MaleGeomancer):
+    unlocked_job_level = 6
+    difficulty = 4
+
+class MaleGeomancerAdvanced(MaleGeomancer):
+    unlocked_job_level = 8
+    difficulty = 6
+
+class MaleGeomancerExpert1(MaleGeomancer):
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleGeomancerExpert2(MaleGeomancer):
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleGeomancerExpert3(MaleGeomancer):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleGeomancerRare(MaleGeomancerExpert3):
+    left_hand = Items.KAISER_PLATE
+    difficulty = 10
 
 
 class FemaleGeomancer(RandomizedUnit):
     job = Job.GEOMANCER
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.GEOMANCER
+    unlocked_job_level = 4
+    difficulty = 2
+
+class FemaleGeomancerModerate(FemaleGeomancer):
+    unlocked_job_level = 6
+    difficulty = 4
+
+class FemaleGeomancerAdvanced1(FemaleGeomancer):
+    unlocked_job_level = 8
+    difficulty = 6
+
+class FemaleGeomancerAdvanced2(FemaleGeomancer):
+    unlocked_job = UnlockedJob.DANCER
+    unlocked_job_level = 4
+    difficulty = 6
+
+class FemaleGeomancerExpert1(FemaleGeomancer):
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleGeomancerExpert2(FemaleGeomancer):
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleGeomancerExpert3(FemaleGeomancer):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleGeomancerRare(FemaleGeomancerExpert3):
+    left_hand = Items.GENJI_SHIELD
+    difficulty = 10
 
 
 class MaleLancer(RandomizedUnit):
     job = Job.LANCER
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.LANCER
+    unlocked_job_level = 4
+    difficulty = 2
+
+class MaleLancerModerate(MaleLancer):
+    unlocked_job_level = 6
+    difficulty = 4
+
+class MaleLancerAdvanced(MaleLancer):
+    unlocked_job_level = 8
+    difficulty = 6
+
+class MaleLancerExpert1(MaleLancer):
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleLancerExpert2(MaleLancer):
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleLancerExpert3(MaleLancer):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 4
+    difficulty = 8
+
+class MaleLancerRare(MaleLancerExpert3):
+    right_hand = Items.DRAGON_WHISKER
+    difficulty = 10
 
 
 class FemaleLancer(RandomizedUnit):
     job = Job.LANCER
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.LANCER
+    unlocked_job_level = 4
+    difficulty = 2
+
+class FemaleLancerModerate(FemaleLancer):
+    unlocked_job_level = 6
+    difficulty = 4
+
+class FemaleLancerAdvanced1(FemaleLancer):
+    unlocked_job_level = 8
+    difficulty = 6
+
+class FemaleLancerAdvanced2(FemaleLancer):
+    unlocked_job = UnlockedJob.DANCER
+    unlocked_job_level = 4
+    difficulty = 6
+
+class FemaleLancerExpert1(FemaleLancer):
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleLancerExpert2(FemaleLancer):
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleLancerExpert3(FemaleLancer):
+    unlocked_job = UnlockedJob.MIME
+    unlocked_job_level = 4
+    difficulty = 8
+
+class FemaleLancerRare(FemaleLancerExpert3):
+    right_hand = Items.HOLY_LANCE
+    difficulty = 10
 
 
 class MaleSamurai(RandomizedUnit):
     job = Job.SAMURAI
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 6
+    difficulty = 4
+
+class MaleSamuraiAdvanced(MaleSamurai):
+    unlocked_job_level = 8
+    difficulty = 6
+
+class MaleSamuraiExpert(MaleSamurai):
+    unlocked_job = UnlockedJob.MIME
+    difficulty = 8
+
+class MaleSamuraiRare(MaleSamuraiExpert):
+    right_hand = Items.MASAMUNE
+    difficulty = 10
 
 
 class FemaleSamurai(RandomizedUnit):
     job = Job.SAMURAI
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.SAMURAI
+    unlocked_job_level = 6
+    difficulty = 4
+
+
+class FemaleSamuraiAdvanced1(FemaleSamurai):
+    unlocked_job_level = 8
+    difficulty = 6
+
+class FemaleSamuraiAdvanced2(FemaleSamurai):
+    unlocked_job = UnlockedJob.DANCER
+    unlocked_job_level = 4
+    difficulty = 6
+
+
+class FemaleSamuraiExpert(FemaleSamurai):
+    unlocked_job = UnlockedJob.MIME
+    difficulty = 8
+
+class FemaleSamuraiRare(FemaleSamuraiExpert):
+    right_hand = Items.CHIRIJIRADEN
+    difficulty = 10
 
 
 class MaleNinja(RandomizedUnit):
     job = Job.NINJA
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 6
+    difficulty = 4
+
+class MaleNinjaAdvanced(MaleNinja):
+    unlocked_job_level = 8
+    difficulty = 6
+
+class MaleNinjaExpert(MaleNinja):
+    unlocked_job = UnlockedJob.MIME
+    difficulty = 8
+
+class MaleNinjaRare(MaleNinjaExpert):
+    right_hand = Items.IGA_KNIFE
+    difficulty = 10
 
 
 class FemaleNinja(RandomizedUnit):
     job = Job.NINJA
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.NINJA
+    unlocked_job_level = 6
+    difficulty = 4
+
+class FemaleNinjaAdvanced1(MaleNinja):
+    unlocked_job_level = 8
+    difficulty = 6
+
+class FemaleNinjaAdvanced2(FemaleNinja):
+    unlocked_job = UnlockedJob.DANCER
+    unlocked_job_level = 4
+    difficulty = 6
+
+class FemaleNinjaExpert(MaleNinja):
+    unlocked_job = UnlockedJob.MIME
+    difficulty = 8
+
+class FemaleNinjaRare(FemaleNinjaExpert):
+    right_hand = Items.KOGA_KNIFE
+    difficulty = 10
 
 
 class MaleCalculator(RandomizedUnit):
     job = Job.CALCULATOR
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.CALCULATOR
+    unlocked_job_level = 6
+    difficulty = 6
+
+class MaleCalculatorExpert(MaleCalculator):
+    unlocked_job_level = 8
+    difficulty = 8
 
 
 class FemaleCalculator(RandomizedUnit):
     job = Job.CALCULATOR
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.CALCULATOR
+    unlocked_job_level = 6
+    difficulty = 6
+
+class FemaleCalculatorExpert(FemaleCalculator):
+    unlocked_job_level = 8
+    difficulty = 8
 
 
 class MaleBard(RandomizedUnit):
     job = Job.BARD
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    unlocked_job = UnlockedJob.BARD
+    unlocked_job_level = 6
+    difficulty = 6
 
 
 class FemaleDancer(RandomizedUnit):
     job = Job.DANCER
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    unlocked_job = UnlockedJob.DANCER
+    unlocked_job_level = 6
+    difficulty = 6
 
 
 class MaleMime(RandomizedUnit):
     job = Job.MIME
     sprite_set = SpriteSet.GENERIC_MALE
     gender = UnitGender.MALE
+    difficulty = 8
 
 
 class FemaleMime(RandomizedUnit):
     job = Job.MIME
     sprite_set = SpriteSet.GENERIC_FEMALE
     gender = UnitGender.FEMALE
+    difficulty = 8
 #endregion
 
 #region Special humans
@@ -312,10 +1424,12 @@ class RamzaC4Squire(RandomizedUnit):
     job = Job.RAMZA_SQUIRE_CHAPTER_4
     sprite_set = SpriteSet.RAMZA_C4
     gender = UnitGender.MALE
+    difficulty = 4
 
 
 class RamzaC4SquireFullSkillset(RamzaC4Squire):
     primary = ActionAbility.GUTS_C4
+    difficulty = 6
 
 
 class DelitaSquire(RandomizedUnit):
@@ -334,7 +1448,7 @@ class DelitaArcKnight(RandomizedUnit):
     job = Job.ARC_KNIGHT_DELITA
     sprite_set = SpriteSet.DELITA_C4
     gender = UnitGender.MALE
-    difficulty = 8
+    difficulty = 4
 
 
 class Algus(RandomizedUnit):
@@ -350,13 +1464,13 @@ class ZalbagArcKnight(RandomizedUnit):
     job = Job.ARC_KNIGHT_ZALBAG
     sprite_set = SpriteSet.ZALBAG
     gender = UnitGender.MALE
-    difficulty = 3
+    difficulty = 4
 
 class LuneKnight(RandomizedUnit):
     job = Job.LUNE_KNIGHT
     sprite_set = SpriteSet.DYCEDARG
     gender = UnitGender.MALE
-    difficulty = 3
+    difficulty = 4
 
 class Princess(RandomizedUnit):
     job = Job.PRINCESS
@@ -379,7 +1493,7 @@ class Dragoner(RandomizedUnit):
     job = Job.DRAGONER
     sprite_set = SpriteSet.REIS
     gender = UnitGender.FEMALE
-    difficulty = 3
+    difficulty = 4
 
 class HolyPriest(RandomizedUnit):
     job = Job.HOLY_PRIEST
@@ -391,13 +1505,14 @@ class DarkKnight(RandomizedUnit):
     job = Job.DARK_KNIGHT_GUEST
     sprite_set = SpriteSet.GAFGARION
     gender = UnitGender.MALE
+    difficulty = 4
 
 
 class Astrologist(RandomizedUnit):
     job = Job.ASTROLOGIST
     sprite_set = SpriteSet.OLAN
     gender = UnitGender.MALE
-    difficulty = 3
+    difficulty = 8
 
 
 class EngineerMustadio(RandomizedUnit):
@@ -429,14 +1544,14 @@ class HolyKnightAgrias(RandomizedUnit):
     job = Job.HOLY_KNIGHT_AGRIAS
     sprite_set = SpriteSet.AGRIAS
     gender = UnitGender.FEMALE
-    difficulty = 3
+    difficulty = 4
 
 
 class TempleKnight(RandomizedUnit):
     job = Job.TEMPLE_KNIGHT
     sprite_set = SpriteSet.BEOWULF
     gender = UnitGender.MALE
-    difficulty = 6
+    difficulty = 8
 
 
 class DivineKnightVormav(RandomizedUnit):
@@ -457,7 +1572,6 @@ class KnightBlade(RandomizedUnit):
     job = Job.KNIGHT_BLADE
     sprite_set = SpriteSet.IZLUDE
     gender = UnitGender.MALE
-    difficulty = 3
 
 
 class KnightBladeWithKit(KnightBlade):
@@ -542,7 +1656,7 @@ class Soldier(RandomizedUnit):
     job = Job.SOLDIER
     sprite_set = SpriteSet.CLOUD
     gender = UnitGender.MALE
-    difficulty = 3
+    difficulty = 4
 
 
 class ArcKnightZombie(RandomizedUnit):
@@ -597,6 +1711,7 @@ class Altima1(RandomizedUnit):
     job = Job.ALTIMA_1
     sprite_set = SpriteSet.ALTIMA_1
     gender = UnitGender.MONSTER
+    hidden_stats = True
     primary = ActionAbility.ULTIMATE_MAGIC
     secondary = ActionAbility.CHAOS
     difficulty = 14
@@ -606,6 +1721,7 @@ class Altima2(RandomizedUnit):
     job = Job.ALTIMA_2
     sprite_set = SpriteSet.ALTIMA_2
     gender = UnitGender.MONSTER
+    hidden_stats = True
     primary = ActionAbility.COMPLETE_MAGIC
     secondary = ActionAbility.SATURATION
     difficulty = 14
@@ -641,6 +1757,7 @@ class BlackGoblin(GenericMonster):
 
 class Gobbledeguck(GenericMonster):
     job = Job.GOBBLEDEGUCK
+    difficulty = 4
 
 
 class Bomb(GenericMonster):
@@ -653,6 +1770,7 @@ class Grenade(GenericMonster):
 
 class Explosive(GenericMonster):
     job = Job.EXPLOSIVE
+    difficulty = 4
 
 
 class RedPanther(GenericMonster):
@@ -665,6 +1783,7 @@ class Cuar(GenericMonster):
 
 class Vampire(GenericMonster):
     job = Job.VAMPIRE
+    difficulty = 4
 
 
 class PiscoDemon(GenericMonster):
@@ -690,6 +1809,7 @@ class BoneSnatch(GenericMonster):
 
 class LivingBone(GenericMonster):
     job = Job.LIVING_BONE
+    difficulty = 4
 
 
 class Ghoul(GenericMonster):
@@ -702,6 +1822,7 @@ class Gust(GenericMonster):
 
 class Revnant(GenericMonster):
     job = Job.REVNANT
+    difficulty = 4
 
 
 class Flotiball(GenericMonster):
@@ -714,6 +1835,7 @@ class Ahriman(GenericMonster):
 
 class Plague(GenericMonster):
     job = Job.PLAGUE
+    difficulty = 4
 
 
 class Juravis(GenericMonster):
@@ -726,6 +1848,7 @@ class SteelHawk(GenericMonster):
 
 class Cocatoris(GenericMonster):
     job = Job.COCATORIS
+    difficulty = 4
 
 
 class Uribo(GenericMonster):
@@ -762,6 +1885,7 @@ class Minitaurus(GenericMonster):
 
 class Sacred(GenericMonster):
     job = Job.SACRED
+    difficulty = 4
 
 
 class Morbol(GenericMonster):
@@ -774,6 +1898,7 @@ class Ochu(GenericMonster):
 
 class GreatMorbol(GenericMonster):
     job = Job.GREAT_MORBOL
+    difficulty = 4
 
 
 class Behemoth(GenericMonster):
@@ -857,6 +1982,7 @@ class Velius(RandomizedUnit):
     job = Job.VELIUS
     sprite_set = SpriteSet.VELIUS
     gender = UnitGender.MONSTER
+    hidden_stats = True
     difficulty = 8
 
 
@@ -869,6 +1995,7 @@ class Zalera(RandomizedUnit):
     job = Job.ZALERA
     sprite_set = SpriteSet.ZALERA
     gender = UnitGender.MALE
+    hidden_stats = True
     difficulty = 8
 
 
@@ -881,6 +2008,7 @@ class Hashmalum(RandomizedUnit):
     job = Job.HASHMALUM
     sprite_set = SpriteSet.HASHMALUM
     gender = UnitGender.MALE
+    hidden_stats = True
     difficulty = 10
 
 
@@ -893,6 +2021,7 @@ class Queklain(RandomizedUnit):
     job = Job.QUEKLAIN
     sprite_set = SpriteSet.QUEKLAIN
     gender = UnitGender.MALE
+    hidden_stats = True
     difficulty = 6
 
 
@@ -905,6 +2034,7 @@ class Adramelk(RandomizedUnit):
     job = Job.ADRAMELK
     sprite_set = SpriteSet.ADRAMELK
     gender = UnitGender.MONSTER
+    hidden_stats = True
     difficulty = 8
 
 
@@ -917,6 +2047,7 @@ class Elidibs(RandomizedUnit):
     job = Job.ELIDIBS
     sprite_set = SpriteSet.MONSTER
     gender = UnitGender.MONSTER
+    hidden_stats = True
     difficulty = 12
 #endregion
 

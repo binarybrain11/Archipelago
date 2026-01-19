@@ -12,7 +12,7 @@ class ItemData:
 all_item_data = []
 
 gear_item_names = [
-    "Dagger", "Mythril Knife", "Blind Knife", "Mage Masher", "Platina Dagger", "Main Gauche", "orichalcum",
+    "Dagger", "Mythril Knife", "Blind Knife", "Mage Masher", "Platina Dagger", "Main Gauche", "Orichalcum",
     "Assassin Dagger", "Air Knife", "Zorlin Shape",
 
     "Hidden Knife", "Ninja Knife", "Short Edge", "Ninja Edge", "Spell Edge", "Sasuke Knife", "Iga Knife", "Koga Knife",

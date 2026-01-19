@@ -10,7 +10,7 @@ class BattleMapping:
     name: str
     battle_id: EventCode
     battle_level: int
-    source_units = []
+    source_units: list[SourceUnit] = []
     unit_mapping: dict[SourceUnit, RandomizedUnitFactory]
 
     def __init__(self, battle_id: int, battle_level: int, source_units):

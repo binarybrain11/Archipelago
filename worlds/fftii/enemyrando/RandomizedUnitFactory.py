@@ -19,6 +19,6 @@ class RandomizedUnitFactory:
         """Returns a unit from the factory with a difficulty less than or equal to the specified difficulty"""
         if difficulty < self.get_lowest_difficulty():
             return None
-        eligible_units = {unit: self.units[unit] for unit in self.units.keys() if self.units[unit] <= difficulty}
+        eligible_units = {unit: self.units[unit] for unit in self.units.keys() if unit.difficulty <= difficulty}
         chosen_unit: type[RandomizedUnit] = self.random.sample(list(eligible_units), k=1, counts=eligible_units.values()).pop()
         return chosen_unit

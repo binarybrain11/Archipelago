@@ -1,7 +1,6 @@
 from enum import Enum, IntEnum, unique
 
 
-@unique
 class Job(IntEnum):
     RAMZA_SQUIRE_CHAPTER_1 = 0x01
     RAMZA_SQUIRE_CHAPTER_23 = 0x02
@@ -78,6 +77,26 @@ class Job(IntEnum):
     BARD = 0x5B
     DANCER = 0x5C
     MIME = 0x5D
+
+    # These aren't used directly, they're just to make the randomized factory code work nicer.
+    FEMALE_SQUIRE = 0x4A
+    FEMALE_CHEMIST = 0x4B
+    FEMALE_KNIGHT = 0x4C
+    FEMALE_ARCHER = 0x4D
+    FEMALE_MONK = 0x4E
+    FEMALE_PRIEST = 0x4F
+    FEMALE_WIZARD = 0x50
+    FEMALE_TIMEMAGE = 0x51
+    FEMALE_SUMMONER = 0x52
+    FEMALE_THIEF = 0x53
+    FEMALE_MEDIATOR = 0x54
+    FEMALE_ORACLE = 0x55
+    FEMALE_GEOMANCER = 0x56
+    FEMALE_LANCER = 0x57
+    FEMALE_SAMURAI = 0x58
+    FEMALE_NINJA = 0x59
+    FEMALE_CALCULATOR = 0x5A
+    FEMALE_MIME = 0x5D
 
     YELLOW_CHOCOBO = 0x5E
     BLACK_CHOCOBO = 0x5F

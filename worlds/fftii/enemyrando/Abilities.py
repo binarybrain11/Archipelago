@@ -70,6 +70,7 @@ class SupportAbility(Enum):
     MAINTENANCE = 0xDB01
     DEFEND = 0xDF01
     TWO_HANDS = 0xDC01
+    SHORT_CHARGE = 0xE201
 
 @unique
 class MovementAbility(Enum):

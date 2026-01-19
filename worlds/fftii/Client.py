@@ -60,6 +60,11 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
         except bizhawk.RequestFailedError:
             return False  # Not able to get a response, say no for now
 
+        auth_raw = (await bizhawk.read(
+            ctx.bizhawk_ctx,
+            [(memory.rom_name_location_in_ram, memory.rom_name_length, self.ram)]))[0]
+        if auth_raw == bytes(20):
+            return False
         ctx.game = self.game
         ctx.items_handling = 0b111
         ctx.want_slot_data = True
@@ -463,7 +468,6 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
                 if location_id not in ctx.checked_locations:
                     toggle_dot = False
             if toggle_dot:
-                print(location_dot_data)
                 location_dot_address = location_dot_data[ADDRESS][0]
                 location_dot_bit = location_dot_data[ADDRESS][1]
                 current_dot_data = await self.read_ram_value_guarded(ctx, location_dot_address)

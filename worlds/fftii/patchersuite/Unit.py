@@ -32,6 +32,7 @@ class Unit:
     flags_offset = 0x01
     flags: int
     gender: UnitGender
+    hidden_stats: bool
 
     flags2_offset = 0x18
     flags2: int
@@ -122,6 +123,7 @@ class Unit:
                 self.sprite_set_name = "Unknown sprite set"
         self.gender = self.get_gender()
         self.team = self.get_team()
+        self.hidden_stats = self.get_hidden_stats()
         self.apply_unit_data()
         for i in range(len(self.unit_data)):
             assert self.unit_data[i] == unit_data[i], (hex(i), self.unit_data[i], unit_data[i])
@@ -153,9 +155,23 @@ class Unit:
             return UnitTeam.RED
         raise ValueError(str(bin(self.flags2)))
 
+    def get_hidden_stats(self):
+        return self.flags & 0x04
+
     def apply_unit_data(self):
         self.unit_data[self.job_offset] = self.job
         self.unit_data[self.sprite_set_offset] = self.sprite_set
+        self.flags = self.flags & 0b00011111
+        if self.gender == UnitGender.MALE:
+            self.flags = self.flags | 0x80
+        elif self.gender == UnitGender.FEMALE:
+            self.flags = self.flags | 0x40
+        elif self.gender == UnitGender.MONSTER:
+            self.flags = self.flags | 0x20
+        if self.hidden_stats:
+            self.flags = self.flags | 0x04
+        else:
+            self.flags = self.flags & 0b11111011
         self.unit_data[self.flags_offset] = self.flags
         self.unit_data[self.flags2_offset] = self.flags2
         self.unit_data[self.unlocked_job_offset] = self.unlocked_job
@@ -178,10 +194,11 @@ class Unit:
         self.unit_data[self.right_hand_offset] = self.right_hand
         self.unit_data[self.left_hand_offset] = self.left_hand
 
-    def set_new_data(self, destination_unit: "RandomizedUnit"):
+    def set_new_data(self, destination_unit: type["RandomizedUnit"]):
         self.job = destination_unit.job
         self.sprite_set = destination_unit.sprite_set.value
         self.gender = destination_unit.gender
+        self.hidden_stats = destination_unit.hidden_stats
         self.birthday_month = destination_unit.birthday_month.value
         self.birthday_day = destination_unit.birthday_day
         self.brave = destination_unit.brave

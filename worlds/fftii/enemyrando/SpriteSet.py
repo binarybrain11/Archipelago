@@ -67,6 +67,10 @@ class SpriteSet(Enum):
     GENERIC_FEMALE = 0x81
     MONSTER = 0x82
 
+generic_human_sprite_sets = [
+    SpriteSet.GENERIC_MALE, SpriteSet.GENERIC_FEMALE
+]
+
 sprite_sets = {
     0x01: "Ramza",
     0x02: "Ramza",

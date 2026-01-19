@@ -54,7 +54,8 @@ class RareBattles(Toggle):
     display_name = "Rare Battles"
 
 class PoachLocations(Toggle):
-    """Are poaches in the location pool? WARNING: Can be grindy and RNG-heavy."""
+    """Are poaches in the location pool? WARNING: Can be grindy and RNG-heavy.
+    Will be disabled if Enemy Randomizer is set to Randomized."""
     display_name = "Poach Locations"
 
 class LogicalDifficulty(Choice):
@@ -158,29 +159,30 @@ class JPGainMultiplier(Choice):
 class EnemyRandomizer(Choice):
     """Randomizes enemies.
     Disabled leaves enemies as vanilla.
-    Limited randomizes only bosses with bosses.
-    Simple randomizes only generics (both humans and monsters) with generics.
-    Advanced randomizes all unique units and all generics with their categories.
-    Complex randomizes both generic and special units with each other."""
+    Boss Shuffle shuffles only unique story bosses amongst each other.
+    Randomized randommizes all enemies per other settings in this section."""
     display_name = "Enemy Randomizer"
     option_disabled = 0
-    option_limited = 1
-    option_simple = 2
-    option_advanced = 3
-    option_complex = 4
+    option_boss_shuffle = 1
+    option_randomized = 2
     default = 0
-    visibility = Visibility.none
+
+class RandomizeGariland(Toggle):
+    """Whether to randomize the Gariland story fight."""
+    display_name = "Randomize Gariland"
 
 class CrossEnemyRandomizer(Toggle):
-    """If enabled, randomized humans can become monster units and vice versa."""
+    """If enabled, generic jobs can randomize into special units and vice versa."""
     display_name = "Cross Enemy Randomizer"
-    visibility = Visibility.none
+
+class CrossSpeciesRandomizer(Toggle):
+    """If enabled, randomized humans can become monster units and vice versa."""
+    display_name = "Cross Species Randomizer"
 
 class RandomizeStoryFightsOnly(Toggle):
     """If enabled, only story and sidequest fights will be randomized,
     and random encounters will be left alone"""
     display_name = "Randomize Story Fights Only"
-    visibility = Visibility.none
 
 class EnemyRandomizerLocality(Choice):
     """Controls the scope of enemy randomization.
@@ -192,7 +194,6 @@ class EnemyRandomizerLocality(Choice):
     option_region = 1
     option_global = 2
     default = 0
-    visibility = Visibility.none
 
 class LucaviRandomizer(Choice):
     """Controls if Lucavi and Altima are included in randomization.
@@ -204,7 +205,6 @@ class LucaviRandomizer(Choice):
     option_lucavi = 1
     option_include_altima = 2
     default = 0
-    visibility = Visibility.none
 
 class EnemyRandomizerMethod(Choice):
     """Controls the randomization method for determining randomized units.
@@ -250,7 +250,9 @@ class FinalFantasyTacticsIIOptions(PerGameCommonOptions):
     bonus_gil_item_size: BonusGilItemSize
     jp_boon_size: JPBoonSize
     enemy_randomizer: EnemyRandomizer
+    randomize_gariland: RandomizeGariland
     cross_enemy_randomizer: CrossEnemyRandomizer
+    cross_species_randomizer: CrossSpeciesRandomizer
     randomize_story_fights_only: RandomizeStoryFightsOnly
     enemy_randomizer_locality: EnemyRandomizerLocality
     lucavi_randomizer: LucaviRandomizer
@@ -284,14 +286,16 @@ fftii_option_groups = [
         BonusGilItemSize,
         JPBoonSize
     ]),
-    # OptionGroup("Enemy Randomizer Options", [
-    #     EnemyRandomizer,
-    #     CrossEnemyRandomizer,
-    #     RandomizeStoryFightsOnly,
-    #     EnemyRandomizerLocality,
-    #     LucaviRandomizer,
-    #     EnemyRandomizerMethod
-    # ]),
+    OptionGroup("Enemy Randomizer Options", [
+        EnemyRandomizer,
+        RandomizeGariland,
+        CrossEnemyRandomizer,
+        CrossSpeciesRandomizer,
+        RandomizeStoryFightsOnly,
+        EnemyRandomizerLocality,
+        LucaviRandomizer,
+        EnemyRandomizerMethod
+    ]),
     OptionGroup("QOL Options", [
         EXPGainMultiplier,
         JPGainMultiplier

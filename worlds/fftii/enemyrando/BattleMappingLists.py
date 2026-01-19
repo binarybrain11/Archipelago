@@ -413,9 +413,19 @@ murond_story_fights: list[BattleMapping] = [
     *deep_dungeon_fights
 ]
 
+story_fights_by_region = [
+    gallione_story_fights, fovoham_story_fights, lesalia_story_fights,
+    lionel_story_fights, zeltennia_story_fights, limberry_story_fights, murond_story_fights
+]
+
+all_fights_by_region = [
+    gallione_fights, fovoham_fights, lesalia_fights,
+    lionel_fights, zeltennia_fights, limberry_fights, murond_story_fights
+]
+
 all_randoms: list[BattleMapping] = [
-    *gallione_randoms, *fovoham_randoms, *lesalia_randoms, *lionel_randoms,
-    *zeltennia_randoms, *limberry_randoms
+    *gallione_randoms, *fovoham_randoms, *lesalia_randoms,
+    *lionel_randoms, *zeltennia_randoms, *limberry_randoms
 ]
 
 all_story_fights: list[BattleMapping] = [

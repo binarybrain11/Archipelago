@@ -507,7 +507,8 @@ location_dot_info = {
     },
     "Igros": {
         STORY_LOCATIONS: [
-            LocationNames.IGROS_STORY
+            LocationNames.IGROS_STORY,
+            LocationNames.IGROS_STONE
         ],
         ADDRESS: (0x057959, 0x02)
     },
@@ -561,7 +562,9 @@ location_dot_info = {
         STORY_LOCATIONS: [
             LocationNames.RIOVANES_1_STORY,
             LocationNames.RIOVANES_2_STORY,
+            LocationNames.RIOVANES_2_STONE,
             LocationNames.RIOVANES_3_STORY,
+            LocationNames.RIOVANES_3_STONE,
             LocationNames.RIOVANES_SHOP,
             LocationNames.RAMZA_CHAPTER_4_UNLOCK,
             LocationNames.RAFA_RECRUIT,
@@ -623,6 +626,7 @@ location_dot_info = {
             LocationNames.GOLAND_2_SIDEQUEST,
             LocationNames.GOLAND_3_SIDEQUEST,
             LocationNames.GOLAND_4_SIDEQUEST,
+            LocationNames.GOLAND_4_STONE,
             LocationNames.BEOWULF_RECRUIT,
             LocationNames.REIS_DRAGON_RECRUIT,
             LocationNames.WORKER_8_RECRUIT
@@ -659,6 +663,7 @@ location_dot_info = {
         STORY_LOCATIONS: [
             LocationNames.LIONEL_1_STORY,
             LocationNames.LIONEL_2_STORY,
+            LocationNames.LIONEL_2_STONE,
             LocationNames.LIONEL_SHOP
         ],
         ADDRESS: (0x057959, 0x04)
@@ -715,6 +720,7 @@ location_dot_info = {
         STORY_LOCATIONS: [],
         SIDEQUEST_LOCATIONS: [
             LocationNames.NELVESKA_SIDEQUEST,
+            LocationNames.NELVESKA_STONE,
             LocationNames.REIS_HUMAN_RECRUIT
         ],
         ADDRESS: (0x05795B, 0x40)
@@ -746,6 +752,8 @@ location_dot_info = {
             LocationNames.LIMBERRY_1_STORY,
             LocationNames.LIMBERRY_2_STORY,
             LocationNames.LIMBERRY_3_STORY,
+            LocationNames.LIMBERRY_3_STONE_1,
+            LocationNames.LIMBERRY_3_STONE_2,
             LocationNames.LIMBERRY_SHOP,
             LocationNames.MELIADOUL_RECRUIT
         ],
@@ -761,6 +769,7 @@ location_dot_info = {
             LocationNames.BETHLA_NORTH_STORY,
             LocationNames.BETHLA_SOUTH_STORY,
             LocationNames.BETHLA_SLUICE_STORY,
+            LocationNames.BETHLA_SLUICE_STONE,
             LocationNames.BETHLA_SHOP,
             LocationNames.ORLANDU_RECRUIT
         ],
@@ -785,13 +794,15 @@ location_dot_info = {
             LocationNames.UBS_5_STORY,
             LocationNames.MUROND_DEATH_CITY_STORY,
             LocationNames.PRECINCTS_STORY,
-            LocationNames.AIRSHIPS_1_STORY
+            LocationNames.AIRSHIPS_1_STORY,
+            LocationNames.AIRSHIPS_1_STONE,
         ],
         ADDRESS: (0x05795B, 0x02)
     },
     "Goug": {
         STORY_LOCATIONS: [
             LocationNames.GOUG_STORY,
+            LocationNames.GOUG_STONE,
             LocationNames.MUSTADIO_RECRUIT
         ],
         ADDRESS: (0x05795A, 0x04)
@@ -817,6 +828,7 @@ location_dot_info = {
             LocationNames.VOYAGE_SIDEQUEST,
             LocationNames.HORROR_SIDEQUEST,
             LocationNames.END_SIDEQUEST,
+            LocationNames.END_STONE,
             LocationNames.BYBLOS_RECRUIT
         ],
         ADDRESS: (0x05795B, 0x20)
