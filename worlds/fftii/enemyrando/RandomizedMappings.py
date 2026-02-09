@@ -44,9 +44,9 @@ generic_monster_table: dict[Job, list[Job]] = {
 }
 
 special_job_table: dict[Job, list[Job]] = {
-    Job.RAMZA_SQUIRE_CHAPTER_1: [Job.RAMZA_SQUIRE_CHAPTER_1],
-    Job.RAMZA_SQUIRE_CHAPTER_23: [Job.RAMZA_SQUIRE_CHAPTER_23],
-    Job.RAMZA_SQUIRE_CHAPTER_4: [Job.RAMZA_SQUIRE_CHAPTER_4],
+    #Job.RAMZA_SQUIRE_CHAPTER_1: [Job.RAMZA_SQUIRE_CHAPTER_1],
+    #Job.RAMZA_SQUIRE_CHAPTER_23: [Job.RAMZA_SQUIRE_CHAPTER_23],
+    #Job.RAMZA_SQUIRE_CHAPTER_4: [Job.RAMZA_SQUIRE_CHAPTER_4],
     Job.SQUIRE_DELITA: [Job.SQUIRE_DELITA],
     Job.SQUIRE_ALGUS: [Job.SQUIRE_ALGUS],
     Job.HOLY_KNIGHT_DELITA: [Job.HOLY_KNIGHT_DELITA],
@@ -93,6 +93,11 @@ lucavi_table: dict[Job, list[Job]] = {
     Job.ADRAMELK: [Job.ADRAMELK],
     Job.ELIDIBS: [Job.ELIDIBS],
     Job.HASHMALUM: [Job.HASHMALUM]
+}
+
+altima_table: dict[Job, list[Job]] = {
+    Job.ALTIMA_1: [Job.ALTIMA_1],
+    Job.ALTIMA_2: [Job.ALTIMA_2],
 }
 
 factory_mappings: dict[Job, dict[type[RandomizedUnit], int]] = {

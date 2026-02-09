@@ -7,11 +7,13 @@ class SourceUnit:
     sprite_set: SpriteSet
     job: Job
     gender: UnitGender
+    immortal: bool = False
 
-    def __init__(self, sprite_set: SpriteSet, job: Job, gender: UnitGender):
+    def __init__(self, sprite_set: SpriteSet, job: Job, gender: UnitGender, immortal: bool = False):
         self.sprite_set = sprite_set
         self.job = job
         self.gender = gender
+        self.immortal = immortal
 
     def to_json(self):
         return {
@@ -37,4 +39,13 @@ class SourceUnit:
         return True
 
     def __hash__(self):
-        return hash((self.sprite_set.value, self.job.value, self.gender.value))
+        job = self.job.value
+        if self.job in monster_families.keys():
+            job = monster_families[self.job][0]
+        return hash((self.sprite_set.value, job, self.gender.value))
+
+    def __lt__(self, other):
+        return self.job.value < other.job.value
+
+    def __gt__(self, other):
+        return self.job.value > other.job.value

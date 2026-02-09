@@ -2,12 +2,14 @@ import logging
 
 from typing import TYPE_CHECKING
 
+from MultiServer import mark_raw
 from NetUtils import ClientStatus
 
 import worlds._bizhawk as bizhawk
 
 from worlds._bizhawk.client import BizHawkClient
 
+from .data.logic.Monsters import monster_family_lookup, MonsterNames, monster_families, MonsterFamilies
 from .data import memory
 from .data.items import item_data_lookup, gear_item_names, gil_item_names, gil_item_sizes, zodiac_stone_names, \
     jp_item_names, jp_item_sizes, job_names, special_character_names, world_map_pass_names, earned_job_names
@@ -17,7 +19,7 @@ from .data.memory import stones_lookup, seed_hash_length, pass_paths, finale_pat
     RARE_BATTLE, SIDEQUEST_LOCATIONS, ALTIMA_ONLY_STORY_LOCATIONS, ADDRESS
 
 if TYPE_CHECKING:
-    from worlds._bizhawk.context import BizHawkClientContext
+    from worlds._bizhawk.context import BizHawkClientContext, BizHawkClientCommandProcessor
 
 logger = logging.getLogger("Client")
 
@@ -44,6 +46,7 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
         self.location_name_to_id: dict[str, int] | None = None
         self.item_name_to_id: dict[str, int] | None = None
         self.logged_version = False
+        self.poach_mapping = None
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -68,6 +71,7 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
         ctx.game = self.game
         ctx.items_handling = 0b111
         ctx.want_slot_data = True
+        ctx.command_processor.commands["poach_location"] = self._cmd_poach_locations
         return True
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
@@ -88,6 +92,10 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
                 from . import FinalFantasyTacticsIvaliceIslandWorld
                 self.location_name_to_id = FinalFantasyTacticsIvaliceIslandWorld.location_name_to_id
                 self.item_name_to_id = FinalFantasyTacticsIvaliceIslandWorld.item_name_to_id
+            if self.poach_mapping is None:
+                self.poach_mapping = ctx.slot_data["poach_hints"]
+                for key, value in self.poach_mapping.items():
+                    self.poach_mapping[key] = sorted(value)
             if await self.check_valid_game(ctx):
                 await self.check_victory(ctx)
                 await self.location_check(ctx)
@@ -479,7 +487,31 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
                         (location_dot_address, [new_dot_data], self.ram)
                     ])
 
-
+    @mark_raw
+    def _cmd_poach_locations(self, ctx: "BizHawkClientCommandProcessor", monster: str) -> None:
+        """Test message."""
+        key = monster
+        if self.poach_mapping is None:
+            logger.info("Please connect to the server first.")
+            return
+        if key not in self.poach_mapping.keys():
+            try:
+                new_key = MonsterFamilies(key)
+                key = monster_families[new_key][0]
+            except ValueError:
+                valid_names = [monster_name.value for monster_name in monster_family_lookup.keys()]
+                valid_names.extend([family_name.value for family_name in monster_families.keys()])
+                logger.info(f"{key} not found. Please enter a valid monster or family name.")
+                logger.info(f"Valid names are {", ".join(valid_names)}")
+                return
+        family = monster_family_lookup[MonsterNames(key)]
+        family_members = monster_families[family]
+        returned_info = []
+        for family_member in family_members:
+            returned_info.extend(self.poach_mapping[family_member.value])
+        logger.info(f"The {family.value} family can be found in the following locations:")
+        for location in returned_info:
+            logger.info(f"- {location}")
 
     async def read_ram_values_guarded(self, ctx: "BizHawkClientContext", location: int, size: int):
         value = await bizhawk.guarded_read(ctx.bizhawk_ctx, [(location, size, self.ram)], guard_list)

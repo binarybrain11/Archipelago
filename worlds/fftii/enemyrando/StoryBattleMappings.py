@@ -52,7 +52,7 @@ MandaliaPlains = BattleMapping(389, 0, [
 #Used sprite sheets: 5
 #===
 Miluda1 = BattleMapping(395, 2, [
-    SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.KNIGHT, UnitGender.FEMALE),
+    SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.KNIGHT, UnitGender.FEMALE, True),
     #SourceUnit(SpriteSet(SpriteSet.ALGUS), Job.SQUIRE_ALGUS, UnitGender.MALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.THIEF, UnitGender.MALE),
     #SourceUnit(SpriteSet(SpriteSet.DELITA_C1), Job.SQUIRE_DELITA, UnitGender.MALE),
@@ -61,7 +61,7 @@ Miluda1 = BattleMapping(395, 2, [
 #Used sprite sheets: 5
 #===
 Miluda2 = BattleMapping(399, 2, [
-    SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.KNIGHT, UnitGender.FEMALE),
+    SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.KNIGHT, UnitGender.FEMALE, True),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.WIZARD, UnitGender.MALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.TIMEMAGE, UnitGender.FEMALE),
     #SourceUnit(SpriteSet(SpriteSet.DELITA_C1), Job.SQUIRE_DELITA, UnitGender.MALE),
@@ -73,14 +73,14 @@ Wiegraf1 = BattleMapping(400, 3, [
     SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.YELLOW_CHOCOBO, UnitGender.MONSTER),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.KNIGHT, UnitGender.FEMALE),
     #SourceUnit(SpriteSet(SpriteSet.DELITA_C1), Job.SQUIRE_DELITA, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.WIEGRAF1), Job.WHITE_KNIGHT_C1, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.WIEGRAF1), Job.WHITE_KNIGHT_C1, UnitGender.MALE, True),
 ])
 #Used sprite sheets: 5
 #===
 FortZeakden = BattleMapping(401, 3, [
     #SourceUnit(SpriteSet(SpriteSet.ZALBAG), Job.ARC_KNIGHT_ZALBAG, UnitGender.MALE),
     #SourceUnit(SpriteSet(SpriteSet.TETA), Job.TETA, UnitGender.FEMALE),
-    SourceUnit(SpriteSet(SpriteSet.ALGUS), Job.KNIGHT, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.ALGUS), Job.KNIGHT, UnitGender.MALE, True),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.WIZARD, UnitGender.FEMALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.KNIGHT, UnitGender.MALE),
     #SourceUnit(SpriteSet(SpriteSet.DELITA_C1), Job.SQUIRE_DELITA, UnitGender.MALE),
@@ -90,7 +90,7 @@ FortZeakden = BattleMapping(401, 3, [
 DDENDversusElidibs = BattleMapping(402, 14, [
     #SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.BYBLOS, UnitGender.MONSTER),
     SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.APANDA, UnitGender.MONSTER),
-    SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.ELIDIBS, UnitGender.MONSTER),
+    SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.ELIDIBS, UnitGender.MONSTER, True),
 ])
 #Used sprite sheets: 3
 #===
@@ -114,7 +114,7 @@ AraguayWoods = BattleMapping(404, 4, [
 #Used sprite sheets: 4
 #===
 ZirekileFalls = BattleMapping(405, 4, [
-    SourceUnit(SpriteSet(SpriteSet.GAFGARION), Job.DARK_KNIGHT_GUEST, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.GAFGARION), Job.DARK_KNIGHT_GUEST, UnitGender.MALE, True),
     #SourceUnit(SpriteSet(SpriteSet.OVELIA), Job.PRINCESS, UnitGender.FEMALE),
     #SourceUnit(SpriteSet(SpriteSet.DELITA_C2), Job.HOLY_KNIGHT_DELITA, UnitGender.MALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.KNIGHT, UnitGender.MALE),
@@ -169,7 +169,7 @@ BariausValley = BattleMapping(413, 6, [
 #Used sprite sheets: 4
 #===
 GolgorandExecutionSite = BattleMapping(414, 7, [
-    SourceUnit(SpriteSet(SpriteSet.GAFGARION_ENEMY), Job.DARK_KNIGHT_ENEMY, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.GAFGARION_ENEMY), Job.DARK_KNIGHT_ENEMY, UnitGender.MALE, True),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.ARCHER, UnitGender.FEMALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.KNIGHT, UnitGender.MALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.TIMEMAGE, UnitGender.FEMALE),
@@ -179,14 +179,14 @@ GolgorandExecutionSite = BattleMapping(414, 7, [
 LionelCastleGate = BattleMapping(415, 7, [
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.KNIGHT, UnitGender.FEMALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.SUMMONER, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.GAFGARION_ENEMY), Job.DARK_KNIGHT_ENEMY, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.GAFGARION_ENEMY), Job.DARK_KNIGHT_ENEMY, UnitGender.MALE, True),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.ARCHER, UnitGender.MALE),
 ])
 #Used sprite sheets: 4
 #===
 InsideofLionelCastle = BattleMapping(416, 7, [
     #SourceUnit(SpriteSet(SpriteSet.DRACLAU), Job.DRACLAU, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.QUEKLAIN), Job.QUEKLAIN, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.QUEKLAIN), Job.QUEKLAIN, UnitGender.MALE, True),
 ])
 #Used sprite sheets: 2
 #===
@@ -209,7 +209,7 @@ Zarghidas = BattleMapping(419, 14, [
 #===
 OutsideLesaliaGateZalmo1 = BattleMapping(420, 8, [
     #SourceUnit(SpriteSet(SpriteSet.ALMA), Job.CLERIC, UnitGender.FEMALE),
-    SourceUnit(SpriteSet(SpriteSet.ZALMO), Job.HOLY_PRIEST, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.ZALMO), Job.HOLY_PRIEST, UnitGender.MALE, True),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.MONK, UnitGender.FEMALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.KNIGHT, UnitGender.MALE),
 ])
@@ -225,7 +225,7 @@ UndergroundBookStorageSecondFloor = BattleMapping(422, 9, [
 #===
 UndergroundBookStorageThirdFloor = BattleMapping(423, 9, [
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.SUMMONER, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.IZLUDE), Job.KNIGHT_BLADE, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.IZLUDE), Job.KNIGHT_BLADE, UnitGender.MALE, True),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.KNIGHT, UnitGender.MALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.ARCHER, UnitGender.MALE),
 ])
@@ -235,7 +235,7 @@ UndergroundBookStorageFirstFloor = BattleMapping(424, 9, [
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.KNIGHT, UnitGender.FEMALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.WIZARD, UnitGender.FEMALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.ARCHER, UnitGender.FEMALE),
-    SourceUnit(SpriteSet(SpriteSet.WIEGRAF2), Job.WHITE_KNIGHT_C3, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.WIEGRAF2), Job.WHITE_KNIGHT_C3, UnitGender.MALE, True),
 ])
 #Used sprite sheets: 4
 #===
@@ -252,7 +252,7 @@ GrogHill = BattleMapping(426, 10, [
 #===
 RescueRafa = BattleMapping(428, 10, [
     #SourceUnit(SpriteSet(SpriteSet.RAFA_GUEST), Job.HEAVEN_KNIGHT_GUEST, UnitGender.FEMALE),
-    SourceUnit(SpriteSet(SpriteSet.MALAK), Job.HELL_KNIGHT, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.MALAK), Job.HELL_KNIGHT, UnitGender.MALE, True),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.SUMMONER, UnitGender.FEMALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.NINJA, UnitGender.MALE),
 ])
@@ -270,28 +270,28 @@ YuguoWoods = BattleMapping(430, 11, [
 #===
 RiovanesCastleEntrance = BattleMapping(431, 11, [
     #SourceUnit(SpriteSet(SpriteSet.RAFA_GUEST), Job.HEAVEN_KNIGHT_GUEST, UnitGender.FEMALE),
-    SourceUnit(SpriteSet(SpriteSet.MALAK), Job.HELL_KNIGHT, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.MALAK), Job.HELL_KNIGHT, UnitGender.MALE, True),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.ARCHER, UnitGender.FEMALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.KNIGHT, UnitGender.MALE),
 ])
 #Used sprite sheets: 4
 #===
 InsideofRiovanesCastle = BattleMapping(432, 11, [
-    SourceUnit(SpriteSet(SpriteSet.WIEGRAF2), Job.WHITE_KNIGHT_C3, UnitGender.NONE),
+    SourceUnit(SpriteSet(SpriteSet.WIEGRAF2), Job.WHITE_KNIGHT_C3, UnitGender.NONE, True),
     SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.ARCHAIC_DEMON, UnitGender.MONSTER),
-    SourceUnit(SpriteSet(SpriteSet.WIEGRAF2), Job.WHITE_KNIGHT_C3, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.WIEGRAF2), Job.WHITE_KNIGHT_C3, UnitGender.MALE, True),
     #SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.KNIGHT, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.VELIUS), Job.VELIUS, UnitGender.MONSTER),
+    SourceUnit(SpriteSet(SpriteSet.VELIUS), Job.VELIUS, UnitGender.MONSTER, True),
     #SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.KNIGHT, UnitGender.FEMALE),
 ])
 #Used sprite sheets: 6
 #===
 RooftopofRiovanesCastle = BattleMapping(433, 11, [
     #SourceUnit(SpriteSet(SpriteSet.RAFA), Job.HEAVEN_KNIGHT, UnitGender.FEMALE),
-    SourceUnit(SpriteSet(SpriteSet.ELMDOR), Job.ARC_KNIGHT_ELMDOR, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.CELIA), Job.ASSASSIN_CELIA, UnitGender.FEMALE),
+    SourceUnit(SpriteSet(SpriteSet.ELMDOR), Job.ARC_KNIGHT_ELMDOR, UnitGender.MALE, True),
+    SourceUnit(SpriteSet(SpriteSet.CELIA), Job.ASSASSIN_CELIA, UnitGender.FEMALE, True),
     #SourceUnit(SpriteSet(SpriteSet.MALAK_DEAD), Job.MALAK_DEAD, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.LEDE), Job.ASSASSIN_LEDE, UnitGender.FEMALE),
+    SourceUnit(SpriteSet(SpriteSet.LEDE), Job.ASSASSIN_LEDE, UnitGender.FEMALE, True),
 ])
 #Used sprite sheets: 5
 #===
@@ -306,14 +306,14 @@ UndergroundBookStorageFourthFloor = BattleMapping(435, 14, [
 UndergroundBookStorageFifthFloor = BattleMapping(436, 14, [
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.SUMMONER, UnitGender.MALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.WIZARD, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.ROFEL), Job.DIVINE_KNIGHT_ROFEL, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.ROFEL), Job.DIVINE_KNIGHT_ROFEL, UnitGender.MALE, True),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.TIMEMAGE, UnitGender.MALE),
 ])
 #Used sprite sheets: 4
 #===
 MurondDeathCity = BattleMapping(438, 14, [
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.SAMURAI, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.KLETIAN), Job.SORCERER, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.KLETIAN), Job.SORCERER, UnitGender.MALE, True),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.NINJA, UnitGender.MALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.TIMEMAGE, UnitGender.MALE),
 ])
@@ -325,15 +325,15 @@ LostSacredPrecincts = BattleMapping(439, 14, [
     SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.HYDRA, UnitGender.MONSTER),
     SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.DARK_BEHEMOTH, UnitGender.MONSTER),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.CHEMIST, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.BALK), Job.ENGINEER_BALK, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.BALK), Job.ENGINEER_BALK, UnitGender.MALE, True),
 ])
 #Used sprite sheets: 4
 #===
 GraveyardofAirships1 = BattleMapping(440, 14, [
     #SourceUnit(SpriteSet(SpriteSet.ALMA_DEAD), Job.ALMA_DEAD, UnitGender.FEMALE),
     #SourceUnit(SpriteSet(SpriteSet.VORMAV), Job.DIVINE_KNIGHT_VORMAV, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.HASHMALUM), Job.HASHMALUM, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.AJORA), Job.ALMA_DEAD, UnitGender.FEMALE),
+    SourceUnit(SpriteSet(SpriteSet.HASHMALUM), Job.HASHMALUM, UnitGender.MALE, True),
+    SourceUnit(SpriteSet(SpriteSet.AJORA), Job.ALMA_DEAD, UnitGender.FEMALE, True),
 ])
 #Used sprite sheets: 4
 #===
@@ -357,7 +357,7 @@ DoguolaPass = BattleMapping(442, 12, [
 BerveniaFreeCity = BattleMapping(443, 12, [
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.SUMMONER, UnitGender.FEMALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.ARCHER, UnitGender.FEMALE),
-    SourceUnit(SpriteSet(SpriteSet.MELIADOUL_ENEMY), Job.DIVINE_KNIGHT_MELIADOUL_ENEMY, UnitGender.FEMALE),
+    SourceUnit(SpriteSet(SpriteSet.MELIADOUL_ENEMY), Job.DIVINE_KNIGHT_MELIADOUL_ENEMY, UnitGender.FEMALE, True),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.NINJA, UnitGender.FEMALE),
 ])
 #Used sprite sheets: 4
@@ -372,7 +372,7 @@ FinathRiver = BattleMapping(444, 12, [
 #===
 ZalmoII = BattleMapping(445, 12, [
     #SourceUnit(SpriteSet(SpriteSet.DELITA_C2), Job.HOLY_KNIGHT_DELITA, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.ZALMO), Job.HOLY_PRIEST, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.ZALMO), Job.HOLY_PRIEST, UnitGender.MALE, True),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.KNIGHT, UnitGender.MALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.ORACLE, UnitGender.MALE),
 ])
@@ -380,7 +380,7 @@ ZalmoII = BattleMapping(445, 12, [
 #===
 BalkI = BattleMapping(447, 12, [
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.WIZARD, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.BALK), Job.ENGINEER_BALK, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.BALK), Job.ENGINEER_BALK, UnitGender.MALE, True),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.KNIGHT, UnitGender.MALE),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.ARCHER, UnitGender.MALE),
 ])
@@ -425,17 +425,17 @@ PoeskasLake = BattleMapping(453, 13, [
 #Used sprite sheets: 4
 #===
 OutsideofLimberryCastle = BattleMapping(454, 13, [
-    SourceUnit(SpriteSet(SpriteSet.CELIA), Job.ASSASSIN_CELIA, UnitGender.FEMALE),
+    SourceUnit(SpriteSet(SpriteSet.CELIA), Job.ASSASSIN_CELIA, UnitGender.FEMALE, True),
     SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.APANDA, UnitGender.MONSTER),
-    SourceUnit(SpriteSet(SpriteSet.LEDE), Job.ASSASSIN_LEDE, UnitGender.FEMALE),
+    SourceUnit(SpriteSet(SpriteSet.LEDE), Job.ASSASSIN_LEDE, UnitGender.FEMALE, True),
 ])
 #Used sprite sheets: 3
 #===
 ElmdorII = BattleMapping(456, 13, [
-    SourceUnit(SpriteSet(SpriteSet.CELIA), Job.ASSASSIN_CELIA, UnitGender.FEMALE),
+    SourceUnit(SpriteSet(SpriteSet.CELIA), Job.ASSASSIN_CELIA, UnitGender.FEMALE, True),
     SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.ULTIMA_DEMON, UnitGender.MONSTER),
-    SourceUnit(SpriteSet(SpriteSet.LEDE), Job.ASSASSIN_LEDE, UnitGender.FEMALE),
-    SourceUnit(SpriteSet(SpriteSet.ELMDOR), Job.ARC_KNIGHT_ELMDOR, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.LEDE), Job.ASSASSIN_LEDE, UnitGender.FEMALE, True),
+    SourceUnit(SpriteSet(SpriteSet.ELMDOR), Job.ARC_KNIGHT_ELMDOR, UnitGender.MALE, True),
 ])
 #Used sprite sheets: 4
 #===
@@ -446,15 +446,15 @@ Zalera = BattleMapping(457, 13, [
     SourceUnit(SpriteSet(SpriteSet.UNDEAD_KNIGHT), Job.KNIGHT_UNDEAD, UnitGender.MONSTER),
     SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.SKELETON, UnitGender.MONSTER),
     #SourceUnit(SpriteSet(SpriteSet.MELIADOUL), Job.DIVINE_KNIGHT_MELIADOUL, UnitGender.FEMALE),
-    SourceUnit(SpriteSet(SpriteSet.ZALERA), Job.ZALERA, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.ZALERA), Job.ZALERA, UnitGender.MALE, True),
 ])
 #Used sprite sheets: 5
 #===
 Adramelk = BattleMapping(459, 14, [
     #SourceUnit(SpriteSet(SpriteSet.ZALBAG), Job.ARC_KNIGHT_ZALBAG, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.DYCEDARG), Job.LUNE_KNIGHT, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.DYCEDARG), Job.LUNE_KNIGHT, UnitGender.MALE, True),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_MALE), Job.KNIGHT, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.ADRAMELK), Job.ADRAMELK, UnitGender.MONSTER),
+    SourceUnit(SpriteSet(SpriteSet.ADRAMELK), Job.ADRAMELK, UnitGender.MONSTER, True),
 ])
 #Used sprite sheets: 4
 #===
@@ -467,14 +467,14 @@ StMurondTemple = BattleMapping(460, 14, [
 #Used sprite sheets: 4
 #===
 HallofStMurondTemple = BattleMapping(461, 14, [
-    SourceUnit(SpriteSet(SpriteSet.ROFEL), Job.DIVINE_KNIGHT_ROFEL, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.KLETIAN), Job.SORCERER, UnitGender.MALE),
-    SourceUnit(SpriteSet(SpriteSet.VORMAV), Job.DIVINE_KNIGHT_VORMAV, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.ROFEL), Job.DIVINE_KNIGHT_ROFEL, UnitGender.MALE, True),
+    SourceUnit(SpriteSet(SpriteSet.KLETIAN), Job.SORCERER, UnitGender.MALE, True),
+    SourceUnit(SpriteSet(SpriteSet.VORMAV), Job.DIVINE_KNIGHT_VORMAV, UnitGender.MALE, True),
 ])
 #Used sprite sheets: 3
 #===
 ChapelofStMurondTemple = BattleMapping(462, 14, [
-    SourceUnit(SpriteSet(SpriteSet.ZALBAG_ZOMBIE), Job.ARC_KNIGHT_ZOMBIE, UnitGender.MALE),
+    SourceUnit(SpriteSet(SpriteSet.ZALBAG_ZOMBIE), Job.ARC_KNIGHT_ZOMBIE, UnitGender.MALE, True),
     #SourceUnit(SpriteSet(SpriteSet.VORMAV), Job.DIVINE_KNIGHT_VORMAV, UnitGender.MALE),
     SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.ARCHAIC_DEMON, UnitGender.MONSTER),
     SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.ULTIMA_DEMON, UnitGender.MONSTER),
@@ -514,10 +514,10 @@ UndergroundPassageinGoland = BattleMapping(466, 8, [
 #Used sprite sheets: 5
 #===
 NelveskaTemple = BattleMapping(468, 12, [
-    SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.GOBLIN, UnitGender.MONSTER),
+    SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.GOBLIN, UnitGender.MONSTER, True),
     SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.HYUDRA, UnitGender.MONSTER),
     SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.COCATORIS, UnitGender.MONSTER),
-    SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.STEEL_GIANT, UnitGender.MONSTER),
+    SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.STEEL_GIANT, UnitGender.MONSTER, True),
 ])
 #Used sprite sheets: 4
 

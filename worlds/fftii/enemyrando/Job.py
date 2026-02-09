@@ -1,5 +1,7 @@
 from enum import Enum, IntEnum, unique
 
+from worlds.fftii.data.logic.Monsters import MonsterNames
+
 
 class Job(IntEnum):
     RAMZA_SQUIRE_CHAPTER_1 = 0x01
@@ -261,12 +263,10 @@ special_character_jobs = {
     0x34: "Holy Knight (Agrias, Guest)",
     0x3D: "Knight (Undead)",
     0x3F: "Archer (Undead)",
-    0x41: "Altima 1",
     0x42: "Wizard (Undead)",
     0x44: "Time Mage (Undead)",
     0x46: "Oracle (Undead)",
     0x47: "Summoner (Undead)",
-    0x49: "Altima 2"
 }
 
 generic_jobs = {
@@ -359,7 +359,14 @@ lucavi_jobs = {
     0x40: "Regulator (Hashmalum)",
     0x43: "Impure King (Queklain)",
     0x45: "Ghost of Fury (Adramelk)",
-    0x97: "Serpentarius (Elidibs)"
+    0x97: "Serpentarius (Elidibs)",
+    0x41: "Altima 1",
+    0x49: "Altima 2"
+}
+
+altima_jobs = {
+    0x41: "Altima 1",
+    0x49: "Altima 2"
 }
 
 all_jobs = {
@@ -367,7 +374,8 @@ all_jobs = {
     **generic_jobs,
     **generic_monster_jobs,
     **special_monster_jobs,
-    **lucavi_jobs
+    **lucavi_jobs,
+    **altima_jobs
 }
 
 @unique
@@ -392,3 +400,54 @@ class UnlockedJob(Enum):
     BARD = 0x11
     DANCER = 0x12
     MIME = 0x13
+
+monster_job_name_lookup = {
+    Job.YELLOW_CHOCOBO: MonsterNames.YELLOW_CHOCOBO,
+    Job.BLACK_CHOCOBO: MonsterNames.BLACK_CHOCOBO,
+    Job.RED_CHOCOBO: MonsterNames.RED_CHOCOBO,
+    Job.GOBLIN: MonsterNames.GOBLIN,
+    Job.BLACK_GOBLIN: MonsterNames.BLACK_GOBLIN,
+    Job.GOBBLEDEGUCK: MonsterNames.GOBBLEDEGUCK,
+    Job.BOMB: MonsterNames.BOMB,
+    Job.GRENADE: MonsterNames.GRENADE,
+    Job.EXPLOSIVE: MonsterNames.EXPLOSIVE,
+    Job.RED_PANTHER: MonsterNames.RED_PANTHER,
+    Job.CUAR: MonsterNames.CUAR,
+    Job.VAMPIRE: MonsterNames.VAMPIRE,
+    Job.PISCO_DEMON: MonsterNames.PISCO_DEMON,
+    Job.SQUIDLARKIN: MonsterNames.SQUIDLARKIN,
+    Job.MINDFLARE: MonsterNames.MINDFLARE,
+    Job.SKELETON: MonsterNames.SKELETON,
+    Job.BONE_SNATCH: MonsterNames.BONE_SNATCH,
+    Job.LIVING_BONE: MonsterNames.LIVING_BONE,
+    Job.GHOUL: MonsterNames.GHOUL,
+    Job.GUST: MonsterNames.GUST,
+    Job.REVNANT: MonsterNames.REVNANT,
+    Job.FLOTIBALL: MonsterNames.FLOATIBALL,
+    Job.AHRIMAN: MonsterNames.AHRIMAN,
+    Job.PLAGUE: MonsterNames.PLAGUE,
+    Job.JURAVIS: MonsterNames.JURAVIS,
+    Job.STEEL_HAWK: MonsterNames.STEEL_HAWK,
+    Job.COCATORIS: MonsterNames.COCATORIS,
+    Job.URIBO: MonsterNames.URIBO,
+    Job.PORKY: MonsterNames.PORKY,
+    Job.WILDBOW: MonsterNames.WILDBOW,
+    Job.WOODMAN: MonsterNames.WOODMAN,
+    Job.TRENT: MonsterNames.TRENT,
+    Job.TAIJU: MonsterNames.TAIJU,
+    Job.BULL_DEMON: MonsterNames.BULL_DEMON,
+    Job.MINITAURUS: MonsterNames.MINITAURUS,
+    Job.SACRED: MonsterNames.SACRED,
+    Job.MORBOL: MonsterNames.MORBOL,
+    Job.OCHU: MonsterNames.OCHU,
+    Job.GREAT_MORBOL: MonsterNames.GREAT_MORBOL,
+    Job.BEHEMOTH: MonsterNames.BEHEMOTH,
+    Job.KING_BEHEMOTH: MonsterNames.KING_BEHEMOTH,
+    Job.DARK_BEHEMOTH: MonsterNames.DARK_BEHEMOTH,
+    Job.DRAGON: MonsterNames.DRAGON,
+    Job.BLUE_DRAGON: MonsterNames.BLUE_DRAGON,
+    Job.RED_DRAGON: MonsterNames.RED_DRAGON,
+    Job.HYUDRA: MonsterNames.HYUDRA,
+    Job.HYDRA: MonsterNames.HYDRA,
+    Job.TIAMAT: MonsterNames.TIAMAT,
+}

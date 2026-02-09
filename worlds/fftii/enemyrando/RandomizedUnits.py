@@ -1331,7 +1331,7 @@ class FemaleNinja(RandomizedUnit):
     unlocked_job_level = 6
     difficulty = 4
 
-class FemaleNinjaAdvanced1(MaleNinja):
+class FemaleNinjaAdvanced1(FemaleNinja):
     unlocked_job_level = 8
     difficulty = 6
 
@@ -1340,7 +1340,7 @@ class FemaleNinjaAdvanced2(FemaleNinja):
     unlocked_job_level = 4
     difficulty = 6
 
-class FemaleNinjaExpert(MaleNinja):
+class FemaleNinjaExpert(FemaleNinja):
     unlocked_job = UnlockedJob.MIME
     difficulty = 8
 

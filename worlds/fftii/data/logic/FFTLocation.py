@@ -133,7 +133,7 @@ class LocationNames(Enum):
     ARAGUAY_RARE = "Araguay Woods Rare Battle"
     ZIREKILE_RARE = "Zirekile Falls Rare Battle"
     ZEKLAUS_RARE = "Zeklaus Desert Rare Battle"
-    BERVENIA_VOLCANO_RARE = "Bervenia Volvano Rare Battle"
+    BERVENIA_VOLCANO_RARE = "Bervenia Volcano Rare Battle"
     DOGUOLA_RARE = "Doguola Pass Rare Battle"
     BARIAUS_HILL_RARE = "Bariaus Hill Rare Battle"
     ZIGOLIS_RARE = "Zigolis Swamp Rare Battle"

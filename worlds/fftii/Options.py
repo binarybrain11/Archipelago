@@ -188,7 +188,7 @@ class EnemyRandomizerLocality(Choice):
     """Controls the scope of enemy randomization.
     Battle randomizes enemy units of the same job differently per battle.
     Region randomizes enemy units of the same job differently per region.
-    Global randomizes all enemy units in the game of the same job to the same randpmized job."""
+    Global randomizes all enemy units in the game of the same job to the same randomized job."""
     display_name = "Enemy Randomizer Locality"
     option_battle = 0
     option_region = 1
@@ -208,13 +208,13 @@ class LucaviRandomizer(Choice):
 
 class EnemyRandomizerMethod(Choice):
     """Controls the randomization method for determining randomized units.
-    Shuffle disallows duplicate randomized units in the chosen locality.
-    Chaos allows duplicate randomized units in the chosen locality."""
+    Shuffle will attempt to map vanilla units to new unique jobs,
+    such that only Squires will become Chemists, for example.
+    Chaos allows duplicates, such that multiple jobs could become Chemists, for example."""
     display_name = "Enemy Randomizer Method"
     option_shuffle = 0
     option_chaos = 1
     default = 0
-    visibility = Visibility.none
 
 # Unused options
 class StartingRegion(Choice):

@@ -1,3 +1,5 @@
+import logging
+
 from docutils.io import InputError
 
 from BaseClasses import ItemClassification
@@ -187,9 +189,10 @@ def split_text_into_lines(location_text: str) -> tuple[list[str], list[list[int]
             data_key = location_text[start:end + 1]
             index = end + 1
         else:
-            print(character)
-            print(index)
-            raise InputError("We shouldn't be processing this.")
+            logging.error(f"{character} at {index} of string {location_text} was processed when it shouldn't have "
+                          f"been.")
+            raise InputError(f"{character} at {index} of string {location_text} was processed when it shouldn't have "
+                             f"been. Please submit log and YAML to author for investigation.")
         if data_key not in text_data_lookup.keys():
             data_key = "?"
         data = text_data_lookup[data_key]
@@ -228,8 +231,12 @@ def split_text_into_lines(location_text: str) -> tuple[list[str], list[list[int]
                         sub_data_key = current_line[sub_start:sub_end + 1]
                         sub_index = sub_end + 1
                     else:
-                        print(location_text, character, index)
-                        raise InputError("We shouldn't be processing this.")
+                        logging.error(
+                            f"{character} at {index} of string {location_text} was processed when it shouldn't have "
+                            f"been.")
+                        raise InputError(
+                            f"{character} at {index} of string {location_text} was processed when it shouldn't have "
+                            f"been. Please submit log and YAML to author for investigation.")
                     if sub_data_key not in text_data_lookup.keys():
                         sub_data_key = "?"
                     sub_data = text_data_lookup[sub_data_key]

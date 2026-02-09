@@ -171,8 +171,6 @@ class PoachLogicObject:
     def poach_logic_rule(self, state: CollectionState) -> bool:
         expression = None
         for requirement in self.requirements:
-            if requirement.sidequest and not self.options.sidequest_battles:
-                continue
             region_list = requirement.access_regions
             battle_level = requirement.battle_level
             region_expression = None
@@ -181,8 +179,10 @@ class PoachLogicObject:
                     region_expression = state.can_reach_region(region.name, self.player)
                 else:
                     region_expression = region_expression and state.can_reach_region(region.name, self.player)
-            poach_shop_level = poach_battle_levels[self.options.logical_difficulty.value][battle_level]
-            poach_job_count = poach_job_battle_levels[self.options.logical_difficulty.value][battle_level]
+            battle_level_list = battle_levels if requirement.story else poach_battle_levels
+            job_level_list = job_battle_levels if requirement.story else poach_job_battle_levels
+            poach_shop_level = battle_level_list[self.options.logical_difficulty.value][battle_level]
+            poach_job_count = job_level_list[self.options.logical_difficulty.value][battle_level]
             assert poach_shop_level is not None, requirement.access_regions
             assert poach_job_count is not None, requirement.access_regions
             battle_level_expression = (state.has("Progressive Shop Level", self.player, poach_shop_level)

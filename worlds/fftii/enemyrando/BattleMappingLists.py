@@ -131,6 +131,7 @@ lesalia_only_randoms: list[BattleMapping] = [
     ZeklausDesertEast2,
     ZeklausDesertEast3,
     ZeklausDesertEast4,
+    ZeklausDesertSouth5,
     AraguayWoodsEast1,
     AraguayWoodsEast2,
     AraguayWoodsEast3,
@@ -185,7 +186,8 @@ lesalia_story_fights: list[BattleMapping] = [
     OutsideLesaliaGateZalmo1,
     CollieryUndergroundThirdFloor,
     CollieryUndergroundSecondFloor,
-    CollieryUndergroundFirstFloor
+    CollieryUndergroundFirstFloor,
+    UndergroundPassageinGoland
 ]
 
 lesalia_fights: list[BattleMapping] = [*lesalia_randoms, *lesalia_story_fights]

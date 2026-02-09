@@ -122,8 +122,6 @@ class FinalFantasyTacticsIIPatchExtension(APPatchExtension):
                     else:
                         new_unit = Unit(unit)
                     new_entd_entry.unit_datas.append(new_unit)
-                used_sprite_sheets = set()
-                used_source_units = set()
                 for unit in new_entd_entry.unit_datas:
                     if unit.sprite_set > 0:
                         source_unit = SourceUnit(SpriteSet(unit.sprite_set), Job(unit.job), unit.gender)
@@ -134,15 +132,16 @@ class FinalFantasyTacticsIIPatchExtension(APPatchExtension):
                                         mapping_entry.battle_level)
                                     if destination_unit is None:
                                         raise ValueError
+                                    if i == 0x193: # Dorter 2 exclude Gafgarion.
+                                        if unit.job == Job.DARK_KNIGHT_GUEST:
+                                            continue
+                                    if i == 0x194: # Araguay Woods exclude Gafgarion and Boco.
+                                        if unit.job == Job.DARK_KNIGHT_GUEST:
+                                            continue
+                                        if unit.job == Job.YELLOW_CHOCOBO:
+                                            continue
                                     unit.set_new_data(destination_unit)
                                     unit.apply_unit_data()
-                        if source_unit in valid_shuffle_source_units:
-                            used_source_units.add(source_unit)
-                        if source_unit not in used_sprite_sheets:
-                            used_sprite_sheets.add(source_unit)
-                for source in used_source_units:
-                    pass
-                    #print(source)
                 new_entd_entry.apply_data()
                 entd_entries.append(new_entd_entry)
         new_full_entd: bytearray = full_entd.copy()

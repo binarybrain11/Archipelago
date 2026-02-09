@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, StrEnum
 
 from .FFTRegion import FFTRegion
 from .regions import Mandalia, Grog, Zirekile, BariausHill, Finath, Dolbodar, Fovoham, Bethla, \
@@ -6,7 +6,7 @@ from .regions import Mandalia, Grog, Zirekile, BariausHill, Finath, Dolbodar, Fo
     Germinas, Zeklaus, Doguola, Poeskas, Zigolis, Dorter, Goug, Zeakden, Nelveska, DeepDungeon, Goland, Zeltennia
 
 
-class MonsterNames(Enum):
+class MonsterNames(StrEnum):
     YELLOW_CHOCOBO = "Yellow Chocobo"
     BLACK_CHOCOBO = "Black Chocobo"
     RED_CHOCOBO = "Red Chocobo"
@@ -119,11 +119,30 @@ class RegionAccessRequirement:
     access_regions: list[type[FFTRegion]]
     battle_level: int
     sidequest: bool
+    story: bool
+    battle_id: int = 0
 
-    def __init__(self, access_regions: list[type[FFTRegion]], battle_level: int, sidequest: bool = False):
+    def __init__(
+            self,
+            access_regions: list[type[FFTRegion]],
+            battle_level: int,
+            sidequest: bool = False,
+            story: bool = False):
         self.access_regions = access_regions
         self.battle_level = battle_level
         self.sidequest = sidequest
+        self.story = story
+
+    def __repr__(self):
+        return f"{[region.name for region in self.access_regions]}"
+
+    def to_json(self):
+        return {
+            "Regions": [region.name for region in self.access_regions],
+            "BattleLevel": self.battle_level,
+            "Story": self.story,
+            "BattleID": self.battle_id
+        }
 
 class MonsterRegion:
     monster_name: MonsterNames

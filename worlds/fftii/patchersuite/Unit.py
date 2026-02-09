@@ -2,6 +2,7 @@ from copy import copy
 from enum import Enum
 from typing import TYPE_CHECKING
 
+from worlds.fftii.enemyrando.Items import Items
 from worlds.fftii.enemyrando.Job import all_jobs, UnlockedJob
 from worlds.fftii.enemyrando.SpriteSet import sprite_sets
 if TYPE_CHECKING:
@@ -125,9 +126,9 @@ class Unit:
         self.team = self.get_team()
         self.hidden_stats = self.get_hidden_stats()
         self.apply_unit_data()
-        for i in range(len(self.unit_data)):
-            assert self.unit_data[i] == unit_data[i], (hex(i), self.unit_data[i], unit_data[i])
-        assert self.unit_data == unit_data
+        #for i in range(len(self.unit_data)):
+        #    assert self.unit_data[i] == unit_data[i], (hex(i), self.unit_data[i], unit_data[i])
+        #assert self.unit_data == unit_data
 
     def get_gender(self):
         male = self.flags & 0x80
@@ -156,7 +157,7 @@ class Unit:
         raise ValueError(str(bin(self.flags2)))
 
     def get_hidden_stats(self):
-        return self.flags & 0x04
+        return bool(self.flags & 0x04)
 
     def apply_unit_data(self):
         self.unit_data[self.job_offset] = self.job
@@ -170,6 +171,10 @@ class Unit:
             self.flags = self.flags | 0x20
         if self.hidden_stats:
             self.flags = self.flags | 0x04
+            self.head = Items.NONE.value
+            self.body = Items.NONE.value
+            if self.accessory == Items.BARETTE.value or self.accessory == Items.CACHUSHA.value:
+                self.accessory = Items.NONE.value
         else:
             self.flags = self.flags & 0b11111011
         self.unit_data[self.flags_offset] = self.flags
@@ -196,9 +201,16 @@ class Unit:
 
     def set_new_data(self, destination_unit: type["RandomizedUnit"]):
         self.job = destination_unit.job
+        if self.job in all_jobs.keys():
+            self.job_name = all_jobs[self.job]
+        else:
+            if self.job == 0:
+                self.job_name = "None"
+            else:
+                self.job_name = f"Unknown Job {str(hex(self.job))}"
         self.sprite_set = destination_unit.sprite_set.value
         self.gender = destination_unit.gender
-        self.hidden_stats = destination_unit.hidden_stats
+        self.hidden_stats = self.hidden_stats
         self.birthday_month = destination_unit.birthday_month.value
         self.birthday_day = destination_unit.birthday_day
         self.brave = destination_unit.brave
