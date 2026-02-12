@@ -141,52 +141,52 @@ def check_if_source_unit_randomized(source_unit: SourceUnit, options: "FinalFant
             return False
     return True
 
+region_lists = [
+    [*BattleMappingLists.gallione_story_fights, *BattleMappingLists.gallione_only_randoms],
+    BattleMappingLists.gallione_randoms_from_fovoham,
+    [*BattleMappingLists.fovoham_story_fights, *BattleMappingLists.fovoham_only_randoms],
+    BattleMappingLists.fovoham_randoms_from_gallione,
+    BattleMappingLists.fovoham_randoms_from_lesalia,
+    BattleMappingLists.fovoham_randoms_from_zeltennia,
+    [*BattleMappingLists.lesalia_only_randoms, *BattleMappingLists.lesalia_story_fights],
+    BattleMappingLists.lesalia_randoms_from_gallione,
+    BattleMappingLists.lesalia_randoms_from_fovoham,
+    BattleMappingLists.lesalia_randoms_from_lionel,
+    BattleMappingLists.lesalia_randoms_from_limberry,
+    [*BattleMappingLists.lionel_only_randoms, *BattleMappingLists.lionel_story_fights],
+    BattleMappingLists.lionel_randoms_from_murond,
+    [*BattleMappingLists.zeltennia_only_randoms, *BattleMappingLists.zeltennia_story_fights],
+    BattleMappingLists.zeltennia_randoms_from_fovoham,
+    BattleMappingLists.zeltennia_randoms_from_limberry,
+    [*BattleMappingLists.limberry_only_randoms, *BattleMappingLists.limberry_story_fights],
+    BattleMappingLists.limberry_randoms_from_zeltennia,
+    BattleMappingLists.murond_story_fights,
+]
+region_keys = [
+    "GallioneOnly",
+    "GallioneFromFovoham",
+    "FovohamOnly",
+    "FovohamFromGallione",
+    "FovohamFromLesalia",
+    "FovohamFromZeltennia",
+    "LesaliaOnly",
+    "LesaliaFromGallione",
+    "LesaliaFromFovoham",
+    "LesaliaFromLionel",
+    "LesaliaFromLimberry",
+    "LionelOnly",
+    "LionelFromMurond",
+    "ZeltenniaOnly",
+    "ZeltenniaFromFovoham",
+    "ZeltenniaFromLimberry",
+    "LimberryOnly",
+    "LimberryFromZeltennia",
+    "MurondOnly"
+]
+assert len(region_lists) == len(region_keys), (len(region_lists), len(region_keys))
 
 def create_poach_mappings(enemy_rando_mapping):
     new_poach_locations: dict[str, set[RandomizedPoachBattleSource]] = {}
-    region_lists = [
-        [*BattleMappingLists.gallione_story_fights, *BattleMappingLists.gallione_only_randoms],
-        BattleMappingLists.gallione_randoms_from_fovoham,
-        [*BattleMappingLists.fovoham_story_fights, *BattleMappingLists.fovoham_only_randoms],
-        BattleMappingLists.fovoham_randoms_from_gallione,
-        BattleMappingLists.fovoham_randoms_from_lesalia,
-        BattleMappingLists.fovoham_randoms_from_zeltennia,
-        [*BattleMappingLists.lesalia_only_randoms, *BattleMappingLists.lesalia_story_fights],
-        BattleMappingLists.lesalia_randoms_from_gallione,
-        BattleMappingLists.lesalia_randoms_from_fovoham,
-        BattleMappingLists.lesalia_randoms_from_lionel,
-        BattleMappingLists.lesalia_randoms_from_limberry,
-        [*BattleMappingLists.lionel_only_randoms, *BattleMappingLists.lionel_story_fights],
-        BattleMappingLists.lionel_randoms_from_murond,
-        [*BattleMappingLists.zeltennia_only_randoms, *BattleMappingLists.zeltennia_story_fights],
-        BattleMappingLists.zeltennia_randoms_from_fovoham,
-        BattleMappingLists.zeltennia_randoms_from_limberry,
-        [*BattleMappingLists.limberry_only_randoms, *BattleMappingLists.limberry_story_fights],
-        BattleMappingLists.limberry_randoms_from_zeltennia,
-        BattleMappingLists.murond_story_fights,
-    ]
-    region_keys = [
-        "GallioneOnly",
-        "GallioneFromFovoham",
-        "FovohamOnly",
-        "FovohamFromGallione",
-        "FovohamFromLesalia",
-        "FovohamFromZeltennia",
-        "LesaliaOnly",
-        "LesaliaFromGallione",
-        "LesaliaFromFovoham",
-        "LesaliaFromLionel",
-        "LesaliaFromLimberry",
-        "LionelOnly",
-        "LionelFromMurond",
-        "ZeltenniaOnly",
-        "ZeltenniaFromFovoham",
-        "ZeltenniaFromLimberry",
-        "LimberryOnly",
-        "LimberryFromZeltennia",
-        "MurondOnly"
-    ]
-    assert len(region_lists) == len(region_keys), (len(region_lists), len(region_keys))
     for fight_list, region_key in zip(region_lists, region_keys):
         new_poach_locations[region_key] = set()
         for fight in fight_list:
@@ -209,4 +209,23 @@ def create_poach_mappings(enemy_rando_mapping):
                             destination_job,
                             destination_job_name)
                         new_poach_locations[region_key].add(new_source)
+    return new_poach_locations
+
+def create_default_poach_mappings():
+    new_poach_locations: dict[str, set[RandomizedPoachBattleSource]] = {}
+    for fight_list, region_key in zip(region_lists, region_keys):
+        new_poach_locations[region_key] = set()
+        for fight in fight_list:
+            for source_unit in fight.source_units:
+                if source_unit.immortal:
+                    continue
+                destination_job: Job = source_unit.job
+                if destination_job in monster_job_name_lookup.keys():
+                    destination_job_name = monster_job_name_lookup[destination_job]
+                    new_source = RandomizedPoachBattleSource(
+                        fight.battle_level,
+                        fight.battle_id.value,
+                        destination_job,
+                        destination_job_name)
+                    new_poach_locations[region_key].add(new_source)
     return new_poach_locations

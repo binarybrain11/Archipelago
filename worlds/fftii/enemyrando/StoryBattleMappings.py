@@ -70,7 +70,7 @@ Miluda2 = BattleMapping(399, 2, [
 #===
 Wiegraf1 = BattleMapping(400, 3, [
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.MONK, UnitGender.FEMALE),
-    SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.YELLOW_CHOCOBO, UnitGender.MONSTER),
+    SourceUnit(SpriteSet(SpriteSet.MONSTER), Job.YELLOW_CHOCOBO, UnitGender.MONSTER, True),
     SourceUnit(SpriteSet(SpriteSet.GENERIC_FEMALE), Job.KNIGHT, UnitGender.FEMALE),
     #SourceUnit(SpriteSet(SpriteSet.DELITA_C1), Job.SQUIRE_DELITA, UnitGender.MALE),
     SourceUnit(SpriteSet(SpriteSet.WIEGRAF1), Job.WHITE_KNIGHT_C1, UnitGender.MALE, True),

@@ -46,7 +46,7 @@ from .enemyrando.BattleMappings import valid_shuffle_source_units, zodiac_shuffl
 from .enemyrando.BattleRegionMapping import all_battle_region_mappings, PoachHintLocation
 from .enemyrando.EventCodes import EventCode
 from .enemyrando.GenerationFunctions import get_eligible_destination_jobs, get_logic_adjusted_fight_level, \
-    get_randomized_mapping, check_if_source_unit_randomized, create_poach_mappings
+    get_randomized_mapping, check_if_source_unit_randomized, create_poach_mappings, create_default_poach_mappings
 from .enemyrando.Job import Job, generic_jobs, generic_monster_jobs, special_character_jobs, special_monster_jobs, \
     lucavi_jobs, monster_job_name_lookup
 from .enemyrando.RandomizedMapping import RandomizedMapping
@@ -345,8 +345,35 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
                                     battle_source.fight_id)
                                 self.poach_hints[monster_name].append(poach_hint)
                                 self.poach_database[monster_name].append(requirement)
-                                pass
                 self.poach_locations = poach_locations
+        elif self.options.poach_locations:
+            poach_mappings = create_default_poach_mappings()
+            poach_locations: dict[MonsterNames, list[RegionAccessRequirement]] = dict()
+            for monster_name in monster_family_lookup.keys():
+                self.poach_hints[monster_name] = list()
+                self.poach_database[monster_name] = list()
+                poach_locations[monster_name] = []
+                for region, battle_sources in poach_mappings.items():
+                    for battle_source in battle_sources:
+                        if monster_name == battle_source.monster_name:
+                            battle_region_mapping = [
+                                mapping for mapping in all_battle_region_mappings
+                                if battle_source.fight_id in mapping.battle_ids
+                            ].pop()
+                            story_battle = battle_source.fight_id > 0x100
+                            requirement = RegionAccessRequirement(
+                                battle_region_mapping.regions,
+                                battle_source.battle_level,
+                                story=story_battle
+                            )
+                            requirement.battle_id = battle_source.fight_id
+                            poach_locations[monster_name].append(requirement)
+                            poach_hint = PoachHintLocation(
+                                battle_region_mapping.name,
+                                battle_source.battle_level,
+                                battle_source.fight_id)
+                            self.poach_hints[monster_name].append(poach_hint)
+                            self.poach_database[monster_name].append(requirement)
 
         # Story battles are always in
         included_locations: list[LocationNames] = []
