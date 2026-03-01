@@ -17,6 +17,7 @@ header_length = 0x10
 player_name_location = 0x20
 player_name_length = 0x40
 major_offsets_location = 0x60
+deathlink_options = 0x80
 bit_positions = [0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80]
 candle_shop = bit_positions[4]
 arrow_shop = bit_positions[3]
@@ -225,6 +226,7 @@ class TLOZPatchExtension(APPatchExtension):
         player_name = bytearray(placements["meta"]["player_name"], 'utf8')[:player_name_length]
         player_name.extend([0] * (player_name_length - len(player_name)))
         rom_data[player_name_location + header_length:player_name_location + header_length + player_name_length] = player_name
+        rom_data[deathlink_options + header_length] = 1
 
         # Write each location's new data in
         for location, item in placements.items():

@@ -20,6 +20,7 @@ WRAM_NAMES = {
     "NesHawk": "Battery RAM",
     "SubNESHawk": "Battery RAM",
     "QuickNes": "WRAM",
+    "quickerNES": "WRAM",
 }
 
 class TLOZClient(BizHawkClient):
@@ -54,6 +55,10 @@ class TLOZClient(BizHawkClient):
 
         self.sram_name = WRAM_NAMES[nes_core]
 
+        deathlink = (await bizhawk.read(ctx.bizhawk_ctx, [(Rom.deathlink_options, 1, self.rom)]))[0][0]
+        if deathlink:
+            await ctx.update_death_link(deathlink & 0b1)
+
         return True
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
@@ -81,7 +86,7 @@ class TLOZClient(BizHawkClient):
                 self.take_any_item_ids["Middle"] = TLoZWorld.location_name_to_id["Take Any Item Middle"]
                 self.take_any_item_ids["Right"] = TLoZWorld.location_name_to_id["Take Any Item Right"]
             self.guard_list = [*self.base_guard_list]
-            await self.check_victory(ctx)
+            await self.check_game_mode(ctx)
             await self.location_check(ctx)
             await self.received_items_check(ctx)
             await self.resolve_shop_items(ctx)
@@ -92,7 +97,7 @@ class TLOZClient(BizHawkClient):
             # The connector didn't respond. Exit handler and return to main loop to reconnect
             pass
 
-    async def check_victory(self, ctx: "BizHawkClientContext"):
+    async def check_game_mode(self, ctx: "BizHawkClientContext"):
         game_mode = await self.read_ram_value(ctx, Rom.game_mode)
         if game_mode == 19 and ctx.finished_game == False:
             ctx.finished_game = True
@@ -100,6 +105,11 @@ class TLOZClient(BizHawkClient):
                 {"cmd": "StatusUpdate",
                  "status": ClientStatus.CLIENT_GOAL}
             ])
+        # Should DeathLink be disabled after goal? To troll or not to troll, that is the question
+        elif "DeathLink" in ctx.tags:
+            currently_dead = game_mode == 17
+            await ctx.handle_deathlink_state(currently_dead,
+                                             ctx.player_names[ctx.slot] + " ran out of hearts." if ctx.slot else "")
 
     async def location_check(self, ctx: "BizHawkClientContext"):
         locations_checked = []
@@ -377,6 +387,10 @@ class TLOZClient(BizHawkClient):
         elif item_name == "Food":
             write_list.append((Rom.food, [1], self.wram))
         return await self.write(ctx, write_list)
+
+
+    async def deathlink_kill_player(self, ctx):
+        return await self.write(ctx, [(Rom.game_mode, [0x11], self.wram)])
 
 
     async def read_ram_value(self, ctx, location):
