@@ -32,6 +32,8 @@ take_any_caves_checked = 0x0678
 first_quest_dungeon_items_early = 0x18910
 first_quest_dungeon_items_late = 0x18C10
 game_mode = 0x12
+fill_hearts = 0x63
+death_mode_counter = 0xE5
 items_obtained_low = 0x0677
 items_obtained_high = 0x067B
 sword = 0x0657
@@ -226,7 +228,7 @@ class TLOZPatchExtension(APPatchExtension):
         player_name = bytearray(placements["meta"]["player_name"], 'utf8')[:player_name_length]
         player_name.extend([0] * (player_name_length - len(player_name)))
         rom_data[player_name_location + header_length:player_name_location + header_length + player_name_length] = player_name
-        rom_data[deathlink_options + header_length] = 1
+        rom_data[deathlink_options + header_length] = placements["meta"]["death_link"]
 
         # Write each location's new data in
         for location, item in placements.items():

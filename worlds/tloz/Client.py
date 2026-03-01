@@ -58,6 +58,7 @@ class TLOZClient(BizHawkClient):
         deathlink = (await bizhawk.read(ctx.bizhawk_ctx, [(Rom.deathlink_options, 1, self.rom)]))[0][0]
         if deathlink:
             await ctx.update_death_link(deathlink & 0b1)
+            ctx.death_link_allow_survive = deathlink & 0b10
 
         return True
 
@@ -390,7 +391,27 @@ class TLOZClient(BizHawkClient):
 
 
     async def deathlink_kill_player(self, ctx):
-        return await self.write(ctx, [(Rom.game_mode, [0x11], self.wram)])
+        current_potion_value = await self.read_ram_value_guarded(ctx, Rom.potion)
+        if current_potion_value is None:
+            return
+
+        if not ctx.death_link_allow_survive or current_potion_value == 0:
+            return await self.write(ctx, [
+                (Rom.game_mode, [0x11], self.wram), # Tell the game to kill Link
+                (Rom.death_mode_counter, [0x4], self.wram), # Set the number of times Link turns as he dies
+            ])
+        write_success = await self.write(ctx, [
+            (Rom.fill_hearts, [0x1], self.wram), # Tell the game to heal Link
+            (Rom.potion, [current_potion_value - 1], self.wram), # Go down a potion
+            # Would prefer playing the death sound, but that also stops the music :(
+            (Rom.sound_effect_queue, [0x20], self.wram), # Play the hit sound
+            ])
+        if write_success:
+            # Tell deathlink that we died so it stops trying to kill us
+            # This shouldn't send a death since this function is called after
+            # setting death_state to KILLING_PLAYER
+            await ctx.handle_deathlink_state(True, "")
+        return
 
 
     async def read_ram_value(self, ctx, location):

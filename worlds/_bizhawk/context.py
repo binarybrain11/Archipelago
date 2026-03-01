@@ -54,6 +54,7 @@ class BizHawkClientContext(CommonContext):
     rom_hash: str | None = None
     bizhawk_ctx: BizHawkContext
     death_state: DeathState
+    death_link_allow_survive: bool
     killing_player_task: "typing.Optional[asyncio.Task[None]]"
 
     watcher_timeout: float
