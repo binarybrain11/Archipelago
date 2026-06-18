@@ -8,7 +8,7 @@ import time
 import copy
 import enum
 import subprocess
-from typing import Any
+from typing import Any, Optional
 
 import settings
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
@@ -134,7 +134,7 @@ class BizHawkClientContext(CommonContext):
     bizhawk_ctx: BizHawkContext
     death_state: DeathState
     death_link_allow_survive: bool
-    killing_player_task: "typing.Optional[asyncio.Task[None]]"
+    killing_player_task: "Optional[asyncio.Task[None]]"
 
     watcher_timeout: float
     """The maximum amount of time the game watcher loop will wait for an update from the server before executing"""
