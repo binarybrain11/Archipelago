@@ -236,8 +236,6 @@ components: List[Component] = [
     Component('OoT Client', 'OoTClient',
               file_identifier=SuffixIdentifier('.apz5')),
     Component('OoT Adjuster', 'OoTAdjuster'),
-    # FF1
-    Component('FF1 Client', 'FF1Client'),
     # ChecksFinder
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Zillion
