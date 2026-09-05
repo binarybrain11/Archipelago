@@ -203,6 +203,7 @@ def set_building_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
 
         rule_collector.set_location_rule(location_name, logic.building.can_build(building.name))
 
+        location_name = building_progression.to_location_name(building.name)
 
 def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
     for bundle_room in bundle_rooms:
@@ -323,7 +324,10 @@ def set_bookseller_rules(logic, rule_collector):
 
 
 def set_raccoon_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, bundle_rooms: List[BundleRoom], world_options: StardewValleyOptions):
-    rule_collector.set_entrance_rule(LogicEntrance.has_giant_stump, logic.received(CommunityUpgrade.raccoon))
+    if world_options.quest_locations.has_story_quests():
+        rule_collector.set_entrance_rule(LogicEntrance.has_giant_stump, logic.received(CommunityUpgrade.raccoon, 2))
+    else:
+        rule_collector.set_entrance_rule(LogicEntrance.has_giant_stump, logic.quest.can_complete_quest(Quest.giant_stump))
     rule_collector.set_entrance_rule(LogicEntrance.buy_from_raccoon_1, logic.quest.has_raccoon_shop())
     rule_collector.set_entrance_rule(LogicEntrance.buy_from_raccoon_2, logic.quest.has_raccoon_shop(2))
     rule_collector.set_entrance_rule(LogicEntrance.buy_from_raccoon_3, logic.quest.has_raccoon_shop(3))
@@ -388,6 +392,8 @@ def set_mines_floor_entrance_rules(logic, rule_collector: StardewRuleCollector, 
             rule = rule & logic.mine.can_progress_in_the_mines_from_floor(floor)
         rule_collector.set_entrance_rule(dig_to_mines_floor(floor), rule)
 
+def set_skull_cavern_floor_entrance_rules(logic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
+    rule_collector.set_entrance_rule(Entrance.mine_in_skull_cavern, logic.mine.can_progress_in_the_mines_from_floor(120))
 
 def set_skull_cavern_floor_entrance_rules(logic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
     rule_collector.set_entrance_rule(Entrance.mine_in_skull_cavern, logic.mine.can_progress_in_the_mines_from_floor(120))

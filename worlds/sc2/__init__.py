@@ -91,6 +91,7 @@ class SC2World(World):
     game = "Starcraft 2"
     web = Starcraft2WebWorld()
     settings: ClassVar[settings.Starcraft2Settings]
+    disable_ut = True
 
     item_name_to_id = {name: data.code for name, data in get_full_item_list().items()}
     location_name_to_id = {location.name: location.code for location in DEFAULT_LOCATION_LIST}
@@ -433,7 +434,6 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
         if max_count and count > max_count:
             return max_count
         return count
-    
     auto_excludes = Counter({item_name: 1 for item_name in item_groups.legacy_items})
     if world.options.exclude_overpowered_items.value == ExcludeOverpoweredItems.option_true:
         for item_name in item_groups.overpowered_items:
@@ -993,6 +993,22 @@ def pad_item_pool_with_filler(world: SC2World, num_items: int, pool: List[Starcr
         item = create_item_with_correct_settings(world.player, world.get_filler_item_name())
         pool.append(item)
 
+    fill_pool_with_kerrigan_levels(world, pool)
+    filtered_pool = filter_items(world, world.location_cache, pool)
+    return filtered_pool
+
+
+def item_list_contains_parent(world: SC2World, item_data: ItemData, item_name_list: List[str]) -> bool:
+    if item_data.parent is None:
+        # The item has no associated parent, the item is valid
+        return True
+    return item_parents.parent_present[item_data.parent](item_name_list, world.options)
+
+
+def pad_item_pool_with_filler(world: SC2World, num_items: int, pool: List[StarcraftItem]):
+    for _ in range(num_items):
+        item = create_item_with_correct_settings(world.player, world.get_filler_item_name())
+        pool.append(item)
 
 def set_up_filler_items_distribution(world: SC2World) -> None:
     world.filler_items_distribution = world.options.filler_items_distribution.value.copy()
@@ -1066,7 +1082,7 @@ def fill_pool_with_kerrigan_levels(world: SC2World, item_pool: List[StarcraftIte
         or (world.options.grant_story_levels and not kerrigan_build_missions)
     ):
         return
-    
+
     def add_kerrigan_level_items(level_amount: int, item_amount: int):
         name = f"{level_amount} Kerrigan Level"
         if level_amount > 1:

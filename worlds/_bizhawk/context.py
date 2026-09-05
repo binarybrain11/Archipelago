@@ -98,7 +98,7 @@ class BizHawkClientCommandProcessor(ClientCommandProcessor):
             if value is None:
                 logger.info('Must specify "on" or "off" for category "all"')
                 return
-
+            
             if value:
                 self.ctx.text_passthrough_categories.update((
                     TextCategory.OTHER,
@@ -125,7 +125,6 @@ class BizHawkClientCommandProcessor(ClientCommandProcessor):
 class BizHawkClientContext(CommonContext):
     command_processor = BizHawkClientCommandProcessor
     text_passthrough_categories: set[str]
-    server_seed_name: str | None = None
     auth_status: AuthStatus
     password_requested: bool
     client_handler: BizHawkClient | None
@@ -179,8 +178,6 @@ class BizHawkClientContext(CommonContext):
         if cmd == "Connected":
             self.slot_data = args.get("slot_data", None)
             self.auth_status = AuthStatus.AUTHENTICATED
-        elif cmd == "RoomInfo":
-            self.server_seed_name = args.get("seed_name", None)
 
         if self.client_handler is not None:
             self.client_handler.on_package(self, cmd, args)
@@ -213,7 +210,6 @@ class BizHawkClientContext(CommonContext):
 
     async def disconnect(self, allow_autoreconnect: bool=False):
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
-        self.server_seed_name = None
         await super().disconnect(allow_autoreconnect)
 
     def on_deathlink(self, data: dict[str, Any]):
