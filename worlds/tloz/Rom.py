@@ -3,13 +3,14 @@ import json
 import zlib
 import os
 from pkgutil import get_data
-import warnings
 
 import bsdiff4
 
 import Utils
 from BaseClasses import ItemClassification
 from worlds.Files import APDeltaPatch, APProcedurePatch, APTokenMixin, APPatchExtension
+
+from .Strings import write_hints
 
 NA10CHECKSUM = '337bd6f1a1163df31bf2633665589ab0'
 rom_name_location = 0x00
@@ -126,49 +127,6 @@ map_item_slot = 0x11
 item_tiles_offset = 0x808F
 compass_tile_offset = 0x6A0
 archipelago_sprite = [ 0x03, 0x07, 0x3f, 0x7f, 0xff, 0xff, 0xc6, 0x00, 0x00, 0x00, 0x38, 0x7c, 0xfe, 0xfe, 0xfe, 0x7c, 0x00, 0x03, 0x07, 0x0f, 0x0f, 0x0f, 0x07, 0x03, 0xfe, 0xfc, 0xf8, 0x70, 0x30, 0x00, 0x00, 0x00 ]
-
-string_table_index_offset = 0x4010
-string_table_end = 0x45B2 
-hint_offsets = (
-    0x00,  # __IT'S DANGEROUS TO GO____ALONE! TAKE THIS.
-    0x02,  # __MASTER USING IT AND___YOU CAN HAVE THIS.
-    0x04,  # _TAKE ANY ROAD YOU WANT.
-    0x06,  # _SECRET IS IN THE TREE____AT THE DEAD-END.
-    0x08,  # ___LET'S PLAY MONEY___MAKING GAME.
-    0x0A,  # __PAY ME FOR THE DOOR_____REPAIR CHARGE.
-    0x0C,  # ____SHOW THIS TO THE_______OLD WOMAN.
-    0x0E,  # ____MEET THE OLD MAN______AT THE GRAVE.
-    0x10,  # __BUY MEDICINE BEFORE__YOU GO.
-    0x12,  # __PAY ME AND I'LL TALK.
-    0x14,  # ___THIS AIN'T ENOUGH________TO TALK.
-    0x16,  # _______GO UP,UP,___THE MOUNTAIN AHEAD.
-    0x18,  # __GO NORTH,WEST,SOUTH,__WEST TO THE FOREST  OF MAZE.
-    0x1A,  # ____BOY, YOU'RE RICH!
-    0x1C,  # _BUY SOMETHIN' WILL YA!
-    0x1E,  # _____BOY, THIS IS___REALLY EXPENSIVE!
-    0x20,  # _TAKE ANY ONE YOU WANT.
-    0x22,  # _____IT'S A SECRET_____TO EVERYBODY.
-    0x24,  # ___GRUMBLE,GRUMBLE...
-    0x26,  # __EASTMOST PENNINSULA_____IS THE SECRET.
-    0x28,  # _DODONGO DISLIKES SMOKE.
-    0x2A,  # _DID YOU GET THE SWORD_FROM THE OLD MAN ON_TOP OF THE WATERFALL?
-    0x2C,  # _____WALK INTO THE_______WATERFALL.
-    0x2E,  # __SECRET POWER IS SAID___TO BE IN THE ARROW.
-    0x30,  # ____DIGDOGGER HATES_CERTAIN KIND OF SOUND.
-    0x32,  # ____I BET YOU'D LIKE___TO HAVE MORE BOMBS.
-    0x34,  # ____IF YOU GO IN THE_DIRECTION OF THE ARROW.
-    0x36,  # ____LEAVE YOUR LIFE_______OR MONEY.
-    0x38,  # _THERE ARE SECRETS WHERE___FAIRIES DON'T LIVE.
-    0x3A,  # ____AIM AT THE EYES_______OF GOHMA.
-    0x3C,  # __SOUTH OF ARROW MARK____HIDES A SECRET.
-    0x3E,  # __THERE'S A SECRET IN__THE TIP OF THE NOSE.
-    0x40,  # ___SPECTACLE ROCK IS__AN ENTRANCE TO DEATH.
-    0x42,  # 10TH ENEMY HAS THE BOMB.
-    0x44,  # _ONES WHO DOES NOT HAVE_TRIFORCE CAN'T GO IN.
-    0x46,  # ___PATRA HAS THE MAP.
-    0x48,  # __GO TO THE NEXT ROOM.
-    0x4A   # _____EYES OF SKULL_____HAS A SECRET.
-)
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:
@@ -309,80 +267,10 @@ class TLOZPatchExtension(APPatchExtension):
                 item_id = item_id | 0b01000000
             rom_data[location_id] = item_id
 
-        # string_table = TLOZPatchExtension.read_string_table(rom_data)
-        # string_table[0] = TLOZPatchExtension.string_to_bytes("Hello World")
-        # TLOZPatchExtension.write_string_table(rom_data, string_table)
+        # Updates the rom_data in-place
+        write_hints(rom_data, placements)
 
         return rom_data
-
-    # Converts a Python string to a ROM-encoded string
-    @staticmethod
-    def string_to_bytes(string):
-        res = []
-        char_byte_table = {
-            '0': 0x00, '1': 0x01, '2': 0x02, '3': 0x03, '4': 0x04, '5': 0x05, '6': 0x06, '7': 0x07, '8': 0x08, '9': 0x09,
-            'a': 0x0A, 'b': 0x0B, 'c': 0x0C, 'd': 0x0D, 'e': 0x0E, 'f': 0x0F, 'g': 0x10, 'h': 0x11, 'i': 0x12, 'j': 0x13, 'k': 0x14, 'l': 0x15, 'm': 0x16, 'n': 0x17, 'o': 0x18, 'p': 0x19, 'q': 0x1A, 'r': 0x1B, 's': 0x1C, 't': 0x1D, 'u': 0x1E, 'v': 0x1F, 'w': 0x20, 'x': 0x21, 'y': 0x22, 'z': 0x23,
-            ' ': 0x24,
-            # '~': 0x25, # This is actually a spacing character, not a tilde
-            ',': 0x28, '!': 0x29, '\'': 0x2A, '&': 0x2B,
-            '.': 0x2C, '"': 0x2D, '?': 0x2E, '-': 0x2F
-        }
-        for char in string.lower():
-            byte = char_byte_table.get(char)
-            if None != byte:
-                res.append(byte)
-        return res
-
-        #byte += 0x80 # Next character should appear on the second line
-        #byte += 0x40 # Next character should appear on the third line
-        #byte += 0xC0 # End of string
-        # lines of text are 24 characters wide before they careen into the background
-
-    # Returns a list of ROM-encoded strings from the string table
-    @staticmethod
-    def read_string_table(rom_data):
-        string_table_offset = string_table_index_offset + 0x4C
-        res = []
-        cur_str = []
-        for offset in range(string_table_end - string_table_offset):
-            cur_str.append(rom_data[string_table_offset + offset])
-            if (cur_str[-1] & 0xC0 == 0xC0):
-                res.append(cur_str)
-                print(cur_str)
-                cur_str = []
-        return res
-
-    # Writes a list of ROM-encoded strings to the string table
-    @staticmethod
-    def write_string_table(rom_data, string_table):
-        string_table_offset = string_table_index_offset + 0x4C
-        # Ensure there are fewer strings than entries in the table
-        assert len(string_table) <= ( 0x4C >> 1 ), "Attempting to write too many strings to the string table! {} <= {}".format(len(string_table), 0x4C >> 1)
-        # Ensure the string table we're trying to write can fit
-        assert sum(len(s) for s in string_table) < (string_table_end - string_table_offset), "Attempting to write a string table that's too large! {} <= {}".format(sum(len(s) for s in string_table), (string_table_end - string_table_offset))
-
-        string_write_offset = string_table_offset
-        for string_num, string in enumerate(string_table):
-            # The ROM pointer needs to be translated to the in-memory pointer. This bank starts at 0x4010 and is translated to 0x8000 (it's a
-            # coincidence here that the string table is at the beginning of the bank, therefore the 0x4010 literal)
-            memory_string_offset = string_write_offset - 0x4010 + 0x8000
-            rom_data[string_table_index_offset + string_num * 2] = memory_string_offset & 0xFF
-            rom_data[string_table_index_offset + string_num * 2 + 1] = (memory_string_offset >> 8) & 0xFF
-            for char in string:
-                rom_data[string_write_offset] = char
-                string_write_offset += 1
-
-                # If we ever try to write past the string table, STOP
-                # immediately and warn. Stopping here prevents us from
-                # corrupting the rest of the game, just the text will be funky
-                if string_write_offset >= string_table_end:
-                    # Ensure the string is terminated
-                    rom_data[string_write_offset - 1] |= 0xC0
-                    warnings.warn("Attempted to write past the string table!")
-                    return
-
-            # Ensure the string is terminated
-            rom_data[string_write_offset - 1] |= 0xC0
 
 class TLOZProcedurePatch(APProcedurePatch, APTokenMixin):
     game = "The Legend of Zelda"
