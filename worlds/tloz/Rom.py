@@ -25,12 +25,14 @@ potion_shop = bit_positions[2]
 shield_shop = bit_positions[5]
 ring_shop = bit_positions[6]
 take_any = bit_positions[1]
+cave_flags = 0x0413
 left_shop_slots = 0x0628
 middle_shop_slots = 0x0629
 right_shop_slots = 0x062A
 take_any_caves_checked = 0x0678
 first_quest_dungeon_items_early = 0x18910
 first_quest_dungeon_items_late = 0x18C10
+current_level = 0x10
 game_mode = 0x12
 fill_hearts = 0x63
 death_mode_counter = 0xE5
@@ -69,6 +71,7 @@ item_lift_timer = 0x0506
 sound_effect_queue = 0x0602
 
 
+map_location = 0x00EB
 overworld_status_block = 0x067F
 underworld_early_status_block = 0x06FF
 underworld_late_status_block = 0x077F
@@ -104,6 +107,10 @@ cave_type_flags = {
     "Old Man Grave Hint": 0b01100100,
     "Level 1": 0b00000100
 }
+
+cave_flags_type = {}
+for k,v in cave_type_flags.items():
+    cave_flags_type[v] = k
 
 warp_cave_offset = 0x19344
 starting_sword_cave_location_byte = 0x70
