@@ -125,17 +125,6 @@ open_entrances = [
     "Screen 4E", "Screen 5E", "Screen 64", "Screen 66", "Screen 6F", "Screen 70", "Screen 74", "Screen 75", "Screen 77"
 ]
 
-# We can hint in two ways that we care about: 
-# What is at screen __?
-# What is at check __?
-hint_caves_data = {
-    "Go Up The Mountain Hint": "Screen 0B",
-    "Secret Is In Tree Hint": "Screen 1F",
-    "Lost Woods Hint": None,
-    "Old Man Grave Hint": "Magical Sword Grave",
-    "Starting Sword Cave": "Starting Sword Cave"
-}
-
 all_entrances = overworld_entrances_data.keys()
 
 overworld_regions = {  # These are not AP Regions (tm). They're for regional entrance shuffle.

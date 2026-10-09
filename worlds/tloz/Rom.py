@@ -253,7 +253,6 @@ class TLOZPatchExtension(APPatchExtension):
                 rom_data[letter_cave_location_byte] = entrance_offset
         for i, cave in enumerate(warp_caves):
             rom_data[warp_cave_offset + i] = cave
-            print(hex(cave))
         return rom_data
 
     @staticmethod
@@ -272,23 +271,19 @@ class TLOZPatchExtension(APPatchExtension):
         rom_data[player_name_location + header_length:player_name_location + header_length + player_name_length] = player_name
         rom_data[deathlink_options + header_length] = placements["meta"]["death_link"]
 
+        for location, amount in placements["Secret Money"].items():
+            rom_data[secret_money_ids[location]] = amount
+
         # Write each location's new data in
-        for location, item in placements.items():
+        for location, item in placements["locations"].items():
             # Zelda and Ganon aren't real locations. Neither is the metadata.
             if location == "Ganon" or location == "Zelda" or location == "entrance_randomizer_set" or location == "meta":
-                continue
-
-            if "Secret Money" in location:
-                rom_data[secret_money_ids[location]] = item
-                continue
-
-            if "Classification" in location:
                 continue
 
             # Neither are boss defeat events
             if "Status" in location:
                 continue
-            item_id = item_game_ids[item]
+            item_id = item_game_ids[item["name"]]
             location_id = location_ids[location]
 
             # Shop prices need to be set
@@ -297,7 +292,7 @@ class TLOZPatchExtension(APPatchExtension):
                     # Final item in stores has bit 6 and 7 set. It's what marks the cave a shop.
                     item_id = item_id | 0b11000000
                 price_location = shop_price_location_ids[location]
-                rom_data[price_location] = item_prices[item]
+                rom_data[price_location] = item_prices[item["name"]]
             if location == "Take Any Item Right":
                 # Same story as above: bit 6 is what makes this a Take Any cave
                 item_id = item_id | 0b01000000
