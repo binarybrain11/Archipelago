@@ -272,22 +272,6 @@ floor_location_game_offsets_late = {
     "Level 9 Rupee Drop (Gels East)": 0x26
 }
 
-hint_dungeons_data = {
-    0x00: "Screen 0A",           # Level 4: Walk into the waterfall
-    0x0B: "Screen 42",           # Level 6: There are secrets where fairies don't live
-    0x16: None,                  # Level 5: Secret power is said to be in the arrow
-    0x1F: "Level 2 Boss",        # Level 2: Dodongo dislikes smoke
-    0x2B: "White Sword Pond",    # Level 3: Did you get the sword from the old man on top of the waterfall?
-    0x41: "Screen 2F",           # Level 1: Eastmost penninsula is the secret.
-    0x67: "Level 5 Boss",        # Level 5: Digdogger hates certain kinds of sound.
-    0x6A: "Level 6 Boss",        # Level 6: Aim at the eyes of Gohma
-    0x8A: "Level 9 Compass",     # Level 9: Eyes of skull has a secret
-    0x8E: None,                  # Level 9: Go to the next room
-    0xB3: None,                  # Level 8: 10th enemy has the bomb
-    0xB5: "Screen 05",           # Level 8: Spectacle rock is an entrance to death   
-    0xD4: "Level 7 Boss",        # Level 7: There's a secret in the tip of the nose
-}
-
 floor_location_game_ids_late = {}
 for key, value in floor_location_game_offsets_late.items():
     floor_location_game_ids_late[key] = value + Rom.first_quest_dungeon_items_late

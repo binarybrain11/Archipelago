@@ -8,7 +8,7 @@ import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
 from worlds.tloz import Rom, Locations, Items
-from .EntranceRandoRules import hint_caves_data
+from .Strings import hint_caves_data, hint_dungeons_data
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -180,8 +180,9 @@ class TLOZClient(BizHawkClient):
         if (current_screen is None or level is None):
             return
         # level 0 is the Overworld. These hint locations are handled by handle_cave
-        if (level > 0 and current_screen in Locations.hint_dungeons_data):
-            await self.handle_hint(ctx, Locations.hint_dungeons_data[current_screen])
+        if (level > 0 and current_screen in hint_dungeons_data):
+            hint_target, _ = hint_dungeons_data[current_screen]
+            await self.handle_hint(ctx, hint_target)
 
 
     async def received_items_check(self, ctx: "BizHawkClientContext"):
@@ -421,7 +422,8 @@ class TLOZClient(BizHawkClient):
 
         cave_type = Rom.cave_flags_type[entrance_flag & 0b11111100]
         if (cave_type in hint_caves_data):
-            await self.handle_hint(ctx, hint_caves_data[cave_type])
+            hint_target, _ = hint_caves_data[cave_type]
+            await self.handle_hint(ctx, hint_target)
 
     async def handle_hint(self, ctx, hint_target):
         if hint_target is None:

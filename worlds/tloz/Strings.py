@@ -18,11 +18,11 @@ hint_offsets = (
     0x0C,  # ____SHOW THIS TO THE_______OLD WOMAN.
     0x0E,  # ____MEET THE OLD MAN______AT THE GRAVE.
     0x10,  # __BUY MEDICINE BEFORE__YOU GO.
-    0x12,  # __PAY ME AND I'LL TALK.
-    0x14,  # ___THIS AIN'T ENOUGH________TO TALK.
-    0x16,  # _______GO UP,UP,___THE MOUNTAIN AHEAD.
-    0x18,  # __GO NORTH,WEST,SOUTH,__WEST TO THE FOREST  OF MAZE.
-    0x1A,  # ____BOY, YOU'RE RICH!
+    0x12,  # __PAY ME AND I'LL TALK.                                Hint woman greeting
+    0x14,  # ___THIS AIN'T ENOUGH________TO TALK.                   Hint woman -10
+    0x16,  # _______GO UP,UP,___THE MOUNTAIN AHEAD.                 Hint woman -30  
+    0x18,  # __GO NORTH,WEST,SOUTH,__WEST TO THE FOREST  OF MAZE.   Hint woman -30
+    0x1A,  # ____BOY, YOU'RE RICH!                                  Hint woman -50
     0x1C,  # _BUY SOMETHIN' WILL YA!
     0x1E,  # _____BOY, THIS IS___REALLY EXPENSIVE!
     0x20,  # _TAKE ANY ONE YOU WANT.
@@ -49,12 +49,95 @@ hint_offsets = (
     0x4A   # _____EYES OF SKULL_____HAS A SECRET.
 )
 
+# We can hint in two ways that we care about: 
+# What is at screen __?
+# What is at check __?
+# screen hints aren't implemented yet, just check hints
+# (hinted_location, string_offset)
+hint_dungeons_data = {
+    0x00: ("Screen 0A", 0x2C),          # Level 4: Walk into the waterfall
+    0x0B: ("Screen 42", 0x38),          # Level 6: There are secrets where fairies don't live
+    0x16: (None, 0x2E),                 # Level 5: Secret power is said to be in the arrow
+    0x1F: ("Level 2 Boss", 0x28),       # Level 2: Dodongo dislikes smoke
+    0x2B: ("White Sword Pond", 0x2A),   # Level 3: Did you get the sword from the old man on top of the waterfall?
+    0x41: ("Screen 2F", 0x26),          # Level 1: Eastmost penninsula is the secret.
+    0x67: ("Level 5 Boss", 0x30),       # Level 5: Digdogger hates certain kinds of sound.
+    0x6A: ("Level 6 Boss", 0x3A),       # Level 6: Aim at the eyes of Gohma
+    0x8A: ("Level 9 Compass", 0x4A),    # Level 9: Eyes of skull has a secret
+    0x8E: (None, 0x48),                 # Level 9: Go to the next room
+    0xB3: (None, 0x42),                 # Level 8: 10th enemy has the bomb
+    0xB5: ("Screen 05", 0x40),          # Level 8: Spectacle rock is an entrance to death   
+    0xD4: ("Level 7 Boss", 0x3E),       # Level 7: There's a secret in the tip of the nose
+}
+
+hint_caves_data = {
+    # These first two hints refer to the woman you pay for a hint. These offsets
+    # go to the -30 option that actually grants a hint, not the greeting or
+    # other two options
+    "Go Up The Mountain Hint":  ("Screen 0B", 0x16),
+    "Lost Woods Hint":          (None, 0x18),
+    "Secret Is In Tree Hint":   ("Screen 1F", 0x06),
+    "Old Man Grave Hint":       ("Magical Sword Grave", 0x0E),
+    "Starting Sword Cave":      ("Starting Sword Cave", 0x00),
+}
+
+# Format strings that expects arguments:
+# item_player, item_name, extra_hint_info
+location_hint_sugar = {
+    "Level 1 Boss": "Aquamentus has {}'s {}{}",
+    "Level 1 Triforce": "Aquamentus guards {}'s {}{}",
+    "Level 2 Boss": "Dodongo has {}'s {}{}",
+    "Level 2 Triforce": "Dodongo guards {}'s {}{}",
+    "Level 3 Boss": "Manhandla has {}'s {}{}",
+    "Level 3 Triforce": "Manhandla guards {}'s {}{}",
+    "Level 4 Boss": "Gleeok has {}'s {}{}",
+    "Level 4 Triforce": "Gleeok guards {}'s {}{}",
+    "Level 5 Boss": "Digdogger has {}'s {}{}",
+    "Level 5 Triforce": "Digdogger guards {}'s {}{}",
+    "Level 6 Boss": "Gohma has {}'s {}{}",
+    "Level 6 Triforce": "Gohma guards {}'s {}{}",
+    "Level 7 Boss": "Aquamentus has {}'s {}{}",
+    "Level 7 Triforce": "Aquamentus guards {}'s {}{}",
+    "Level 8 Boss": "Gleeok has {}'s {}{}",
+    "Level 8 Triforce": "Gleeok guards {}'s {}{}",
+}
+
 def write_hints(rom_data, placements):
+    hint_offsets_set = {}
+    for cave, (hint_location, offset) in hint_caves_data.items():
+        if hint_location is None:
+            continue 
+        if hint_location[:6] == "Screen":
+            continue
+        _, hint_offsets_set[hint_location] = hint_caves_data[cave]
+    for screen, (hint_location, offset) in hint_dungeons_data.items():
+        if hint_location is None:
+            continue 
+        if hint_location[:6] == "Screen":
+            continue
+        _, hint_offsets_set[hint_location] = hint_dungeons_data[screen]
+
     string_table = read_string_table(rom_data)
-    string_table[0] = string_to_bytes("Hello World")
+    num_truncated, num_omitted, num_hints = (0,0,0)
+    for location, item in placements["locations"].items():
+        if location not in hint_offsets_set:
+            continue
+        offset = hint_offsets_set[location]
+        encoded_string, truncated, omitted = align_string(item["hint"])
+        # If we truncate the screen characters, it's probably fine?
+        # Assumes omitted characters are totally okay
+        if truncated <= 3:
+            string_table[offset // 2] = encoded_string 
+            num_hints += 1
+            if truncated:
+                num_truncated += truncated
+            if omitted:
+                num_omitted += omitted
+    print(f"tloz: {num_hints} hints written with {num_truncated} truncated and {num_omitted} omitted characters")
     write_string_table(rom_data, string_table)
 
-# Converts a Python string to a ROM-encoded string
+# Converts a Python string to a ROM-encoded string. Returns a tuple with the resulting byte string and a count of how any characters were omitted
+# (bytes, omitted)
 def string_to_bytes(string):
     res = []
     char_byte_table = {
@@ -67,13 +150,16 @@ def string_to_bytes(string):
     }
     # Keep track of line numbers to encode \n properly
     line_num = 0
+    omitted = 0
     for char in string.lower():
         if char == '\n':
             if line_num == 0:
                 res[-1] |= 0x80
+                line_num += 1
                 continue
             elif line_num == 1:
                 res[-1] |= 0x40
+                line_num += 1
                 continue
             else:
                 res[-1] |= 0xC0
@@ -81,7 +167,9 @@ def string_to_bytes(string):
         byte = char_byte_table.get(char)
         if None != byte:
             res.append(byte)
-    return res
+        else:
+            omitted += 1
+    return (res, omitted)
 
 # Returns a list of ROM-encoded strings from the string table
 def read_string_table(rom_data):
@@ -92,7 +180,6 @@ def read_string_table(rom_data):
         cur_str.append(rom_data[string_table_offset + offset])
         if (cur_str[-1] & 0xC0 == 0xC0):
             res.append(cur_str)
-            print(cur_str)
             cur_str = []
     return res
 
@@ -135,12 +222,12 @@ def write_string_table(rom_data, string_table):
         rom_data[string_write_offset - 1] |= 0xC0
 
 # Returns a tuple where the first item is the string centered (unless specified)
-# and split across lines, and the second item is a boolean indicating if the
-# string was truncated
+# and split across lines, the second item is how many characters were truncated,
+# the third is how many characters were omitted.
 def align_string(string, center=True):
     line_width = 24
     # Appending a space here forces the following for loop to add the last token to the lines
-    encoded_string = string_to_bytes(string + ' ')
+    encoded_string, omitted = string_to_bytes(string + ' ')
     lines = []
     cur_line = []
     cur_tok = []
@@ -149,8 +236,6 @@ def align_string(string, center=True):
         # Exit early if we reach the line limit
         if len(lines) >= 3:
             break
-
-        # If there is already newline information encoded, blindly add the 
 
         # Wait to append spaces until we know if the next token can fit on this line
         if char != 0x24:
@@ -203,7 +288,7 @@ def align_string(string, center=True):
     # Terminate the string
     res[-1] |= 0xC0
     is_truncated = char_num < len(encoded_string) - 1
-    return (res, is_truncated)
+    return (res, is_truncated, omitted)
 
 def print_encoded_string(string):
     char_byte_table = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ', '~', '*', '*', ',', '!', '\'', '&', '.', '"', '?', '-' ]
