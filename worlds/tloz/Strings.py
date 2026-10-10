@@ -1,4 +1,7 @@
 import warnings
+import logging
+
+logger = logging.getLogger("Client")
 
 # The string table has room for 1,442 characters and the extended table (a chunk
 # in bank 1 that appears unused) has room for 1,934 characters for a total of
@@ -56,20 +59,22 @@ hint_offsets = (
 # What is at check __?
 # screen hints aren't implemented yet, just check hints
 # (hinted_location, string_offset)
-hint_dungeons_data = {
+hint_early_dungeons_data = {
     0x00: ("Screen 0A", 0x2C),          # Level 4: Walk into the waterfall
     0x0B: ("Screen 42", 0x38),          # Level 6: There are secrets where fairies don't live
-    0x16: (None, 0x2E),                 # Level 5: Secret power is said to be in the arrow
+    0x15: (None, 0x2E),                 # Level 5: Secret power is said to be in the arrow
     0x1F: ("Level 2 Boss", 0x28),       # Level 2: Dodongo dislikes smoke
     0x2B: ("White Sword Pond", 0x2A),   # Level 3: Did you get the sword from the old man on top of the waterfall?
     0x41: ("Screen 2F", 0x26),          # Level 1: Eastmost penninsula is the secret.
     0x67: ("Level 5 Boss", 0x30),       # Level 5: Digdogger hates certain kinds of sound.
     0x6A: ("Level 6 Boss", 0x3A),       # Level 6: Aim at the eyes of Gohma
-    0x8A: ("Level 9 Compass", 0x4A),    # Level 9: Eyes of skull has a secret
-    0x8E: (None, 0x48),                 # Level 9: Go to the next room
-    0xB3: (None, 0x42),                 # Level 8: 10th enemy has the bomb
-    0xB5: ("Screen 05", 0x40),          # Level 8: Spectacle rock is an entrance to death
-    0xD4: ("Level 7 Boss", 0x3E),       # Level 7: There's a secret in the tip of the nose
+}
+hint_late_dungeons_data = {
+    0x02: ("Level 9 Compass", 0x4A),    # Level 9: Eyes of skull has a secret
+    0x06: (None, 0x48),                 # Level 9: Go to the next room
+    0x3B: (None, 0x42),                 # Level 8: 10th enemy has the bomb
+    0x3D: ("Screen 05", 0x40),          # Level 8: Spectacle rock is an entrance to death
+    0x5B: ("Level 7 Boss", 0x3E),       # Level 7: There's a secret in the tip of the nose
 }
 
 hint_caves_data = {
@@ -120,18 +125,13 @@ def write_hints(rom_data, placements):
     # Build a set of locations that can be hinted, and the string offset that
     # hint should overwrite
     hint_offsets_set = {}
-    for cave, (hint_location, offset) in hint_caves_data.items():
-        if hint_location is None:
-            continue
-        if hint_location[:6] == "Screen":
-            continue
-        _, hint_offsets_set[hint_location] = hint_caves_data[cave]
-    for screen, (hint_location, offset) in hint_dungeons_data.items():
-        if hint_location is None:
-            continue
-        if hint_location[:6] == "Screen":
-            continue
-        _, hint_offsets_set[hint_location] = hint_dungeons_data[screen]
+    for hint_data in [hint_caves_data, hint_early_dungeons_data, hint_late_dungeons_data]:
+        for location, (hint_location, offset) in hint_data.items():
+            if hint_location is None:
+                continue
+            if hint_location[:6] == "Screen":
+                continue
+            _, hint_offsets_set[hint_location] = hint_data[cave]
 
     string_table = read_string_table(rom_data)
     num_truncated, num_omitted, num_hints = (0,0,0)
@@ -150,7 +150,7 @@ def write_hints(rom_data, placements):
             if omitted:
                 num_omitted += omitted
     write_string_table(rom_data, string_table)
-    logger.info(f"Patch wrote {num_hints} hints with {num_truncated} truncated and {num_omitted} omitted characters")
+    logger.info(f"Patch wrote {num_hints} of {hint_offsets_set} hints with {num_truncated} truncated and {num_omitted} omitted characters")
 
 # Converts a Python string to a ROM-encoded string. Returns a tuple with the resulting byte string and a count of how any characters were omitted
 # (bytes, omitted)
