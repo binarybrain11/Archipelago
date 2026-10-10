@@ -411,15 +411,17 @@ class TLOZClient(BizHawkClient):
                                             [(Rom.cave_flags, 1, self.wram)],
                                             [(Rom.game_mode, [0x0B], self.wram)])
         if (current_screen is None or current_cave_flags is None):
-            return 
+            return
         else:
             current_screen = current_screen[0][0]
             current_cave_flags = current_cave_flags[0][0]
 
-        entrance_flag = (await self.read_rom(ctx, 
-            Locations.cave_data_location_start - Rom.header_length + current_screen, 
+        entrance_flag = (await self.read_rom(ctx,
+            Locations.cave_data_location_start - Rom.header_length + current_screen,
             1))[0]
 
+        if (entrance_flag & 0b11111100) not in Rom.cave_flags_type:
+            return
         cave_type = Rom.cave_flags_type[entrance_flag & 0b11111100]
         if (cave_type in hint_caves_data):
             hint_target, _ = hint_caves_data[cave_type]
@@ -427,15 +429,15 @@ class TLOZClient(BizHawkClient):
 
     async def handle_hint(self, ctx, hint_target):
         if hint_target is None:
-            return 
+            return
         if len(hint_target) >= 6 and hint_target[:6] == "Screen":
             # Screens don't have locations to scout, but maybe we could hint another way?
-            return 
+            return
         hint_location_id = Locations.location_table[hint_target]
         if hint_location_id not in ctx.locations_scouted:
             ctx.locations_scouted.add(hint_location_id)
             await ctx.send_msgs([{"cmd": "LocationScouts", "locations": [hint_location_id], "create_as_hint": 2}])
-        
+
 
     async def deathlink_kill_player(self, ctx):
         current_potion_value = await self.read_ram_value_guarded(ctx, Rom.potion)
@@ -463,9 +465,6 @@ class TLOZClient(BizHawkClient):
 
     async def read_ram_value(self, ctx, location):
         return (await bizhawk.read(ctx.bizhawk_ctx, [(location, 1, self.wram)]))[0][0]
-
-    async def read_ram_values(self, ctx, location, size):
-        return (await bizhawk.read(ctx.bizhawk_ctx, [(location, size, self.wram)]))[0]
 
     async def read_ram_value_guarded(self, ctx: "BizHawkClientContext", location):
         value = await bizhawk.guarded_read(ctx.bizhawk_ctx,

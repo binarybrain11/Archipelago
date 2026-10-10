@@ -3,8 +3,10 @@ import warnings
 # The string table has room for 1,442 characters and the extended table (a chunk
 # in bank 1 that appears unused) has room for 1,934 characters for a total of
 # 3,376 characters. May lose some characters to table alignment!
+# If all character lines use the maximum 24*3 = 72 characters, the whole table
+# would be 2,664 characters
 string_table_index_offset = 0x4010
-string_table_end = 0x45B2 
+string_table_end = 0x45B2
 extended_table_offset = 0x77D2
 extended_table_end = 0x7F60
 # Divide by 2 to get the table index!
@@ -20,7 +22,7 @@ hint_offsets = (
     0x10,  # __BUY MEDICINE BEFORE__YOU GO.
     0x12,  # __PAY ME AND I'LL TALK.                                Hint woman greeting
     0x14,  # ___THIS AIN'T ENOUGH________TO TALK.                   Hint woman -10
-    0x16,  # _______GO UP,UP,___THE MOUNTAIN AHEAD.                 Hint woman -30  
+    0x16,  # _______GO UP,UP,___THE MOUNTAIN AHEAD.                 Hint woman -30
     0x18,  # __GO NORTH,WEST,SOUTH,__WEST TO THE FOREST  OF MAZE.   Hint woman -30
     0x1A,  # ____BOY, YOU'RE RICH!                                  Hint woman -50
     0x1C,  # _BUY SOMETHIN' WILL YA!
@@ -49,7 +51,7 @@ hint_offsets = (
     0x4A   # _____EYES OF SKULL_____HAS A SECRET.
 )
 
-# We can hint in two ways that we care about: 
+# We can hint in two ways that we care about:
 # What is at screen __?
 # What is at check __?
 # screen hints aren't implemented yet, just check hints
@@ -66,7 +68,7 @@ hint_dungeons_data = {
     0x8A: ("Level 9 Compass", 0x4A),    # Level 9: Eyes of skull has a secret
     0x8E: (None, 0x48),                 # Level 9: Go to the next room
     0xB3: (None, 0x42),                 # Level 8: 10th enemy has the bomb
-    0xB5: ("Screen 05", 0x40),          # Level 8: Spectacle rock is an entrance to death   
+    0xB5: ("Screen 05", 0x40),          # Level 8: Spectacle rock is an entrance to death
     0xD4: ("Level 7 Boss", 0x3E),       # Level 7: There's a secret in the tip of the nose
 }
 
@@ -78,7 +80,7 @@ hint_caves_data = {
     "Lost Woods Hint":          (None, 0x18),
     "Secret Is In Tree Hint":   ("Screen 1F", 0x06),
     "Old Man Grave Hint":       ("Magical Sword Grave", 0x0E),
-    "Starting Sword Cave":      ("Starting Sword Cave", 0x00),
+    "Starting Sword Cave":      (None, 0x00),
 }
 
 # Format strings that expects arguments:
@@ -102,19 +104,31 @@ location_hint_sugar = {
     "Level 8 Triforce": "Gleeok guards {}'s {}{}",
 }
 
+# The ROM is chopped up into banks that are loaded into memory at 0x8000, translate between them!
+def rom_addr_to_memory_addr(address):
+    if address < 0x10: return None
+    elif address < 0x1C010:
+        # Header length
+        address -= 0x10
+        # Bank size
+        address %= 0x4000
+        return address + 0x8000
+    else:
+        return address - 0x10 - 0x1C000 + 0xC000
+
 def write_hints(rom_data, placements):
     # Build a set of locations that can be hinted, and the string offset that
     # hint should overwrite
     hint_offsets_set = {}
     for cave, (hint_location, offset) in hint_caves_data.items():
         if hint_location is None:
-            continue 
+            continue
         if hint_location[:6] == "Screen":
             continue
         _, hint_offsets_set[hint_location] = hint_caves_data[cave]
     for screen, (hint_location, offset) in hint_dungeons_data.items():
         if hint_location is None:
-            continue 
+            continue
         if hint_location[:6] == "Screen":
             continue
         _, hint_offsets_set[hint_location] = hint_dungeons_data[screen]
@@ -129,7 +143,7 @@ def write_hints(rom_data, placements):
         # If we truncate the screen characters, it's probably fine?
         # Assumes omitted characters are totally okay
         if truncated <= 3:
-            string_table[offset // 2] = encoded_string 
+            string_table[offset // 2] = encoded_string
             num_hints += 1
             if truncated:
                 num_truncated += truncated
@@ -202,9 +216,7 @@ def write_string_table(rom_data, string_table):
             string_write_offset = extended_table_offset
             string_write_end = extended_table_end
 
-        # The ROM pointer needs to be translated to the in-memory pointer. This bank starts at 0x4010 and is translated to 0x8000 (it's a
-        # coincidence here that the string table is at the beginning of the bank, therefore the 0x4010 literal)
-        memory_string_offset = string_write_offset - 0x4010 + 0x8000
+        memory_string_offset = rom_addr_to_memory_addr(string_write_offset)
         rom_data[string_table_index_offset + string_num * 2] = memory_string_offset & 0xFF
         rom_data[string_table_index_offset + string_num * 2 + 1] = (memory_string_offset >> 8) & 0xFF
         for char in string:
@@ -238,6 +250,18 @@ def align_string(string, center=True):
         # Exit early if we reach the line limit
         if len(lines) >= 3:
             break
+
+        # If newlines are already encoded, blindly trust them
+        if char & 0xC0:
+            cur_tok.append(char)
+            cur_line.extend(cur_tok)
+            lines.append(cur_line)
+            cur_tok = []
+            cur_line = []
+            if char & 0xC0 == 0xC0:
+                break
+            else:
+                continue
 
         # Wait to append spaces until we know if the next token can fit on this line
         if char != 0x24:
@@ -303,14 +327,3 @@ def print_encoded_string(string):
             print(line)
             line = ''
 
-'''
-print('-------------')
-string, _ = align_string("Hello world!")
-print_encoded_string(string)
-print('-------------')
-string, _ = align_string("I think it worked out in some fashions, but I do wonder what the ultimate difference in spend has ended up being. I also would wonder in an actual disaster what would end up happening if SHS had to failover to USWC because of the lack of compute reservations, at least when I was around")
-print_encoded_string(string)
-print('-------------')
-string, _ = align_string("My current company is pushing real hard to get the rest of their on prem into the cloud. Problem being cloud is ending up being several times more expensive, and our only profitable services are \"On prem\" (Rented space in a managed datacenter)")
-print_encoded_string(string)
-'''
