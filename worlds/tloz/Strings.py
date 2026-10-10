@@ -103,6 +103,8 @@ location_hint_sugar = {
 }
 
 def write_hints(rom_data, placements):
+    # Build a set of locations that can be hinted, and the string offset that
+    # hint should overwrite
     hint_offsets_set = {}
     for cave, (hint_location, offset) in hint_caves_data.items():
         if hint_location is None:
@@ -133,8 +135,8 @@ def write_hints(rom_data, placements):
                 num_truncated += truncated
             if omitted:
                 num_omitted += omitted
-    print(f"tloz: {num_hints} hints written with {num_truncated} truncated and {num_omitted} omitted characters")
     write_string_table(rom_data, string_table)
+    logger.info(f"Patch wrote {num_hints} hints with {num_truncated} truncated and {num_omitted} omitted characters")
 
 # Converts a Python string to a ROM-encoded string. Returns a tuple with the resulting byte string and a count of how any characters were omitted
 # (bytes, omitted)
