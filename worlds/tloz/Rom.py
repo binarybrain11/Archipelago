@@ -10,7 +10,7 @@ import Utils
 from BaseClasses import ItemClassification
 from worlds.Files import APDeltaPatch, APProcedurePatch, APTokenMixin, APPatchExtension
 
-from .Strings import write_hints
+from .Strings import write_hints, rom_addr_to_memory_addr
 
 NA10CHECKSUM = '337bd6f1a1163df31bf2633665589ab0'
 rom_name_location = 0x00
@@ -143,16 +143,6 @@ redundant_red_blue_table_offset = 0x94E1
 triforce_table_offset = 0x94F5
 archipelago_treasure_string = [6, 15, 18, 21, 21, 14, 27, 36, 36, 36, 36, 36, 25, 27, 24, 16, 27, 14, 28, 28, 18, 24, 23, 0xFF]
 
-# The ROM is chopped up into banks that are loaded into memory at 0x8000, translate between them!
-def rom_addr_to_memory_addr(address):
-    if address < 0x10: return None 
-    elif address < 0x1C010:
-        address -= 0x10
-        address %= 0x4000
-        return address + 0x8000
-    else:
-        return address - 0x1C010 + 0xC000
-
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
@@ -208,8 +198,8 @@ class TLOZPatchExtension(APPatchExtension):
             if item & 0b00011111 == 0b00000011:
                 rom_data[first_quest_dungeon_items_late + i] = item | 0b00111111
 
-        # Make the map item use the same sprite as the compass 
-        rom_data[item_frame_table_offset + map_item_slot] = 0x18 
+        # Make the map item use the same sprite as the compass
+        rom_data[item_frame_table_offset + map_item_slot] = 0x18
         # Change the palette to blue for non-progression items
         rom_data[item_palette_table_offset + map_item_slot] = 0x01
         for i in range(len(archipelago_sprite)):
@@ -300,7 +290,7 @@ class TLOZPatchExtension(APPatchExtension):
                 item_id = item_id | 0b01000000
             rom_data[location_id] = item_id
 
-        # Updates the rom_data in-place
+        # Updates the rom_data in-place to replace character strings with placement hints
         write_hints(rom_data, placements)
 
         return rom_data
