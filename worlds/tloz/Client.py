@@ -8,7 +8,7 @@ import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
 from worlds.tloz import Rom, Locations, Items
-from .Strings import hint_caves_data, hint_dungeons_data
+from .Strings import hint_caves_data, hint_early_dungeons_data, hint_late_dungeons_data
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -180,8 +180,11 @@ class TLOZClient(BizHawkClient):
         if (current_screen is None or level is None):
             return
         # level 0 is the Overworld. These hint locations are handled by handle_cave
-        if (level > 0 and current_screen in hint_dungeons_data):
-            hint_target, _ = hint_dungeons_data[current_screen]
+        if (level > 6 and current_screen in hint_late_dungeons_data):
+            hint_target, _ = hint_late_dungeons_data[current_screen]
+            await self.handle_hint(ctx, hint_target)
+        if (6 >= level > 0 and current_screen in hint_early_dungeons_data):
+            hint_target, _ = hint_early_dungeons_data[current_screen]
             await self.handle_hint(ctx, hint_target)
 
 
