@@ -268,13 +268,10 @@ class TLOZPatchExtension(APPatchExtension):
 
         # Write each location's new data in
         for location, item in placements["locations"].items():
-            # Zelda and Ganon aren't real locations. Neither is the metadata.
-            if location == "Ganon" or location == "Zelda" or location == "entrance_randomizer_set" or location == "meta":
+            # Zelda, Ganon, and boss defeat events aren't real locations
+            if location == "Ganon" or location == "Zelda" or "Status" in location:
                 continue
 
-            # Neither are boss defeat events
-            if "Status" in location:
-                continue
             item_id = item_game_ids[item["name"]]
             location_id = location_ids[location]
 

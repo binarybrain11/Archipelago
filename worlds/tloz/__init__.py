@@ -316,11 +316,13 @@ class TLoZWorld(World):
         loc_player = self.multiworld.player_name[location.player]
         item_player = self.multiworld.player_name[location.item.player]
         item_name = location.item.name
-        ext_hint = self.get_extended_hint(location)
-        if ext_hint is not None and ext_hint[:6] == "Screen":
-            ext_hint = f" s{ext_hint[-2:]}"
-        else:
-            ext_hint = ''
+        ext_hint = ''
+        if self.options.EntranceShuffle > 0:
+            ext_hint = self.get_extended_hint(location)
+            if ext_hint is not None and ext_hint[:6] == "Screen":
+                ext_hint = f" s{ext_hint[-2:]}"
+            else:
+                ext_hint = ''
 
         # Include item classification here?
         # More logic here to find shorter hints?

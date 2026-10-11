@@ -80,7 +80,8 @@ hint_late_dungeons_data = {
 hint_caves_data = {
     # These first two hints refer to the woman you pay for a hint. These offsets
     # go to the -30 option that actually grants a hint, not the greeting or
-    # other two options
+    # other two options. Currently, they won't wait until you pay for the hint to
+    # location scout (if these are set to something other than a None or Screen hint)
     "Go Up The Mountain Hint":  ("Screen 0B", 0x16),
     "Lost Woods Hint":          (None, 0x18),
     "Secret Is In Tree Hint":   ("Screen 1F", 0x06),
@@ -103,7 +104,7 @@ location_hint_sugar = {
     "Level 5 Triforce": "Digdogger guards {}'s {}{}",
     "Level 6 Boss": "Gohma has {}'s {}{}",
     "Level 6 Triforce": "Gohma guards {}'s {}{}",
-    "Level 7 Boss": "Aquamentus has {}'s {}{}",
+    "Level 7 Boss": " Aquamentus has {}'s {}{}",
     "Level 7 Triforce": "Aquamentus guards {}'s {}{}",
     "Level 8 Boss": "Gleeok has {}'s {}{}",
     "Level 8 Triforce": "Gleeok guards {}'s {}{}",
@@ -131,7 +132,7 @@ def write_hints(rom_data, placements):
                 continue
             if hint_location[:6] == "Screen":
                 continue
-            _, hint_offsets_set[hint_location] = hint_data[cave]
+            hint_offsets_set[hint_location] = offset
 
     string_table = read_string_table(rom_data)
     num_truncated, num_omitted, num_hints = (0,0,0)
@@ -150,7 +151,7 @@ def write_hints(rom_data, placements):
             if omitted:
                 num_omitted += omitted
     write_string_table(rom_data, string_table)
-    logger.info(f"Patch wrote {num_hints} of {hint_offsets_set} hints with {num_truncated} truncated and {num_omitted} omitted characters")
+    logger.info(f"Patch wrote {num_hints} of {len(hint_offsets_set)} hints with {num_truncated} truncated and {num_omitted} omitted characters")
 
 # Converts a Python string to a ROM-encoded string. Returns a tuple with the resulting byte string and a count of how any characters were omitted
 # (bytes, omitted)
@@ -213,8 +214,11 @@ def write_string_table(rom_data, string_table):
         # the extended table, the check below with the early exit will
         # gracefully catch and truncate it
         if (len(string) > string_write_end - string_write_offset):
-            string_write_offset = extended_table_offset
-            string_write_end = extended_table_end
+            # Only overwrite the current string offset if we haven't switched
+            # to the extended table.
+            if string_write_end != extended_table_end:
+                string_write_offset = extended_table_offset
+                string_write_end = extended_table_end
 
         memory_string_offset = rom_addr_to_memory_addr(string_write_offset)
         rom_data[string_table_index_offset + string_num * 2] = memory_string_offset & 0xFF
