@@ -18,6 +18,15 @@ class TriforceLocations(Choice):
     option_anywhere = 2
 
 
+class SecondQuestShuffle(Choice):
+    """Shuffle the Second Quest. After rescuing Zelda, a second quest begins
+    with new dungeons and a slightly different overworld. Your goal is now
+    rescuing Zelda in the second quest, adding more locations for you to check!"""
+    display_name = "Second Quest"
+    option_disable = 0
+    option_enable = 1
+
+
 class StartingPosition(Choice):
     """How easy is the start of the game.
     Safe means a weapon is guaranteed in Starting Sword Cave.

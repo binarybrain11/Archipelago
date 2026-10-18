@@ -87,9 +87,136 @@ level_locations = [
     ]
 ]
 
+q2_level_locations = [
+    [
+        "Q2 Level 1 Compass",
+        "Q2 Level 1 Map", 
+        "Q2 Level 1 Boss", 
+        "Q2 Level 1 Triforce", 
+        "Q2 Level 1 Item (Boomerang)", 
+        "Q2 Level 1 Key Drop (Moblins West)", 
+        "Q2 Level 1 Key Drop (Wallmasters)",
+        "Q2 Level 1 Rupee Drop (Gels)", 
+        "Q2 Level 1 Bomb drop (Blue Moblins)",
+    ],
+    [
+        "Q2 Level 2 Compass",
+        "Q2 Level 2 Map",
+        "Q2 Level 2 Boss",
+        "Q2 Level 2 Triforce",
+        "Q2 Level 2 Item (Recorder)",
+        "Q2 Level 2 Key Drop (Gibdos Entrance)",
+        "Q2 Level 2 Key Drop (Zols)",
+        "Q2 Level 2 Key Drop (Keese East)",
+        "Q2 Level 2 Key Drop (Keese West)",
+        "Q2 Level 2 Key Drop (Gibdos, Keese, and Pols Voice)",
+        "Q2 Level 2 Key Drop (Manhandla)",
+        "Q2 Level 2 Key Drop (Keese Central)",
+        "Q2 Level 2 Bomb Drop (Darknuts South)",
+        "Q2 Level 2 Bomb Drop (Darknuts North)",
+        "Q2 Level 2 Rupee Drop (Gibdos East)",
+    ],
+    [
+        "Q2 Level 3 Compass",
+        "Q2 Level 3 Map",
+        "Q2 Level 3 Boss",
+        "Q2 Level 3 Triforce",
+        "Q2 Level 3 Item (Magical Boomerang)",
+        "Q2 Level 3 Key Drop (Stalfos)",
+        "Q2 Level 3 Key Drop (Moblins)",
+        "Q2 Level 3 Bomb Drop (Ropes)",
+    ],
+    [
+        "Q2 Level 4 Compass",
+        "Q2 Level 4 Map",
+        "Q2 Level 4 Boss",
+        "Q2 Level 4 Triforce",
+        "Q2 Level 4 Item (Magic Book)",
+        "Q2 Level 4 Item (Raft)",
+        "Q2 Level 4 Key Drop (Zols and Keese)",
+        "Q2 Level 4 Key Drop (Blue Darknuts)",
+        "Q2 Level 4 Key Drop (Gibdos, Keese, and Pols Voice)",
+        "Q2 Level 4 Key Drop (Keese)",
+        "Q2 Level 4 Bomb Drop (Darknuts)",
+        "Q2 Level 4 Bomb Drop (Zols)",
+    ],
+    [
+        "Q2 Level 5 Compass",
+        "Q2 Level 5 Map",
+        "Q2 Level 5 Boss",
+        "Q2 Level 5 Triforce",
+        "Q2 Level 5 Item (Bow)",
+        "Q2 Level 5 Key Drop (Keese)",
+        "Q2 Level 5 Key Drop (Gohma)",
+        "Q2 Level 5 Key Drop (Like Likes and Wizzrobes)",
+        "Q2 Level 5 Rupee Drop (Like Likes)",
+        "Q2 Level 5 Rupee Drop (Manhandla)",
+    ],
+    [
+        "Q2 Level 6 Compass",
+        "Q2 Level 6 Map",
+        "Q2 Level 6 Boss",
+        "Q2 Level 6 Triforce",
+        "Q2 Level 6 Item (Step Ladder)",
+        "Q2 Level 6 Key Drop (Wizzrobes South Island)",
+        "Q2 Level 6 Key Drop (Wizzrobes North Island)",
+        "Q2 Level 6 Bomb Drop (Wizzrobes Entrance)",
+        "Q2 Level 6 Bomb Drop (Wizzrobes North)",
+        "Q2 Level 6 Rupee Drop (Like Likes and Wizzrobes)",
+        "Q2 Level 6 Rupee Drop (Traps)",
+        "Q2 Level 6 Rupee Drop (Gleeok)",
+    ],
+    [
+        "Q2 Level 7 Compass",
+        "Q2 Level 7 Map",
+        "Q2 Level 7 Boss",
+        "Q2 Level 7 Triforce",
+        "Q2 Level 7 Item (Red Candle)",
+        "Q2 Level 7 Key Drop (Keese)",
+        "Q2 Level 7 Key Drop (Darknuts and Pols Voice)",
+        "Q2 Level 7 Bomb Drop (Blue Darknuts North)",
+        "Q2 Level 7 Bomb Drop (Blue Darknuts West)",
+        "Q2 Level 7 Rupee Drop (Blue Darknuts East)",
+        "Q2 Level 7 Rupee Drop (Manhandla)",
+    ],
+    [
+        "Q2 Level 8 Compass",
+        "Q2 Level 8 Map",
+        "Q2 Level 8 Boss",
+        "Q2 Level 8 Triforce",
+        "Q2 Level 8 Item (Magical Rod)",
+        "Q2 Level 8 Item (Magical Key)",
+        "Q2 Level 8 Key Drop (Blue Moblins)",
+        "Q2 Level 8 Key Drop (Red Bubbles)",
+        "Q2 Level 8 Key Drop (Dodongos)",
+        "Q2 Level 8 Bomb Drop (Wallmasters)",
+        "Q2 Level 8 Bomb Drop (Moblins South)",
+        "Q2 Level 8 Rupee Drop (Digdogger)",
+        "Q2 Level 8 Rupee Drop (Keese and Moblins)",
+        "Q2 Level 8 Rupee Drop (Moblins Center)",
+    ],
+    [
+        "Q2 Level 9 Compass",
+        "Q2 Level 9 Map",
+        "Q2 Level 9 Item (Red Ring)",
+        "Q2 Level 9 Item (Silver Arrow)",
+        "Q2 Level 9 Key Drop (Wizzrobes)",
+        "Q2 Level 9 Bomb Drop (Blue Lanmolas)",
+        "Q2 Level 9 Bomb Drop (Red Lanmolas)",
+        "Q2 Level 9 Rupee Drop (Like Likes and Wizzrobes)",
+        "Q2 Level 9 Rupee Drop (Vire)",
+        "Q2 Level 9 Rupee Drop (Keese)",
+        "Q2 Level 9 Rupee Drop (Petra)",
+    ],
+]
+
 all_level_locations = [location for level in level_locations for location in level]
 
 standard_level_locations = [location for level in level_locations for location in level if "Drop" not in location]
+
+q2_all_level_locations = [location for level in q2_level_locations for location in level]
+
+q2_standard_level_locations = [location for level in q2_level_locations for location in level if "Drop" not in location]
 
 arrow_shop_locations = ["Arrow Shop Item Left", "Arrow Shop Item Middle", "Arrow Shop Item Right"]
 candle_shop_locations = ["Candle Shop Item Left", "Candle Shop Item Middle", "Candle Shop Item Right"]
@@ -120,15 +247,23 @@ sword_cave_locations = [
 food_locations = [
     "Level 7 Item (Red Candle)", "Level 7 Map", "Level 7 Boss", "Level 7 Triforce", "Level 7 Key Drop (Goriyas)",
     "Level 7 Bomb Drop (Moldorms North)", "Level 7 Bomb Drop (Goriyas North)",
-    "Level 7 Bomb Drop (Dodongos)", "Level 7 Rupee Drop (Goriyas North)"
+    "Level 7 Bomb Drop (Dodongos)", "Level 7 Rupee Drop (Goriyas North)",
+        "Q2 Level 3 Item (Magical Boomerang)",
+        *(q2_level_locations[7])
 ]
 
 gohma_locations = [
-    "Level 6 Boss", "Level 6 Triforce", "Level 8 Item (Magical Key)", "Level 8 Bomb Drop (Darknuts North)"
+    "Level 6 Boss", "Level 6 Triforce", "Level 8 Item (Magical Key)", "Level 8 Bomb Drop (Darknuts North)",
+        "Q2 Level 5 Key Drop (Gohma)",
+        "Q2 Level 6 Boss", "Q2 Level 6 Triforce",
 ]
 
 gleeok_locations = [
     "Level 4 Boss", "Level 4 Triforce", "Level 8 Boss", "Level 8 Triforce"
+        "Q2 Level 3 Boss", "Q2 Level 3 Triforce",
+        "Q2 Level 5 Boss", "Q2 Level 5 Triforce",
+        "Q2 Level 6 Rupee Drop (Gleeok)",
+        "Q2 Level 7 Boss", "Q2 Level 7 Triforce",
 ]
 
 floor_location_game_offsets_early = {
@@ -276,7 +411,124 @@ floor_location_game_ids_late = {}
 for key, value in floor_location_game_offsets_late.items():
     floor_location_game_ids_late[key] = value + Rom.first_quest_dungeon_items_late
 
+q2_floor_location_game_offsets_early = {
+    "Q2 Level 1 Compass": 0x57,
+    "Q2 Level 1 Map": 0x48, 
+    "Q2 Level 1 Boss": 0x07, 
+    "Q2 Level 1 Triforce": 0x08, 
+    "Q2 Level 1 Item (Boomerang)": 0x78, 
+    "Q2 Level 1 Key Drop (Moblins West)": 0x67, 
+    "Q2 Level 1 Key Drop (Wallmasters)": 0x18,
+    "Q2 Level 1 Rupee Drop (Gels)": 0x37, 
+    "Q2 Level 1 Bomb drop (Blue Moblins)": 0x47,
+    "Q2 Level 2 Compass": 0x5A,
+    "Q2 Level 2 Map": 0x0A,
+    "Q2 Level 2 Boss": 0x2B,
+    "Q2 Level 2 Triforce": 0x1B,
+    "Q2 Level 2 Item (Recorder)": 0x8E,
+    "Q2 Level 2 Key Drop (Gibdos Entrance)": 0x69,
+    "Q2 Level 2 Key Drop (Zols)": 0x6B,
+    "Q2 Level 2 Key Drop (Keese East)": 0x5B,
+    "Q2 Level 2 Key Drop (Keese West)": 0x49,
+    "Q2 Level 2 Key Drop (Gibdos, Keese, and Pols Voice)": 0x4A,
+    "Q2 Level 2 Key Drop (Manhandla)": 0x19,
+    "Q2 Level 2 Key Drop (Keese Central)": 0x2A,
+    "Q2 Level 2 Bomb Drop (Darknuts South)": 0x4B,
+    "Q2 Level 2 Bomb Drop (Darknuts North)": 0x3B,
+    "Q2 Level 2 Rupee Drop (Gibdos East)": 0x7B,
+    "Q2 Level 3 Compass": 0x76,
+    "Q2 Level 3 Map": 0x45,
+    "Q2 Level 3 Boss": 0x66,
+    "Q2 Level 3 Triforce": 0x20,
+    "Q2 Level 3 Item (Magical Boomerang)": 0x15,
+    "Q2 Level 3 Key Drop (Stalfos)": 0x35,
+    "Q2 Level 3 Key Drop (Moblins)": 0x30,
+    "Q2 Level 3 Bomb Drop (Ropes)": 0x55,
+    "Q2 Level 4 Compass": 0x6C,
+    "Q2 Level 4 Map": 0x1E,
+    "Q2 Level 4 Boss": 0x5F,
+    "Q2 Level 4 Triforce": 0x4F,
+    "Q2 Level 4 Item (Magic Book)": 0x7F,
+    "Q2 Level 4 Item (Raft)": 0x6A,
+    "Q2 Level 4 Key Drop (Zols and Keese)": 0x7C,
+    "Q2 Level 4 Key Drop (Blue Darknuts)": 0x4C,
+    "Q2 Level 4 Key Drop (Gibdos, Keese, and Pols Voice)": 0x3D,
+    "Q2 Level 4 Key Drop (Keese)": 0x1D,
+    "Q2 Level 4 Bomb Drop (Darknuts)": 0x4D,
+    "Q2 Level 4 Bomb Drop (Zols)": 0x2C,
+    "Q2 Level 5 Compass": 0x41,
+    "Q2 Level 5 Map": 0x60,
+    "Q2 Level 5 Boss": 0x10,
+    "Q2 Level 5 Triforce": 0x00,
+    "Q2 Level 5 Item (Bow)": 0x7A,
+    "Q2 Level 5 Key Drop (Keese)": 0x70,
+    "Q2 Level 5 Key Drop (Gohma)": 0x02,
+    "Q2 Level 5 Key Drop (Like Likes and Wizzrobes)": 0x31,
+    "Q2 Level 5 Rupee Drop (Like Likes)": 0x61,
+    "Q2 Level 5 Rupee Drop (Manhandla)": 0x32,
+    "Q2 Level 6 Compass": 0x34,
+    "Q2 Level 6 Map": 0x43,
+    "Q2 Level 6 Boss": 0x26,
+    "Q2 Level 6 Triforce": 0x16,
+    "Q2 Level 6 Item (Step Ladder)": 0x46,
+    "Q2 Level 6 Key Drop (Wizzrobes South Island)": 0x63,
+    "Q2 Level 6 Key Drop (Wizzrobes North Island)": 0x14,
+    "Q2 Level 6 Bomb Drop (Wizzrobes Entrance)": 0x64,
+    "Q2 Level 6 Bomb Drop (Wizzrobes North)": 0x13,
+    "Q2 Level 6 Rupee Drop (Like Likes and Wizzrobes)": 0x52,
+    "Q2 Level 6 Rupee Drop (Traps)": 0x51,
+    "Q2 Level 6 Rupee Drop (Gleeok)": 0x05,
+}
+
+q2_floor_location_game_ids_early = {}
+for key, value in q2_floor_location_game_offsets_early.items():
+    q2_floor_location_game_ids_early[key] = value + Rom.second_quest_dungeon_items_early
+
+q2_floor_location_game_offsets_late = {
+    "Q2 Level 7 Compass": 0x78,
+    "Q2 Level 7 Map": 0x6E,
+    "Q2 Level 7 Boss": 0x1C,
+    "Q2 Level 7 Triforce": 0x1B,
+    "Q2 Level 7 Item (Red Candle)": 0x70,
+    "Q2 Level 7 Key Drop (Keese)": 0x2E,
+    "Q2 Level 7 Key Drop (Darknuts and Pols Voice)": 0x2A,
+    "Q2 Level 7 Bomb Drop (Blue Darknuts North)": 0x1D,
+    "Q2 Level 7 Bomb Drop (Blue Darknuts West)": 0x5A,
+    "Q2 Level 7 Rupee Drop (Blue Darknuts East)": 0x5E,
+    "Q2 Level 7 Rupee Drop (Manhandla)": 0x3C,
+    "Q2 Level 8 Compass": 0x1F,
+    "Q2 Level 8 Map": 0x39,
+    "Q2 Level 8 Boss": 0x3D,
+    "Q2 Level 8 Triforce": 0x2D,
+    "Q2 Level 8 Item (Magical Rod)": 0x2B,
+    "Q2 Level 8 Item (Magical Key)": 0x2C,
+    "Q2 Level 8 Key Drop (Blue Moblins)": 0x0F,
+    "Q2 Level 8 Key Drop (Red Bubbles)": 0x0A,
+    "Q2 Level 8 Key Drop (Dodongos)": 0x09,
+    "Q2 Level 8 Bomb Drop (Wallmasters)": 0x0C,
+    "Q2 Level 8 Bomb Drop (Moblins South)": 0x6A,
+    "Q2 Level 8 Rupee Drop (Digdogger)": 0x0D,
+    "Q2 Level 8 Rupee Drop (Keese and Moblins)": 0x68,
+    "Q2 Level 8 Rupee Drop (Moblins Center)": 0x5D,
+    "Q2 Level 9 Compass": 0x42,
+    "Q2 Level 9 Map": 0x46,
+    "Q2 Level 9 Item (Red Ring)": 0x77,
+    "Q2 Level 9 Item (Silver Arrow)": 0x76,
+    "Q2 Level 9 Key Drop (Wizzrobes)": 0x32,
+    "Q2 Level 9 Bomb Drop (Blue Lanmolas)": 0x63,
+    "Q2 Level 9 Bomb Drop (Red Lanmolas)": 0x50,
+    "Q2 Level 9 Rupee Drop (Like Likes and Wizzrobes)": 0x66,
+    "Q2 Level 9 Rupee Drop (Vire)": 0x61,
+    "Q2 Level 9 Rupee Drop (Keese)": 0x55,
+    "Q2 Level 9 Rupee Drop (Petra)": 0x44,
+}
+
+q2_floor_location_game_ids_late = {}
+for key, value in q2_floor_location_game_offsets_late.items():
+    q2_floor_location_game_ids_late[key] = value + Rom.second_quest_dungeon_items_late
+
 dungeon_items = {**floor_location_game_ids_early, **floor_location_game_ids_late}
+q2_dungeon_items = {**q2_floor_location_game_ids_early, **q2_floor_location_game_ids_late}
 
 shop_location_ids = {
     "Arrow Shop Item Left": 0x18637,
@@ -363,6 +615,10 @@ underworld1_locations = [*floor_location_game_offsets_early.keys()]
 
 underworld2_locations = [*floor_location_game_offsets_late.keys()]
 
+q2_underworld1_locations = [*q2_floor_location_game_offsets_early.keys()]
+
+q2_underworld2_locations = [*q2_floor_location_game_offsets_late.keys()]
+
 #cave_locations = ["Take Any Item Left", "Take Any Item Middle", "Take Any Item Right"] + [*shop_locations]
 
 location_table_base = [x for x in major_locations] + \
@@ -373,3 +629,7 @@ for i, location in enumerate(location_table_base):
     location_table[location] = i
 
 location_ids = {**dungeon_items, **shop_location_ids, **major_location_ids}
+q2_location_ids = {**q2_dungeon_items, 
+    **{"Q2 " + loc: offset for loc, offset in shop_location_ids.items()}, 
+    **{"Q2 " + loc: offset for loc, offset in major_location_ids.items()}, 
+}
