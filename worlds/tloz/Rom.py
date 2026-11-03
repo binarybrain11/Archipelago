@@ -166,22 +166,15 @@ class TLOZPatchExtension(APPatchExtension):
         rom_data = bytearray(rom_data)
         # Set every item to the new nothing value, but keep room flags. Type 2 boss roars should
         # become type 1 boss roars, so we at least keep the sound of roaring where it should be.
-        for i in range(0, 0x7F):
-            item = rom_data[first_quest_dungeon_items_early + i]
-            if item & 0b00100000:
-                item = item & 0b11011111
-                item = item | 0b01000000
-                rom_data[first_quest_dungeon_items_early + i] = item
-            if item & 0b00011111 == 0b00000011:  # Change all Item 03s to Item 3F, the proper "nothing"
-                rom_data[first_quest_dungeon_items_early + i] = item | 0b00111111
-
-            item = rom_data[first_quest_dungeon_items_late + i]
-            if item & 0b00100000:
-                item = item & 0b11011111
-                item = item | 0b01000000
-                rom_data[first_quest_dungeon_items_late + i] = item
-            if item & 0b00011111 == 0b00000011:
-                rom_data[first_quest_dungeon_items_late + i] = item | 0b00111111
+        for item_block in [first_quest_dungeon_items_early, first_quest_dungeon_items_late, second_quest_dungeon_items_early, second_quest_dungeon_items_late]:
+            for i in range(0, 0x7F):
+                item = rom_data[item_block + i]
+                if item & 0b00100000:
+                    item = item & 0b11011111
+                    item = item | 0b01000000
+                    rom_data[item_block + i] = item
+                if item & 0b00011111 == 0b00000011:  # Change all Item 03s to Item 3F, the proper "nothing"
+                    rom_data[item_block + i] = item | 0b00111111
 
         # Make the map item use the same sprite as the compass 
         rom_data[item_frame_table_offset + map_item_slot] = 0x18 
@@ -238,7 +231,7 @@ class TLOZPatchExtension(APPatchExtension):
         # Write each location's new data in
         for location, item in placements.items():
             # Zelda and Ganon aren't real locations. Neither is the metadata.
-            if location == "Ganon" or location == "Zelda" or location == "entrance_randomizer_set" or location == "meta":
+            if location in ["Ganon", "Zelda", "Q2 Ganon", "Q2 Zelda", "entrance_randomizer_set", "meta"]:
                 continue
 
             if "Secret Money" in location:
@@ -251,7 +244,23 @@ class TLOZPatchExtension(APPatchExtension):
             # Neither are boss defeat events
             if "Status" in location:
                 continue
-            item_id = item_game_ids[item]
+
+            if item in item_game_ids:
+                item_id = item_game_ids[item]
+            elif ("Q2 " + item) in item_game_ids:
+                item_id = item_game_ids["Q2 " + item]
+            else:
+                # Error instead of ignore?
+                continue
+
+            # These locations only have one copy of the item data between the
+            # first and second quest, so we only overwrite that data for first
+            # quest. We can still distinguish them at runtime with the client
+            # and can use post_fill logic to try and keep the item placements
+            # aligned e.g. make sure the left arrow shop item is the same kind
+            # of item so the sprites and shop cost makes sense
+            if location[:3] == "Q2 " and (location[3:] in shop_locations or location[3:] in major_locations):
+                continue
             location_id = location_ids[location]
 
             # Shop prices need to be set

@@ -628,8 +628,11 @@ location_table = {}
 for i, location in enumerate(location_table_base):
     location_table[location] = i
 
-location_ids = {**dungeon_items, **shop_location_ids, **major_location_ids}
-q2_location_ids = {**q2_dungeon_items, 
+location_ids = {
+    **dungeon_items, 
+    **shop_location_ids, 
+    **major_location_ids,
+    **q2_dungeon_items, 
     **{"Q2 " + loc: offset for loc, offset in shop_location_ids.items()}, 
     **{"Q2 " + loc: offset for loc, offset in major_location_ids.items()}, 
 }
