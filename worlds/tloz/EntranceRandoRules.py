@@ -11,98 +11,145 @@ option_open = 3
 option_major_open = 4
 option_all = 5
 
-def has_bombs(state: CollectionState, player: int):
-    return state.has_group("weapons", player)
+def has_bombs(state: CollectionState, player: int, quest: int):
+	if (quest == 1):
+		return state.has("weapons", player)
+	else:
+		return state.has("Q2 weapons", player)
 
-def has_candle(state: CollectionState, player: int):
-    return state.has_group("candles", player)
+def has_candle(state: CollectionState, player: int, quest: int):
+	if (quest == 1):
+		return state.has("candles", player)
+	else:
+		return state.has("Q2 candles", player)
 
-def has_power_bracelet(state: CollectionState, player: int):
-    return state.has("Power Bracelet", player)
+def has_power_bracelet(state: CollectionState, player: int, quest: int):
+	if (quest == 1):
+		return state.has("Power Bracelet", player)
+	else:
+		return state.has("Q2 Power Bracelet", player)
 
-def has_raft(state: CollectionState, player: int):
-    return state.has("Raft", player)
+def has_raft(state: CollectionState, player: int, quest: int):
+	if (quest == 1):
+		return state.has("Raft", player)
+	else:
+		return state.has("Q2 Raft", player)
 
-def has_recorder(state: CollectionState, player: int):
-    return state.has("Recorder", player)
+def has_raft_or_recorder(state: CollectionState, player: int, quest: int):
+	if (quest == 1):
+		return state.has("Recorder", player) or state.has("Raft", player)
+	else:
+		return state.has("Q2 Recorder", player) or state.has("Q2 Raft", player)
 
-def has_anything(state: CollectionState, player: int):
+def has_recorder(state: CollectionState, player: int, quest: int):
+	if (quest == 1):
+		return state.has("Recorder", player)
+	else:
+		return state.has("Q2 Recorder", player)
+
+def has_stepladder(state: CollectionState, player: int, quest: int):
+	if (quest == 1):
+		return state.has("Stepladder", player)
+	else:
+		return state.has("Q2 Stepladder", player)
+
+def has_anything(state: CollectionState, player: int, quest: int):
     return True
 
-
+# Each tuple is the access rule and location or region behind the entrance.
+# The first tuple is for the first quest and the second tuple for the second quest
 overworld_entrances_data = {
-    "Screen 01": (has_bombs, "Door Repair"),
-    "Screen 03": (has_bombs, "Door Repair"),
-    "Screen 04": (has_anything, "Potion Shop"),
-    "Screen 05": (has_bombs, "Level 9"),
-    "Screen 07": (has_bombs, "Door Repair"),
-    "Screen 0A": (has_anything, "White Sword Pond"),
-    "Screen 0B": (has_anything, "Level 5"),
-    "Screen 0C": (has_anything, "Candle Shop"),
-    "Screen 0D": (has_bombs, "Potion Shop"),
-    "Screen 0E": (has_anything, "Letter Cave"),
-    "Screen 0F": (has_anything, "Secret Money Large"),
-    "Screen 10": (has_bombs, "Money Making Game"),
-    "Screen 12": (has_bombs, "Shield Shop"),
-    "Screen 13": (has_bombs, "Secret Money Medium"),
-    "Screen 14": (has_bombs, "Door Repair"),
-    "Screen 16": (has_bombs, "Money Making Game"),
-    "Screen 1A": (has_anything, "Go Up The Mountain Hint"),
-    "Screen 1C": (has_anything, "Secret Is In Tree Hint"),
-    "Screen 1D": (has_power_bracelet, "Warp Cave"),
-    "Screen 1E": (has_bombs, "Door Repair"),
-    "Screen 1F": (has_anything, "Money Making Game"),
-    "Screen 21": (has_anything, "Magical Sword Grave"),
-    "Screen 22": (has_anything, "Level 6"),
-    "Screen 23": (has_power_bracelet, "Warp Cave"),
-    "Screen 25": (has_anything, "Arrow Shop"),
-    "Screen 26": (has_bombs, "Shield Shop"),
-    "Screen 27": (has_bombs, "Potion Shop"),
-    "Screen 28": (has_candle, "Secret Money Medium"),
-    "Screen 2C": (has_bombs, "Take Any Item"),
-    "Screen 2D": (has_bombs, "Secret Money Medium"),
-    "Screen 2F": (has_raft, "Take Any Item"),
-    "Screen 33": (has_bombs, "Potion Shop"),
-    "Screen 34": (has_anything, "Blue Ring Shop"),
-    "Screen 37": (has_anything, "Level 1"),
-    "Screen 3C": (has_anything, "Level 2"),
-    "Screen 3D": (has_anything, "Secret Money Medium"),
-    "Screen 42": (has_recorder, "Level 7"),
-    "Screen 44": (has_anything, "Arrow Shop"),
-    "Screen 45": (has_raft, "Level 4"),
-    "Screen 46": (has_candle, "Shield Shop"),
-    "Screen 47": (has_candle, "Take Any Item"),
-    "Screen 48": (has_candle, "Secret Money Medium"),
-    "Screen 49": (has_power_bracelet, "Warp Cave"),
-    "Screen 4A": (has_anything, "Arrow Shop"),
-    "Screen 4B": (has_candle, "Potion Shop"),
-    "Screen 4D": (has_candle, "Shield Shop"),
-    "Screen 4E": (has_anything, "Secret Money Small"),
-    "Screen 51": (has_candle, "Secret Money Small"),
-    "Screen 56": (has_candle, "Secret Money Small"),
-    "Screen 5B": (has_candle, "Secret Money Small"),
-    "Screen 5E": (has_anything, "Candle Shop"),
-    "Screen 62": (has_candle, "Secret Money Large"),
-    "Screen 63": (has_candle, "Door Repair"),
-    "Screen 64": (has_anything, "Potion Shop"),
-    "Screen 66": (has_anything, "Candle Shop"),
-    "Screen 67": (has_bombs, "Secret Money Medium"),
-    "Screen 68": (has_candle, "Door Repair"),
-    "Screen 6A": (has_candle, "Door Repair"),
-    "Screen 6B": (has_candle, "Secret Money Large"),
-    "Screen 6D": (has_candle, "Level 8"),
-    "Screen 6F": (has_anything, "Arrow Shop"),
-    "Screen 70": (has_anything, "Lost Woods Hint"),
-    "Screen 71": (has_bombs, "Secret Money Medium"),
-    "Screen 74": (has_anything, "Level 3"),
-    "Screen 75": (has_anything, "Old Man Grave Hint"),
-    "Screen 76": (has_bombs, "Money Making Game"),
-    "Screen 77": (has_anything, "Starting Sword Cave"),
-    "Screen 78": (has_candle, "Potion Shop"),
-    "Screen 79": (has_power_bracelet, "Warp Cave"),
-    "Screen 7B": (has_bombs, "Take Any Item"),
-    "Screen 7C": (has_bombs, "Money Making Game"),
-    "Screen 7D": (has_bombs, "Door Repair")
+    "Screen 00": (None,                                         (has_bombs, "Level 9")),
+    "Screen 01": ((has_bombs, "Door Repair"),                   (has_bombs, "Door Repair")),
+    "Screen 02": (None,                                         (has_bombs, "Potion Shop")),
+    "Screen 03": ((has_bombs, "Door Repair"),                   (has_bombs, "Door Repair")),
+    "Screen 04": ((has_anything, "Potion Shop"),                (has_anything, "Potion Shop")),
+    "Screen 05": ((has_bombs, "Level 9"),                       None),
+    "Screen 06": (None,                                         (has_recorder, "Take Any Item")),
+    "Screen 07": ((has_bombs, "Door Repair"),                   (has_bombs, "Door Repair")),
+    "Screen 09": (None,                                         (has_power_bracelet, "Magical Sword Grave")),
+    "Screen 0A": ((has_anything, "White Sword Pond"),           (has_anything, "White Sword Pond")),
+    "Screen 0B": ((has_anything, "Level 5"),                    None),
+    "Screen 0C": ((has_anything, "Candle Shop"),                (has_anything, "Candle Shop")),
+    "Screen 0D": ((has_bombs, "Potion Shop"),                   (has_bombs, "Potion Shop")),
+    "Screen 0E": ((has_anything, "Letter Cave"),                (has_anything, "Shield Shop")),
+    "Screen 0F": ((has_anything, "Secret Money Large"),         (has_anything, "Blue Ring Shop")),
+    "Screen 10": ((has_bombs, "Money Making Game"),             (has_bombs, "Money Making Game")),
+    "Screen 11": (None,                                         (has_power_bracelet, "Letter Cave")),
+    "Screen 12": ((has_bombs, "Shield Shop"),                   (has_bombs, "Shield Shop")),
+    "Screen 13": ((has_bombs, "Secret Money Medium"),           (has_bombs, "Secret Money Medium")),
+    "Screen 14": ((has_bombs, "Door Repair"),                   (has_bombs, "Door Repair")),
+    "Screen 15": (None,                                         (has_bombs, "Shield Shop")),
+    "Screen 16": ((has_bombs, "Money Making Game"),             (has_bombs, "Money Making Game")),
+    "Screen 18": (None,                                         (has_stepladder, "Potion Shop")),
+    "Screen 19": (None,                                         (has_stepladder, "Level 8")),
+    "Screen 1A": ((has_anything, "Go Up The Mountain Hint"),    (has_anything, "Go Up The Mountain Hint")),
+    "Screen 1B": (None,                                         (has_anything, "Level 4")),
+    "Screen 1C": ((has_anything, "Secret Is In Tree Hint"),     (has_anything, "Secret Is In Tree Hint")),
+    "Screen 1D": ((has_power_bracelet, "Warp Cave"),            (has_power_bracelet, "Warp Cave")),
+    "Screen 1E": ((has_bombs, "Door Repair"),                   (has_bombs, "Door Repair")),
+    "Screen 1F": ((has_anything, "Money Making Game"),          (has_anything, "Money Making Game")),
+    "Screen 20": (None,                                         (has_anything, "Take Any Item")),
+    "Screen 21": ((has_anything, "Magical Sword Grave"),        None),
+    "Screen 22": ((has_anything, "Level 6"),                    (has_anything, "Secret Money Medium")),
+    "Screen 23": ((has_power_bracelet, "Warp Cave"),            (has_power_bracelet, "Warp Cave")),
+    "Screen 25": ((has_anything, "Arrow Shop"),                 (has_anything, "Arrow Shop")),
+    "Screen 26": ((has_bombs, "Shield Shop"),                   (has_bombs, "Shield Shop")),
+    "Screen 27": ((has_bombs, "Potion Shop"),                   None),
+    "Screen 28": ((has_candle, "Secret Money Medium"),          (has_candle, "Secret Money Medium")),
+    "Screen 29": (None,                                         (has_recorder, "Potion Shop")),
+    "Screen 2B": (None,                                         (has_recorder, "Secret Money Small")),
+    "Screen 2C": ((has_bombs, "Take Any Item"),                 None),
+    "Screen 2D": ((has_bombs, "Secret Money Medium"),           (has_bombs, "Secret Money Medium")),
+    "Screen 2F": ((has_raft, "Take Any Item"),                  (has_raft, "Take Any Item")),
+    "Screen 30": (None,                                         (has_recorder, "Level 6")),
+    "Screen 33": ((has_bombs, "Potion Shop"),                   (has_bombs, "Potion Shop")),
+    "Screen 34": ((has_anything, "Blue Ring Shop"),             (has_anything, "Level 2")),
+    "Screen 37": ((has_anything, "Level 1"),                    (has_anything, "Level 1")),
+    "Screen 3A": (None,                                         (has_recorder, "Take Any Item")),
+    "Screen 3C": ((has_anything, "Level 2"),                    (has_recorder, "Level 3")),
+    "Screen 3D": ((has_anything, "Secret Money Medium"),        (has_anything, "Secret Money Medium")),
+    "Screen 42": ((has_recorder, "Level 7"),                    None),
+    "Screen 44": ((has_anything, "Arrow Shop"),                 (has_anything, "Arrow Shop")),
+    "Screen 45": ((has_raft, "Level 4"),                        (has_raft, "Level 5")),
+    "Screen 46": ((has_candle, "Shield Shop"),                  (has_candle, "Shield Shop")),
+    "Screen 47": ((has_candle, "Take Any Item"),                None),
+    "Screen 48": ((has_candle, "Secret Money Medium"),          (has_candle, "Secret Money Medium")),
+    "Screen 49": ((has_power_bracelet, "Warp Cave"),            (has_power_bracelet, "Warp Cave")),
+    "Screen 4A": ((has_anything, "Arrow Shop"),                 (has_anything, "Arrow Shop")),
+    "Screen 4B": ((has_candle, "Potion Shop"),                  (has_candle, "Potion Shop")),
+    "Screen 4D": ((has_candle, "Shield Shop"),                  (has_candle, "Shield Shop")),
+    "Screen 4E": ((has_anything, "Secret Money Small"),         (has_anything, "Secret Money Small")),
+    "Screen 51": ((has_candle, "Secret Money Small"),           (has_candle, "Secret Money Small")),
+    "Screen 53": (None,                                         (has_candle, "Secret Money Large")),
+    "Screen 56": ((has_candle, "Secret Money Small"),           (has_candle, "Secret Money Small")),
+    "Screen 58": (None,                                         (has_candle, "Secret Money Medium")),
+    "Screen 5B": ((has_candle, "Secret Money Small"),           (has_candle, "Secret Money Small")),
+    "Screen 5E": ((has_anything, "Candle Shop"),                (has_anything, "Candle Shop")),
+    "Screen 60": (None,                                         (has_candle, "Money Making Game")),
+    "Screen 62": ((has_candle, "Secret Money Large"),           None),
+    "Screen 63": ((has_candle, "Door Repair"),                  (has_candle, "Door Repair")),
+    "Screen 64": ((has_anything, "Potion Shop"),                (has_anything, "Potion Shop")),
+    "Screen 66": ((has_anything, "Candle Shop"),                (has_anything, "Candle Shop")),
+    "Screen 67": ((has_bombs, "Secret Money Medium"),           None),
+    "Screen 68": ((has_candle, "Door Repair"),                  (has_candle, "Door Repair")),
+    "Screen 6A": ((has_candle, "Door Repair"),                  (has_candle, "Door Repair")),
+    "Screen 6B": ((has_candle, "Secret Money Large"),           None),
+    "Screen 6C": (None,                                         (has_candle, "Level 7")),
+    "Screen 6D": ((has_candle, "Level 8"),                      None),
+    "Screen 6F": ((has_anything, "Arrow Shop"),                 (has_anything, "Arrow Shop")),
+    "Screen 70": ((has_anything, "Lost Woods Hint"),            (has_anything, "Lost Woods Hint")),
+    "Screen 71": ((has_bombs, "Secret Money Medium"),           None),
+    "Screen 72": (None,                                         (has_candle, "Door Repair")),
+    "Screen 74": ((has_anything, "Level 3"),                    (has_anything, "Shield Shop")),
+    "Screen 75": ((has_anything, "Old Man Grave Hint"),         (has_anything, "Old Man Grave Hint")),
+    "Screen 76": ((has_bombs, "Money Making Game"),             (has_bombs, "Money Making Game")),
+    "Screen 77": ((has_anything, "Starting Sword Cave"),        (has_anything, "Starting Sword Cave")),
+    "Screen 78": ((has_candle, "Potion Shop"),                  (has_candle, "Potion Shop")),
+    "Screen 79": ((has_power_bracelet, "Warp Cave"),            (has_power_bracelet, "Warp Cave")),
+    "Screen 7B": ((has_bombs, "Take Any Item"),                 None),
+    "Screen 7C": ((has_bombs, "Money Making Game"),             (has_bombs, "Money Making Game")),
+    "Screen 7D": ((has_bombs, "Door Repair"),                   (has_bombs, "Door Repair"))
 
 }
 
@@ -121,7 +168,13 @@ warp_caves = [
 
 open_entrances = [
     "Screen 04", "Screen 0A", "Screen 0B", "Screen 0C", "Screen 0E", "Screen 0F", "Screen 1A", "Screen 1C", "Screen 1F",
-    "Screen 21", "Screen 22", "Screen 25", "Screen 34", "Screen 37", "Screen 3C", "Screen 3D", "Screen 44", "Screen 4A",
+    "Screen 20", "Screen 22", "Screen 25", "Screen 34", "Screen 37", "Screen 3C", "Screen 3D", "Screen 44", "Screen 4A",
+    "Screen 4E", "Screen 5E", "Screen 64", "Screen 66", "Screen 6F", "Screen 70", "Screen 74", "Screen 75", "Screen 77"
+]
+
+q2_open_entrances = [
+    "Screen 04", "Screen 0A", "Screen 0C", "Screen 0E", "Screen 0F", "Screen 1A", "Screen 1B", "Screen 1C", "Screen 1F",
+    "Screen 21", "Screen 22", "Screen 25", "Screen 34", "Screen 37", "Screen 3D", "Screen 44", "Screen 4A",
     "Screen 4E", "Screen 5E", "Screen 64", "Screen 66", "Screen 6F", "Screen 70", "Screen 74", "Screen 75", "Screen 77"
 ]
 

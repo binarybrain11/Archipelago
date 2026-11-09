@@ -81,8 +81,8 @@ class TLoZWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = location_table
 
-    item_name_groups = {
-        'weapons': starting_weapons,
+    q1_item_name_groups = {
+        # 'weapons': starting_weapons,
         'swords': {
             "Sword", "White Sword", "Magical Sword"
         },
@@ -93,6 +93,8 @@ class TLoZWorld(World):
             "Arrow", "Silver Arrow"
         }
     }
+    q2_item_name_groups = {"Q2 " + group: { "Q2 " + i for i in items } for group, items in item_name_groups.items()}
+    item_name_groups = {**q1_item_name_groups,**q2_item_name_groups}
 
     location_name_groups = {
         "Shops": set(shop_locations),
@@ -106,7 +108,16 @@ class TLoZWorld(World):
         "Level 6": set(level_locations[5]),
         "Level 7": set(level_locations[6]),
         "Level 8": set(level_locations[7]),
-        "Level 9": set(level_locations[8])
+        "Level 9": set(level_locations[8]),
+        "Q2 Level 1": set(q2_level_locations[0]),
+        "Q2 Level 2": set(q2_level_locations[1]),
+        "Q2 Level 3": set(q2_level_locations[2]),
+        "Q2 Level 4": set(q2_level_locations[3]),
+        "Q2 Level 5": set(q2_level_locations[4]),
+        "Q2 Level 6": set(q2_level_locations[5]),
+        "Q2 Level 7": set(q2_level_locations[6]),
+        "Q2 Level 8": set(q2_level_locations[7]),
+        "Q2 Level 9": set(q2_level_locations[8])
     }
 
     for k, v in item_name_to_id.items():
@@ -120,6 +131,7 @@ class TLoZWorld(World):
         super().__init__(multiworld, player)
         self.generator_in_use = threading.Event()
         self.rom_name_available_event = threading.Event()
+        self.overworlds = None
         self.levels = None
         self.filler_items = None
         self.entrance_randomizer_set = None
@@ -144,96 +156,124 @@ class TLoZWorld(World):
 
     def create_regions(self):
         menu = Region("Menu", self.player, self.multiworld)
-        overworld = Region("Overworld", self.player, self.multiworld)
+        self.overworlds = [ Region("Overworld", self.player, self.multiworld) ]
+        if self.options.SecondQuestShuffle:
+            self.overworlds.append(
+                Region("Q2 Overworld", self.player, self.multiworld))
 
         self.entrance_randomizer_set = create_entrance_randomizer_set(self)
 
-        self.levels = [None]  # Yes I'm making a one-indexed array in a zero-indexed language. I hate me too.
-        for i in range(1, 10):
-            level = Region(f"Level {i}", self.player, self.multiworld)
-            self.levels.append(level)
-            new_entrance = Entrance(self.player, f"Level {i}", overworld)
-            entrando_entrance = [screen for screen, entrance in self.entrance_randomizer_set.items() if entrance[1] == f"Level {i}"][0]
-            entrando_rule = self.entrance_randomizer_set[entrando_entrance][0]
-            new_entrance.connect(level)
-            overworld.connect(
-                level,
-                f"Level {i} Entrance at {entrando_entrance}",
-                lambda state, rule=entrando_rule: rule(state, self.player))
+        self.levels = [[None]*10, [None]*10] # Yes I'm making one-indexed arrays in a zero-indexed language. I hate me too.
+        shared_regions = {}
+        shared_locations = {
+            "Take Any Item": take_any_locations,
+            **shop_categories
+        }
+        for screen, entrance in self.entrance_randomizer_set.items():
+            for quest in range(2):
+                if quest == 1 and not self.options.SecondQuestShuffle:
+                    continue
+                if entrance[quest] == None:
+                    continue
 
-            self.multiworld.regions.append(level)
+                location = entrance[quest][1] 
+                location_name = location if quest == 0 else "Q2 " + location
+                overworld_name = "Overworld" if quest == 0 else "Q2 Overworld"
 
-        for i, level in enumerate(level_locations):
-            for location in level:
-                if self.options.ExpandedPool or "Drop" not in location:
-                    self.levels[i + 1].locations.append(
-                        self.create_location(location, self.location_name_to_id[location], self.levels[i + 1]))
+                if location[:5] == "Level":
+                    self.create_level_region(screen, entrance[quest], quest)
+                    continue
 
-        for level in range(1, 9):
-            boss_event = self.create_location(f"Level {level} Boss Status", None,
-                                              self.multiworld.get_region(f"Level {level}", self.player),
-                                              True)
-            boss_event.show_in_spoiler = False
-            self.levels[level].locations.append(boss_event)
+                if "Take Any Item" == location and not self.options.ExpandedPool:
+                    continue
 
-        for location in major_locations:
-            if location in sword_cave_locations or location == "Letter Cave":
-                region = Region(location, self.player, self.multiworld)
-                entrando_screen = [screen for screen, entrance in self.entrance_randomizer_set.items() if entrance[1] == location][0]
-                entrando_rule = self.entrance_randomizer_set[entrando_screen][0]
-                overworld.connect(region, f"Overworld to {entrando_screen}", lambda state, rule=entrando_rule: rule(state, self.player))
+                # These locations have a simple region with one entrance
+                if location in sword_cave_locations or location == "Letter Cave":
+                    region = Region(location_name, self.player, self.multiworld)
+                else:
+                    # These caves have more than one entrance. Initialize the region once
+                    if location_name not in shared_regions:
+                        shared_regions[location_name] = Region(location_name, self.player, self.multiworld)
+                        # Attach all of the locations to the region
+                        for shared_location in shared_locations[location]:
+                            shared_location_name = shared_location if quest == 0 else "Q2 " + shared_location
+                            shared_regions[location_name].locations.append(
+                                self.create_location(shared_location_name, 
+                                    # These locations only have one spot in the ROM for the first and second quest, 
+                                    # so we use the same id for different shared_location_names. The Client can 
+                                    # distinguish these locations at runtime
+                                    self.location_name_to_id[location], region))
+                    region = shared_regions[location_name]
+
+                entrando_rule = entrance[quest][0]
+                self.overworlds[quest].connect(region, 
+                    f"{overworld_name} to {screen}", 
+                    lambda state, rule=entrando_rule: rule(state, self.player))
                 region.locations.append(
                     self.create_location(location, self.location_name_to_id[location], region))
-            elif "Take Any" not in location:
-                overworld.locations.append(
-                    self.create_location(location, self.location_name_to_id[location], overworld))
 
-        if self.options.ExpandedPool:
-            entrando_screens = [screen for screen, entrance in self.entrance_randomizer_set.items() if entrance[1] == "Take Any Item"]
-            region = Region("Take Any Item", self.player, self.multiworld)
-            for screen in entrando_screens:
-                screen_region = Region(screen, self.player, self.multiworld)
-                entrando_rule = self.entrance_randomizer_set[screen][0]
-                screen_region.connect(
-                    region,
-                    f"{screen_region} to Take Any Item",
-                    lambda state, rule=entrando_rule: rule(state, self.player)
-                )
-                overworld.connect(screen_region, f"Overworld to {screen}", lambda state: True)
-            for location in take_any_locations:
-                region.locations.append(
-                    self.create_location(location, self.location_name_to_id[location], region)
-                )
+        # Tidy up some locations not included in entrando
+        for location in overworld_locations:
+            if location not in sword_cave_locations and location != "Letter Cave":
+                self.overworlds[0].locations.append(
+                    self.create_location(location, self.location_name_to_id[location], self.overworlds[0]))
+                if SecondQuestShuffle:
+                    self.overworlds[1].locations.append(
+                        self.create_location("Q2 " + location, self.location_name_to_id[location], self.overworlds[1]))
 
-        for shop_category, shop_slots in shop_categories.items():
-            screens = [screen for screen, entrance in self.entrance_randomizer_set.items() if entrance[1] == shop_category]
-            shop_region = Region(shop_category, self.player, self.multiworld)
-            for screen in screens:
-                screen_region = Region(screen, self.player, self.multiworld)
-                entrando_rule = self.entrance_randomizer_set[screen][0]
-                screen_region.connect(
-                    shop_region,
-                    f"{screen_region} to {shop_category}",
-                    lambda state, rule=entrando_rule: rule(state, self.player))
-                overworld.connect(screen_region,
-                                  f"Overworld {screen}",
-                                  lambda state: True
-                                  )
-            for shop_slot in shop_slots:
-                shop_region.locations.append(
-                    self.create_location(shop_slot, self.location_name_to_id[shop_slot], shop_region))
 
         ganon = self.create_location("Ganon", None, self.multiworld.get_region("Level 9", self.player))
         zelda = self.create_location("Zelda", None, self.multiworld.get_region("Level 9", self.player))
         ganon.show_in_spoiler = False
         zelda.show_in_spoiler = False
-        self.levels[9].locations.append(ganon)
-        self.levels[9].locations.append(zelda)
-        begin_game = Entrance(self.player, "Begin Game", menu)
-        menu.exits.append(begin_game)
-        begin_game.connect(overworld)
+        self.levels[0][9].locations.append(ganon)
+        self.levels[0][9].locations.append(zelda)
+        menu.connect(self.overworlds[0], "Begin Game")
+
+        if self.options.SecondQuestShuffle:
+            q2_ganon = self.create_location("Q2 Ganon", None, self.multiworld.get_region("Q2 Level 9", self.player))
+            q2_zelda = self.create_location("Q2 Zelda", None, self.multiworld.get_region("Q2 Level 9", self.player))
+            q2_ganon.show_in_spoiler = False
+            q2_zelda.show_in_spoiler = False
+            self.levels[1][9].locations.append(q2_ganon)
+            self.levels[1][9].locations.append(q2_zelda)
+            menu.connect(self.overworlds[1], "Q2 Begin Game",
+                lambda state: state.has("Rescued Zelda!", player))
+
         self.multiworld.regions.append(menu)
-        self.multiworld.regions.append(overworld)
+        self.multiworld.regions.append(self.overworlds[0])
+
+
+    def create_level_region(self, screen, entrance_data, quest):
+        if quest == 0:
+            level_name = entrance_data[1]
+        else:
+            level_name = "Q2 " + entrance_data[1]
+        # Here we expect level_name to match regex /^(Q2 )?Level \d$/
+        level_num = int(level_name[-1:])
+        level = Region(level_name, self.player, self.multiworld)
+        self.levels[quest][level_num]
+        new_entrance = Entrance(self.player, level_name, self.overworlds[quest])
+        entrando_rule = entrance_data[0]
+        new_entrance.connect(level)
+        overworld.connect(
+            level,
+            f"{level_name} Entrance at {screen}",
+            lambda state, rule=entrando_rule: rule(state, self.player))
+
+        location_list = level_locations if quest == 0 else q2_level_locations
+        for location in location_list[level_num - 1]:
+            if self.options.ExpandedPool or "Drop" not in location:
+                level.locations.append(
+                    self.create_location(location, self.location_name_to_id[location], level))
+
+        boss_event = self.create_location(f"{level_name} Boss Status", None,
+                                            level, True)
+        boss_event.show_in_spoiler = False
+        level.locations.append(boss_event)
+
+        self.multiworld.regions.append(level)
+
 
 
     def create_items(self):

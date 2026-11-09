@@ -621,8 +621,9 @@ q2_underworld2_locations = [*q2_floor_location_game_offsets_late.keys()]
 
 #cave_locations = ["Take Any Item Left", "Take Any Item Middle", "Take Any Item Right"] + [*shop_locations]
 
-location_table_base = [x for x in major_locations] + \
-                      [y for y in all_level_locations] + \
+location_table_base = [w for w in major_locations] + \
+                      [x for x in all_level_locations] + \
+                      [y for y in q2_all_level_locations] + \
                       [z for z in shop_locations]
 location_table = {}
 for i, location in enumerate(location_table_base):

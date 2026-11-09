@@ -12,7 +12,10 @@ def set_rules(tloz_world: "TLoZWorld"):
     player = tloz_world.player
     options = tloz_world.options
 
-    tloz_world.multiworld.completion_condition[player] = lambda state: state.has("Rescued Zelda!", player)
+    if options.SecondQuestShuffle:
+        tloz_world.multiworld.completion_condition[player] = lambda state: state.has("Rescued Zelda again!", player)
+    else:
+        tloz_world.multiworld.completion_condition[player] = lambda state: state.has("Rescued Zelda!", player)
     ganon = tloz_world.multiworld.get_location("Ganon", player)
     ganon.place_locked_item(tloz_world.create_event("Triforce of Power"))
     add_rule(ganon, lambda state: state.has("Silver Arrow", player) and state.has("Bow", player))
@@ -20,6 +23,14 @@ def set_rules(tloz_world: "TLoZWorld"):
     tloz_world.multiworld.get_location("Zelda", player).place_locked_item(tloz_world.create_event("Rescued Zelda!"))
     add_rule(tloz_world.multiworld.get_location("Zelda", player),
              lambda state: state.has("Triforce of Power", player))
+    if options.SecondQuestShuffle:
+        ganon = tloz_world.multiworld.get_location("Q2 Ganon", player)
+        ganon.place_locked_item(tloz_world.create_event("Q2 Triforce of Power"))
+        add_rule(ganon, lambda state: state.has("Q2 Silver Arrow", player) and state.has("Bow", player))
+
+        tloz_world.multiworld.get_location("Q2 Zelda", player).place_locked_item(tloz_world.create_event("Rescued Zelda again!"))
+        add_rule(tloz_world.multiworld.get_location("Q2 Zelda", player),
+                lambda state: state.has("Q2 Triforce of Power", player))
 
     # Boss events for a nicer spoiler log play through
     for level in range(1, 9):
